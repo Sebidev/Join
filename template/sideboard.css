@@ -2,3 +2,19 @@
     font-family: 'Inter';
     src: url('/fonts/Inter-VariableFont.ttf') format('truetype'),
 }
+
+body{
+    margin: 0;
+}
+
+.sideboard{
+    display: flex;
+    width: 232px;
+    height: 1024px;
+    padding: 64px 0px;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    background: #2A3647;
+}
