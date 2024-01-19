@@ -8,27 +8,59 @@
 </head>
 <body>
     <h1>Add Task</h1>
+
     <div class="Add-task">
         <div class="Add-task-left">
-            <div>Title</div>
-            <input type="text">
-            <div>Description</div>
-            <input type="text">
-            <div>Assigned to</div>
-            <div></div>
-        </div>
-        <div class="Add-task-right">
-            <div>Due date</div>
-            <input type="text">
-            <div>Prio
-                <div>Urgent</div>
-                <div>Medium</div>
-                <div>Low</div>
+            <div class="title-container">
+                <div class="title">Title</div>
+                <input type="text" class="title-input" placeholder="Enter a title" required>
+                <div class="required-info">This field is required</div>
             </div>
+
+            <div class="description-container">
+                <div class="description">Description</div>
+                <input type="text" class="description-input" placeholder="Enter a Description" required>
+                <div class="required-info">This field is required</div>
+            </div>
+
+            <div class="assigned-to-container">
+                <div class="assigned-to">Assigned to</div>
+                <div class="input-container">
+                    <input type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
+                    <img class="arrow_down" src="./img/arrow_down.svg" alt="">
+                </div>
+            </div>
+        </div>
+
+        <div class="divider">
+            <img src="./img/divider.svg" alt="">
+        </div>
+
+        <div class="Add-task-right">
+            <div class="due-date-container">
+                <div class="due-date">Due date</div>
+                <input class="due-date-input" type="text" placeholder="dd/mm/yyyy">
+            </div>
+
+            <div class="prio-container">
+                <div class="prio">Prio</div>
+                
+                <div class="prio-option-container">
+                    <button class="urgent">
+                        <h3>Urgent</h3>
+                        <img src="./img/Prio_up.svg" alt="">
+                    </button>
+                    <div class="medium">Medium</div>
+                    <div class="low">Low</div>
+                </div>
+            </div>
+
             <div>Category</div>
             <input type="text">
+
             <div>Subtasks</div>
             <input type="text">
+
         </div>
     </div>
 </body>
