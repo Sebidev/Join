@@ -5,7 +5,9 @@ body {
   height: 1024px;
 }
 
-h1 {
+.header-add-task {
+  margin-top: 110px;
+  margin-bottom: 48px;
   color: #000;
   font-family: Inter;
   font-size: 61px;
@@ -46,6 +48,15 @@ h1 {
   font-weight: 400;
   font-size: 20px;
   line-height: 24px;
+}
+
+.title:after {
+  content: "*";
+  color: #ff8190;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 120%;
+  letter-spacing: 0em;
 }
 
 .title-input {
@@ -203,6 +214,15 @@ h1 {
   line-height: 120%; /* 24px */
 }
 
+.due-date:after {
+  content: "*";
+  color: #ff8190;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 120%;
+  letter-spacing: 0em;
+}
+
 .due-date-input {
   background-image: url(../img/event.svg) !important;
   background-repeat: no-repeat !important;
@@ -218,6 +238,12 @@ h1 {
   border-radius: 10px;
   border: 1px solid var(--Style, #d1d1d1);
   background: #fff;
+  color: var(--Style, #d1d1d1);
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%; /* 24px */
 }
 
 .prio-container {
@@ -313,6 +339,15 @@ h1 {
   line-height: 120%; /* 24px */
 }
 
+.category:after {
+  content: "*";
+  color: #ff8190;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 120%;
+  letter-spacing: 0em;
+}
+
 .category-dropdown {
   display: flex;
   width: 408px;
@@ -379,7 +414,7 @@ h1 {
 
 /* Bottom */
 .clear-and-create-section {
-  margin-top: 146px;
+  margin-top: 130px;
   margin-left: 131px;
   display: inline-flex;
   justify-content: center;
@@ -423,22 +458,31 @@ h1 {
 }
 
 .required-legend {
-    margin-top: 223px;
-    width: 170px;
-    height: 27px;
-    flex-shrink: 0;
-    color: #ff8190;
-  
-    font-family: Inter;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 120%; /* 24px */
-    color: #000;
+  margin-top: 215px;
+  width: 170px;
+  height: 27px;
+  flex-shrink: 0;
+  color: #ff8190;
 
-    font-family: Inter;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 120%;
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%; /* 24px */
+  color: #000;
+
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%;
+}
+
+.required-legend::before {
+  content: "*";
+  color: #ff8190;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 120%;
+  letter-spacing: 0em;
 }
