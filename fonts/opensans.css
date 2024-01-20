@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'OpenSans';
+    src: url('/fonts/OpenSans-VariableFont.ttf') format('truetype'),
+  }
+  
+  html, body {
+    font-family: 'OpenSans';
+    margin: 0;
+  }

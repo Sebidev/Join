@@ -1,12 +1,6 @@
-@font-face {
-  font-family: 'Inter';
-  src: url('/fonts/Inter-VariableFont.ttf') format('truetype'),
-}
-
 html, body {
   height: 100%;
-  margin: 0;
-  font-family: 'Inter';
+
 }
 
 .content {
@@ -146,7 +140,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  height: calc(100% - 51.5px)
 }
 
 .login-card-container {
