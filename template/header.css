@@ -1,4 +1,41 @@
-@font-face {
-    font-family: 'Inter';
-    src: url('/fonts/Inter-VariableFont.ttf') format('truetype'),
+body{
+    margin: 0px;
 }
+
+.header{
+    display: flex;
+    padding: 20px 40px 20px 348px;
+    justify-content: space-between;
+    align-items: center;
+    background: #FFF;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.10);
+}
+
+.header_text{
+    color: #000;
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%; /* 24px */
+}
+
+.icon_box{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.help_icon{
+    display: flex;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+}
+
+.avatar_icon{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+

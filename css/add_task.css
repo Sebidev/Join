@@ -14,11 +14,12 @@ body {
   font-style: normal;
   font-weight: 700;
   line-height: 120%; /* 73.2px */
-  margin-left: 96px;
+  margin-left: 350px;
 }
 
 .Add-task {
   display: flex;
+  margin-left: 250px;
 }
 
 /* Add-task left */
