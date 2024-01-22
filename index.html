@@ -11,50 +11,18 @@
   <link rel="stylesheet" href="fonts/inter.css">
 </head>
 
-<body>
+<body onload="renderSection('login')">
   <img class="login-logo" src="img/join-logo-signup.svg" alt="Join Logo">
 
   <div class="content" id="content">
-    <div class="login-signup desktop-only" id="login-signup">
+    <div class="login-signup" id="login-signup">
       <span class="login-signup-text">Not a Join user?</span>
-      <button class="main-button main-button-signup">
+      <button class="main-button main-button-signup" onclick="renderSection('register')">
         Sign up
       </button>
     </div>
+    
     <div class="container" id="container">
-      <div class="login-card-container">
-        <div class="login-card">
-          <h1 class="login-heading">Log in</h1>
-          <form class="login-form">
-            <div class="login-inputs" id="login-inputs">
-              <div class="login-input-container">
-                <div class="login-input-wrapper">
-                  <input class="login-email-input" type="email" name="email-login" id="email-login" placeholder="Email"
-                    required autocomplete="on">
-                  <img class="email-icon" src="img/mail.svg" alt="Email Icon">
-                </div>
-              </div>
-              <div class="login-input-container">
-                <div class="login-input-wrapper" id="pw-wrapper">
-                  <input class="login-pw-input" type="password" name="password-login" id="password-login"
-                    placeholder="Password" required autocomplete="current-password">
-                  <img class="lock-icon" id="lock-icon-login" src="img/lock.svg" alt="Password Icon">
-                </div>
-              </div>
-            </div>
-            <div class="login-remember">
-              <img class="checkbox-icon" src="img/unchecked.svg" alt="Checkbox" id="unchecked">
-              <span class="login-remember-text">Remember Me</span>
-            </div>
-            <div class="login-button-container">
-              <button type="submit" class="main-button">Log in</button>
-              <button type="button" class="main-button main-button-white">
-                Guest Log in
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
     </div>
 
     <footer>
@@ -65,6 +33,8 @@
     </footer>
   </div>
 
+  <script src="js/login_templates.js"></script>
+  <script src="js/login.js"></script>
 </body>
 
 </html>
