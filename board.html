@@ -24,39 +24,14 @@
         </div>
     </div>
 
-    <div class="component-instance">
-        <div>
-            <div class="instance">To do
-                <div class="plus-button">
-                    <img src="./img/Capa 1.svg" alt="">
-                </div>
-            </div>
-        </div>
-        
-        <div>
-            <div class="instance">In progress
-                <div class="plus-button">
-                    <img src="./img/Capa 1.svg" alt="">
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <div class="instance">Await feedback
-                <div class="plus-button">
-                    <img src="./img/Capa 1.svg" alt="">
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <div class="instance">Done</div>
-        </div>
-    </div>
-
     <div class="board">
         <div class="to-do-section">
-            <div class="card-user-story">
+            <div class="instance"><h3>To do</h3>
+                <div class="plus-button">
+                    <img src="./img/Capa 1.svg" alt="">
+                </div>
+            </div>
+            <div onclick="openCard()" class="card-user-story">
                 <div class="user-story">
                     <p class="to-do-top">User Story</p>
                 </div>
@@ -88,7 +63,12 @@
         </div>
 
         <div class="in-progress-section">
-            <div class="card-user-story-progress">
+            <div class="instance"><h3>In progress</h3>
+                <div class="plus-button">
+                    <img src="./img/Capa 1.svg" alt="">
+                </div>
+            </div>
+            <div onclick="openCard()" class="card-user-story-progress">
                 <div class="user-story">
                     <p class="in-progress-top">User Story</p>
                 </div>
@@ -122,7 +102,12 @@
         </div>
 
         <div class="await-section">
-            <div class="card-await-feedback">
+            <div class="instance"><h3>Await feedback</h3>
+                <div class="plus-button">
+                    <img src="./img/Capa 1.svg" alt="">
+                </div>
+            </div>
+            <div onclick="openCard()" class="card-await-feedback">
                 <div class="technical-task">
                     <p class="await-feedback-top">Technical Task</p>
                 </div>
@@ -176,7 +161,8 @@
         </div>
 
         <div class="done-section">
-            <div class="card-done">
+            <div class="instance"><h3>Done</h3></div>
+            <div onclick="openCard()" class="card-done">
                 <div class="technical-task">
                     <p class="await-feedback-top">Technical Task</p>
                 </div>
