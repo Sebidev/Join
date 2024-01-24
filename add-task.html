@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./fonts/inter.css">
     <link rel="stylesheet" href="./css/add_task.css">
     <script src="js/template_load.js"></script>
+    <script src="js/add-task.js"></script>
 </head>
 <body>
     <header id="header"></header>
@@ -16,7 +17,7 @@
 
     <div class="Add-task">
         <div class="Add-task-left">
-            <div class="title-container">
+            <div class="title-container-add-task">
                 <div class="title">Title</div>
                 <input type="text" class="title-input" placeholder="Enter a title" required>
                 <div class="required-info">This field is required</div>
@@ -37,7 +38,6 @@
                 <div class="required-legend">This field is required</div>
             </div>
         </div>
-        
 
         <div class="divider">
             <img src="./img/divider.svg" alt="">
@@ -46,22 +46,22 @@
         <div class="Add-task-right">
             <div class="due-date-container">
                 <div class="due-date">Due date</div>
-                <input class="due-date-input" type="text" placeholder="dd/mm/yyyy">
+                <input class="due-date-input" type="date" placeholder="dd/mm/yyyy">
             </div>
 
             <div class="prio-container">
                 <div class="prio">Prio</div>
-
+            
                 <div class="prio-option-container">
-                    <button class="button urgent">
+                    <button onclick="choose('urgent')" class="button urgent">
                         <h3>Urgent</h3>
                         <img src="./img/Prio_up.svg" alt="">
                     </button>
-                    <button class="button medium">
+                    <button onclick="choose('medium')" class="button medium">
                         <h3>Medium</h3>
                         <img src="./img/Prio_neutral.svg" alt="">
                     </button>
-                    <button class="button low">
+                    <button onclick="choose('low')" class="button low">
                         <h3>Low</h3>
                         <img src="./img/Prio_down.svg" alt="">
                     </button>
@@ -76,13 +76,15 @@
                 </div>
             </div>
             
-
             <div class="subtasks-container">
-                <div class="subtasks">Subtasks</div>
-                <div class="input-container">
-                    <input class="subtasks-input" type="text" placeholder="Add  new subtask">
-                    <img class="add-icon" src="./img/Subtasks icons11.svg" alt="">
+                <div class="subtasks-add-task">Subtasks</div>
+                <div class="input-container-subtask">
+                    <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask" onclick="changeSubImg()" id="subtask">
+                    <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" onclick="addSubtask()">
+                    <div class="subImgContainer" id="subImgContainer">
+                    </div>   
                 </div>
+                <div class="subtask-list" id="subtaskList"></div>
             </div>
 
             <div class="clear-and-create-section">
@@ -98,8 +100,6 @@
             </div>
         </div>
     </div>
-    
 
-    
 </body>
 </html>

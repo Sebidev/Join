@@ -33,7 +33,7 @@ body {
   margin-left: 96px;
 }
 
-.title-container {
+.title-container-add-task {
   display: flex;
   width: 440px;
   flex-direction: column;
@@ -127,6 +127,12 @@ body {
   line-height: 120%; /* 24px */
 }
 
+.input-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
 .assigned-to-container {
   display: flex;
   width: 440px;
@@ -148,6 +154,11 @@ body {
 }
 
 .assigned-dropdown {
+
+  background-image: url('./img/arrow_down.svg');
+  background-repeat: no-repeat;
+  background-position: right center;
+
   display: flex;
   width: 408px;
   padding: 12px 16px;
@@ -165,8 +176,30 @@ body {
   line-height: 120%; /* 24px */
 }
 
-.input-container {
-  position: relative;
+.input-container-subtask {
+  display: flex;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #d1d1d1;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.input-container-subtask img {
+  padding-right: 10px;
+  padding-left: 10px;
+  cursor: pointer;
+}
+
+.input-container-subtask input:focus {
+  outline: none;
+}
+
+.input-container-subtask input {
+  display: flex;
+  width: 100%;
+  border: none;
 }
 
 .arrow_down {
@@ -226,7 +259,7 @@ body {
 }
 
 .due-date-input {
-  background-image: url(../img/event.svg) !important;
+  /* background-image: url(../img/event.svg) !important; */
   background-repeat: no-repeat !important;
   background-position-x: calc(96%) !important;
   background-position-y: center !important;
@@ -246,6 +279,14 @@ body {
   font-style: normal;
   font-weight: 400;
   line-height: 120%; /* 24px */
+}
+
+.due-date-calendar {
+  display: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 1000;
 }
 
 .prio-container {
@@ -321,7 +362,7 @@ body {
   gap: 8px;
   flex: 1 0 0;
   border-radius: 10px;
-  background: #ffa800;
+  background: var(--white, #fff);
 }
 
 .low {
@@ -390,7 +431,7 @@ body {
   gap: 8px;
 }
 
-.subtasks {
+.subtasks-add-task {
   color: var(--Version-2-main-color, #2a3647);
   font-family: Inter;
   font-size: 20px;
@@ -420,12 +461,29 @@ body {
 }
 
 .add-icon {
-  top: 2px;
-  right: 3px;
   padding: 8px;
-  position: absolute;
   cursor: pointer;
   overflow: visible;
+}
+
+.subtask-icon {
+  cursor: pointer;
+  display: none;
+  position: absolute;
+  top: 46%;
+  transform: translateY(-50%);
+  right: 30px;
+}
+
+.subImgContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-subtask-line {
+  border-left: 1px solid #d1d1d1;
+  height: 30px;
 }
 
 /* Bottom */
@@ -465,12 +523,21 @@ body {
   width: 186.2px;
   height: 59.2px;
   display: flex;
-  padding: 16px;
   justify-content: center;
   align-items: center;
   gap: 4px;
   border-radius: 10px;
   background: #2a3647;
+}
+
+.create-task-button h3 {
+  color: #fff;
+
+  font-family: Inter;
+  font-size: 21px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 120%; /* 25.2px */
 }
 
 .required-legend {
