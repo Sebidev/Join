@@ -182,7 +182,7 @@ input {
 }
 
 input::placeholder {
-  color: #d1d1d1;
+  color: #999999;
 }
 
 input:focus {
