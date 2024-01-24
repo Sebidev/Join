@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="./css/board.css">
+    <link rel="stylesheet" href="./css/add_task.css">
     <script src="js/template_load.js"></script>
+    <script src="./js/board_template.js"></script>
 </head>
 <body>
     <header id="header"></header>
@@ -27,7 +29,7 @@
     <div class="board">
         <div class="to-do-section">
             <div class="instance"><h3>To do</h3>
-                <div class="plus-button">
+                <div onclick="addTask()" class="plus-button">
                     <img src="./img/Capa 1.svg" alt="">
                 </div>
             </div>
@@ -64,7 +66,7 @@
 
         <div class="in-progress-section">
             <div class="instance"><h3>In progress</h3>
-                <div class="plus-button">
+                <div onclick="addTask()" class="plus-button">
                     <img src="./img/Capa 1.svg" alt="">
                 </div>
             </div>
@@ -103,7 +105,7 @@
 
         <div class="await-section">
             <div class="instance"><h3>Await feedback</h3>
-                <div class="plus-button">
+                <div onclick="addTask()" class="plus-button">
                     <img src="./img/Capa 1.svg" alt="">
                 </div>
             </div>
@@ -162,7 +164,7 @@
 
         <div class="done-section">
             <div class="instance"><h3>Done</h3></div>
-            <div onclick="openCard()" class="card-done">
+            <div class="card-done">
                 <div class="technical-task">
                     <p class="await-feedback-top">Technical Task</p>
                 </div>
