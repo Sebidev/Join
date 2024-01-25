@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./fonts/inter.css">
     <link rel="stylesheet" href="./css/add_task.css">
     <script src="js/template_load.js"></script>
+    <script src="js/board_template.js"></script>
     <script src="js/add-task.js"></script>
 </head>
 <body>
@@ -71,8 +72,16 @@
             <div class="category-container">
                 <div class="category">Category</div>
                 <div class="input-container">
-                    <input class="category-dropdown" type="text" placeholder="Select contacts to assign">
-                    <img class="arrow_down" src="./img/arrow_down.svg" alt="">
+                    <input class="category-dropdown" type="text" placeholder="Select task category">
+                    <img class="arrow_down" src="./img/arrow_down.svg" onclick="toggleCategoryOptions()" alt="">
+                    <div class="category-options" id="categoryOptions">
+                        <label onclick="updateSelectedCategory('Technical task')">
+                            Technical task
+                        </label>
+                        <label onclick="updateSelectedCategory('User Story')">
+                            User Story
+                        </label>
+                    </div>
                 </div>
             </div>
             
@@ -88,7 +97,7 @@
             </div>
 
             <div class="clear-and-create-section">
-                <button class="clear-button">
+                <button class="clear-button" onclick="clearFields()">
                     <h3>Clear</h3>
                     <img src="./img/iconoir_cancel.svg" alt="">
                 </button>

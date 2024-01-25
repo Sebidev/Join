@@ -59,6 +59,7 @@ body {
 }
 
 .add-task-button {
+  cursor: pointer;
   display: flex;
   padding: 8px 16px;
   justify-content: center;
@@ -99,6 +100,7 @@ body {
 }
 
 .plus-button {
+  cursor: pointer;
   display: flex;
   width: 18px;
   height: 18px;
@@ -477,6 +479,8 @@ body {
 }
 
 .clear-and-create-section-modal {
+  position: fixed;
+  bottom: 66px;
   width: 334px;
   height: 56px;
   margin-top: 160px;

@@ -39,24 +39,24 @@ function addTask() {
                 <div class="Add-task-right-modal">
                     <div class="due-date-container">
                         <div class="due-date">Due date</div>
-                        <input class="due-date-input" type="text" placeholder="dd/mm/yyyy">
+                        <input class="due-date-input" type="date" placeholder="dd/mm/yyyy">
                     </div>
 
                     <div class="prio-container">
                         <div class="prio">Prio</div>
 
                         <div class="prio-option-container">
-                            <button class="button urgent">
+                            <button onclick="choose('urgent')" class="button urgent">
                                 <h3>Urgent</h3>
                                 <img src="./img/Prio_up.svg" alt="">
                             </button>
-                            <button class="button medium">
+                            <button onclick="choose('medium')" class="button medium">
                                 <h3>Medium</h3>
                                 <img src="./img/Prio_neutral.svg" alt="">
                             </button>
-                            <button class="button low">
+                            <button onclick="choose('low')" class="button low">
                                 <h3>Low</h3>
-                                <img src="./img/Prio_down.svg" alt="">
+                            <img src="./img/Prio_down.svg" alt="">
                             </button>
                         </div>
                     </div>
@@ -65,21 +65,32 @@ function addTask() {
                         <div class="category">Category</div>
                         <div class="input-container">
                             <input class="category-dropdown" type="text" placeholder="Select contacts to assign">
-                            <img class="arrow_down" src="./img/arrow_down.svg" alt="">
+                            <img class="arrow_down" src="./img/arrow_down.svg" onclick="toggleCategoryOptions()" alt="">
+                            <div class="category-options" id="categoryOptions">
+                                <label onclick="updateSelectedCategory('Technical task')">
+                                    Technical task
+                                </label>
+                                <label onclick="updateSelectedCategory('User Story')">
+                                    User Story
+                                </label>
+                            </div>
                         </div>
                     </div>
 
 
                     <div class="subtasks-container">
-                        <div class="subtasks">Subtasks</div>
-                        <div class="input-container">
-                            <input class="subtasks-input" type="text" placeholder="Add  new subtask">
-                            <img class="add-icon" src="./img/Subtasks icons11.svg" alt="">
+                        <div class="subtasks-add-task">Subtasks</div>
+                        <div class="input-container-subtask">
+                            <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask" onclick="changeSubImg()" id="subtask">
+                            <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" onclick="addSubtask()">
+                            <div class="subImgContainer" id="subImgContainer">
+                            </div>   
                         </div>
+                        <div class="subtask-list" id="subtaskList"></div>
                     </div>
 
                     <div class="clear-and-create-section-modal">
-                        <button onclick="closeModal()" class="cancel-button-modal">
+                        <button onclick="clearFields()" class="cancel-button-modal">
                             <h3>Cancel</h3>
                             <img src="./img/iconoir_cancel.svg" alt="">
                         </button>
@@ -93,17 +104,19 @@ function addTask() {
             </div>
         </div>
     `;
-
+    
     document.body.insertAdjacentHTML('beforeend', modalHTML);
 
-     const overlay = document.getElementById('overlay');
-     overlay.style.display = 'block';
+    choose('medium');
+
+    const overlay = document.getElementById('overlay');
+    overlay.style.display = 'block';
 }
- 
+
 function closeModal() {
-     const modal = document.getElementById('taskModal');
-     const overlay = document.getElementById('overlay');
-     
-     modal.remove();
-     overlay.remove();
+    const modal = document.getElementById('taskModal');
+    const overlay = document.getElementById('overlay');
+
+    modal.remove();
+    overlay.remove();
 }

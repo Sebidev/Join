@@ -35,10 +35,10 @@ body {
 
 .title-container-add-task {
   display: flex;
+  height: 96px;
   width: 440px;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
 }
 
 .title {
@@ -63,6 +63,7 @@ body {
 
 .title-input {
   flex: 1 0 0;
+  margin-top: 8px;
   margin-bottom: 4px;
   display: flex;
   padding: 12px 21px;
@@ -91,8 +92,10 @@ body {
 }
 
 .description-container {
+  margin-top: 16px;
   display: flex;
   width: 440px;
+  height: 168px;
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
@@ -128,21 +131,23 @@ body {
 }
 
 .input-container {
+  height: 48px;
   display: flex;
   align-items: center;
   position: relative;
 }
 
 .assigned-to-container {
+  margin-top: 16px;
   display: flex;
   width: 440px;
   height: 80px;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
 }
 
 .assigned-to {
+  margin-bottom: 8px;
   width: 112px;
   flex: 1 0 0;
   color: var(--Version-2-main-color, #2a3647);
@@ -154,8 +159,7 @@ body {
 }
 
 .assigned-dropdown {
-
-  background-image: url('./img/arrow_down.svg');
+  background-image: url("./img/arrow_down.svg");
   background-repeat: no-repeat;
   background-position: right center;
 
@@ -363,6 +367,7 @@ body {
   flex: 1 0 0;
   border-radius: 10px;
   background: var(--white, #fff);
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
 }
 
 .low {
@@ -415,12 +420,45 @@ body {
   border: 1px solid var(--Style, #d1d1d1);
   background: var(--white, #fff);
 
+  color: var(--Style, #d1d1d1);
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%;
+}
+
+.category-options {
+  max-height: 100px;
+  height: 100px;
+  width: 100%;
+  top: 48px;
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 1px solid var(--Style, #d1d1d1);
+  overflow-y: auto;
+}
+
+.category-options label {
   color: var(--black, #000);
   font-family: Inter;
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
   line-height: 120%; /* 24px */
+
+  display: flex;
+  align-items: center;
+  height: 34px;
+  /*display: block;*/
+  padding: 8px;
+  cursor: pointer;
+}
+
+.category-options label:hover {
+  background-color: #f0f0f0;
 }
 
 .subtasks-container {
@@ -452,12 +490,32 @@ body {
   border-radius: 10px;
   border: 1px solid var(--Style, #d1d1d1);
   background: #fff;
-  color: var(--Style, #d1d1d1);
   font-family: Inter;
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
   line-height: 120%; /* 24px */
+}
+
+.subtask-list {
+  width: 100%;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.subtask-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-button {
+  display: flex;
+}
+
+.subtask-text {
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .add-icon {
@@ -488,15 +546,16 @@ body {
 
 /* Bottom */
 .clear-and-create-section {
-  margin-top: 146px;
-  margin-left: 131px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
+  position: fixed;
+  bottom: 0;
+  padding: 10px;
+  display: flex;
   gap: 16px;
+  right: 124px;
 }
 
 .clear-button {
+  cursor: pointer;
   width: 107.6px;
   height: 57.6px;
   display: flex;
@@ -520,6 +579,7 @@ body {
 }
 
 .create-task-button {
+  cursor: pointer;
   width: 186.2px;
   height: 59.2px;
   display: flex;
@@ -541,7 +601,7 @@ body {
 }
 
 .required-legend {
-  margin-top: 215px;
+  margin-top: 223px;
   width: 170px;
   height: 27px;
   flex-shrink: 0;
