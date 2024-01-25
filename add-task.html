@@ -6,9 +6,7 @@
     <title>Join</title>
     <link rel="stylesheet" href="./fonts/inter.css">
     <link rel="stylesheet" href="./css/add_task.css">
-    <script src="js/template_load.js"></script>
-    <script src="js/board_template.js"></script>
-    <script src="js/add-task.js"></script>
+    
 </head>
 <body>
     <header id="header"></header>
@@ -16,6 +14,7 @@
 
     <div class="header-add-task">Add Task</div>
 
+    <form id="taskForm">
     <div class="Add-task">
         <div class="Add-task-left">
             <div class="title-container-add-task">
@@ -47,7 +46,7 @@
         <div class="Add-task-right">
             <div class="due-date-container">
                 <div class="due-date">Due date</div>
-                <input class="due-date-input" type="date" placeholder="dd/mm/yyyy">
+                <input class="due-date-input" type="date" placeholder="dd/mm/yyyy" required>
             </div>
 
             <div class="prio-container">
@@ -69,10 +68,11 @@
                 </div>
             </div>
 
+            
             <div class="category-container">
                 <div class="category">Category</div>
                 <div class="input-container">
-                    <input class="category-dropdown" type="text" placeholder="Select task category">
+                    <input class="category-dropdown" type="text" placeholder="Select task category" required>
                     <img class="arrow_down" src="./img/arrow_down.svg" onclick="toggleCategoryOptions()" alt="">
                     <div class="category-options" id="categoryOptions">
                         <label onclick="updateSelectedCategory('Technical task')">
@@ -84,6 +84,7 @@
                     </div>
                 </div>
             </div>
+            
             
             <div class="subtasks-container">
                 <div class="subtasks-add-task">Subtasks</div>
@@ -102,13 +103,16 @@
                     <img src="./img/iconoir_cancel.svg" alt="">
                 </button>
         
-                <button class="create-task-button">
+                <button type="submit" class="create-task-button" onclick="addToBoard()">
                     <h3>Create Task</h3>
                     <img src="./img/check.svg" alt="">
                 </button>
             </div>
+        </form>
         </div>
     </div>
-
+    <script src="js/template_load.js"></script>
+    <script src="js/add-task.js"></script>
+    <script src="js/board_template.js"></script>
 </body>
 </html>

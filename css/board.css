@@ -162,7 +162,7 @@ body {
 .card-user-story {
   display: flex;
   width: 220px;
-  height: 212px;
+  /*height: 212px;*/
   padding: 16px;
   gap: 24px;
   border-radius: 24px;
@@ -253,6 +253,8 @@ body {
 }
 
 .user-story {
+  margin-top: 0px;
+  margin-bottom: 0px;
   width: 81px;
   height: 19px;
   display: flex;

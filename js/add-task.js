@@ -1,3 +1,12 @@
+let selectedPriority = '';
+let titles = [];
+let descriptions = [];
+let assignedTos = [];
+let dueDates = [];
+let selectedPrios = [];
+let selectedCategories = [];
+let subTasks = [];
+
 function choose(priority) {
     let colorMap = { 'urgent': '#FF3D00', 'medium': '#FFA800', 'low': '#7AE229' };
     let setStyles = (elements, styles) => elements.forEach(e => e && Object.assign(e.style, styles));
@@ -10,10 +19,12 @@ function choose(priority) {
     if (priorityButton && priorityImg && colorMap[priority]) {
         setStyles([priorityButton], { backgroundColor: colorMap[priority] });
         setStyles([priorityImg], { filter: 'brightness(0) invert(1)' });
+
+        selectedPriority = priority;
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     choose('medium');
 });
 
@@ -111,4 +122,41 @@ function clearFields() {
 
     let subtaskList = document.getElementById('subtaskList');
     subtaskList.innerHTML = '';
+}
+
+function addToBoard() {
+    let form = document.getElementById('taskForm');
+    let title = document.querySelector('.title-input').value;
+    let description = document.querySelector('.description-input').value;
+    let assignedTo = document.querySelector('.assigned-dropdown').value;
+    let dueDate = document.querySelector('.due-date-input').value;
+    let selectedPrio = selectedPriority;
+    let selectedCategory = document.querySelector('.category-dropdown').value;
+    let subTaskElement = document.querySelector('.subtask-item .subtask-text');
+    let subTask = subTaskElement ? subTaskElement.textContent : '';
+
+    // Für die Programmierung erstmal rausgenommen damit nicht immer alles ausgefüllt werden muss
+    //if (!title || !description || !dueDate || !selectedCategory) {
+    //    return;
+    //}
+
+    titles.push(title);
+    descriptions.push(description);
+    assignedTos.push(assignedTo);
+    dueDates.push(dueDate);
+    selectedPrios.push(selectedPrio);
+    selectedCategories.push(selectedCategory);
+    subTasks.push(subTask);
+
+    localStorage.setItem('titles', JSON.stringify(titles));
+    localStorage.setItem('descriptions', JSON.stringify(descriptions));
+    localStorage.setItem('assignedTos', JSON.stringify(assignedTos));
+    localStorage.setItem('dueDates', JSON.stringify(dueDates));
+    localStorage.setItem('selectedPrios', JSON.stringify(selectedPrios));
+    localStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
+    localStorage.setItem('subTasks', JSON.stringify(subTasks));
+
+    window.location.href = 'board.html';
+
+    clearFields();
 }

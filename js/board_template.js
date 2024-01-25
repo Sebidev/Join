@@ -104,7 +104,7 @@ function addTask() {
             </div>
         </div>
     `;
-    
+
     document.body.insertAdjacentHTML('beforeend', modalHTML);
 
     choose('medium');
@@ -119,4 +119,80 @@ function closeModal() {
 
     modal.remove();
     overlay.remove();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    let titles = JSON.parse(localStorage.getItem('titles')) || [];
+    let descriptions = JSON.parse(localStorage.getItem('descriptions')) || [];
+    let assignedTos = JSON.parse(localStorage.getItem('assignedTos')) || [];
+    let dueDates = JSON.parse(localStorage.getItem('dueDates')) || [];
+    let selectedPrios = JSON.parse(localStorage.getItem('selectedPrios')) || [];
+    let selectedCategories = JSON.parse(localStorage.getItem('selectedCategories')) || [];
+    let subTasks = JSON.parse(localStorage.getItem('subTasks')) || [];
+
+    renderCard();
+
+    localStorage.clear();
+
+    function getValue(selector) {
+        let element = document.querySelector(selector);
+        return element ? element.value : '';
+    }
+
+    function renderCard() {
+        let renderCardContainer = document.getElementById('renderCard');
+        if (renderCardContainer) {
+            let title = titles.join(', ');
+            let description = descriptions.join(', ');
+            let assignedTo = assignedTos.join(', ');
+            let dueDate = dueDates.join(', ');
+            let selectedPrio = selectedPrios.join(', ');
+            let selectedCategory = selectedCategories.join(', ');
+            let subTask = subTasks.join(', ');
+
+            renderCardContainer.innerHTML = `
+                <div class="card-user-story">
+                <p class="user-story">${selectedCategory}</p>
+                    <div class="title-container">
+                        <p class="card-title">${title}</p>
+                        <p class="card-content">${description}</p>
+                    </div>
+                    <p style="display: none">${dueDate}</p>
+                    <div>
+                        <div class="progress-bar"></div>
+                        <p>${subTask}</p>
+                    </div>
+                    <div class="to-do-bottom">
+                        <div class="initial-container">
+                            <p >${assignedTo}</p>
+                            <div class="profile-badge">
+                                <img src="./img/Ellipse 5.svg" alt="">
+                            </div>
+                            <div class="profile-badge">
+                                <img src="./img/Ellipse 5 (1).svg" alt="">
+                            </div>
+                            <div class="profile-badge">
+                                <img src="./img/Ellipse 5 (2).svg" alt="">
+                            </div>
+                        </div>
+                        <div class="priority-symbol">
+                        <img src="${getPriorityIcon(selectedPrio)}" alt="">
+                        </div>
+                </div>
+            `;
+        }
+    }
+});
+
+function getPriorityIcon(priority) {
+    switch (priority) {
+        case 'urgent':
+            return './img/Prio_up.svg';
+        case 'medium':
+            return './img/Prio_neutral.svg';
+        case 'low':
+            return './img/Prio_down.svg';
+        default:
+            return '';  // Hier können Sie einen Standardwert festlegen oder leer lassen, wenn keine Übereinstimmung gefunden wurde
+    }
 }
