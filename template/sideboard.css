@@ -8,12 +8,14 @@ body{
     left: 0;
     display: flex;
     width: 232px;
+    height: 100%;
     padding: 64px 0px;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     flex-shrink: 0;
     background: #2A3647;
+    box-sizing: border-box;
 }
 
 .join_logo{
@@ -31,7 +33,7 @@ body{
     justify-content: center;
     align-items: center;
     flex-direction: row; 
-    padding: 15px 56px;
+    /* padding: 15px 56px; */
     gap: 8px;
 }
 
