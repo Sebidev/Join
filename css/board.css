@@ -242,6 +242,8 @@ body {
 }
 
 .technical-task {
+  margin-top: 0px;
+  margin-bottom: 0px;
   width: 112px;
   height: 19px;
   display: flex;

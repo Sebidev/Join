@@ -1,11 +1,10 @@
-let selectedPriority = '';
-let titles = [];
-let descriptions = [];
-let assignedTos = [];
-let dueDates = [];
-let selectedPrios = [];
-let selectedCategories = [];
-let subTasks = [];
+//let titles = JSON.parse(localStorage.getItem('titles')) || [];
+//let descriptions = JSON.parse(localStorage.getItem('descriptions')) || [];
+//let assignedTos = JSON.parse(localStorage.getItem('assignedTos')) || [];
+//let dueDates = JSON.parse(localStorage.getItem('dueDates')) || [];
+//let selectedPrios = JSON.parse(localStorage.getItem('selectedPrios')) || [];
+//let selectedCategories = JSON.parse(localStorage.getItem('selectedCategories')) || [];
+//let subTasks = JSON.parse(localStorage.getItem('subTasks')) || [];
 
 function choose(priority) {
     let colorMap = { 'urgent': '#FF3D00', 'medium': '#FFA800', 'low': '#7AE229' };
@@ -89,14 +88,14 @@ function addSubtask() {
 
     if (subtaskText !== '') {
         let subtaskHTML = `
-        <div class="subtask-item">
-            <div class="subtask-text">${subtaskText}</div>
-            <div class="delete-button" onclick="deleteSubtaskItem(this.parentNode)"><img src="./img/iconoir_cancel.svg" alt=""></div>
-        </div>
+            <div class="subtask-item">
+                <div class="subtask-text">${subtaskText}</div>
+                <div class="delete-button" onclick="deleteSubtaskItem(this.parentNode)">
+                    <img src="./img/iconoir_cancel.svg" alt="">
+                </div>
+            </div>
         `;
-
         subtaskList.innerHTML += subtaskHTML;
-
         inputElement.value = '';
     }
 }
@@ -124,39 +123,38 @@ function clearFields() {
     subtaskList.innerHTML = '';
 }
 
-function addToBoard() {
-    let form = document.getElementById('taskForm');
-    let title = document.querySelector('.title-input').value;
-    let description = document.querySelector('.description-input').value;
-    let assignedTo = document.querySelector('.assigned-dropdown').value;
-    let dueDate = document.querySelector('.due-date-input').value;
-    let selectedPrio = selectedPriority;
-    let selectedCategory = document.querySelector('.category-dropdown').value;
-    let subTaskElement = document.querySelector('.subtask-item .subtask-text');
-    let subTask = subTaskElement ? subTaskElement.textContent : '';
-
-    // Für die Programmierung erstmal rausgenommen damit nicht immer alles ausgefüllt werden muss
-    //if (!title || !description || !dueDate || !selectedCategory) {
-    //    return;
-    //}
-
-    titles.push(title);
-    descriptions.push(description);
-    assignedTos.push(assignedTo);
-    dueDates.push(dueDate);
-    selectedPrios.push(selectedPrio);
-    selectedCategories.push(selectedCategory);
-    subTasks.push(subTask);
-
-    localStorage.setItem('titles', JSON.stringify(titles));
-    localStorage.setItem('descriptions', JSON.stringify(descriptions));
-    localStorage.setItem('assignedTos', JSON.stringify(assignedTos));
-    localStorage.setItem('dueDates', JSON.stringify(dueDates));
-    localStorage.setItem('selectedPrios', JSON.stringify(selectedPrios));
-    localStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
-    localStorage.setItem('subTasks', JSON.stringify(subTasks));
-
-    window.location.href = 'board.html';
-
-    clearFields();
-}
+//function addToBoard() {
+//    let form = document.getElementById('taskForm');
+//    let title = document.querySelector('.title-input').value;
+//    let description = document.querySelector('.description-input').value;
+//    let assignedTo = document.querySelector('.assigned-dropdown').value;
+//    let dueDate = document.querySelector('.due-date-input').value;
+//    let selectedPrio = selectedPriority;
+//    let selectedCategory = document.querySelector('.category-dropdown').value;
+//    let subTaskElements = document.querySelectorAll('.subtask-item .subtask-text');
+//    let subTasks = Array.from(subTaskElements).map(subtask => subtask.textContent);
+//    
+//    // Zum programmieren außer Kraft gesetzt
+//    //if (!title || !description || !dueDate || !selectedCategory) {
+//    //    return;
+//    //}
+//
+//    titles.push(title);
+//    descriptions.push(description);
+//    assignedTos.push(assignedTo);
+//    dueDates.push(dueDate);
+//    selectedPrios.push(selectedPrio);
+//    selectedCategories.push(selectedCategory);
+//    
+//    localStorage.setItem('titles', JSON.stringify(titles));
+//    localStorage.setItem('descriptions', JSON.stringify(descriptions));
+//    localStorage.setItem('assignedTos', JSON.stringify(assignedTos));
+//    localStorage.setItem('dueDates', JSON.stringify(dueDates));
+//    localStorage.setItem('selectedPrios', JSON.stringify(selectedPrios));
+//    localStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
+//    localStorage.setItem('subTasks', JSON.stringify(subTasks));
+//
+//    renderCard();
+//    clearFields();
+//    window.location.href = 'board.html';
+//}

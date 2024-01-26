@@ -1,3 +1,11 @@
+let titles = JSON.parse(localStorage.getItem('titles')) || [];
+let descriptions = JSON.parse(localStorage.getItem('descriptions')) || [];
+let assignedTos = JSON.parse(localStorage.getItem('assignedTos')) || [];
+let dueDates = JSON.parse(localStorage.getItem('dueDates')) || [];
+let selectedPrios = JSON.parse(localStorage.getItem('selectedPrios')) || [];
+let selectedCategories = JSON.parse(localStorage.getItem('selectedCategories')) || [];
+let subTasks = JSON.parse(localStorage.getItem('subTasks')) || [];
+
 function addTask() {
     const modalHTML = `
         <div id="overlay"></div>
@@ -121,47 +129,39 @@ function closeModal() {
     overlay.remove();
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    let titles = JSON.parse(localStorage.getItem('titles')) || [];
-    let descriptions = JSON.parse(localStorage.getItem('descriptions')) || [];
-    let assignedTos = JSON.parse(localStorage.getItem('assignedTos')) || [];
-    let dueDates = JSON.parse(localStorage.getItem('dueDates')) || [];
-    let selectedPrios = JSON.parse(localStorage.getItem('selectedPrios')) || [];
-    let selectedCategories = JSON.parse(localStorage.getItem('selectedCategories')) || [];
-    let subTasks = JSON.parse(localStorage.getItem('subTasks')) || [];
+localStorage.clear();
 
-    renderCard();
+function getValue(selector) {
+    let element = document.querySelector(selector);
+    return element ? element.value : '';
+}
 
-    localStorage.clear();
+function renderCard() {
+    let renderCardContainer = document.getElementById('renderCard');
+    console.log(renderCardContainer);
+    if (renderCardContainer) {
+        let title = titles.join(', ');
+        let description = descriptions.join(', ');
+        let assignedTo = assignedTos.join(', ');
+        let dueDate = dueDates.join(', ');
+        let selectedPrio = selectedPrios.join(', ');
+        let selectedCategory = selectedCategories.join(', ');
+        let subTask = subTasks.join(', ');
+        let createdSubtasks = subTasks.length;
+        let categoryClass = selectedCategory === 'Technical task' ? 'technical-task' : 'user-story';
 
-    function getValue(selector) {
-        let element = document.querySelector(selector);
-        return element ? element.value : '';
-    }
-
-    function renderCard() {
-        let renderCardContainer = document.getElementById('renderCard');
-        if (renderCardContainer) {
-            let title = titles.join(', ');
-            let description = descriptions.join(', ');
-            let assignedTo = assignedTos.join(', ');
-            let dueDate = dueDates.join(', ');
-            let selectedPrio = selectedPrios.join(', ');
-            let selectedCategory = selectedCategories.join(', ');
-            let subTask = subTasks.join(', ');
-
-            renderCardContainer.innerHTML = `
+        let cardContent = `
                 <div class="card-user-story">
-                <p class="user-story">${selectedCategory}</p>
+                <p class="${categoryClass}">${selectedCategory}</p>
                     <div class="title-container">
                         <p class="card-title">${title}</p>
                         <p class="card-content">${description}</p>
                     </div>
                     <p style="display: none">${dueDate}</p>
-                    <div>
+                    <div class="progress">
                         <div class="progress-bar"></div>
-                        <p>${subTask}</p>
-                    </div>
+                        <div class="subtasks">0/${createdSubtasks} Subtasks</div>
+                </div>
                     <div class="to-do-bottom">
                         <div class="initial-container">
                             <p >${assignedTo}</p>
@@ -180,9 +180,47 @@ document.addEventListener('DOMContentLoaded', function () {
                         </div>
                 </div>
             `;
-        }
+        renderCardContainer.innerHTML = cardContent;
     }
-});
+}
+
+function addToBoard() {
+    let form = document.getElementById('taskForm');
+    let title = document.querySelector('.title-input').value;
+    let description = document.querySelector('.description-input').value;
+    let assignedTo = document.querySelector('.assigned-dropdown').value;
+    let dueDate = document.querySelector('.due-date-input').value;
+    let selectedPrio = selectedPriority;
+    let selectedCategory = document.querySelector('.category-dropdown').value;
+    let subTaskElements = document.querySelectorAll('.subtask-item .subtask-text');
+    let subTasks = Array.from(subTaskElements).map(subtask => subtask.textContent);
+    
+    // Zum programmieren außer Kraft gesetzt
+    //if (!title || !description || !dueDate || !selectedCategory) {
+    //    return;
+    //}
+
+    titles.push(title);
+    descriptions.push(description);
+    assignedTos.push(assignedTo);
+    dueDates.push(dueDate);
+    selectedPrios.push(selectedPrio);
+    selectedCategories.push(selectedCategory);
+    
+    localStorage.setItem('titles', JSON.stringify(titles));
+    localStorage.setItem('descriptions', JSON.stringify(descriptions));
+    localStorage.setItem('assignedTos', JSON.stringify(assignedTos));
+    localStorage.setItem('dueDates', JSON.stringify(dueDates));
+    localStorage.setItem('selectedPrios', JSON.stringify(selectedPrios));
+    localStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
+    localStorage.setItem('subTasks', JSON.stringify(subTasks));
+
+    renderCard();    
+    clearFields();
+    window.location.href = 'board.html';
+}
+
+//renderCard();
 
 function getPriorityIcon(priority) {
     switch (priority) {
@@ -193,6 +231,6 @@ function getPriorityIcon(priority) {
         case 'low':
             return './img/Prio_down.svg';
         default:
-            return '';  // Hier können Sie einen Standardwert festlegen oder leer lassen, wenn keine Übereinstimmung gefunden wurde
+            return '';
     }
 }
