@@ -167,6 +167,8 @@ body {
 .login-input-wrapper {
   width: 70%;
   position: relative;
+  border: 0.075rem solid #d1d1d1;
+  border-radius: 0.5rem;
 }
 
 input {
@@ -175,10 +177,9 @@ input {
   appearance: none;
   background-color: white;
   padding: 0.75rem 1rem;
-  border: 0.075rem solid #d1d1d1;
-  border-radius: 0.5rem;
+  border: none;
   font-size: 1.25rem;
-  width: 100%;
+  width: 83%;
 }
 
 input::placeholder {
@@ -279,6 +280,8 @@ input:focus {
 .register-input-wrapper {
   width: 70%;
   position: relative;
+  border: 0.075rem solid #d1d1d1;
+  border-radius: 0.5rem;
 }
 
 .register-button-container {
