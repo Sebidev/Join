@@ -75,9 +75,13 @@ function loginHTML() {
                     <div class="login-inputs" id="login-inputs">
                     <div class="login-input-container">
                         <div class="login-input-wrapper">
-                        <input class="login-email-input" type="email" name="email-login" id="email-login" placeholder="Email"
+                            <div class="login-email-input">
+                        <input  type="email" name="email-login" id="email-login" placeholder="Email"
                             required autocomplete="on" />
+                            </div>
+                            <div>
                         <img class="email-icon" src="img/mail.svg" alt="Email Icon" />
+                            </div>
                         </div>
                     </div>
                     <div class="login-input-container">
