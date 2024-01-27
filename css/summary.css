@@ -20,7 +20,8 @@ body {
     font-size: 61px;
     font-style: normal;
     font-weight: 700;
-    line-height: 120%; /* 73.2px */
+    line-height: 120%;
+    /* 73.2px */
     margin-left: 350px;
 }
 
@@ -29,20 +30,21 @@ body {
     margin-right: 30px;
 }
 
-.verticalbar img{
+.verticalbar img {
     width: 0px;
     height: 59px;
     stroke-width: 3px;
     fill: #29ABE2;
 }
 
-.header_summary_text{
+.header_summary_text {
     color: #2A3647;
     font-family: Inter;
     font-size: 27px;
     font-style: normal;
     font-weight: 400;
-    line-height: 120%; /* 32.4px */
+    line-height: 120%;
+    /* 32.4px */
 }
 
 .summary_container {
@@ -51,7 +53,7 @@ body {
     gap: 200px;
 }
 
-.boxs_box{
+.boxs_box {
     display: flex;
     width: 560px;
     flex-direction: column;
@@ -61,7 +63,7 @@ body {
     margin-left: 350px;
 }
 
-.box_pencil{
+.box_pencil {
     display: flex;
     width: 264px;
     height: 168px;
@@ -75,28 +77,30 @@ body {
     box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.10);
 }
 
-.box_icon img{
+.box_icon img {
     width: 69px;
     height: 69px;
 }
 
-.box_number{
+.box_number {
     color: #000;
     text-align: center;
     font-family: Inter;
     font-size: 64px;
     font-style: normal;
     font-weight: 600;
-    line-height: 120%; /* 76.8px */
+    line-height: 120%;
+    /* 76.8px */
 }
 
-.box_text{
+.box_text {
     color: #2A3647;
     font-family: Inter;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
-    line-height: 120%; /* 24px */
+    line-height: 120%;
+    /* 24px */
 }
 
 .column_container {
@@ -104,7 +108,7 @@ body {
     flex-direction: column;
 }
 
-.boxs_top{
+.boxs_top {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -112,7 +116,7 @@ body {
     gap: 32px;
 }
 
-.box_check{
+.box_check {
     display: flex;
     width: 264px;
     height: 168px;
@@ -126,13 +130,13 @@ body {
     box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.10);
 }
 
-.boxs_center{
+.boxs_center {
     display: flex;
     justify-content: column;
     align-items: center;
 }
 
-.box_urgency{
+.box_urgency {
     display: flex;
     width: 545px;
     height: 168px;
@@ -145,7 +149,7 @@ body {
     box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.10);
 }
 
-.box_urgency_verticalbar img{
+.box_urgency_verticalbar img {
     width: 0px;
     height: 102.023px;
     flex-shrink: 0;
@@ -153,26 +157,28 @@ body {
     stroke: #D1D1D1;
 }
 
-.box_urgency_date{
+.box_urgency_date {
     color: #2A3647;
     font-family: Inter;
     font-size: 21px;
     font-style: normal;
     font-weight: 700;
-    line-height: 120%; /* 25.2px */
+    line-height: 120%;
+    /* 25.2px */
     margin-bottom: 13px;
 }
 
-.box_urgency_deadline{
+.box_urgency_deadline {
     color: #2A3647;
     font-family: Inter;
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
-    line-height: 120%; /* 19.2px */
+    line-height: 120%;
+    /* 19.2px */
 }
 
-.boxs_down{
+.boxs_down {
     display: flex;
     padding: 1px 0px;
     justify-content: center;
@@ -180,7 +186,7 @@ body {
     gap: 28px;
 }
 
-.box_small{
+.box_small {
     display: flex;
     width: 195px;
     height: 168px;
@@ -195,37 +201,40 @@ body {
     box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.10);
 }
 
-.box_small_number{
+.box_small_number {
     color: #000;
     text-align: center;
     font-family: Inter;
     font-size: 64px;
     font-style: normal;
     font-weight: 600;
-    line-height: 120%; /* 76.8px */
+    line-height: 120%;
+    /* 76.8px */
 }
 
-.box_small_text{
+.box_small_text {
     color: #2A3647;
     text-align: center;
     font-family: Inter;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
-    line-height: 120%; /* 24px */
+    line-height: 120%;
+    /* 24px */
 }
 
-.box_small_text2{
+.box_small_text2 {
     color: #2A3647;
     text-align: center;
     font-family: "OpenSans";
     font-size: 21px;
     font-style: normal;
     font-weight: 400;
-    line-height: 120%; /* 25.2px */
+    line-height: 120%;
+    /* 25.2px */
 }
 
-.right_textbox{
+.right_textbox {
     display: inline-flex;
     flex-direction: column;
     justify-content: center;
@@ -233,20 +242,22 @@ body {
     gap: 3px;
 }
 
-.right_textgray{
+.right_textgray {
     color: #2A3647;
     font-family: Inter;
     font-size: 47px;
     font-style: normal;
     font-weight: 500;
-    line-height: 120%; /* 56.4px */
+    line-height: 120%;
+    /* 56.4px */
 }
 
-.right_textlightblue{
+.right_textlightblue {
     color: #29ABE2;
     font-family: Inter;
     font-size: 64px;
     font-style: normal;
     font-weight: 700;
-    line-height: 120%; /* 76.8px */
+    line-height: 120%;
+    /* 76.8px */
 }

@@ -353,3 +353,61 @@ input:focus {
 .arrow-icon:hover {
   background-color: #eeefef;
 }
+
+.visible {
+  visibility: visible !important;
+}
+
+.login-error-message {
+  text-align: center;
+  font-size: 1rem;
+  color: red;
+  padding-top: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.register-checkbox-error,
+.register-password-error,
+.register-email-error {
+  text-align: center;
+  font-size: 1rem;
+  color: red;
+  padding-top: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.signup-success {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  overflow: hidden;
+}
+
+.signup-success-message {
+  background-color: #2a3647;
+  border-radius: 0.5rem;
+  padding: 1rem 1.5rem;
+  color: white;
+  font-size: 1.25rem;
+  opacity: 0;
+  transform: translateY(750%);
+}
+
+.signup-success-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  visibility: hidden;
+}
+
+.success-message-visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  transition: all 0.25s ease-in-out !important;
+}

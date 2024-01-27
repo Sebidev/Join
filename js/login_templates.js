@@ -10,7 +10,7 @@ function registerHTML() {
                     <img class="arrow-icon" src="img/arrow-left.svg" alt="arrow left" onclick="renderSection('login')">
                 </div>
                 <h1 class="register-heading">Sign Up</h1>
-                <form class="register-form">
+                <form class="register-form" onsubmit="signUp(); return false">
                     <div id="register-inputs">
                         <div class="register-input-container">
                             <div class="register-input-wrapper">
@@ -52,6 +52,11 @@ function registerHTML() {
                     </div>
                 </form>
             </div>
+            <div class="signup-success-overlay" id="signup-success-overlay">
+                <div class="signup-success">
+                    <div class="signup-success-message" id="signup-success-message">You Signed Up successfully</div>
+                </div>
+            </div>
         </div>
     `;
 }
@@ -66,7 +71,7 @@ function loginHTML() {
         <div class="login-card-container">
             <div class="login-card">
                 <h1 class="login-heading">Log in</h1>
-                <form class="login-form">
+                <form class="login-form" onsubmit="login(); return false">
                     <div class="login-inputs" id="login-inputs">
                     <div class="login-input-container">
                         <div class="login-input-wrapper">
@@ -91,7 +96,7 @@ function loginHTML() {
                     </div>
                     <div class="login-button-container">
                     <button type="submit" class="main-button">Log in</button>
-                    <button type="button" class="main-button main-button-white">
+                    <button type="button" class="main-button main-button-white" onclick="guestLogin()">
                         Guest Log in
                     </button>
                     </div>
