@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Join</title>
-    <link rel="stylesheet" href="./fonts/inter.css">
-    <link rel="stylesheet" href="./css/add_task.css">
-    
-</head>
-<body>
+    <link rel="stylesheet" href="./fonts/inter.css" />
+    <link rel="stylesheet" href="./css/add_task.css" />
+  </head>
+  <body>
     <header id="header"></header>
     <div id="sideboard"></div>
 
@@ -19,36 +18,37 @@
             <div class="Add-task-left">
                 <div class="title-container-add-task">
                     <div class="title">Title</div>
-                    <input type="text" class="title-input" placeholder="Enter a title" required>
+                    <input id="taskTitleInput" type="text" class="title-input" placeholder="Enter a title" required>
                     <div class="required-info">This field is required</div>
                 </div>
-
+    
+                
                 <div class="description-container">
                     <div class="description">Description</div>
-                    <input type="text" class="description-input" placeholder="Enter a Description" required>
+                    <input id="descriptionInput" type="text" class="description-input" placeholder="Enter a Description" required>
                     <div class="required-info">This field is required</div>
                 </div>
-
+    
                 <div class="assigned-to-container">
                     <div class="assigned-to">Assigned to</div>
                     <div class="input-container">
-                        <input type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
+                        <input id="assignedTo" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
                         <img class="arrow_down" src="./img/arrow_down.svg" alt="">
                     </div>
                     <div class="required-legend">This field is required</div>
                 </div>
             </div>
-
+    
             <div class="divider">
                 <img src="./img/divider.svg" alt="">
             </div>
-
+    
             <div class="Add-task-right">
                 <div class="due-date-container">
                     <div class="due-date">Due date</div>
-                    <input class="due-date-input" type="date" placeholder="dd/mm/yyyy" required>
+                    <input id="date" class="due-date-input" type="date" placeholder="dd/mm/yyyy" required>
                 </div>
-
+    
                 <div class="prio-container">
                     <div class="prio">Prio</div>
                 
@@ -67,12 +67,12 @@
                         </button>
                     </div>
                 </div>
-
-
+    
+    
                 <div class="category-container">
                     <div class="category">Category</div>
                     <div class="input-container">
-                        <input class="category-dropdown" type="text" placeholder="Select task category" required>
+                        <input id="category" class="category-dropdown" type="text" placeholder="Select task category" required>
                         <img class="arrow_down" src="./img/arrow_down.svg" onclick="toggleCategoryOptions()" alt="">
                         <div class="category-options" id="categoryOptions">
                             <label onclick="updateSelectedCategory('Technical task')">
@@ -84,8 +84,8 @@
                         </div>
                     </div>
                 </div>
-
-
+    
+    
                 <div class="subtasks-container">
                     <div class="subtasks-add-task">Subtasks</div>
                     <div class="input-container-subtask">
@@ -96,7 +96,7 @@
                     </div>
                     <div class="subtask-list" id="subtaskList"></div>
                 </div>
-
+    
                 <div class="clear-and-create-section">
                     <button class="clear-button" onclick="clearFields()">
                         <h3>Clear</h3>
@@ -110,9 +110,8 @@
                 </div>
             </div>
         </div>
-    </form>
+    </form> 
     <script src="js/template_load.js"></script>
     <script src="js/add-task.js"></script>
-    <script src="js/board_template.js"></script>
-</body>
+  </body>
 </html>

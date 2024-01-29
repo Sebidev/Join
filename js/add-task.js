@@ -1,10 +1,37 @@
-//let titles = JSON.parse(localStorage.getItem('titles')) || [];
-//let descriptions = JSON.parse(localStorage.getItem('descriptions')) || [];
-//let assignedTos = JSON.parse(localStorage.getItem('assignedTos')) || [];
-//let dueDates = JSON.parse(localStorage.getItem('dueDates')) || [];
-//let selectedPrios = JSON.parse(localStorage.getItem('selectedPrios')) || [];
-//let selectedCategories = JSON.parse(localStorage.getItem('selectedCategories')) || [];
-//let subTasks = JSON.parse(localStorage.getItem('subTasks')) || [];
+let containerCount = 0;
+
+async function addToBoard() {
+    let taskTitle = document.getElementById('taskTitleInput').value;
+    let description = document.getElementById('descriptionInput').value;
+    let assigned = document.getElementById('assignedTo').value;
+    let date = document.getElementById('date').value;
+    let category = document.getElementById('category').value;
+    let subtasksList = document.getElementById('subtaskList').children;
+
+    containerCount++;
+
+   
+    localStorage.setItem('selectedPriority', selectedPriority);
+    localStorage.setItem('sharedData', JSON.stringify({
+        content:
+        {
+            title: taskTitle,
+            description: description,
+            assigned: assigned,
+            date: date,
+            category: category,
+            subtasks: subtasksList.length,
+        }, id: 'containerDiv' + containerCount
+    }));
+    debugger
+    window.location.href = 'board.html';
+
+    document.getElementById('taskTitleInput').value = '';
+    document.getElementById('descriptionInput').value = '';
+    document.getElementById('assignedTo').value = '';
+    document.getElementById('date').value = '';
+    document.getElementById('category').value = '';
+}
 
 function choose(priority) {
     let colorMap = { 'urgent': '#FF3D00', 'medium': '#FFA800', 'low': '#7AE229' };
@@ -123,6 +150,16 @@ function clearFields() {
     subtaskList.innerHTML = '';
 }
 
+/////////////////////// Backup der Funktionen welche grundsächlich funktionieren /////////////////////////////////////////////
+
+//let titles = JSON.parse(localStorage.getItem('titles')) || [];
+//let descriptions = JSON.parse(localStorage.getItem('descriptions')) || [];
+//let assignedTos = JSON.parse(localStorage.getItem('assignedTos')) || [];
+//let dueDates = JSON.parse(localStorage.getItem('dueDates')) || [];
+//let selectedPrios = JSON.parse(localStorage.getItem('selectedPrios')) || [];
+//let selectedCategories = JSON.parse(localStorage.getItem('selectedCategories')) || [];
+//let subTasks = JSON.parse(localStorage.getItem('subTasks')) || [];
+
 //function addToBoard() {
 //    let form = document.getElementById('taskForm');
 //    let title = document.querySelector('.title-input').value;
@@ -157,4 +194,52 @@ function clearFields() {
 //    renderCard();
 //    clearFields();
 //    window.location.href = 'board.html';
+//}
+
+//function renderCard() {
+//    let renderCardContainer = document.getElementById('renderCard');
+//    console.log(renderCardContainer);
+//    if (renderCardContainer) {
+//        let title = titles.join(', ');
+//        let description = descriptions.join(', ');
+//        let assignedTo = assignedTos.join(', ');
+//        let dueDate = dueDates.join(', ');
+//        let selectedPrio = selectedPrios.join(', ');
+//        let selectedCategory = selectedCategories.join(', ');
+//        let subTask = subTasks.join(', ');
+//        let createdSubtasks = subTasks.length;
+//        let categoryClass = selectedCategory === 'Technical task' ? 'technical-task' : 'user-story';
+//
+//        let cardContent = `
+//                <div class="card-user-story">
+//                <p class="${categoryClass}">${selectedCategory}</p>
+//                    <div class="title-container">
+//                        <p class="card-title">${title}</p>
+//                        <p class="card-content">${description}</p>
+//                    </div>
+//                    <p style="display: none">${dueDate}</p>
+//                    <div class="progress">
+//                        <div class="progress-bar"></div>
+//                        <div class="subtasks">0/${createdSubtasks} Subtasks</div>
+//                </div>
+//                    <div class="to-do-bottom">
+//                        <div class="initial-container">
+//                            <p >${assignedTo}</p>
+//                            <div class="profile-badge">
+//                                <img src="./img/Ellipse 5.svg" alt="">
+//                            </div>
+//                            <div class="profile-badge">
+//                                <img src="./img/Ellipse 5 (1).svg" alt="">
+//                            </div>
+//                            <div class="profile-badge">
+//                                <img src="./img/Ellipse 5 (2).svg" alt="">
+//                            </div>
+//                        </div>
+//                        <div class="priority-symbol">
+//                        <img src="${getPriorityIcon(selectedPrio)}" alt="">
+//                        </div>
+//                </div>
+//            `;
+//        renderCardContainer.innerHTML = cardContent;
+//    }
 //}

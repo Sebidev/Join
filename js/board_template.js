@@ -1,10 +1,3 @@
-let titles = JSON.parse(localStorage.getItem('titles')) || [];
-let descriptions = JSON.parse(localStorage.getItem('descriptions')) || [];
-let assignedTos = JSON.parse(localStorage.getItem('assignedTos')) || [];
-let dueDates = JSON.parse(localStorage.getItem('dueDates')) || [];
-let selectedPrios = JSON.parse(localStorage.getItem('selectedPrios')) || [];
-let selectedCategories = JSON.parse(localStorage.getItem('selectedCategories')) || [];
-let subTasks = JSON.parse(localStorage.getItem('subTasks')) || [];
 
 function addTask() {
     const modalHTML = `
@@ -136,91 +129,60 @@ function getValue(selector) {
     return element ? element.value : '';
 }
 
-function renderCard() {
-    let renderCardContainer = document.getElementById('renderCard');
-    console.log(renderCardContainer);
-    if (renderCardContainer) {
-        let title = titles.join(', ');
-        let description = descriptions.join(', ');
-        let assignedTo = assignedTos.join(', ');
-        let dueDate = dueDates.join(', ');
-        let selectedPrio = selectedPrios.join(', ');
-        let selectedCategory = selectedCategories.join(', ');
-        let subTask = subTasks.join(', ');
-        let createdSubtasks = subTasks.length;
-        let categoryClass = selectedCategory === 'Technical task' ? 'technical-task' : 'user-story';
+debugger
+function checkAndRenderSharedData() {
+    let sharedDataString = localStorage.getItem('sharedData');
 
-        let cardContent = `
-                <div class="card-user-story">
-                <p class="${categoryClass}">${selectedCategory}</p>
-                    <div class="title-container">
-                        <p class="card-title">${title}</p>
-                        <p class="card-content">${description}</p>
-                    </div>
-                    <p style="display: none">${dueDate}</p>
-                    <div class="progress">
-                        <div class="progress-bar"></div>
-                        <div class="subtasks">0/${createdSubtasks} Subtasks</div>
-                </div>
-                    <div class="to-do-bottom">
-                        <div class="initial-container">
-                            <p >${assignedTo}</p>
-                            <div class="profile-badge">
-                                <img src="./img/Ellipse 5.svg" alt="">
-                            </div>
-                            <div class="profile-badge">
-                                <img src="./img/Ellipse 5 (1).svg" alt="">
-                            </div>
-                            <div class="profile-badge">
-                                <img src="./img/Ellipse 5 (2).svg" alt="">
-                            </div>
-                        </div>
-                        <div class="priority-symbol">
-                        <img src="${getPriorityIcon(selectedPrio)}" alt="">
-                        </div>
-                </div>
-            `;
-        renderCardContainer.innerHTML = cardContent;
+    if (sharedDataString) {
+        let data = JSON.parse(sharedDataString);
+        renderCard(data);
+        localStorage.removeItem('sharedData');
     }
 }
+checkAndRenderSharedData();
 
-function addToBoard() {
-    let form = document.getElementById('taskForm');
-    let title = document.querySelector('.title-input').value;
-    let description = document.querySelector('.description-input').value;
-    let assignedTo = document.querySelector('.assigned-dropdown').value;
-    let dueDate = document.querySelector('.due-date-input').value;
-    let selectedPrio = selectedPriority;
-    let selectedCategory = document.querySelector('.category-dropdown').value;
-    let subTaskElements = document.querySelectorAll('.subtask-item .subtask-text');
-    let subTasks = Array.from(subTaskElements).map(subtask => subtask.textContent);
-    
-    // Zum programmieren außer Kraft gesetzt
-    //if (!title || !description || !dueDate || !selectedCategory) {
-    //    return;
-    //}
+function renderCard(data) {
+    let containerDiv = document.getElementById('renderCard');
+    let renderCard = document.createElement('div');
+    renderCard.id = data.id;
 
-    titles.push(title);
-    descriptions.push(description);
-    assignedTos.push(assignedTo);
-    dueDates.push(dueDate);
-    selectedPrios.push(selectedPrio);
-    selectedCategories.push(selectedCategory);
-    
-    localStorage.setItem('titles', JSON.stringify(titles));
-    localStorage.setItem('descriptions', JSON.stringify(descriptions));
-    localStorage.setItem('assignedTos', JSON.stringify(assignedTos));
-    localStorage.setItem('dueDates', JSON.stringify(dueDates));
-    localStorage.setItem('selectedPrios', JSON.stringify(selectedPrios));
-    localStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
-    localStorage.setItem('subTasks', JSON.stringify(subTasks));
+    let categoryClass = data.content.category === 'Technical task' ? 'technical-task' : 'user-story';
+    let createdSubtasks = data.content.subtasks;
+    let selectedPriority = localStorage.getItem('selectedPriority');
 
-    renderCard();    
-    clearFields();
-    window.location.href = 'board.html';
+    renderCard.innerHTML = `
+        <div onclick="" class="card-user-story">
+                <p class="${categoryClass}">${data.content.category}</p>
+            <div class="title-container">
+                <p class="card-title">${data.content.title}</p>
+                <p class="card-content">${data.content.description}</p>
+            </div>
+            <p style="display: none">${data.content.date}</p>
+            <div class="progress">
+                <div class="progress-bar"></div>
+                <div class="subtasks">0/${createdSubtasks} Subtasks</div>
+            </div>
+            <div class="to-do-bottom">
+                <div class="initial-container">
+                <p >${data.content.assigned}</p>
+                <div class="profile-badge">
+                  <img src="./img/Ellipse5-3.svg" alt="">
+              </div>
+              <div class="profile-badge">
+                  <img src="./img/Ellipse5-1.svg" alt="">
+              </div>
+              <div class="profile-badge">
+                  <img src="./img/Ellipse5-2.svg" alt="">
+              </div>
+          </div>
+                <div class="priority-symbol">
+                  <img src="${getPriorityIcon(selectedPriority)}" alt="">
+              </div >
+        </div>
+    `;
+
+    containerDiv.appendChild(renderCard);
 }
-
-//renderCard();
 
 function getPriorityIcon(priority) {
     switch (priority) {
