@@ -122,8 +122,6 @@ function closeModal() {
     overlay.remove();
 }
 
-localStorage.clear();
-
 function getValue(selector) {
     let element = document.querySelector(selector);
     return element ? element.value : '';
@@ -143,6 +141,12 @@ checkAndRenderSharedData();
 
 function renderCard(data) {
     let containerDiv = document.getElementById('renderCard');
+
+    if (!data || !data.id) {
+        console.error("Fehler: Fehlende oder undefinierte id-Eigenschaft im Datenobjekt");
+        return; // oder behandeln Sie den Fehler auf andere Weise
+    }
+
     let renderCard = document.createElement('div');
     renderCard.id = data.id;
 

@@ -1,6 +1,7 @@
 let containerCount = 0;
 
 async function addToBoard() {
+    debugger
     let taskTitle = document.getElementById('taskTitleInput').value;
     let description = document.getElementById('descriptionInput').value;
     let assigned = document.getElementById('assignedTo').value;
@@ -23,7 +24,7 @@ async function addToBoard() {
             subtasks: subtasksList.length,
         }, id: 'containerDiv' + containerCount
     }));
-    debugger
+    
     window.location.href = 'board.html';
 
     document.getElementById('taskTitleInput').value = '';
