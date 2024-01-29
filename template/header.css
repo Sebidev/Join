@@ -39,3 +39,6 @@ body{
     gap: 16px;
 }
 
+.avatar_icon, .help_icon{
+    cursor: pointer;
+}
