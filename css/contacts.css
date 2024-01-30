@@ -15,8 +15,8 @@ body {
 }
 
 #contactModal {
-    width: 1116px;
-    height: 870px;
+    width: 1212px;
+    height: 592px;
     border-radius: 30px;
     background: #fff;
     margin: 0;
@@ -26,8 +26,178 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: white;
-    border: 1px solid #ccc;
     z-index: 1000;
+}
+
+#bluebar{
+    display: inline-flex;
+    height: 594px;
+    width: 38%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 12px;
+    flex-shrink: 0;
+    background:#2A3647;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+}
+
+.bluebar_joinlogo{
+    width: 55.6px;
+    height: 66.483px;
+    position: absolute;
+    left: 46.904px;
+    top: 154px;
+}
+
+.bluebar_titel{
+    margin-left: auto;
+    margin-right: auto;
+    color:#FFF;
+    font-family: Inter;
+    font-size: 61px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 120%; /* 73.2px */
+}
+
+.bluebar_text{
+    margin-left: auto;
+    margin-right: auto;
+    color: #FFF;
+    font-family: Inter;
+    font-size: 27px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%; /* 32.4px */
+}
+
+.bluebar_line{
+    margin-left: 48px;
+    margin-right: auto;
+    margin-bottom: -50px;
+    stroke-width: 3px;
+    stroke: #29ABE2;
+}
+
+.avatar_contactModal {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: -50px;
+    margin-left: 83px;
+    gap: 10px;
+    border-radius: 70px;
+    border: 3px solid #FFF;
+    background: #FFF;
+    box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.10);
+    width: 120px;
+    height: 120px;
+}
+
+.close_button1{
+    display: flex;
+    position: absolute;
+    top: 48px;
+    right: 48px;
+    width: 32px;
+    height: 32px;
+    padding: 4px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 56px;
+}
+
+.form_container {
+    position: absolute;
+    top: 155px;
+    right: 60px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.textfield_newcontact {
+    display: flex;
+    width: 380px;
+    padding: 13px 21px;
+    align-items: center;
+    gap: 10px;
+    border-radius: 10px;
+    border: 1px solid #D1D1D1;
+    background: #FFF;
+    color: #000;
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%; /* 24px */
+}
+
+.textfield_newcontact::placeholder {
+    color: #D1D1D1;
+}
+
+.input_container {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.textfield_image {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+}
+
+.close_button2{
+    display: flex;
+    padding: 16px;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    border-radius: 10px;
+    border: 1px solid var(--Version-2-main-color, #2A3647);
+}
+
+.createcontact_button{
+    display: flex;
+    padding: 16px;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    border-radius: 10px;
+    background: #2A3647;
+    color: #FFF;
+    font-family: Inter;
+    font-size: 21px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 120%; /* 25.2px */
+}
+
+.button_container {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.createcontact_button img{
+    width: 24px;
+    height: 24px;
+}
+
+.close_button1, .close_button2, .createcontact_button:hover {
+    cursor: pointer;
 }
   
 .modal-headline {
