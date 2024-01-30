@@ -386,6 +386,10 @@ body {
   background: #fff;
 }
 
+.profile-badge img {
+  width: 34px;
+}
+
 .priority-symbol {
   display: flex;
   width: 32px;

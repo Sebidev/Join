@@ -6,6 +6,7 @@
     <title>Join</title>
     <link rel="stylesheet" href="./fonts/inter.css" />
     <link rel="stylesheet" href="./css/add_task.css" />
+    <link rel="stylesheet" href="./css/contacts.css" />
   </head>
   <body>
     <header id="header"></header>
@@ -33,7 +34,8 @@
                     <div class="assigned-to">Assigned to</div>
                     <div class="input-container">
                         <input id="assignedTo" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
-                        <img class="arrow_down" src="./img/arrow_down.svg" alt="">
+                        <img onclick="showDropdown()" class="arrow_down" src="./img/arrow_down.svg" alt="">
+                        <div id="contactDropdown" class="dropdown-content"></div>
                     </div>
                     <div class="required-legend">This field is required</div>
                 </div>

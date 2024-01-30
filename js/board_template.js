@@ -1,6 +1,5 @@
-
 function addTask() {
-    const modalHTML = `
+    let modalHTML = `
         <div id="overlay"></div>
         
         <div id="taskModal" class="add-task-create-open">
@@ -31,7 +30,6 @@ function addTask() {
                         <div class="required-legend-modal">This field is required</div>
                     </div>
                 </div>
-
 
                 <div class="divider">
                     <img src="./img/divider.svg" alt="">
@@ -78,7 +76,6 @@ function addTask() {
                         </div>
                     </div>
 
-
                     <div class="subtasks-container">
                         <div class="subtasks-add-task">Subtasks</div>
                         <div class="input-container-subtask">
@@ -110,13 +107,13 @@ function addTask() {
 
     choose('medium');
 
-    const overlay = document.getElementById('overlay');
+    let overlay = document.getElementById('overlay');
     overlay.style.display = 'block';
 }
 
 function closeModal() {
-    const modal = document.getElementById('taskModal');
-    const overlay = document.getElementById('overlay');
+    let modal = document.getElementById('taskModal');
+    let overlay = document.getElementById('overlay');
 
     modal.remove();
     overlay.remove();
@@ -127,7 +124,6 @@ function getValue(selector) {
     return element ? element.value : '';
 }
 
-debugger
 function checkAndRenderSharedData() {
     let sharedDataString = localStorage.getItem('sharedData');
 
@@ -140,50 +136,42 @@ function checkAndRenderSharedData() {
 checkAndRenderSharedData();
 
 function renderCard(data) {
+    console.log('Data in renderCard:', data);
+    console.log('Content in renderCard:', data.content);
+    console.log('Initial in renderCard:', data.content.initial);
     let containerDiv = document.getElementById('renderCard');
-
-    if (!data || !data.id) {
-        console.error("Fehler: Fehlende oder undefinierte id-Eigenschaft im Datenobjekt");
-        return; // oder behandeln Sie den Fehler auf andere Weise
-    }
-
     let renderCard = document.createElement('div');
     renderCard.id = data.id;
-
     let categoryClass = data.content.category === 'Technical task' ? 'technical-task' : 'user-story';
     let createdSubtasks = data.content.subtasks;
     let selectedPriority = localStorage.getItem('selectedPriority');
 
     renderCard.innerHTML = `
-        <div onclick="" class="card-user-story">
-                <p class="${categoryClass}">${data.content.category}</p>
-            <div class="title-container">
-                <p class="card-title">${data.content.title}</p>
-                <p class="card-content">${data.content.description}</p>
-            </div>
-            <p style="display: none">${data.content.date}</p>
-            <div class="progress">
-                <div class="progress-bar"></div>
-                <div class="subtasks">0/${createdSubtasks} Subtasks</div>
-            </div>
-            <div class="to-do-bottom">
-                <div class="initial-container">
-                <p >${data.content.assigned}</p>
-                <div class="profile-badge">
-                  <img src="./img/Ellipse5-3.svg" alt="">
-              </div>
-              <div class="profile-badge">
-                  <img src="./img/Ellipse5-1.svg" alt="">
-              </div>
-              <div class="profile-badge">
-                  <img src="./img/Ellipse5-2.svg" alt="">
-              </div>
-          </div>
-                <div class="priority-symbol">
-                  <img src="${getPriorityIcon(selectedPriority)}" alt="">
-              </div >
+    <div onclick="" class="card-user-story">
+        <p class="${categoryClass}">${data.content.category}</p>
+        <div class="title-container">
+            <p class="card-title">${data.content.title}</p>
+            <p class="card-content">${data.content.description}</p>
         </div>
-    `;
+        <p style="display: none">${data.content.date}</p>
+        <div class="progress">
+            <div class="progress-bar"></div>
+            <div class="subtasks">0/${createdSubtasks} Subtasks</div>
+        </div>
+        <div class="to-do-bottom">
+            <div class="initial-container">
+                <div class="avatar">
+                    <img src="img/Ellipse5.svg">
+                    <div class="avatar_initletter">${data.content.initials}</div>
+                </div>
+                
+            </div>
+            <div class="priority-symbol">
+                <img src="${getPriorityIcon(selectedPriority)}" alt="">
+            </div>
+        </div>
+    </div>
+`;
 
     containerDiv.appendChild(renderCard);
 }

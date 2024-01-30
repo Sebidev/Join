@@ -1,37 +1,122 @@
 let containerCount = 0;
+let contacts = [
+    { name: 'Anton Mayer', email: 'antom@gmail.com', initial: 'AM' },
+    { name: 'Anja Schulz', email: 'schulz@hotmail.com', initial: 'AS' },
+    { name: 'Benedikt Ziegler', email: 'benedikt@gmail.com', initial: 'BZ' },
+    { name: 'David Eisenberg', email: 'davidberg@gmail.com', initial: 'DE' },
+    { name: 'Eva Fischer', email: 'eva@gmail.com', initial: 'EF' },
+    { name: 'Emmanuel Mauer', email: 'emmanuelma@gmail.com', initial: 'EM' },
+];
+let selectedInitialsArray = [];
+
+function showDropdown() {
+    let dropdownContent = document.getElementById('contactDropdown');
+    dropdownContent.innerHTML = '';
+
+    // Hier wird das Array vor jedem Öffnen des Dropdowns zurückgesetzt
+    selectedInitialsArray = [];
+
+    contacts.forEach(function (contact) {
+        let entry = document.createElement('label');
+        entry.className = 'contacts';
+        entry.innerHTML = `
+            <form class="avatar">
+                <img src="img/Ellipse5.svg">
+                <div onclick="handleAddToBoard('${contact.initial}')" class="avatar_initletter">${contact.initial}</div>
+            </form>
+            <div class="contactentry_info">
+                <div class="contactentry_name">${contact.name}</div>
+            </div>
+        `;
+
+        entry.addEventListener('click', function () {
+            let assignedToInput = document.getElementById('assignedTo');
+            assignedToInput.value = `${contact.name} (${contact.initial})`;
+            assignedToInput.dataset.initials = contact.initial;
+
+            // Hier fügen wir die ausgewählten Initialen zum Array hinzu
+            selectedInitialsArray.push(contact.initial);
+
+            // Hier setzen wir die Initialen im localStorage
+            localStorage.setItem('selectedInitialsArray', JSON.stringify(selectedInitialsArray));
+
+            console.log('Assigned:', assignedToInput.value);
+            console.log('Initials:', assignedToInput.dataset.initials);
+
+            // Hier wird das Dropdown-Menü geschlossen
+            dropdownContent.style.display = 'none';
+        });
+
+        dropdownContent.appendChild(entry);
+    });
+
+    // Hier wird das Dropdown-Menü geöffnet
+    dropdownContent.style.display = 'block';
+}
+
+document.querySelector('.arrow_down').addEventListener('click', showDropdown);
+
+document.addEventListener('click', function (event) {
+    let dropdown = document.getElementById('contactDropdown');
+    if (!event.target.matches('.arrow_down') && !event.target.closest('.assigned-to-container')) {
+        dropdown.style.display = 'none';
+    }
+});
 
 async function addToBoard() {
-    debugger
-    let taskTitle = document.getElementById('taskTitleInput').value;
-    let description = document.getElementById('descriptionInput').value;
-    let assigned = document.getElementById('assignedTo').value;
-    let date = document.getElementById('date').value;
-    let category = document.getElementById('category').value;
-    let subtasksList = document.getElementById('subtaskList').children;
+    // Hier greifen wir auf das Array mit den ausgewählten Initialen zu
+    let selectedInitialsArray = localStorage.getItem('selectedInitialsArray');
+    let selectedInitials = selectedInitialsArray ? JSON.parse(selectedInitialsArray) : [];
 
-    containerCount++;
+    console.log('Selected Initials:', selectedInitials);
 
-   
-    localStorage.setItem('selectedPriority', selectedPriority);
-    localStorage.setItem('sharedData', JSON.stringify({
-        content:
-        {
-            title: taskTitle,
-            description: description,
-            assigned: assigned,
-            date: date,
-            category: category,
-            subtasks: subtasksList.length,
-        }, id: 'containerDiv' + containerCount
-    }));
-    
-    window.location.href = 'board.html';
+    if (selectedInitials.length > 0) {
+        let assigned = selectedInitials.map(initial => {
+            let matchingContact = contacts.find(contact => contact.initial === initial);
+            return matchingContact ? `${matchingContact.name} (${initial})` : '';
+        }).join(', ');
 
-    document.getElementById('taskTitleInput').value = '';
-    document.getElementById('descriptionInput').value = '';
-    document.getElementById('assignedTo').value = '';
-    document.getElementById('date').value = '';
-    document.getElementById('category').value = '';
+        let taskTitle = document.getElementById('taskTitleInput').value;
+        let description = document.getElementById('descriptionInput').value;
+        let date = document.getElementById('date').value;
+        let category = document.getElementById('category').value;
+        let subtasksList = document.getElementById('subtaskList').children;
+
+        containerCount++;
+
+        localStorage.setItem('selectedPriority', selectedPriority);
+        localStorage.setItem('sharedData', JSON.stringify({
+            content: {
+                title: taskTitle,
+                description: description,
+                assigned: assigned,
+                initials: selectedInitials,
+                date: date,
+                category: category,
+                subtasks: subtasksList.length,
+            },
+            id: 'containerDiv' + containerCount
+        }));
+
+        // Zum Programmieren außer Kraft gesetzt
+        window.location.href = 'board.html';
+
+        document.getElementById('taskTitleInput').value = '';
+        document.getElementById('descriptionInput').value = '';
+        document.getElementById('assignedTo').value = '';
+        document.getElementById('date').value = '';
+        document.getElementById('category').value = '';
+
+        console.log('After setting data in localStorage:', localStorage.getItem('sharedData'));
+    } else {
+        console.error('No selected initials available.');
+    }
+}
+
+function handleAddToBoard() {
+    // Hier wählen wir den ersten Kontakt aus dem Array aus und rufen addToBoard auf
+    let selectedContact = [contacts[0]];
+    addToBoard(selectedContact);
 }
 
 function choose(priority) {
@@ -150,97 +235,3 @@ function clearFields() {
     let subtaskList = document.getElementById('subtaskList');
     subtaskList.innerHTML = '';
 }
-
-/////////////////////// Backup der Funktionen welche grundsächlich funktionieren /////////////////////////////////////////////
-
-//let titles = JSON.parse(localStorage.getItem('titles')) || [];
-//let descriptions = JSON.parse(localStorage.getItem('descriptions')) || [];
-//let assignedTos = JSON.parse(localStorage.getItem('assignedTos')) || [];
-//let dueDates = JSON.parse(localStorage.getItem('dueDates')) || [];
-//let selectedPrios = JSON.parse(localStorage.getItem('selectedPrios')) || [];
-//let selectedCategories = JSON.parse(localStorage.getItem('selectedCategories')) || [];
-//let subTasks = JSON.parse(localStorage.getItem('subTasks')) || [];
-
-//function addToBoard() {
-//    let form = document.getElementById('taskForm');
-//    let title = document.querySelector('.title-input').value;
-//    let description = document.querySelector('.description-input').value;
-//    let assignedTo = document.querySelector('.assigned-dropdown').value;
-//    let dueDate = document.querySelector('.due-date-input').value;
-//    let selectedPrio = selectedPriority;
-//    let selectedCategory = document.querySelector('.category-dropdown').value;
-//    let subTaskElements = document.querySelectorAll('.subtask-item .subtask-text');
-//    let subTasks = Array.from(subTaskElements).map(subtask => subtask.textContent);
-//    
-//    // Zum programmieren außer Kraft gesetzt
-//    //if (!title || !description || !dueDate || !selectedCategory) {
-//    //    return;
-//    //}
-//
-//    titles.push(title);
-//    descriptions.push(description);
-//    assignedTos.push(assignedTo);
-//    dueDates.push(dueDate);
-//    selectedPrios.push(selectedPrio);
-//    selectedCategories.push(selectedCategory);
-//    
-//    localStorage.setItem('titles', JSON.stringify(titles));
-//    localStorage.setItem('descriptions', JSON.stringify(descriptions));
-//    localStorage.setItem('assignedTos', JSON.stringify(assignedTos));
-//    localStorage.setItem('dueDates', JSON.stringify(dueDates));
-//    localStorage.setItem('selectedPrios', JSON.stringify(selectedPrios));
-//    localStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
-//    localStorage.setItem('subTasks', JSON.stringify(subTasks));
-//
-//    renderCard();
-//    clearFields();
-//    window.location.href = 'board.html';
-//}
-
-//function renderCard() {
-//    let renderCardContainer = document.getElementById('renderCard');
-//    console.log(renderCardContainer);
-//    if (renderCardContainer) {
-//        let title = titles.join(', ');
-//        let description = descriptions.join(', ');
-//        let assignedTo = assignedTos.join(', ');
-//        let dueDate = dueDates.join(', ');
-//        let selectedPrio = selectedPrios.join(', ');
-//        let selectedCategory = selectedCategories.join(', ');
-//        let subTask = subTasks.join(', ');
-//        let createdSubtasks = subTasks.length;
-//        let categoryClass = selectedCategory === 'Technical task' ? 'technical-task' : 'user-story';
-//
-//        let cardContent = `
-//                <div class="card-user-story">
-//                <p class="${categoryClass}">${selectedCategory}</p>
-//                    <div class="title-container">
-//                        <p class="card-title">${title}</p>
-//                        <p class="card-content">${description}</p>
-//                    </div>
-//                    <p style="display: none">${dueDate}</p>
-//                    <div class="progress">
-//                        <div class="progress-bar"></div>
-//                        <div class="subtasks">0/${createdSubtasks} Subtasks</div>
-//                </div>
-//                    <div class="to-do-bottom">
-//                        <div class="initial-container">
-//                            <p >${assignedTo}</p>
-//                            <div class="profile-badge">
-//                                <img src="./img/Ellipse 5.svg" alt="">
-//                            </div>
-//                            <div class="profile-badge">
-//                                <img src="./img/Ellipse 5 (1).svg" alt="">
-//                            </div>
-//                            <div class="profile-badge">
-//                                <img src="./img/Ellipse 5 (2).svg" alt="">
-//                            </div>
-//                        </div>
-//                        <div class="priority-symbol">
-//                        <img src="${getPriorityIcon(selectedPrio)}" alt="">
-//                        </div>
-//                </div>
-//            `;
-//        renderCardContainer.innerHTML = cardContent;
-//    }
-//}
