@@ -127,12 +127,28 @@ function saveContact() {
     // Setze das Formular zurück
     document.querySelector('#contactForm').reset();
 
+    // Schließe das Modal
     closeContactModal();
+
+    // Lade die Kontakte neu
+    location.reload();
 }
 
 function loadContacts() {
     // Zuerst holen wir die Kontakte aus dem LocalStorage
     let contacts = JSON.parse(localStorage.getItem('contacts'));
+
+    // Wenn keine Kontakte vorhanden sind, erstellen wir einen Demo-Kontakt
+    if (!contacts) {
+        contacts = [{
+            name: 'Demo Contact',
+            email: 'demo@contact.com',
+            phone: '0123456789'
+        }];
+
+        // Speichern Sie den Demo-Kontakt im LocalStorage
+        localStorage.setItem('contacts', JSON.stringify(contacts));
+    }
 
     // Dann erstellen wir eine Funktion, die einen Kontakt in HTML umwandelt
     function createContactHTML(contact) {
