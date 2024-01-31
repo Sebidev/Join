@@ -135,45 +135,58 @@ function checkAndRenderSharedData() {
 }
 checkAndRenderSharedData();
 
-function renderCard(data) {
-    console.log('Data in renderCard:', data);
-    console.log('Content in renderCard:', data.content);
-    console.log('Initial in renderCard:', data.content.initial);
-    let containerDiv = document.getElementById('renderCard');
-    let renderCard = document.createElement('div');
-    renderCard.id = data.id;
-    let categoryClass = data.content.category === 'Technical task' ? 'technical-task' : 'user-story';
-    let createdSubtasks = data.content.subtasks;
-    let selectedPriority = localStorage.getItem('selectedPriority');
+function createAvatarDivs(selectedContacts) {
+    let avatarDivsHTML = '';
 
-    renderCard.innerHTML = `
-    <div onclick="" class="card-user-story">
-        <p class="${categoryClass}">${data.content.category}</p>
-        <div class="title-container">
-            <p class="card-title">${data.content.title}</p>
-            <p class="card-content">${data.content.description}</p>
-        </div>
-        <p style="display: none">${data.content.date}</p>
-        <div class="progress">
-            <div class="progress-bar"></div>
-            <div class="subtasks">0/${createdSubtasks} Subtasks</div>
-        </div>
-        <div class="to-do-bottom">
+    for (let i = 0; i < selectedContacts.length; i++) {
+        let selectedContact = selectedContacts[i];
+
+        avatarDivsHTML += `
             <div class="initial-container">
                 <div class="avatar">
-                    <img src="img/Ellipse5.svg">
-                    <div class="avatar_initletter">${data.content.initials}</div>
+                    <img src="${selectedContact.imagePath}">
+                    <div class="avatar_initletter">${selectedContact.initials}</div>
                 </div>
-                
-            </div>
-            <div class="priority-symbol">
-                <img src="${getPriorityIcon(selectedPriority)}" alt="">
-            </div>
-        </div>
-    </div>
-`;
+            </div>`;
+    }
 
-    containerDiv.appendChild(renderCard);
+    return avatarDivsHTML;
+}
+
+function renderCard(data) {
+    if (data && data.content) {
+        let containerDiv = document.getElementById('renderCard');
+        let categoryClass = data.content.category === 'Technical task' ? 'technical-task' : 'user-story';
+        let createdSubtasks = data.content.subtasks;
+        let selectedPriority = localStorage.getItem('selectedPriority');
+        let selectedContacts = data.content.selectedContacts || [];
+        let initialsHTML = createAvatarDivs(selectedContacts);
+
+        let renderCard = document.createElement('div');
+        renderCard.id = data.id;
+        renderCard.className = 'card-user-story';
+
+        renderCard.innerHTML = `
+            <p class="${categoryClass}">${data.content.category}</p>
+            <div class="title-container">
+                <p class="card-title">${data.content.title}</p>
+                <p class="card-content">${data.content.description}</p>
+            </div>
+            <p style="display: none">${data.content.date}</p>
+            <div class="progress">
+                <div class="progress-bar"></div>
+                <div class="subtasks">0/${createdSubtasks} Subtasks</div>
+            </div>
+            <div class="to-do-bottom">
+                ${initialsHTML}
+                <div class="priority-symbol">
+                    <img src="${getPriorityIcon(selectedPriority)}" alt="">
+                </div>
+            </div>
+        `;
+
+        containerDiv.appendChild(renderCard);
+    }
 }
 
 function getPriorityIcon(priority) {

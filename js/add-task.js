@@ -1,60 +1,13 @@
 let containerCount = 0;
 let contacts = [
-    { name: 'Anton Mayer', email: 'antom@gmail.com', initial: 'AM' },
-    { name: 'Anja Schulz', email: 'schulz@hotmail.com', initial: 'AS' },
-    { name: 'Benedikt Ziegler', email: 'benedikt@gmail.com', initial: 'BZ' },
-    { name: 'David Eisenberg', email: 'davidberg@gmail.com', initial: 'DE' },
-    { name: 'Eva Fischer', email: 'eva@gmail.com', initial: 'EF' },
-    { name: 'Emmanuel Mauer', email: 'emmanuelma@gmail.com', initial: 'EM' },
+    { name: 'Anton Mayer', email: 'antom@gmail.com', initial: 'AM', imagePath: 'img/Ellipse5-2.svg' },
+    { name: 'Anja Schulz', email: 'schulz@hotmail.com', initial: 'AS', imagePath: 'img/Ellipse5.svg' },
+    { name: 'Benedikt Ziegler', email: 'benedikt@gmail.com', initial: 'BZ', imagePath: 'img/Ellipse5-3.svg' },
+    { name: 'David Eisenberg', email: 'davidberg@gmail.com', initial: 'DE', imagePath: 'img/Ellipse5-1.svg' },
+    { name: 'Eva Fischer', email: 'eva@gmail.com', initial: 'EF', imagePath: 'img/Ellipse5-2.svg' },
+    { name: 'Emmanuel Mauer', email: 'emmanuelma@gmail.com', initial: 'EM', imagePath: 'img/Ellipse5-4.svg' },
 ];
 let selectedInitialsArray = [];
-
-function showDropdown() {
-    let dropdownContent = document.getElementById('contactDropdown');
-    dropdownContent.innerHTML = '';
-
-    // Hier wird das Array vor jedem Öffnen des Dropdowns zurückgesetzt
-    selectedInitialsArray = [];
-
-    contacts.forEach(function (contact) {
-        let entry = document.createElement('label');
-        entry.className = 'contacts';
-        entry.innerHTML = `
-            <form class="avatar">
-                <img src="img/Ellipse5.svg">
-                <div onclick="handleAddToBoard('${contact.initial}')" class="avatar_initletter">${contact.initial}</div>
-            </form>
-            <div class="contactentry_info">
-                <div class="contactentry_name">${contact.name}</div>
-            </div>
-        `;
-
-        entry.addEventListener('click', function () {
-            let assignedToInput = document.getElementById('assignedTo');
-            assignedToInput.value = `${contact.name} (${contact.initial})`;
-            assignedToInput.dataset.initials = contact.initial;
-
-            // Hier fügen wir die ausgewählten Initialen zum Array hinzu
-            selectedInitialsArray.push(contact.initial);
-
-            // Hier setzen wir die Initialen im localStorage
-            localStorage.setItem('selectedInitialsArray', JSON.stringify(selectedInitialsArray));
-
-            console.log('Assigned:', assignedToInput.value);
-            console.log('Initials:', assignedToInput.dataset.initials);
-
-            // Hier wird das Dropdown-Menü geschlossen
-            dropdownContent.style.display = 'none';
-        });
-
-        dropdownContent.appendChild(entry);
-    });
-
-    // Hier wird das Dropdown-Menü geöffnet
-    dropdownContent.style.display = 'block';
-}
-
-document.querySelector('.arrow_down').addEventListener('click', showDropdown);
 
 document.addEventListener('click', function (event) {
     let dropdown = document.getElementById('contactDropdown');
@@ -63,60 +16,123 @@ document.addEventListener('click', function (event) {
     }
 });
 
-async function addToBoard() {
-    // Hier greifen wir auf das Array mit den ausgewählten Initialen zu
-    let selectedInitialsArray = localStorage.getItem('selectedInitialsArray');
-    let selectedInitials = selectedInitialsArray ? JSON.parse(selectedInitialsArray) : [];
+function showDropdown() {
+    let dropdownContent = document.getElementById("contactDropdown");
+    dropdownContent.innerHTML = "";
 
-    console.log('Selected Initials:', selectedInitials);
+    contacts.forEach(contact => {
+        let isSelected = selectedInitialsArray.includes(contact.initial);
 
-    if (selectedInitials.length > 0) {
-        let assigned = selectedInitials.map(initial => {
-            let matchingContact = contacts.find(contact => contact.initial === initial);
-            return matchingContact ? `${matchingContact.name} (${initial})` : '';
-        }).join(', ');
+        let contactDiv = document.createElement("div");
+        contactDiv.innerHTML = `
+            <label class="contacts">
+                <div class="contacts-img-initial">
+                    <img src="${contact.imagePath}" alt="${contact.name}">
+                    <div class="initials-overlay">${contact.initial}</div>
+                </div>
+                <div class="dropdown-checkbox">
+                    <div style="margin-left: 5px;">${contact.name}</div>
+                    <input type="checkbox" class="contact-checkbox" ${isSelected ? 'checked' : ''}>
+                </div>
+            </label>
+        `;
+        contactDiv.addEventListener("click", () => toggleContactSelection(contact));
+        dropdownContent.appendChild(contactDiv);
+    });
 
-        let taskTitle = document.getElementById('taskTitleInput').value;
-        let description = document.getElementById('descriptionInput').value;
-        let date = document.getElementById('date').value;
-        let category = document.getElementById('category').value;
-        let subtasksList = document.getElementById('subtaskList').children;
-
-        containerCount++;
-
-        localStorage.setItem('selectedPriority', selectedPriority);
-        localStorage.setItem('sharedData', JSON.stringify({
-            content: {
-                title: taskTitle,
-                description: description,
-                assigned: assigned,
-                initials: selectedInitials,
-                date: date,
-                category: category,
-                subtasks: subtasksList.length,
-            },
-            id: 'containerDiv' + containerCount
-        }));
-
-        // Zum Programmieren außer Kraft gesetzt
-        window.location.href = 'board.html';
-
-        document.getElementById('taskTitleInput').value = '';
-        document.getElementById('descriptionInput').value = '';
-        document.getElementById('assignedTo').value = '';
-        document.getElementById('date').value = '';
-        document.getElementById('category').value = '';
-
-        console.log('After setting data in localStorage:', localStorage.getItem('sharedData'));
-    } else {
-        console.error('No selected initials available.');
-    }
+    dropdownContent.style.display = 'block';
 }
 
-function handleAddToBoard() {
-    // Hier wählen wir den ersten Kontakt aus dem Array aus und rufen addToBoard auf
-    let selectedContact = [contacts[0]];
-    addToBoard(selectedContact);
+function toggleContactSelection(contact) {
+    let index = selectedInitialsArray.indexOf(contact.initial);
+
+    if (index !== -1) {
+        selectedInitialsArray.splice(index, 1);
+    } else {
+        selectedInitialsArray.push(contact.initial);
+    }
+
+    selectContact(contact);
+}
+
+function selectContact(contact) {
+    console.log("Selected Contacts:", selectedInitialsArray);
+
+    let selectedContactsContainer = document.getElementById("selectedContactsContainer");
+    selectedContactsContainer.innerHTML = "";
+
+    selectedInitialsArray.forEach(initial => {
+        let selectedContact = contacts.find(c => c.initial === initial);
+        if (selectedContact) {
+            let selectedContactDiv = document.createElement("div");
+            selectedContactDiv.innerHTML = `
+                <div class="selected-contact">
+                    <div class="contacts-img-initial">
+                        <img src="${selectedContact.imagePath}" alt="${selectedContact.name}">
+                        <div class="initials-overlay">${selectedContact.initial}</div>
+                    </div>
+                    <span>${selectedContact.name} (${initial})</span>
+                </div>
+            `;
+            selectedContactsContainer.appendChild(selectedContactDiv);
+        }
+    });
+}
+
+async function addToBoard() {
+    debugger;
+
+    let taskTitle = document.getElementById('taskTitleInput').value;
+    let description = document.getElementById('descriptionInput').value;
+    let date = document.getElementById('date').value;
+    let category = document.getElementById('category').value;
+    let subtasksList = document.getElementById('subtaskList').children;
+
+    let selectedContactsContainer = document.getElementById("selectedContactsContainer");
+    let selectedContacts = [];
+
+    selectedContactsContainer.childNodes.forEach(contactDiv => {
+        if (contactDiv.nodeType === 1) {
+            let imgElement = contactDiv.querySelector('img');
+            let initials = imgElement.nextElementSibling.textContent.trim();
+
+            selectedContacts.push({
+                imagePath: imgElement.src,
+                initials: initials
+            });
+        }
+    });
+
+    console.log('taskTitle:', taskTitle);
+    console.log('description:', description);
+    console.log('date:', date);
+    console.log('category:', category);
+    console.log('subtasksList:', subtasksList);
+
+    containerCount++;
+
+    localStorage.setItem('selectedPriority', selectedPriority);
+
+    localStorage.setItem('sharedData', JSON.stringify({
+        content: {
+            title: taskTitle,
+            description: description,
+            date: date,
+            category: category,
+            subtasks: subtasksList.length,
+            selectedContacts: selectedContacts
+        },
+        id: 'containerDiv' + containerCount
+    }));
+
+    // Zum Programmieren außer Kraft gesetzt
+    //window.location.href = 'board.html';
+
+    document.getElementById('taskTitleInput').value = '';
+    document.getElementById('descriptionInput').value = '';
+    document.getElementById('assignedTo').value = ''; // Beachten Sie, dass es kein Element mit ID 'assignedTo' gibt, bitte überprüfen Sie die ID
+    document.getElementById('date').value = '';
+    document.getElementById('category').value = '';
 }
 
 function choose(priority) {
@@ -201,13 +217,13 @@ function addSubtask() {
 
     if (subtaskText !== '') {
         let subtaskHTML = `
-            <div class="subtask-item">
-                <div class="subtask-text">${subtaskText}</div>
-                <div class="delete-button" onclick="deleteSubtaskItem(this.parentNode)">
-                    <img src="./img/iconoir_cancel.svg" alt="">
-                </div>
-            </div>
-        `;
+                    <div class="subtask-item">
+                        <div class="subtask-text">${subtaskText}</div>
+                        <div class="delete-button" onclick="deleteSubtaskItem(this.parentNode)">
+                            <img src="./img/iconoir_cancel.svg" alt="">
+                        </div>
+                    </div>
+                    `;
         subtaskList.innerHTML += subtaskHTML;
         inputElement.value = '';
     }

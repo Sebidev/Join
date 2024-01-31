@@ -190,21 +190,54 @@ body {
   border-radius: 10px;
   border: 1px solid var(--Style, #d1d1d1);
   overflow-y: auto;
+  z-index: 1;
+}
+
+#selectedContactsContainer {
+  width: 100%;
+}
+
+.selected-contact {
+  gap: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .contacts {
-  color: var(--black, #000);
-  font-family: Inter;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 120%;
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.contacts-img-initial {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+}
+
+.contacts-img-initial img {
+  height: 32px;
+  width: 32px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.dropdown-checkbox {
+  width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  height: 34px;
-  padding: 8px;
-  cursor: pointer;
+}
+
+.initials-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .input-container-subtask {
