@@ -1,5 +1,8 @@
 users = [];
 
+let currentDate = new Date();
+let currentTime = new Date().getHours();
+
 /**
  * get data from backend server and render the content
  */
@@ -50,4 +53,32 @@ function greetUser() {
 
 function renderContent() {
     greetUser();
+    greetingTimed();
 }
+
+/**
+ * Formating the date
+ */
+function formatDate(dateString) {
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(dateString).toLocaleDateString("en-US", options);
+  }
+  
+  /**
+   * Change greeting at summary depending on the time of day
+   */
+  function greetingTimed() {
+    let greeting;
+  
+    if (currentTime >= 5 && currentTime < 12) {
+      greeting = "Good morning,";
+    } else if (currentTime >= 12 && currentTime < 18) {
+      greeting = "Good afternoon,";
+    } else if (currentTime >= 18 && currentTime < 22) {
+      greeting = "Good evening,";
+    } else {
+      greeting = "Good night,";
+    }
+  
+    document.getElementById("greetingTimed").innerHTML = greeting;
+  }

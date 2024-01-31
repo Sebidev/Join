@@ -1,8 +1,85 @@
-body{
+body {
     margin: 0px;
 }
 
-.header{
+#header-logout {
+    position: relative;
+    z-index: 99;
+}
+
+.userImage {
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+    border: 2px solid black;
+    cursor: pointer;
+    font-size: 24px;
+    font-weight: 600;
+    color: #29abe2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.userImage:hover {
+    cursor: pointer;
+    background-color: #e2e6ec;
+}
+
+.logout-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 36px;
+    top: 81px;
+    width: 130px;
+    height: 45px;
+    background: #2a3647;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 20px 0px 20px 20px;
+    box-sizing: border-box;
+    padding: 5px;
+}
+
+.logout-btn:hover {
+    cursor: pointer;
+    background: #29abe2;
+}
+
+.logout-inner-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #cdcdcd;
+    width: 100%;
+    height: 100%;
+}
+
+.popup-frame-logout {
+    z-index: 2;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+.rs-logout {
+    display: none;
+}
+
+.rs-logout-active {
+    color: white !important;
+    cursor: pointer;
+}
+
+.d-none {
+    display: none;
+}
+
+.header {
     display: flex;
     padding: 20px 40px 20px 348px;
     justify-content: space-between;
@@ -11,34 +88,35 @@ body{
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.10);
 }
 
-.header_text{
+.header_text {
     color: #000;
     font-family: Inter;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
-    line-height: 120%; /* 24px */
+    line-height: 120%;
+    /* 24px */
 }
 
-.icon_box{
+.icon_box {
     display: flex;
     align-items: center;
     gap: 16px;
 }
 
-.help_icon{
+.help_icon {
     display: flex;
     align-items: center;
     width: 24px;
     height: 24px;
 }
 
-.avatar_icon{
+.avatar_icon {
     display: flex;
     align-items: center;
     gap: 16px;
 }
 
-.avatar_icon, .help_icon{
+.avatar_icon, .help_icon {
     cursor: pointer;
 }

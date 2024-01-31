@@ -9,7 +9,7 @@
     <script src="js/template_load.js"></script>
     <title>Join</title>
 </head>
-<body onload="initSummary()">
+<body onload="initSummary(), initHead()">
     <header id="header"></header>
     <div id="sideboard"></div>
     <div class="header_summary">Join 360
@@ -64,11 +64,12 @@
             </div>
         </div>
         <div class="right_textbox">
-            <div class="right_textgray">Good morning,</div>
+            <div class="right_textgray" id="greetingTimed"></div>
             <div class="right_textlightblue" id="loggedinUser"></div>
         </div>
     </div>
     <script src="js/summary.js" defer></script>
     <script src="js/storage.js" defer></script>
+    <script src="js/header.js"></script>
 </body>
 </html>
