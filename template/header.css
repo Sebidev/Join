@@ -21,6 +21,11 @@ body {
     justify-content: center;
 }
 
+.userImage:hover {
+    cursor: pointer;
+    background-color: #e2e6ec;
+}
+
 .logout-btn {
     display: flex;
     flex-direction: column;
