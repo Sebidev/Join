@@ -111,10 +111,54 @@ function addTask() {
     overlay.style.display = 'block';
 }
 
+function choose(priority) {
+    let colorMap = { 'urgent': '#FF3D00', 'medium': '#FFA800', 'low': '#7AE229' };
+    let setStyles = (elements, styles) => elements.forEach(e => e && Object.assign(e.style, styles));
+
+    setStyles(document.querySelectorAll('.button'), { backgroundColor: '#fff' });
+    setStyles(document.querySelectorAll('.button img'), { filter: 'brightness(1) invert(0)' });
+
+    let [priorityButton, priorityImg] = [document.querySelector(`.${priority}`), document.querySelector(`.${priority} img`)];
+
+    if (priorityButton && priorityImg && colorMap[priority]) {
+        setStyles([priorityButton], { backgroundColor: colorMap[priority] });
+        setStyles([priorityImg], { filter: 'brightness(0) invert(1)' });
+
+        selectedPriority = priority;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    choose('medium');
+});
+
+function clearFields() {
+    let inputFields = document.querySelectorAll('.Add-task input, .Add-task textarea');
+    let AllInputFields = document.querySelectorAll('.Add-task-content input, .Add-task-content textarea');
+
+    inputFields.forEach(field => {
+        field.value = '';
+    });
+
+    AllInputFields.forEach(field => {
+        field.value = '';
+    });
+
+    choose('medium');
+    updateSelectedCategory('');
+
+    let subtaskList = document.getElementById('subtaskList');
+    subtaskList.innerHTML = '';
+}
+
 function closeModal() {
     let modal = document.getElementById('taskModal');
     let overlay = document.getElementById('overlay');
+    let cardOverlay = document.getElementById('card-overlay');
+    let cardModal = document.getElementById('cardModal');
 
+    cardOverlay.remove();
+    cardModal.remove();
     modal.remove();
     overlay.remove();
 }
@@ -200,4 +244,87 @@ function getPriorityIcon(priority) {
         default:
             return '';
     }
+}
+
+function openCard() {
+    let openCardHTML = `
+    <div id="card-overlay"></div>
+    <div id="cardModal" class="card-modal">
+            <div class="task-categorie">
+                <p class="task">User Story</p>
+                <div onclick="closeModal()">
+                    <img class="close-card-modal" src="./img/close_modal.svg" alt="">
+                </div>
+            </div>
+            <div class="card-modal-title-container">
+                <p class="card-modal-title">Contact Form & Imprint</p>
+                <p class="card-modal-content">Create a contact form and imprint page...</p>
+            </div>
+            <div class="card-modal-date">
+                <p class="due-date-card-modal">Due date:</p>
+                <div class="card-modal-date-number"> 10/05/2023 </div>
+            </div>
+            <div class="card-modal-priority">
+                <p class="card-modal-priority-letter">Priotity:</p>
+                <div class="card-modal-priority-symbol">
+                    <img src="./img/Prio_up.svg" alt="">
+                </div>
+            </div>
+
+            <div class="card-modal-contacts">
+                <p class="card-modal-assigned-to-headline">Assigned to:</p>
+                <div class="card-modal-contacts-container">
+                    <div class="card-modal-initial-container">
+                        <div class="card-modal-contact">
+                            <div class="card-modal-contact-and-image">
+                                <img src="./img/Ellipse5-1.svg" alt="">
+                                <p class="card-modal-name">Emmanuel Mauer</p>
+                            </div>
+                        </div>
+                        <div class="card-modal-contact">
+                            <div class="card-modal-contact-and-image">
+                                <img src="./img/Ellipse5-2.svg" alt="">
+                                <p class="card-modal-name">Marcel Bauer</p>
+                            </div>
+                        </div>
+                        <div class="card-modal-contact">
+                            <div class="card-modal-contact-and-image">
+                                <img src="./img/Ellipse5-2.svg" alt="">
+                                <p class="card-modal-name">Anton Meyer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="card-modal-subtasks-container">
+                <p class="card-modal-subtasks-container-headline">Subtasks</p>
+                <div class="card-modal-subtasks">
+                    <div class="card-modal-subtask-maincontainer">
+                        <div class="card-modal-subtask">
+                        <img src="./img/check_button_checked.svg"
+                        </div>
+                        <div class="card-modal-subtask-description">Implement Recipe Recommendation</div>
+                    </div>
+
+                    <div class="card-modal-subtask-maincontainer">
+                        <div class="card-modal-subtask">
+                        <img src="./img/check button.svg"
+                        </div>
+                        <div class="card-modal-subtask-description">Start Page Layout</div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+`;
+
+    document.body.insertAdjacentHTML('beforeend', openCardHTML);
+
+    let cardOverlay = document.getElementById('card-overlay');
+    cardOverlay.style.display = 'block';
+
 }
