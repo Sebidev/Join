@@ -853,9 +853,6 @@ body {
   align-self: stretch;
 }
 
-.card-modal-subtask-maincontainer {
-}
-
 .card-modal-subtask {
   display: flex;
   height: 32px;

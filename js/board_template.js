@@ -154,14 +154,19 @@ function clearFields() {
 function closeModal() {
     let modal = document.getElementById('taskModal');
     let overlay = document.getElementById('overlay');
+
+    modal.remove();
+    overlay.remove();
+}
+
+function closeOpenCard() {
     let cardOverlay = document.getElementById('card-overlay');
     let cardModal = document.getElementById('cardModal');
 
     cardOverlay.remove();
     cardModal.remove();
-    modal.remove();
-    overlay.remove();
 }
+
 
 function getValue(selector) {
     let element = document.querySelector(selector);
@@ -252,7 +257,7 @@ function openCard() {
     <div id="cardModal" class="card-modal">
             <div class="task-categorie">
                 <p class="task">User Story</p>
-                <div onclick="closeModal()">
+                <div onclick="closeOpenCard()">
                     <img class="close-card-modal" src="./img/close_modal.svg" alt="">
                 </div>
             </div>
@@ -311,7 +316,7 @@ function openCard() {
 
                     <div class="card-modal-subtask-maincontainer">
                         <div class="card-modal-subtask">
-                        <img src="./img/check button.svg"
+                        <img src="./img/check_button.svg"
                         </div>
                         <div class="card-modal-subtask-description">Start Page Layout</div>
                     </div>
