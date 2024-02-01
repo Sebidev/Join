@@ -1,8 +1,13 @@
 var overlay;
 var contactModal;
 
+// Regex-Ausdrücke für die Überprüfung der Eingabefelder
+let nameRegex = /^[a-zA-Z0-9-_\s.öäüÖÄÜ]*$/;
+let emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+let phoneRegex = /^[+]?[0-9]*$/;
+
 // Erstelle ein neues Div-Element für die blaue Leiste
-var blueBar = `
+var addcontact_blueBar = `
 <div id="bluebar">
     <img class="bluebar_joinlogo" src="img/join_logo.svg"></img>
     <div class="bluebar_titel">Add contact</div>
@@ -13,8 +18,18 @@ var blueBar = `
     </div>
 </div>`;
 
+var editcontact_blueBar = `
+<div id="bluebar">
+    <img class="bluebar_joinlogo" src="img/join_logo.svg"></img>
+    <div class="bluebar_titel">Edit contact</div>
+    <div class="bluebar_line">
+        <svg xmlns="http://www.w3.org/2000/svg" width="94" height="3" viewBox="0 0 94 3" fill="none">
+        <path d="M92 1.5L2 1.5" stroke="#29ABE2" stroke-width="3" stroke-linecap="round"/></svg>
+    </div>
+</div>`;
+
 // Erstelle ein neues Div-Element für das Formular "Add new contact"
-let formHTML = `
+let addcontact_formHTML = `
 <form id="contactForm" class="form_container">
     <div class="input_container">
         <input type="text" class="textfield_newcontact" id="name" name="name" placeholder="Name">
@@ -34,7 +49,7 @@ let formHTML = `
     </div>
 </form>`;
 
-function add_contact() {
+function addContact() {
     // Erstelle ein neues Div-Element für das Overlay
     overlay = document.createElement("div");
     // Setze die ID des Overlays auf "overlay"
@@ -49,7 +64,7 @@ function add_contact() {
     // Füge das Kontaktmodal dem Body-Element hinzu
     document.body.appendChild(contactModal);
     // Füge die blaue Leiste zum Kontaktmodal hinzu
-    contactModal.innerHTML += blueBar;
+    contactModal.innerHTML += addcontact_blueBar;
 
     // Erstellen Sie ein neues div-Element
     let avatarDiv = document.createElement("div");
@@ -75,7 +90,7 @@ function add_contact() {
     let formDiv = document.createElement("div");
 
     // Fügen Sie den HTML-Code zum contactModal hinzu
-    contactModal.innerHTML += formHTML;
+    contactModal.innerHTML += addcontact_formHTML;
     // Fügen Sie das neue div-Element zum contactModal hinzu
     contactModal.appendChild(formDiv);
 
@@ -136,6 +151,24 @@ function saveContact() {
         return;
     }
 
+    // Überprüfe, ob der Name nur Buchstaben, Zahlen und die Sonderzeichen Bindestrich und Unterstrich enthält
+    if (!nameRegex.test(name)) {
+        alert("Ungültiger Name. Bitte nur Buchstaben, Zahlen und die Sonderzeichen Bindestrich und Unterstrich eingeben.");
+        return;
+    }
+
+    // Überprüfe, ob die E-Mail-Adresse gültig ist
+    if (!emailRegex.test(email)) {
+        alert("Ungültige E-Mail-Adresse. Bitte eine gültige E-Mail-Adresse eingeben.");
+        return;
+    }
+
+    // Überprüfe, ob die Telefonnummer nur Zahlen enthält
+    if (!phoneRegex.test(phone)) {
+        alert("Ungültige Telefonnummer. Bitte nur Zahlen und optional ein Pluszeichen am Anfang eingeben.");
+        return;
+    }
+
     // Erstelle ein Objekt mit den Werten und einer eindeutigen ID
     var contact = {
         id: generateId(),
@@ -170,7 +203,7 @@ function loadContacts() {
     let contacts = JSON.parse(localStorage.getItem('contacts'));
 
     // Wenn keine Kontakte vorhanden sind, erstellen wir einen Demo-Kontakt
-    if (!contacts) {
+    if (!contacts || Object.keys(contacts).length === 0) {
         contacts = [{
             id: generateId(),
             avatarid: rollDice(),
@@ -222,18 +255,141 @@ function loadContacts() {
             // Fügen Sie die 'selected'-Klasse zum angeklickten Kontakt hinzu
             contactElement.classList.add('selected');
             // Rufen Sie die Funktion auf, um den Kontakt anzuzeigen
-            floating_contact_render(contact.id);
+            floatingContactRender(contact.id);
         });
     }
 }
 
-// Warten Sie, bis das Dokument vollständig geladen ist, bevor Sie die Kontakte laden
-document.addEventListener('DOMContentLoaded', (event) => {
-    loadContacts();
-});
 
-function editContact(){
-    console.log("editContact");
+function editContact(id){
+    // Kontakte aus dem LocalStorage laden
+    let contacts = JSON.parse(localStorage.getItem('contacts'));
+
+    // Finden Sie den Kontakt mit der angegebenen ID
+    let contact = contacts.find(contact => contact.id === id);
+
+    if (contact) {
+        // Erstelle ein neues Div-Element für das Overlay
+        overlay = document.createElement("div");
+        // Setze die ID des Overlays auf "overlay"
+        overlay.id = "overlay";
+        // Füge das Overlay dem Body-Element hinzu
+        document.body.appendChild(overlay);
+
+        // Erstelle ein neues Div-Element für das Kontaktmodal
+        contactModal = document.createElement("div");
+        // Setze die ID des Kontaktmodals auf "contactModal"
+        contactModal.id = "contactModal";
+        // Füge das Kontaktmodal dem Body-Element hinzu
+        document.body.appendChild(contactModal);
+        // Füge die blaue Leiste zum Kontaktmodal hinzu
+        contactModal.innerHTML += editcontact_blueBar;
+
+        // Erstellen Sie ein neues div-Element
+        let avatarDiv = document.createElement("div");
+        // Erstellen Sie einen String mit dem HTML-Code
+        let avatarHTML = `
+        <img class="avatar_contactModal" src="img/Ellipse5-${contact.avatarid}.svg"></img>
+        <div class="avatar_contactModal_initletter">${contact.name.charAt(0)}</div>
+        `;
+
+        // Fügen Sie den HTML-Code zum contactModal hinzu
+        contactModal.innerHTML += avatarHTML;
+        // Fügen Sie das neue div-Element zum contactModal hinzu
+        contactModal.appendChild(avatarDiv);
+
+        // Erstellen Sie ein neues div-Element
+        let close_button1_DIV = document.createElement("div");
+        // Erstellen Sie einen String mit dem HTML-Code
+        let close_button1_DIV_HTML = `<img class="close_button1" onclick="closeContactModal()" src="img/close.svg"></img>`;
+
+        // Fügen Sie den HTML-Code zum div-Element hinzu
+        close_button1_DIV.innerHTML = close_button1_DIV_HTML;
+        // Fügen Sie das neue div-Element zum contactModal hinzu
+        contactModal.appendChild(close_button1_DIV);
+
+        // Erstellen Sie ein neues div-Element
+        let formDiv = document.createElement("div");
+
+        let editcontact_formHTML = `
+        <form id="editcontact_Form" class="form_container">
+            <div class="input_container">
+                <input type="text" class="textfield_newcontact" id="name" name="name" placeholder="Name" value="${contact.name}" pattern="^[a-zA-Z0-9-_]*$" title="Bitte nur Buchstaben, Zahlen und die Sonderzeichen Bindestrich und Unterstrich eingeben.">
+                <img src="img/person.svg" class="textfield_image">
+            </div>
+            <div class="input_container">
+                <input type="email" class="textfield_newcontact" id="email" name="email" placeholder="Email" value="${contact.email}" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Bitte eine gültige E-Mail-Adresse eingeben.">
+                <img src="img/mail.svg" class="textfield_image">
+            </div>
+            <div class="input_container">
+                <input type="text" class="textfield_newcontact" id="phone" name="phone" placeholder="Phone" value="${contact.phone}" pattern="^[+]?[0-9]*$" title="Bitte nur Zahlen und optional ein Pluszeichen am Anfang eingeben.">
+                <img src="img/phone.svg" class="textfield_image">
+            </div>
+            <div class="button_container">
+                <div class="close_button2" onclick="delContact('${contact.id}')">Delete</img></div>
+                <div class="createcontact_button" onclick="saveEditedContact('${contact.id}')">Save<img src="img/check.svg"></img></div>
+            </div>
+        </form>`;
+
+        // Fügen Sie den HTML-Code zum contactModal hinzu
+        contactModal.innerHTML += editcontact_formHTML;
+        // Fügen Sie das neue div-Element zum contactModal hinzu
+        contactModal.appendChild(formDiv);
+
+        // Mache das Overlay und das Kontaktmodal sichtbar
+        overlay.style.display = "block";
+        contactModal.style.display = "block";
+    }
+    else {
+        console.log(`Kein Kontakt mit der ID ${id} gefunden.`);
+    }
+}
+
+function saveEditedContact(id) {
+    // Kontakte aus dem LocalStorage laden
+    let contacts = JSON.parse(localStorage.getItem('contacts'));
+
+    // Finden Sie den Kontakt mit der angegebenen ID
+    let contact = contacts.find(contact => contact.id === id);
+
+    if (contact) {
+        // Überprüfen Sie die neuen Werte aus dem Formular
+        let name = document.getElementById('name').value;
+        let email = document.getElementById('email').value;
+        let phone = document.getElementById('phone').value;
+
+        if (!nameRegex.test(name)) {
+            alert("Ungültiger Name. Bitte nur Buchstaben, Zahlen und die Sonderzeichen Bindestrich und Unterstrich eingeben.");
+            return;
+        }
+
+        if (!emailRegex.test(email)) {
+            alert("Ungültige E-Mail-Adresse. Bitte eine gültige E-Mail-Adresse eingeben.");
+            return;
+        }
+
+        if (!phoneRegex.test(phone)) {
+            alert("Ungültige Telefonnummer. Bitte nur Zahlen und optional ein Pluszeichen am Anfang eingeben.");
+            return;
+        }
+
+        // Aktualisieren Sie die Kontaktinformationen mit den neuen Werten
+        contact.name = name;
+        contact.email = email;
+        contact.phone = phone;
+
+        // Speichern Sie die aktualisierten Kontakte zurück in den LocalStorage
+        localStorage.setItem('contacts', JSON.stringify(contacts));
+
+        // Schließen Sie das Kontaktmodal
+        closeContactModal();
+
+        // Lade die Kontakte neu
+        location.reload();
+    }
+    else {
+        console.log(`Kein Kontakt mit der ID ${id} gefunden.`);
+    }
 }
 
 function delContact(id){
@@ -250,7 +406,7 @@ function delContact(id){
     location.reload();
 }
 
-function floating_contact_render(id){
+function floatingContactRender(id){
     // Kontakte aus dem LocalStorage laden
     let contacts = JSON.parse(localStorage.getItem('contacts'));
 
@@ -315,3 +471,9 @@ function floating_contact_render(id){
         console.log(`Kein Kontakt mit der ID ${id} gefunden.`);
     }
 }
+
+// Warten Sie, bis das Dokument vollständig geladen ist, bevor Sie die Kontakte laden
+document.addEventListener('DOMContentLoaded', (event) => {
+    loadContacts();
+});
+
