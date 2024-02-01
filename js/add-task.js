@@ -7,14 +7,17 @@ let contacts = [
     { name: 'Eva Fischer', email: 'eva@gmail.com', initial: 'EF', imagePath: 'img/Ellipse5-2.svg' },
     { name: 'Emmanuel Mauer', email: 'emmanuelma@gmail.com', initial: 'EM', imagePath: 'img/Ellipse5-4.svg' },
 ];
+window.contacts = contacts;
 let selectedInitialsArray = [];
 
-document.addEventListener('click', function (event) {
-    let dropdown = document.getElementById('contactDropdown');
-    if (!event.target.matches('.arrow_down') && !event.target.closest('.assigned-to-container')) {
-        dropdown.style.display = 'none';
-    }
-});
+if (window.location.pathname.endsWith("add-task.html")) {
+    document.addEventListener('click', function (event) {
+        let dropdown = document.getElementById('contactDropdown');
+        if (!event.target.matches('.arrow_down') && !event.target.closest('.assigned-to-container')) {
+            dropdown.style.display = 'none';
+        }
+    });
+}
 
 function showDropdown() {
     let dropdownContent = document.getElementById("contactDropdown");

@@ -1,208 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Board</title>
-    <link rel="stylesheet" href="./css/board.css">
-    <link rel="stylesheet" href="./css/add_task.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test 2</title>
+    <link rel="stylesheet" href="./css/board.css" />
+    <link rel="stylesheet" href="./css/add_task.css" />
     <link rel="stylesheet" href="./css/contacts.css" />
-    
-</head>
-<body onload="initHead()">
+  </head>
+  <body>
     <header id="header"></header>
     <div id="sideboard"></div>
     <div class="head">
-        <div class="board-head">Board</div>
-        <div class="head-right">
-            <div class="input-container">
-                <input class="find-task-search" type="text">
-                <img class="vector" src="./img/Vector 3.svg" alt="">
-                <img class="search-icon" src="./img/search.svg" alt="">
-            </div>
-            <button class="add-task-button" onclick="addTask()">Add task
-                <img src="./img/add.svg" alt="">
-            </button>
+      <div class="board-head">Board</div>
+      <div class="head-right">
+        <div class="input-container">
+          <input class="find-task-search" type="text" />
+          <img class="vector" src="./img/Vector 3.svg" alt="" />
+          <img class="search-icon" src="./img/search.svg" alt="" />
         </div>
+        <button class="add-task-button" onclick="addTask()">
+          Add task
+          <img src="./img/add.svg" alt="" />
+        </button>
+      </div>
     </div>
 
     <div class="board">
-        <div class="to-do-section">
-            <div class="instance"><h3>To do</h3>
-                <div onclick="addTask()" class="plus-button">
-                    <img src="./img/Capa 1.svg" alt="">
-                </div>
-            </div>
-
-            <div class="containerDiv" id="renderCard"></div>            
-            
-            <div onclick="openCard()" class="card-user-story">
-                <div class="user-story">
-                    <p class="to-do-top">User Story</p>
-                </div>
-                <div class="title-container">
-                    <p class="card-title">Contact Form & Imprint</p>
-                    <p class="card-content">Create a contact form and imprint page...</p>
-                </div>
-                <div class="progress">
-                    <div class="progress-bar"></div>
-                    <div class="subtasks">0/2 Subtasks</div>
-                </div>
-                <div class="to-do-bottom">
-                    <div class="initial-container">
-                        <div class="profile-badge">
-                            <img src="./img/Ellipse5-1.svg" alt="">
-                        </div>
-                        <div class="profile-badge">
-                            <img src="./img/Ellipse5-2.svg" alt="">
-                        </div>
-                        <div class="profile-badge">
-                            <img src="./img/Ellipse5-3.svg" alt="">
-                        </div>
-                    </div>
-                    <div class="priority-symbol">
-                        <img src="./img/Prio_up.svg" alt="">
-                    </div>
-                </div>
-            </div>
+      <div class="to-do-section">
+        <div class="instance">
+          <h3>To do</h3>
+          <div onclick="addTask()" class="plus-button">
+            <img src="./img/Capa 1.svg" alt="" />
+          </div>
         </div>
 
-        <div class="in-progress-section">
-            <div class="instance"><h3>In progress</h3>
-                <div onclick="addTask()" class="plus-button">
-                    <img src="./img/Capa 1.svg" alt="">
-                </div>
+        <div class="containerDiv" id="renderCard"></div>
+
+        <div onclick="openCard()" class="card-user-story">
+          <div class="user-story">
+            <p class="to-do-top">User Story</p>
+          </div>
+          <div class="title-container">
+            <p class="card-title">Contact Form & Imprint</p>
+            <p class="card-content">
+              Create a contact form and imprint page...
+            </p>
+          </div>
+          <div class="progress">
+            <div class="progress-bar"></div>
+            <div class="subtasks">0/2 Subtasks</div>
+          </div>
+          <div class="to-do-bottom">
+            <div class="initial-container">
+              <div class="profile-badge">
+                <img src="./img/Ellipse5-1.svg" alt="" />
+              </div>
+              <div class="profile-badge">
+                <img src="./img/Ellipse5-2.svg" alt="" />
+              </div>
+              <div class="profile-badge">
+                <img src="./img/Ellipse5-3.svg" alt="" />
+              </div>
             </div>
-            <div onclick="openCard()" class="card-user-story-progress">
-                <div class="user-story">
-                    <p class="in-progress-top">User Story</p>
-                </div>
-                <div class="title-container">
-                    <p class="card-title">Kochwelt Page & Recipe<br>Recommender</p>
-                    <p class="card-content">Build start page with recipe recommendation...</p>
-                </div>
-                <div class="progress">
-                    <div class="progress-bar">
-                        <div class="progress-fill-in-progress"></div>
-                    </div>
-                    <div class="subtasks">1/2 Subtasks</div>
-                </div>
-                <div class="to-do-bottom">
-                    <div class="initial-container">
-                        <div class="profile-badge">
-                            <img src="./img/Ellipse5-1.svg" alt="">
-                        </div>
-                        <div class="profile-badge">
-                            <img src="./img/Ellipse5-2.svg" alt="">
-                        </div>
-                        <div class="profile-badge">
-                            <img src="./img/Ellipse5-3.svg" alt="">
-                        </div>
-                    </div>
-                    <div class="priority-symbol-neutral">
-                        <img src="./img/Prio_neutral-2.svg" alt="">
-                    </div>
-                </div>
+            <div class="priority-symbol">
+              <img src="./img/Prio_up.svg" alt="" />
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="in-progress-section">
+        <div class="instance">
+          <h3>In progress</h3>
+          <div onclick="addTask()" class="plus-button">
+            <img src="./img/Capa 1.svg" alt="" />
+          </div>
+        </div>
+        <div onclick="openCard()" class="card-user-story-progress">
+          <div class="user-story">
+            <p class="in-progress-top">User Story</p>
+          </div>
+          <div class="title-container">
+            <p class="card-title">Kochwelt Page & Recipe<br />Recommender</p>
+            <p class="card-content">
+              Build start page with recipe recommendation...
+            </p>
+          </div>
+          <div class="progress">
+            <div class="progress-bar">
+              <div class="progress-fill-in-progress"></div>
+            </div>
+            <div class="subtasks">1/2 Subtasks</div>
+          </div>
+          <div class="to-do-bottom">
+            <div class="initial-container">
+              <div class="profile-badge">
+                <img src="./img/Ellipse5-1.svg" alt="" />
+              </div>
+              <div class="profile-badge">
+                <img src="./img/Ellipse5-2.svg" alt="" />
+              </div>
+              <div class="profile-badge">
+                <img src="./img/Ellipse5-3.svg" alt="" />
+              </div>
+            </div>
+            <div class="priority-symbol-neutral">
+              <img src="./img/Prio_neutral-2.svg" alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="await-section">
+        <div class="instance">
+          <h3>Await feedback</h3>
+          <div onclick="addTask()" class="plus-button">
+            <img src="./img/Capa 1.svg" alt="" />
+          </div>
+        </div>
+        <div onclick="openCard()" class="card-await-feedback">
+          <div class="technical-task">
+            <p class="await-feedback-top">Technical Task</p>
+          </div>
+          <div class="title-container">
+            <p class="card-title">HTML Base Template Creation</p>
+            <p class="card-content">Create reusable HTML base templates...</p>
+          </div>
+          <div class="to-do-bottom">
+            <div class="initial-container">
+              <div class="profile-badge">
+                <img src="./img/Ellipse5-1.svg" alt="" />
+              </div>
+              <div class="profile-badge">
+                <img src="./img/Ellipse5-2.svg" alt="" />
+              </div>
+              <div class="profile-badge">
+                <img src="./img/Ellipse5-3.svg" alt="" />
+              </div>
+            </div>
+            <div class="priority-symbol-down">
+              <img src="./img/Prio_down.svg" alt="" />
+            </div>
+          </div>
         </div>
 
-        <div class="await-section">
-            <div class="instance"><h3>Await feedback</h3>
-                <div onclick="addTask()" class="plus-button">
-                    <img src="./img/Capa 1.svg" alt="">
-                </div>
+        <div class="card-user-story-await">
+          <div class="user-story">
+            <p class="in-progress-top">User Story</p>
+          </div>
+          <div class="title-container">
+            <p class="card-title">Daily Kochwelt Recipe</p>
+            <p class="card-content">
+              Implement daily recipe and portion calculator....
+            </p>
+          </div>
+          <div class="to-do-bottom">
+            <div class="initial-container">
+              <div class="profile-badge">
+                <img src="./img/Ellipse5-1.svg" alt="" />
+              </div>
+              <div class="profile-badge">
+                <img src="./img/Ellipse5-2.svg" alt="" />
+              </div>
+              <div class="profile-badge">
+                <img src="./img/Ellipse5-3.svg" alt="" />
+              </div>
             </div>
-            <div onclick="openCard()" class="card-await-feedback">
-                <div class="technical-task">
-                    <p class="await-feedback-top">Technical Task</p>
-                </div>
-                <div class="title-container">
-                    <p class="card-title">HTML Base Template Creation</p>
-                    <p class="card-content">Create reusable HTML base templates...</p>
-                </div>
-                <div class="to-do-bottom">
-                    <div class="initial-container">
-                        <div class="profile-badge">
-                            <img src="./img/Ellipse5-1.svg" alt="">
-                        </div>
-                        <div class="profile-badge">
-                            <img src="./img/Ellipse5-2.svg" alt="">
-                        </div>
-                        <div class="profile-badge">
-                            <img src="./img/Ellipse5-3.svg" alt="">
-                        </div>
-                    </div>
-                    <div class="priority-symbol-down">
-                        <img src="./img/Prio_down.svg" alt="">
-                    </div>
-                </div>
+            <div class="priority-symbol-neutral">
+              <img src="./img/Prio_neutral-2.svg" alt="" />
             </div>
-
-            <div class="card-user-story-await">
-                <div class="user-story">
-                    <p class="in-progress-top">User Story</p>
-                </div>
-                <div class="title-container">
-                    <p class="card-title">Daily Kochwelt Recipe</p>
-                    <p class="card-content">Implement daily recipe and portion calculator....</p>
-                </div>
-                <div class="to-do-bottom">
-                    <div class="initial-container">
-                        <div class="profile-badge">
-                            <img src="./img/Ellipse5-1.svg" alt="">
-                        </div>
-                        <div class="profile-badge">
-                            <img src="./img/Ellipse5-2.svg" alt="">
-                        </div>
-                        <div class="profile-badge">
-                            <img src="./img/Ellipse5-3.svg" alt="">
-                        </div>
-                    </div>
-                    <div class="priority-symbol-neutral">
-                        <img src="./img/Prio_neutral-2.svg" alt="">
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="done-section">
-            <div class="instance"><h3>Done</h3></div>
-            <div class="card-done">
-                <div class="technical-task">
-                    <p class="await-feedback-top">Technical Task</p>
-                </div>
-                <div class="title-container">
-                    <p class="card-title">CSS Architecture Planning</p>
-                    <p class="card-content">Define CSS naming conventions and structure...</p>
-                </div>
-                <div class="progress">
-                    <div class="progress-bar">
-                        <div class="progress-fill-in-progress-done"></div>
-                    </div>
-                    <div class="subtasks">2/2 Subtasks</div>
-                </div>
-                <div class="to-do-bottom">
-                    <div class="initial-container">
-                        <div class="profile-badge">
-                            <img src="./img/Ellipse5-1.svg" alt="">
-                        </div>
-                        <div class="profile-badge">
-                            <img src="./img/Ellipse5-2.svg" alt="">
-                        </div>
-                        <div class="profile-badge">
-                            <img src="./img/Ellipse5-3.svg" alt="">
-                        </div>
-                    </div>
-                    <div class="priority-symbol">
-                        <img src="./img/Prio_up.svg" alt="">
-                    </div>
-                </div>
+      <div class="done-section">
+        <div class="instance"><h3>Done</h3></div>
+        <div class="card-done">
+          <div class="technical-task">
+            <p class="await-feedback-top">Technical Task</p>
+          </div>
+          <div class="title-container">
+            <p class="card-title">CSS Architecture Planning</p>
+            <p class="card-content">
+              Define CSS naming conventions and structure...
+            </p>
+          </div>
+          <div class="progress">
+            <div class="progress-bar">
+              <div class="progress-fill-in-progress-done"></div>
             </div>
+            <div class="subtasks">2/2 Subtasks</div>
+          </div>
+          <div class="to-do-bottom">
+            <div class="initial-container">
+              <div class="profile-badge">
+                <img src="./img/Ellipse5-1.svg" alt="" />
+              </div>
+              <div class="profile-badge">
+                <img src="./img/Ellipse5-2.svg" alt="" />
+              </div>
+              <div class="profile-badge">
+                <img src="./img/Ellipse5-3.svg" alt="" />
+              </div>
+            </div>
+            <div class="priority-symbol">
+              <img src="./img/Prio_up.svg" alt="" />
+            </div>
+          </div>
         </div>
+      </div>
     </div>
     <script src="js/template_load.js"></script>
-    <script src="./js/board_template.js"></script>
-    <script src="js/header.js"></script>
-    <script src="js/storage.js"></script>
-</body>
+    <script src="js/add-task.js"></script>
+    <script src="js/board_template.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  </body>
 </html>

@@ -1,4 +1,5 @@
 let isPriorityOptionsOpen = false;
+//import { contacts } from './js/add-task.js';
 
 function addTask() {
     let modalHTML = `
@@ -286,23 +287,26 @@ function openCard() {
             <div class="card-modal-contacts">
                 <p class="card-modal-assigned-to-headline">Assigned to:</p>
                 <div class="card-modal-contacts-container">
-                    <div class="card-modal-initial-container">
-                        <div class="card-modal-contact">
+                    <div id="cardModalInitialContainer" class="card-modal-initial-container">
+                        <div class="card-modal-contact" data-contact-id="1">
                             <div class="card-modal-contact-and-image">
                                 <img src="./img/Ellipse5-1.svg" alt="">
                                 <p class="card-modal-name">Emmanuel Mauer</p>
+                                <span class="remove-contact" onclick="removeContact(1)"></span>
                             </div>
                         </div>
-                        <div class="card-modal-contact">
+                        <div class="card-modal-contact" data-contact-id="2">
                             <div class="card-modal-contact-and-image">
                                 <img src="./img/Ellipse5-2.svg" alt="">
                                 <p class="card-modal-name">Marcel Bauer</p>
+                                <span class="remove-contact" onclick="removeContact(2)"></span>
                             </div>
                         </div>
-                        <div class="card-modal-contact">
+                        <div class="card-modal-contact" data-contact-id="3">
                             <div class="card-modal-contact-and-image">
                                 <img src="./img/Ellipse5-2.svg" alt="">
                                 <p class="card-modal-name">Anton Meyer</p>
+                                <span class="remove-contact" onclick="removeContact(3)"></span>
                             </div>
                         </div>
                     </div>
@@ -382,6 +386,19 @@ function edit() {
     let priorityh3Element = document.querySelector('.card-modal-priority h3');
     priorityImgElement.addEventListener('click', openPriorityOptions);
     priorityh3Element.addEventListener('click', openPriorityOptions);
+
+    let contacts = document.querySelectorAll('.card-modal-contact');
+    contacts.forEach(contact => {
+        let removeButton = document.createElement('span');
+        removeButton.classList.add('remove-contact');
+        removeButton.textContent = 'X';
+        removeButton.onclick = function () {
+            removeContact(contact.dataset.contactId);
+        };
+
+        contact.querySelector('.card-modal-contact-and-image').appendChild(removeButton);
+    });
+    createContactDropdown();
 }
 
 function openPriorityOptions(event) {
@@ -460,4 +477,122 @@ function chooseCardModal(priority) {
     if (priorityOptionsContainer) {
         priorityOptionsContainer.remove();
     }
+}
+
+function removeContact(contactId) {
+    let contact = document.querySelector(`.card-modal-contact[data-contact-id="${contactId}"]`);
+    if (contact) {
+        contact.remove();
+    }
+}
+
+function createContactDropdown() {
+    let assignedToContainer = document.querySelector('.card-modal-assigned-to-headline');
+    let cardContactsContainer = document.querySelector('.card-modal-contacts');
+    
+    let dropdownMenu = document.createElement('div');
+    dropdownMenu.classList.add('contact-dropdown-menu');
+    dropdownMenu.id = 'openCardContactDropdown';
+    dropdownMenu.style.width = `${cardContactsContainer.offsetWidth}px`;
+
+    if (window.contacts) {
+        contacts.forEach(contact => {
+            let isSelected = selectedInitialsArray.includes(contact.initial);
+
+            let contactCardModal = document.createElement("div");
+            contactCardModal.innerHTML = `
+                <label class="contacts">
+                    <div class="contacts-img-initial">
+                        <img src="${contact.imagePath}" alt="${contact.name}">
+                        <div class="initials-overlay">${contact.initial}</div>
+                    </div>
+                    <div class="dropdown-checkbox">
+                        <div style="margin-left: 5px;">${contact.name}</div>
+                        <input type="checkbox" class="contact-checkbox" ${isSelected ? 'checked' : ''}>
+                    </div>
+                </label>
+            `;
+             // Event-Listener auf das Label anwenden
+             let labelElement = contactCardModal.querySelector('.contacts');
+             labelElement.addEventListener("click", () => {
+                 // Klicken auf das Label simulieren, um den Checkbox-Status zu ändern
+                 let checkboxElement = labelElement.querySelector('.contact-checkbox');
+                 checkboxElement.checked = !checkboxElement.checked;
+ 
+                 toggleContactSelectionCardModal(contact);
+             });
+            dropdownMenu.appendChild(contactCardModal);
+        });
+    }
+
+    let arrowIcon = document.createElement('span');
+    arrowIcon.classList.add('arrow-down-icon');
+    arrowIcon.innerHTML = '&#9660';
+
+    dropdownMenu.style.display = 'none';
+
+    arrowIcon.addEventListener('click', function () {
+        dropdownMenu.style.display = (dropdownMenu.style.display === 'none') ? 'block' : 'none';
+    });
+
+    assignedToContainer.appendChild(arrowIcon);
+    assignedToContainer.appendChild(dropdownMenu);
+}
+
+function assignContact(contact) {
+    let assignedToContainer = document.querySelector('.card-modal-contacts-container');
+
+    let contactDiv = document.createElement("div");
+    contactDiv.classList.add('card-modal-contact');
+    contactDiv.dataset.contactId = contact.id;
+
+    contactDiv.innerHTML = `
+        <div class="card-modal-contact-and-image">
+            <img src="${contact.imagePath}" alt="${contact.name}">
+            <p class="card-modal-name">${contact.name}</p>
+        </div>
+    `;
+
+    assignedToContainer.appendChild(contactDiv);
+}
+
+function toggleContactSelectionCardModal(contact, event) {
+    if (event) {
+        event.stopPropagation();
+    }
+
+    let index = selectedInitialsArray.indexOf(contact.initial);
+
+    if (index !== -1) {
+        selectedInitialsArray.splice(index, 1);
+    } else {
+        selectedInitialsArray.push(contact.initial);
+    }
+
+    selectContactCardModal(contact);
+}
+
+function selectContactCardModal(contact) {
+    console.log("Selected Contacts:", selectedInitialsArray);
+
+    let selectedContactsContainer = document.getElementById("cardModalInitialContainer");
+    selectedContactsContainer.innerHTML = "";
+
+    selectedInitialsArray.forEach(initial => {
+        let selectedContact = contacts.find(c => c.initial === initial);
+        if (selectedContact) {
+            let selectedContactDiv = document.createElement("div");
+            selectedContactDiv.innerHTML = `
+                <div class="selected-contact">
+                    <div class="contacts-img-initial">
+                        <img src="${selectedContact.imagePath}" alt="${selectedContact.name}">
+                        <div class="initials-overlay">${selectedContact.initial}</div>
+                    </div>
+                    <span>${selectedContact.name} (${initial})</span>
+                </div>
+            `;
+            selectedContactDiv.addEventListener("click", (event) => toggleContactSelectionCardModal(selectedContact, event));
+            selectedContactsContainer.appendChild(selectedContactDiv);
+        }
+    });
 }

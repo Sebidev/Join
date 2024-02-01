@@ -768,19 +768,11 @@ body {
 }
 
 .card-modal-initial-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
-  align-self: stretch;
+  width: 100%;
 }
 
 .card-modal-contacts-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
-  align-self: stretch;
+  width: 100%;
 }
 
 .card-modal-contact {
@@ -966,4 +958,16 @@ body {
 
 .card-modal-priority-options-container button {
   width: 100%;
+}
+
+.contact-dropdown-menu {
+  width: 100%;
+  /*height: 216px;*/
+  position: absolute;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid var(--Style, #d1d1d1);
+  border-radius: 10px;
+  overflow-y: auto;
+  z-index: 1;
+  display: block;
 }
