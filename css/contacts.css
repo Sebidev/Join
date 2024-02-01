@@ -222,8 +222,9 @@ body {
     height: 100vh;   
     background-color: white;
     margin-left: 232px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
-
 .add_new_conatct_btn_container{
     display: flex;
     width: 456px;
@@ -286,13 +287,21 @@ body {
 
 .contactentry {
     display: flex;
-    width: 352px;
+    width: 300px;
     padding: 15px 24px;
     align-items: flex-start;
     gap: 35px;
     border-radius: 10px;
     background: #FFF;
-    margin-left: 50px;
+    margin-left: 8px;
+}
+
+.selected {
+    background: #2A3647;
+}
+
+.selected .contactentry_name {
+    color: #FFF;
 }
 
 .avatar {

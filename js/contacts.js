@@ -13,6 +13,7 @@ var blueBar = `
     </div>
 </div>`;
 
+// Erstelle ein neues Div-Element für das Formular "Add new contact"
 let formHTML = `
 <form id="contactForm" class="form_container">
     <div class="input_container">
@@ -96,11 +97,38 @@ function closeContactModal() {
     }
 }
 
+// Funktion zur Generierung einer zufälligen ID
+function generateId() {
+    return '_' + Math.random().toString(36).substr(2, 9);
+}
+
+// Funktion zum Mischen eines Arrays (Fisher-Yates-Algorithmus)
+var numbers = [0, 1, 2, 3, 4];
+var index = numbers.length;
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+// Funktion zum Würfeln einer Zahl
+function rollDice() {
+    if (index === numbers.length) {
+        shuffleArray(numbers);
+        index = 0;
+    }
+
+    return numbers[index++];
+}
+
+// Funktion zum Speichern eines Kontakts
 function saveContact() {
     // Erhalte die Werte direkt aus den Eingabefeldern
-    var name = document.querySelector('#contactForm input[name="name"]').value.trim();
-    var email = document.querySelector('#contactForm input[name="email"]').value.trim();
-    var phone = document.querySelector('#contactForm input[name="phone"]').value.trim();
+    var name = document.querySelector('#contactForm input[name="name"]').value;
+    var email = document.querySelector('#contactForm input[name="email"]').value;
+    var phone = document.querySelector('#contactForm input[name="phone"]').value;
 
     // Überprüfe, ob die Felder ausgefüllt sind
     if (!name || !email || !phone) {
@@ -108,8 +136,10 @@ function saveContact() {
         return;
     }
 
-    // Erstelle ein Objekt mit den Werten
+    // Erstelle ein Objekt mit den Werten und einer eindeutigen ID
     var contact = {
+        id: generateId(),
+        avatarid: rollDice(),
         name: name,
         email: email,
         phone: phone
@@ -134,6 +164,7 @@ function saveContact() {
     location.reload();
 }
 
+// Funktion zum Laden der Kontakte
 function loadContacts() {
     // Zuerst holen wir die Kontakte aus dem LocalStorage
     let contacts = JSON.parse(localStorage.getItem('contacts'));
@@ -141,6 +172,8 @@ function loadContacts() {
     // Wenn keine Kontakte vorhanden sind, erstellen wir einen Demo-Kontakt
     if (!contacts) {
         contacts = [{
+            id: generateId(),
+            avatarid: rollDice(),
             name: 'Demo Contact',
             email: 'demo@contact.com',
             phone: '0123456789'
@@ -155,9 +188,9 @@ function loadContacts() {
         return `
         <div class="initial_letter">${contact.name.charAt(0)}</div>
         <div class="line"><svg xmlns="http://www.w3.org/2000/svg" width="354" height="2" viewBox="0 0 354 2" fill="none"><path d="M1 1H353" stroke="#D1D1D1" stroke-linecap="round"/></svg></div>
-        <div class="contactentry">
+        <div class="contactentry" id=${contact.id}>
             <div class="avatar">
-                <img src="img/Ellipse5-2.svg"></img>
+                <img src="img/Ellipse5-${contact.avatarid}.svg"></img>
                 <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
             </div>
             <div class="contactentry_info">
@@ -176,8 +209,46 @@ function loadContacts() {
 
     // Schließlich fügen wir unser HTML in das Dokument ein
     document.querySelector('.contacts_container').innerHTML += contactsHTML;
+
+    // Fügen Sie einen EventListener für jeden Kontakt hinzu
+    for (let contact of contacts) {
+        let contactElement = document.getElementById(contact.id);
+        contactElement.addEventListener('click', function() {
+            // Entfernen Sie die 'selected'-Klasse von allen Kontakten
+            let contactEntries = document.querySelectorAll('.contactentry');
+            for (let entry of contactEntries) {
+                entry.classList.remove('selected');
+            }
+
+            // Fügen Sie die 'selected'-Klasse zum angeklickten Kontakt hinzu
+            contactElement.classList.add('selected');
+
+            printContactById(contact.id);
+        });
+    }
 }
 
+// Warten Sie, bis das Dokument vollständig geladen ist, bevor Sie die Kontakte laden
 document.addEventListener('DOMContentLoaded', (event) => {
     loadContacts();
 });
+
+function printContactById(id) {
+    // Kontakte aus dem LocalStorage laden
+    let contacts = JSON.parse(localStorage.getItem('contacts'));
+
+    // Finden Sie den Kontakt mit der angegebenen ID
+    let contact = contacts.find(contact => contact.id === id);
+
+    // Überprüfen Sie, ob ein Kontakt gefunden wurde
+    if (contact) {
+        // Geben Sie die Daten des Kontakts in der Konsole aus
+        console.log(`ID: ${contact.id}`);
+        console.log(`Avatar ID: ${contact.avatarid}`);
+        console.log(`Name: ${contact.name}`);
+        console.log(`Email: ${contact.email}`);
+        console.log(`Phone: ${contact.phone}`);
+    } else {
+        console.log(`Kein Kontakt mit der ID ${id} gefunden.`);
+    }
+}
