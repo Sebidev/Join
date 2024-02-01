@@ -394,9 +394,8 @@ function openPriorityOptions(event) {
     let priorityOptionsContainer = document.createElement('div');
     priorityOptionsContainer.classList.add('card-modal-priority-options-container');
 
-    // Der HTML-Code für die Prioritätsauswahl
     priorityOptionsContainer.innerHTML = `
-        <button onclick="choose('urgent')" class="button urgent">
+        <button onclick="chooseCardModal('urgent')" class="button urgent">
             <h3>Urgent</h3>
             <img src="./img/Prio_up.svg" alt="" />
         </button>
@@ -436,7 +435,7 @@ function openPriorityOptions(event) {
     });
 }
 
-function choose(priority) {
+function chooseCardModal(priority) {
     let priorityTextElement = document.querySelector('.card-modal-priority h3');
     let prioritySymbolElement = document.querySelector('.card-modal-priority-symbol img');
 
