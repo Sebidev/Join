@@ -1,3 +1,5 @@
+let isPriorityOptionsOpen = false;
+
 function addTask() {
     let modalHTML = `
         <div id="overlay"></div>
@@ -167,7 +169,6 @@ function closeOpenCard() {
     cardModal.remove();
 }
 
-
 function getValue(selector) {
     let element = document.querySelector(selector);
     return element ? element.value : '';
@@ -256,23 +257,29 @@ function openCard() {
     <div id="card-overlay"></div>
     <div id="cardModal" class="card-modal">
             <div class="task-categorie">
-                <p class="task">User Story</p>
-                <div onclick="closeOpenCard()">
-                    <img class="close-card-modal" src="./img/close_modal.svg" alt="">
+                <p class="card-modal-task">User Story</p>
+                <div class="close-card-modal" onclick="closeOpenCard()"">
+                    <img src="./img/close_modal.svg" alt="">
                 </div>
             </div>
+
             <div class="card-modal-title-container">
-                <p class="card-modal-title">Contact Form & Imprint</p>
-                <p class="card-modal-content">Create a contact form and imprint page...</p>
+                <p class="card-modal-title">Kochwelt Page & Recipe Recommender</p>
             </div>
+            <p class="card-modal-content">Create a contact form and imprint page...</p>
+
             <div class="card-modal-date">
                 <p class="due-date-card-modal">Due date:</p>
-                <div class="card-modal-date-number"> 10/05/2023 </div>
+                <div class="card-modal-date-number">
+                    <p id="datePicker">10/05/2023</p>
+                </div>
             </div>
+
             <div class="card-modal-priority">
-                <p class="card-modal-priority-letter">Priotity:</p>
+                <p class="card-modal-priority-letter">Priority:</p>
+                <h3> Medium </h3>
                 <div class="card-modal-priority-symbol">
-                    <img src="./img/Prio_up.svg" alt="">
+                    <img src="./img/Prio_neutral.svg" alt="">
                 </div>
             </div>
 
@@ -302,34 +309,156 @@ function openCard() {
                 </div>
             </div>
 
-
-
             <div class="card-modal-subtasks-container">
                 <p class="card-modal-subtasks-container-headline">Subtasks</p>
                 <div class="card-modal-subtasks">
                     <div class="card-modal-subtask-maincontainer">
-                        <div class="card-modal-subtask">
-                        <img src="./img/check_button_checked.svg"
+                        <div class="card-modal-subtask-checked">
+                            <img src="./img/check_button_checked.svg">
                         </div>
                         <div class="card-modal-subtask-description">Implement Recipe Recommendation</div>
                     </div>
 
                     <div class="card-modal-subtask-maincontainer">
                         <div class="card-modal-subtask">
-                        <img src="./img/check_button.svg"
+                            <img src="./img/check button.svg">
                         </div>
                         <div class="card-modal-subtask-description">Start Page Layout</div>
-                    </div>
+                    </div>  
                 </div>
+            </div>
+
+            <div class="card-modal-edit-and-delete-container">
+                <button onclick="delete()" class="card-modal-delete-button">
+                    <img src="./img/delete.svg">
+                    <p> Delete </p>
+                </button>
+
+                <div class="card-modal-devider">
+                    <img src="img/Vector 3.svg">
+                </div>
+
+                <button onclick="edit()" class="card-modal-edit-button">
+                    <img src="./img/edit.svg">
+                    <p> Edit </p>
+                </button>
+
             </div>
             
         </div>
     </div>
-`;
+    `;
 
     document.body.insertAdjacentHTML('beforeend', openCardHTML);
 
     let cardOverlay = document.getElementById('card-overlay');
     cardOverlay.style.display = 'block';
+}
 
+function edit() {
+    let titleElement = document.querySelector('.card-modal-title');
+    let contentElement = document.querySelector('.card-modal-content');
+    let dateContainer = document.querySelector('.card-modal-date-number');
+    let priorityContainer = document.querySelector('.card-modal-priority');
+
+    titleElement.contentEditable = true;
+    contentElement.contentEditable = true;
+
+    titleElement.style.border = '1px solid #3498db';
+    contentElement.style.border = '1px solid #3498db';
+
+    let dateInput = document.createElement('input');
+    dateInput.type = 'date';
+    dateInput.classList.add('dateInput');
+    dateInput.value = dateContainer.querySelector('p').textContent;
+    dateContainer.innerHTML = '';
+    dateContainer.appendChild(dateInput);
+
+    priorityContainer.contentEditable = true;
+    priorityContainer.style.border = '1px solid #3498db';
+    priorityContainer.addEventListener('click', openPriorityOptions);
+
+    let priorityImgElement = document.querySelector('.card-modal-priority-symbol img');
+    let priorityh3Element = document.querySelector('.card-modal-priority h3');
+    priorityImgElement.addEventListener('click', openPriorityOptions);
+    priorityh3Element.addEventListener('click', openPriorityOptions);
+}
+
+function openPriorityOptions(event) {
+    if (isPriorityOptionsOpen) {
+        return;
+    }
+
+    isPriorityOptionsOpen = true;
+
+    let priorityOptionsContainer = document.createElement('div');
+    priorityOptionsContainer.classList.add('card-modal-priority-options-container');
+
+    // Der HTML-Code für die Prioritätsauswahl
+    priorityOptionsContainer.innerHTML = `
+        <button onclick="choose('urgent')" class="button urgent">
+            <h3>Urgent</h3>
+            <img src="./img/Prio_up.svg" alt="" />
+        </button>
+        <button onclick="choose('medium')" class="button medium">
+            <h3>Medium</h3>
+            <img src="./img/Prio_neutral.svg" alt="" />
+        </button>
+        <button onclick="choose('low')" class="button low">
+            <h3>Low</h3>
+            <img src="./img/Prio_down.svg" alt="" />
+        </button>
+    `;
+
+    let prioritySymbolContainer = event.currentTarget;
+
+    prioritySymbolContainer.style.position = 'relative';
+    priorityOptionsContainer.style.position = 'absolute';
+    priorityOptionsContainer.style.width = '100%';
+
+    let buttons = priorityOptionsContainer.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            priorityOptionsContainer.remove();
+            isPriorityOptionsOpen = false;
+        });
+    });
+
+    prioritySymbolContainer.appendChild(priorityOptionsContainer);
+
+    document.addEventListener('click', function closePriorityOptions(event) {
+        if (!priorityOptionsContainer.contains(event.target) && event.target !== prioritySymbolContainer) {
+            priorityOptionsContainer.remove();
+            document.removeEventListener('click', closePriorityOptions);
+
+            isPriorityOptionsOpen = false;
+        }
+    });
+}
+
+function choose(priority) {
+    let priorityTextElement = document.querySelector('.card-modal-priority h3');
+    let prioritySymbolElement = document.querySelector('.card-modal-priority-symbol img');
+
+    switch (priority) {
+        case 'urgent':
+            priorityTextElement.textContent = 'Urgent';
+            prioritySymbolElement.src = './img/Prio_up.svg';
+            break;
+        case 'medium':
+            priorityTextElement.textContent = 'Medium';
+            prioritySymbolElement.src = './img/Prio_neutral.svg';
+            break;
+        case 'low':
+            priorityTextElement.textContent = 'Low';
+            prioritySymbolElement.src = './img/Prio_down.svg';
+            break;
+        default:
+            break;
+    }
+
+    let priorityOptionsContainer = document.querySelector('.priority-options-container');
+    if (priorityOptionsContainer) {
+        priorityOptionsContainer.remove();
+    }
 }

@@ -446,7 +446,7 @@ body {
   line-height: 120%; /* 73.2px */
 }
 
-#overlay  #card-overlay{
+#overlay #card-overlay {
   display: none;
   position: fixed;
   top: 0;
@@ -457,7 +457,7 @@ body {
   z-index: 1;
 }
 
-#card-overlay{
+#card-overlay {
   display: none;
   position: fixed;
   top: 0;
@@ -612,25 +612,35 @@ body {
   z-index: 1000;
 }
 
-.task {
+.card-modal-task {
   margin-top: 0px;
   margin-bottom: 0px;
-  width: 81px;
-  height: 19px;
+  width: 112px;
+  height: 28px;
   display: flex;
-  padding: 4px 16px;
-  align-items: flex-start;
+  padding: 4px 24px;
+  align-items: center;
   gap: 10px;
   border-radius: 8px;
   background: #0038ff;
+  justify-content: center;
+
   color: #fff;
 
-  /* Version 2/body */
-  font-family: Inter;
-  font-size: 16px;
+  /* Version 2/t5 */
+  font-family: "Open Sans";
+  font-size: 23px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 19.2px */
+  line-height: 120%; /* 27.6px */
+}
+
+.close-card-modal {
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  right: 40px;
+  cursor: pointer;
 }
 
 .task-categorie {
@@ -691,6 +701,7 @@ body {
 }
 
 .card-modal-date-number {
+  margin: 0;
   color: var(--black, #000);
   /* Version 2/t6 */
   font-family: Inter;
@@ -700,11 +711,19 @@ body {
   line-height: 120%; /* 24px */
 }
 
+.card-modal-date-number p {
+  margin: 0;
+}
+
 .card-modal-priority {
   display: flex;
   align-items: center;
   gap: 25px;
   align-self: stretch;
+}
+
+.card-modal-priority h3 {
+  margin: 0;
 }
 
 .card-modal-priority-letter {
@@ -728,6 +747,7 @@ body {
 }
 
 .card-modal-contacts {
+  height: 208px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -764,6 +784,7 @@ body {
 }
 
 .card-modal-contact {
+  height: 42px;
   display: flex;
   padding: 7px 16px;
   justify-content: space-between;
@@ -811,6 +832,7 @@ body {
 }
 
 .card-modal-priority-symbol {
+  margin: 0;
   display: flex;
   width: 32px;
   justify-content: center;
@@ -818,14 +840,8 @@ body {
   gap: 10px;
 }
 
-.close-card-modal {
-  width: 32px;
-  height: 32px;
-  right: 40px;
-  cursor: pointer;
-}
-
 .card-modal-subtasks-container {
+  height: 100px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -846,6 +862,7 @@ body {
 }
 
 .card-modal-subtasks {
+  height: 68px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -853,19 +870,41 @@ body {
   align-self: stretch;
 }
 
+.card-modal-subtask-maincontainer {
+  display: flex;
+  height: 20px;
+  padding: 6px 16px;
+  align-items: center;
+  gap: 16px;
+}
+
+.card-modal-subtask-checked {
+  display: flex;
+  height: 32px;
+  align-items: center;
+  gap: 16px;
+}
+
+.card-modal-subtask-checked img {
+  display: flex;
+  width: 16px;
+  height: 16px;
+  padding: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
 .card-modal-subtask {
   display: flex;
   height: 32px;
-  padding: 6px 16px;
   align-items: center;
   gap: 16px;
 }
 
 .card-modal-subtask img {
   display: flex;
-  width: 16px;
-  height: 16px;
-  padding: 4px;
+  width: 24px;
+  height: 24px;
   justify-content: center;
   align-items: center;
 }
@@ -879,4 +918,52 @@ body {
   font-style: normal;
   font-weight: 400;
   line-height: 120%; /* 19.2px */
+}
+
+.card-modal-edit-and-delete-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-modal-edit-and-delete-container p {
+  margin: 0;
+}
+
+.card-modal-delete-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-modal-devider {
+  width: 0px;
+  height: 24px;
+  stroke-width: 1px;
+  stroke: var(--Style, #d1d1d1);
+}
+
+.card-modal-edit-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.dateInput {
+  height: 34px;
+  font-size: 17px;
+}
+
+.card-modal-priority-options-container {
+  top: 26px;
+  position: absolute;
+  z-index: 1001;
+  width: 100%;
+}
+
+.card-modal-priority-options-container button {
+  width: 100%;
 }
