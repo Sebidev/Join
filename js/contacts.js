@@ -219,11 +219,10 @@ function loadContacts() {
             for (let entry of contactEntries) {
                 entry.classList.remove('selected');
             }
-
             // Fügen Sie die 'selected'-Klasse zum angeklickten Kontakt hinzu
             contactElement.classList.add('selected');
-
-            printContactById(contact.id);
+            // Rufen Sie die Funktion auf, um den Kontakt anzuzeigen
+            floating_contact_render(contact.id);
         });
     }
 }
@@ -233,7 +232,25 @@ document.addEventListener('DOMContentLoaded', (event) => {
     loadContacts();
 });
 
-function printContactById(id) {
+function editContact(){
+    console.log("editContact");
+}
+
+function delContact(id){
+    // Kontakte aus dem LocalStorage laden
+    let contacts = JSON.parse(localStorage.getItem('contacts'));
+
+    // Filtern Sie das Array, um nur Kontakte mit einer anderen ID zu behalten
+    contacts = contacts.filter(contact => contact.id !== id);
+
+    // Speichern Sie das aktualisierte Array im LocalStorage
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+
+    // Lade die Kontakte neu
+    location.reload();
+}
+
+function floating_contact_render(id){
     // Kontakte aus dem LocalStorage laden
     let contacts = JSON.parse(localStorage.getItem('contacts'));
 
@@ -242,12 +259,58 @@ function printContactById(id) {
 
     // Überprüfen Sie, ob ein Kontakt gefunden wurde
     if (contact) {
-        // Geben Sie die Daten des Kontakts in der Konsole aus
-        console.log(`ID: ${contact.id}`);
-        console.log(`Avatar ID: ${contact.avatarid}`);
-        console.log(`Name: ${contact.name}`);
-        console.log(`Email: ${contact.email}`);
-        console.log(`Phone: ${contact.phone}`);
+        // Definieren Sie Ihre HTML-Inhalte als String
+        var floating_contactHTML = `
+        <div class="floating_contact">
+            <div class="floating_contact_avatar">
+                <img src="img/Ellipse5-${contact.avatarid}.svg"></img>
+                    <div class="floating_contact_initletter">${contact.name.charAt(0)}</div>
+                </img>
+            </div>
+            <div class="column">
+            <div class="floating_contact_name">${contact.name}</div>
+            <div class="row">
+                <div class="floating_contact_buttons" onclick="editContact('${contact.id}')">
+                    <img src="img/edit.svg"></img>
+                    Edit
+                </div>
+                <div class="floating_contact_buttons" onclick="delContact('${contact.id}')">
+                    <img src="img/delete.svg"></img>
+                    Delete
+                </div>
+            </div>
+            </div>
+        </div>
+        <br>
+        <div class="floating_contact_info">Contact Information</div>
+        <br>
+        <div class="floating_contact_email">
+            <div class="floating_contact_emailtext">Email</div>
+            <div class="floating_contact_emailadresse">${contact.email}</div>
+        </div>
+        <br>
+        <div class="floating_contact_phone">
+            <div class="floating_contact_phonetext">Phone</div>
+            <div class="floating_contact_phonenumber">${contact.phone}</div>
+        </div>
+        `;
+
+        // Finden Sie das Element mit der ID "floating_contact"
+        var floating_contactElement = document.getElementById("floating_contact");
+
+        // Entfernen Sie das vorhandene floating_contactDiv, falls vorhanden
+        while (floating_contactElement.firstChild) {
+            floating_contactElement.removeChild(floating_contactElement.firstChild);
+        }
+
+        // Erstellen Sie ein neues DIV-Element
+        var floating_contactDiv = document.createElement("div");
+
+        // Fügen Sie Ihren HTML-Inhalt in das neue DIV-Element ein
+        floating_contactDiv.innerHTML = floating_contactHTML;
+
+        // Fügen Sie das neue DIV-Element als Kind des Ziel-Elements ein
+        floating_contactElement.appendChild(floating_contactDiv);
     } else {
         console.log(`Kein Kontakt mit der ID ${id} gefunden.`);
     }

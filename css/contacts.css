@@ -222,7 +222,7 @@ body {
     height: 100vh;   
     background-color: white;
     margin-left: 232px;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
 }
 .add_new_conatct_btn_container{
@@ -391,4 +391,161 @@ body {
 
 .contacts_container {
     float: left;
+}
+
+.floating_contact_container {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 32px;
+    margin-left: 100px;
+    gap: 21px;
+}
+
+.floating_contact{
+    display: flex;
+    align-items: center;
+    gap: 54px;
+}
+
+.floating_contact_avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    position: relative; /* Add this */
+}
+
+.floating_contact_avatar img{
+    width: 120px;
+    height: 120px;
+}
+
+.floating_contact_initletter{
+    display: flex;
+    width: 80px;
+    height: 28.571px;
+    flex-direction: column;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #FFF;
+    text-align: center;
+    font-family: Inter;
+    font-size: 47px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%; /* 56.4px */
+    margin-right: -300px;
+    position: absolute; /* Add this */
+    top: 50%; /* Add this */
+    left: 50%; /* Add this */
+    transform: translate(-50%, -50%); /* Add this */
+}
+
+.floating_contact_name{
+    color: #000;
+    font-family: Inter;
+    font-size: 47px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%; /* 56.4px */
+}
+
+.floating_contact_buttons{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    color: #2A3647;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%; /* 19.2px */
+    margin-top: 8px;
+    margin-right: 16px;
+}
+
+.floating_contact_buttons img{
+    width: 24px;
+    height: 24px;
+}
+
+.floating_contact_buttons:hover {
+    cursor: pointer;
+}
+
+.column {
+    display: flex; 
+    flex-direction: column;
+}
+
+.row {
+    display: flex; 
+    flex-direction: row;
+}
+
+.floating_contact_info{
+    display: flex;
+    width: 207px;
+    height: 74px;
+    flex-direction: column;
+    justify-content: center;
+    color: #000;
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%; /* 24px */
+}
+
+.floating_contact_email{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 21px;
+}
+
+.floating_contact_emailtext{
+    color: #000;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 120%; /* 19.2px */
+}
+
+.floating_contact_emailadresse{
+    color: #007CEE;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%; /* 19.2px */
+}
+
+.floating_contact_phone{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.floating_contact_phonetext{
+    color: #000;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 120%; /* 19.2px */
+}
+
+.floating_contact_phonenr{
+    color: #000;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%; /* 19.2px */
 }
