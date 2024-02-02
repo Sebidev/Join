@@ -13,7 +13,7 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: start;
-    margin-top: 110px;
+    margin-top: 55px;
     margin-bottom: 48px;
     color: #000;
     font-family: Inter;
@@ -44,7 +44,6 @@ body {
     font-style: normal;
     font-weight: 400;
     line-height: 120%;
-    /* 32.4px */
 }
 
 .summary_container {
@@ -59,8 +58,9 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    gap: 28px;
     margin-left: 350px;
+    margin-bottom: 50px;
+    gap: 28px;
 }
 
 .box_pencil {

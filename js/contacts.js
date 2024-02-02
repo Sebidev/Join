@@ -1,126 +1,66 @@
+/**
+ * @file contacts.js
+ * @description This file contains the JavaScript code for the contacts.html page.
+ */
+
+import { editContactTemplate, addContactTemplate } from './contacts_template.js';
+
+let editcontact_innerHTML = editContactTemplate;
+let addcontact_innerHTML = addContactTemplate;
+
 var overlay;
 var contactModal;
 
-// Regex-Ausdrücke für die Überprüfung der Eingabefelder
-let nameRegex = /^[a-zA-Z0-9-_\s.öäüÖÄÜ]*$/;
-let emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
-let phoneRegex = /^[+]?[0-9]*$/;
-
-// Erstelle ein neues Div-Element für die blaue Leiste
-var addcontact_blueBar = `
-<div id="bluebar">
-    <img class="bluebar_joinlogo" src="img/join_logo.svg"></img>
-    <div class="bluebar_titel">Add contact</div>
-    <div class="bluebar_text">Tasks are better with a team!</div>
-    <div class="bluebar_line">
-        <svg xmlns="http://www.w3.org/2000/svg" width="94" height="3" viewBox="0 0 94 3" fill="none">
-        <path d="M92 1.5L2 1.5" stroke="#29ABE2" stroke-width="3" stroke-linecap="round"/></svg>
-    </div>
-</div>`;
-
-var editcontact_blueBar = `
-<div id="bluebar">
-    <img class="bluebar_joinlogo" src="img/join_logo.svg"></img>
-    <div class="bluebar_titel">Edit contact</div>
-    <div class="bluebar_line">
-        <svg xmlns="http://www.w3.org/2000/svg" width="94" height="3" viewBox="0 0 94 3" fill="none">
-        <path d="M92 1.5L2 1.5" stroke="#29ABE2" stroke-width="3" stroke-linecap="round"/></svg>
-    </div>
-</div>`;
-
-// Erstelle ein neues Div-Element für das Formular "Add new contact"
-let addcontact_formHTML = `
-<form id="contactForm" class="form_container">
-    <div class="input_container">
-        <input type="text" class="textfield_newcontact" id="name" name="name" placeholder="Name">
-        <img src="img/person.svg" class="textfield_image">
-    </div>
-    <div class="input_container">
-        <input type="email" class="textfield_newcontact" id="email" name="email" placeholder="Email">
-        <img src="img/mail.svg" class="textfield_image">
-    </div>
-    <div class="input_container">
-        <input type="text" class="textfield_newcontact" id="phone" name="phone" placeholder="Phone">
-        <img src="img/call.svg" class="textfield_image">
-    </div>
-    <div class="button_container">
-        <div class="close_button2" onclick="closeContactModal()">Close<img src="img/close.svg"></img></div>
-        <div class="createcontact_button" onclick="saveContact()">Create contact<img src="img/check.svg"></img></div>
-    </div>
-</form>`;
-
+/**
+ * @description This function is called when the user clicks on the "Add Contact" button. It creates a modal window with a form to add a new contact.
+ */
 function addContact() {
-    // Erstelle ein neues Div-Element für das Overlay
     overlay = document.createElement("div");
-    // Setze die ID des Overlays auf "overlay"
     overlay.id = "overlay";
-    // Füge das Overlay dem Body-Element hinzu
     document.body.appendChild(overlay);
-
-    // Erstelle ein neues Div-Element für das Kontaktmodal
+    
     contactModal = document.createElement("div");
-    // Setze die ID des Kontaktmodals auf "contactModal"
     contactModal.id = "contactModal";
-    // Füge das Kontaktmodal dem Body-Element hinzu
     document.body.appendChild(contactModal);
-    // Füge die blaue Leiste zum Kontaktmodal hinzu
-    contactModal.innerHTML += addcontact_blueBar;
-
-    // Erstellen Sie ein neues div-Element
-    let avatarDiv = document.createElement("div");
-    // Erstellen Sie einen String mit dem HTML-Code
-    let avatarHTML = `<img class="avatar_contactModal" src="img/avatar_newcontact.svg"></img>`;
-
-    // Fügen Sie den HTML-Code zum contactModal hinzu
-    contactModal.innerHTML += avatarHTML;
-    // Fügen Sie das neue div-Element zum contactModal hinzu
-    contactModal.appendChild(avatarDiv);
-
-    // Erstellen Sie ein neues div-Element
-    let close_button1_DIV = document.createElement("div");
-    // Erstellen Sie einen String mit dem HTML-Code
-    let close_button1_DIV_HTML = `<img class="close_button1" onclick="closeContactModal()" src="img/close.svg"></img>`;
-
-    // Fügen Sie den HTML-Code zum div-Element hinzu
-    close_button1_DIV.innerHTML = close_button1_DIV_HTML;
-    // Fügen Sie das neue div-Element zum contactModal hinzu
-    contactModal.appendChild(close_button1_DIV);
-
-    // Erstellen Sie ein neues div-Element
+    
     let formDiv = document.createElement("div");
-
-    // Fügen Sie den HTML-Code zum contactModal hinzu
-    contactModal.innerHTML += addcontact_formHTML;
-    // Fügen Sie das neue div-Element zum contactModal hinzu
+    contactModal.innerHTML += addcontact_innerHTML;
     contactModal.appendChild(formDiv);
 
-    // Mache das Overlay und das Kontaktmodal sichtbar
     overlay.style.display = "block";
     contactModal.style.display = "block";
 }
 
+window.addContact = addContact;
+
+/**
+ * @description This function is called when the user clicks on the "Close" button in the modal window. It removes the modal window from the DOM.
+ */
 function closeContactModal() {
-    // Zugriff auf das Overlay und das Modal
     var overlay = document.getElementById('overlay');
     var contactModal = document.getElementById('contactModal');
 
-    // Überprüfen Sie, ob das Overlay und das Modal existieren
     if (overlay && contactModal) {
-        // Entfernen Sie das Overlay und das Modal aus dem DOM
         overlay.parentNode.removeChild(overlay);
         contactModal.parentNode.removeChild(contactModal);
     }
 }
 
-// Funktion zur Generierung einer zufälligen ID
+/**
+ * @description This function generates a random id for a new contact.
+ * @returns a random id
+ */
 function generateId() {
     return '_' + Math.random().toString(36).substr(2, 9);
 }
 
-// Funktion zum Mischen eines Arrays (Fisher-Yates-Algorithmus)
 var numbers = [0, 1, 2, 3, 4];
 var index = numbers.length;
 
+/**
+ * @description This function shuffles the elements of an array.
+ * @param {*} array 
+ */
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
@@ -128,7 +68,9 @@ function shuffleArray(array) {
     }
 }
 
-// Funktion zum Würfeln einer Zahl
+/**
+ * @description This function simulates the rolling of a dice. It returns a random number between 0 and 4.
+ */
 function rollDice() {
     if (index === numbers.length) {
         shuffleArray(numbers);
@@ -138,82 +80,58 @@ function rollDice() {
     return numbers[index++];
 }
 
-// Funktion zum Speichern eines Kontakts
+window.saveContact = saveContact;
+
+/**
+ * @description This function is called when the user clicks on the "Save" button in the modal window. It saves the new contact to the local storage.
+ */
 function saveContact() {
-    // Erhalte die Werte direkt aus den Eingabefeldern
-    var name = document.querySelector('#contactForm input[name="name"]').value;
-    var email = document.querySelector('#contactForm input[name="email"]').value;
-    var phone = document.querySelector('#contactForm input[name="phone"]').value;
+    let form = document.getElementById('addcontactForm');
 
-    // Überprüfe, ob die Felder ausgefüllt sind
-    if (!name || !email || !phone) {
-        alert('Bitte füllen Sie alle Felder aus.');
-        return;
+    if (form.checkValidity()) {
+        var name = document.querySelector('#addcontactForm input[name="name"]').value;
+        var email = document.querySelector('#addcontactForm input[name="email"]').value;
+        var phone = document.querySelector('#addcontactForm input[name="phone"]').value;
+        var contact = {
+            id: generateId(),
+            avatarid: rollDice(),
+            name: name,
+            email: email,
+            phone: phone
+        };
+        var contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+        
+        contacts.push(contact);
+        localStorage.setItem('contacts', JSON.stringify(contacts));
+        document.querySelector('#addcontactForm').reset();
+
+        successMsg();
+        closeContactModal();
+    } else {
+        form.reportValidity();
     }
-
-    // Überprüfe, ob der Name nur Buchstaben, Zahlen und die Sonderzeichen Bindestrich und Unterstrich enthält
-    if (!nameRegex.test(name)) {
-        alert("Ungültiger Name. Bitte nur Buchstaben, Zahlen und die Sonderzeichen Bindestrich und Unterstrich eingeben.");
-        return;
-    }
-
-    // Überprüfe, ob die E-Mail-Adresse gültig ist
-    if (!emailRegex.test(email)) {
-        alert("Ungültige E-Mail-Adresse. Bitte eine gültige E-Mail-Adresse eingeben.");
-        return;
-    }
-
-    // Überprüfe, ob die Telefonnummer nur Zahlen enthält
-    if (!phoneRegex.test(phone)) {
-        alert("Ungültige Telefonnummer. Bitte nur Zahlen und optional ein Pluszeichen am Anfang eingeben.");
-        return;
-    }
-
-    // Erstelle ein Objekt mit den Werten und einer eindeutigen ID
-    var contact = {
-        id: generateId(),
-        avatarid: rollDice(),
-        name: name,
-        email: email,
-        phone: phone
-    };
-
-    // Hole das Array von Kontakten aus dem LocalStorage
-    var contacts = JSON.parse(localStorage.getItem('contacts')) || [];
-
-    // Füge den neuen Kontakt zum Array hinzu
-    contacts.push(contact);
-
-    // Speichere das aktualisierte Array im LocalStorage
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-
-
-    // Setze das Formular zurück
-    document.querySelector('#contactForm').reset();
-
-    successMsg();
-    
-    closeContactModal();
 }
 
+/**
+ * @description This function displays a success message when a new contact has been added.
+ */
 async function successMsg() {
     const successMessage = document.getElementById('newcontact-message');
     const successOverlay = document.getElementById('newcontact-overlay');
     successOverlay.classList.add('visible');
     successMessage.classList.add('success-message-visible');
+
     await new Promise(resolve => setTimeout(() => {
         resolve();
         location.reload();
     }, 800));
 }
 
-
-// Funktion zum Laden der Kontakte
+/**
+ * @description This function loads the contacts from the local storage and displays them on the contacts.html page.
+ */
 function loadContacts() {
-    // Zuerst holen wir die Kontakte aus dem LocalStorage
     let contacts = JSON.parse(localStorage.getItem('contacts'));
-
-    // Wenn keine Kontakte vorhanden sind, erstellen wir einen Demo-Kontakt
     if (!contacts || Object.keys(contacts).length === 0) {
         contacts = [
         { id: generateId(), avatarid: rollDice(), name: 'Anton Mayer', email: 'antom@gmail.com', phone: '+49123456789'},
@@ -224,12 +142,9 @@ function loadContacts() {
         { id: generateId(), avatarid: rollDice(), name: 'Emmanuel Mauer', email: 'emmanuelma@gmail.com', phone: '+49123456789'},
         { id: generateId(), avatarid: rollDice(), name: 'Marcel Bauer', email: 'bauer@gmail.com', phone: '+49123456789' },
         { id: generateId(), avatarid: rollDice(), name: 'Tatjana Wolf', email: 'wolf@gmail.com', phone: '+49123456789' },];
-
-        // Speichern Sie den Demo-Kontakt im LocalStorage
         localStorage.setItem('contacts', JSON.stringify(contacts));
     }
 
-    // Dann erstellen wir eine Funktion, die einen Kontakt in HTML umwandelt
     function createContactHTML(contact) {
         return `
         <div class="initial_letter">${contact.name.charAt(0)}</div>
@@ -247,109 +162,89 @@ function loadContacts() {
     `;
     }
 
-    // Nun durchlaufen wir alle Kontakte und fügen sie unserem HTML hinzu
     let contactsHTML = '';
+
     for (let contact of contacts) {
-        contactsHTML += createContactHTML(contact);
+        contactsHTML += createContactHTML(contact);t
     }
 
-    // Schließlich fügen wir unser HTML in das Dokument ein
     document.querySelector('.contacts_container').innerHTML += contactsHTML;
 
-    // Fügen Sie einen EventListener für jeden Kontakt hinzu
     for (let contact of contacts) {
         let contactElement = document.getElementById(contact.id);
+
         contactElement.addEventListener('click', function() {
-            // Entfernen Sie die 'selected'-Klasse von allen Kontakten
+        
             let contactEntries = document.querySelectorAll('.contactentry');
+
             for (let entry of contactEntries) {
                 entry.classList.remove('selected');
             }
-            // Fügen Sie die 'selected'-Klasse zum angeklickten Kontakt hinzu
+
             contactElement.classList.add('selected');
-            // Rufen Sie die Funktion auf, um den Kontakt anzuzeigen
             floatingContactRender(contact.id);
         });
     }
 }
 
+window.editContact = editContact;
 
+/**
+ * @description This function is called when the user clicks on the "Edit" button in the contacts.html page. 
+ * It creates a modal window with a form to edit a contact.
+ * @param {*} id contactid
+ */
 function editContact(id){
-    // Kontakte aus dem LocalStorage laden
     let contacts = JSON.parse(localStorage.getItem('contacts'));
-
-    // Finden Sie den Kontakt mit der angegebenen ID
     let contact = contacts.find(contact => contact.id === id);
 
     if (contact) {
-        // Erstelle ein neues Div-Element für das Overlay
         overlay = document.createElement("div");
-        // Setze die ID des Overlays auf "overlay"
         overlay.id = "overlay";
-        // Füge das Overlay dem Body-Element hinzu
         document.body.appendChild(overlay);
-
-        // Erstelle ein neues Div-Element für das Kontaktmodal
         contactModal = document.createElement("div");
-        // Setze die ID des Kontaktmodals auf "contactModal"
         contactModal.id = "contactModal";
-        // Füge das Kontaktmodal dem Body-Element hinzu
         document.body.appendChild(contactModal);
-        // Füge die blaue Leiste zum Kontaktmodal hinzu
-        contactModal.innerHTML += editcontact_blueBar;
+        contactModal.innerHTML += editcontact_innerHTML;
 
-        // Erstellen Sie ein neues div-Element
         let avatarDiv = document.createElement("div");
-        // Erstellen Sie einen String mit dem HTML-Code
         let avatarHTML = `
         <img class="avatar_contactModal" src="img/Ellipse5-${contact.avatarid}.svg"></img>
         <div class="avatar_contactModal_initletter">${contact.name.charAt(0)}</div>
         `;
-
-        // Fügen Sie den HTML-Code zum contactModal hinzu
         contactModal.innerHTML += avatarHTML;
-        // Fügen Sie das neue div-Element zum contactModal hinzu
         contactModal.appendChild(avatarDiv);
 
-        // Erstellen Sie ein neues div-Element
         let close_button1_DIV = document.createElement("div");
-        // Erstellen Sie einen String mit dem HTML-Code
         let close_button1_DIV_HTML = `<img class="close_button1" onclick="closeContactModal()" src="img/close.svg"></img>`;
 
-        // Fügen Sie den HTML-Code zum div-Element hinzu
         close_button1_DIV.innerHTML = close_button1_DIV_HTML;
-        // Fügen Sie das neue div-Element zum contactModal hinzu
         contactModal.appendChild(close_button1_DIV);
 
-        // Erstellen Sie ein neues div-Element
         let formDiv = document.createElement("div");
 
         let editcontact_formHTML = `
-        <form id="editcontact_Form" class="form_container">
+        <form id="editcontact_form" class="form_container">
             <div class="input_container">
-                <input type="text" class="textfield_newcontact" id="name" name="name" placeholder="Name" value="${contact.name}" pattern="^[a-zA-Z0-9-_]*$" title="Bitte nur Buchstaben, Zahlen und die Sonderzeichen Bindestrich und Unterstrich eingeben.">
+                <input type="text" class="textfield_newcontact" id="name" name="name" placeholder="Name" value="${contact.name}" pattern="^[a-zA-Z0-9_-]*$" title="Bitte nur Buchstaben, Zahlen und die Sonderzeichen Bindestrich und Unterstrich eingeben." required>
                 <img src="img/person.svg" class="textfield_image">
             </div>
             <div class="input_container">
-                <input type="email" class="textfield_newcontact" id="email" name="email" placeholder="Email" value="${contact.email}" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Bitte eine gültige E-Mail-Adresse eingeben.">
+                <input type="email" class="textfield_newcontact" id="email" name="email" placeholder="Email" value="${contact.email}" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Bitte eine gültige E-Mail-Adresse eingeben." required>
                 <img src="img/mail.svg" class="textfield_image">
             </div>
             <div class="input_container">
-                <input type="text" class="textfield_newcontact" id="phone" name="phone" placeholder="Phone" value="${contact.phone}" pattern="^[+]?[0-9]*$" title="Bitte nur Zahlen und optional ein Pluszeichen am Anfang eingeben.">
-                <img src="img/phone.svg" class="textfield_image">
+                <input type="text" class="textfield_newcontact" id="phone" name="phone" placeholder="Phone" value="${contact.phone}" pattern="^[+]?[0-9]*$" title="Bitte nur Zahlen und optional ein Pluszeichen am Anfang eingeben." required>
+                <img src="img/call.svg" class="textfield_image">
             </div>
             <div class="button_container">
-                <div class="close_button2" onclick="delContact('${contact.id}')">Delete</img></div>
+                <div class="close_button2" onclick="delContact('${contact.id}')">Delete<img src="img/close.svg"></img></div>
                 <div class="createcontact_button" onclick="saveEditedContact('${contact.id}')">Save<img src="img/check.svg"></img></div>
             </div>
         </form>`;
 
-        // Fügen Sie den HTML-Code zum contactModal hinzu
         contactModal.innerHTML += editcontact_formHTML;
-        // Fügen Sie das neue div-Element zum contactModal hinzu
         contactModal.appendChild(formDiv);
-
-        // Mache das Overlay und das Kontaktmodal sichtbar
         overlay.style.display = "block";
         contactModal.style.display = "block";
     }
@@ -358,77 +253,62 @@ function editContact(id){
     }
 }
 
+window.saveEditedContact = saveEditedContact;
+
+/**
+ * @description This function is called when the user clicks on the "Save" button in the modal window. It saves the edited contact to the local storage.
+ * @param {*} id contactid
+ */
 function saveEditedContact(id) {
-    // Kontakte aus dem LocalStorage laden
-    let contacts = JSON.parse(localStorage.getItem('contacts'));
+    let form = document.getElementById('editcontact_form');
 
-    // Finden Sie den Kontakt mit der angegebenen ID
-    let contact = contacts.find(contact => contact.id === id);
+    if (form.checkValidity()) {
+        let contacts = JSON.parse(localStorage.getItem('contacts'));
+        let contact = contacts.find(contact => contact.id === id);
 
-    if (contact) {
-        // Überprüfen Sie die neuen Werte aus dem Formular
-        let name = document.getElementById('name').value;
-        let email = document.getElementById('email').value;
-        let phone = document.getElementById('phone').value;
+        if (contact) {
+            let name = document.getElementById('name').value;
+            let email = document.getElementById('email').value;
+            let phone = document.getElementById('phone').value;
 
-        if (!nameRegex.test(name)) {
-            alert("Ungültiger Name. Bitte nur Buchstaben, Zahlen und die Sonderzeichen Bindestrich und Unterstrich eingeben.");
-            return;
+            contact.name = name;
+            contact.email = email;
+            contact.phone = phone;
+
+            localStorage.setItem('contacts', JSON.stringify(contacts));
+            closeContactModal();
+            location.reload();
         }
-
-        if (!emailRegex.test(email)) {
-            alert("Ungültige E-Mail-Adresse. Bitte eine gültige E-Mail-Adresse eingeben.");
-            return;
+        else {
+            console.log(`Kein Kontakt mit der ID ${id} gefunden.`);
         }
-
-        if (!phoneRegex.test(phone)) {
-            alert("Ungültige Telefonnummer. Bitte nur Zahlen und optional ein Pluszeichen am Anfang eingeben.");
-            return;
-        }
-
-        // Aktualisieren Sie die Kontaktinformationen mit den neuen Werten
-        contact.name = name;
-        contact.email = email;
-        contact.phone = phone;
-
-        // Speichern Sie die aktualisierten Kontakte zurück in den LocalStorage
-        localStorage.setItem('contacts', JSON.stringify(contacts));
-
-        // Schließen Sie das Kontaktmodal
-        closeContactModal();
-
-        // Lade die Kontakte neu
-        location.reload();
-    }
-    else {
-        console.log(`Kein Kontakt mit der ID ${id} gefunden.`);
+    } else {
+        form.reportValidity();
     }
 }
 
+window.delContact = delContact;
+
+/**
+ * @description This function is called when the user clicks on the "Delete" button in the modal window. It deletes the contact from the local storage.
+ * @param {*} id contactid 
+ */
 function delContact(id){
-    // Kontakte aus dem LocalStorage laden
     let contacts = JSON.parse(localStorage.getItem('contacts'));
-
-    // Filtern Sie das Array, um nur Kontakte mit einer anderen ID zu behalten
     contacts = contacts.filter(contact => contact.id !== id);
-
-    // Speichern Sie das aktualisierte Array im LocalStorage
     localStorage.setItem('contacts', JSON.stringify(contacts));
-
-    // Lade die Kontakte neu
     location.reload();
 }
 
+/**
+ * @description This function renders the floating contact window with the contact information.
+ * @param {*} id contactid
+ */
 function floatingContactRender(id){
-    // Kontakte aus dem LocalStorage laden
     let contacts = JSON.parse(localStorage.getItem('contacts'));
-
-    // Finden Sie den Kontakt mit der angegebenen ID
     let contact = contacts.find(contact => contact.id === id);
 
-    // Überprüfen Sie, ob ein Kontakt gefunden wurde
     if (contact) {
-        // Definieren Sie Ihre HTML-Inhalte als String
         var floating_contactHTML = `
         <div class="floating_contact">
             <div class="floating_contact_avatar">
@@ -464,28 +344,24 @@ function floatingContactRender(id){
         </div>
         `;
 
-        // Finden Sie das Element mit der ID "floating_contact"
         var floating_contactElement = document.getElementById("floating_contact");
 
-        // Entfernen Sie das vorhandene floating_contactDiv, falls vorhanden
         while (floating_contactElement.firstChild) {
             floating_contactElement.removeChild(floating_contactElement.firstChild);
         }
 
-        // Erstellen Sie ein neues DIV-Element
         var floating_contactDiv = document.createElement("div");
-
-        // Fügen Sie Ihren HTML-Inhalt in das neue DIV-Element ein
         floating_contactDiv.innerHTML = floating_contactHTML;
-
-        // Fügen Sie das neue DIV-Element als Kind des Ziel-Elements ein
         floating_contactElement.appendChild(floating_contactDiv);
     } else {
         console.log(`Kein Kontakt mit der ID ${id} gefunden.`);
     }
 }
 
-// Warten Sie, bis das Dokument vollständig geladen ist, bevor Sie die Kontakte laden
+/**
+ * @description This function is called when the contacts page is loaded. 
+ * It loads the contacts from the local storage and displays them on the contacts.html page.
+ */
 document.addEventListener('DOMContentLoaded', (event) => {
     loadContacts();
 });

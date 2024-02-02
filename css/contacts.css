@@ -85,8 +85,8 @@ body {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: -50px;
-    margin-left: 83px;
+    margin-bottom: 0px;
+    margin-left: 50px;
     gap: 10px;
     border-radius: 70px;
     border: 3px solid #FFF;
@@ -102,8 +102,8 @@ body {
     height: 28.571px;
     flex-direction: column;
     justify-content: center;
-    margin-top: -295px;
-    margin-left: 569px;
+    margin-top: -347px;
+    margin-left: 537px;
     flex-shrink: 0;
     color: #FFF;
     text-align: center;
