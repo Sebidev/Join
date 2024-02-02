@@ -1,11 +1,13 @@
 let containerCount = 0;
 let contacts = [
     { name: 'Anton Mayer', email: 'antom@gmail.com', initial: 'AM', imagePath: 'img/Ellipse5-2.svg' },
-    { name: 'Anja Schulz', email: 'schulz@hotmail.com', initial: 'AS', imagePath: 'img/Ellipse5.svg' },
+    { name: 'Anja Schulz', email: 'schulz@hotmail.com', initial: 'AS', imagePath: 'img/Ellipse5-0.svg' },
     { name: 'Benedikt Ziegler', email: 'benedikt@gmail.com', initial: 'BZ', imagePath: 'img/Ellipse5-3.svg' },
     { name: 'David Eisenberg', email: 'davidberg@gmail.com', initial: 'DE', imagePath: 'img/Ellipse5-1.svg' },
     { name: 'Eva Fischer', email: 'eva@gmail.com', initial: 'EF', imagePath: 'img/Ellipse5-2.svg' },
     { name: 'Emmanuel Mauer', email: 'emmanuelma@gmail.com', initial: 'EM', imagePath: 'img/Ellipse5-4.svg' },
+    { name: 'Marcel Bauer', email: 'bauer@gmail.com', initial: 'MB', imagePath: 'img/Ellipse5-4.svg' },
+    { name: 'Tatjana Wolf', email: 'wolf@gmail.com', initial: 'TW', imagePath: 'img/Ellipse5-4.svg' },
 ];
 window.contacts = contacts;
 let selectedInitialsArray = [];
