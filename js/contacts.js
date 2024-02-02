@@ -36,7 +36,7 @@ let addcontact_formHTML = `
         <img src="img/person.svg" class="textfield_image">
     </div>
     <div class="input_container">
-        <input type="text" class="textfield_newcontact" id="email" name="email" placeholder="Email">
+        <input type="email" class="textfield_newcontact" id="email" name="email" placeholder="Email">
         <img src="img/mail.svg" class="textfield_image">
     </div>
     <div class="input_container">
@@ -187,15 +187,26 @@ function saveContact() {
     // Speichere das aktualisierte Array im LocalStorage
     localStorage.setItem('contacts', JSON.stringify(contacts));
 
+
     // Setze das Formular zurück
     document.querySelector('#contactForm').reset();
 
-    // Schließe das Modal
+    successMsg();
+    
     closeContactModal();
-
-    // Lade die Kontakte neu
-    location.reload();
 }
+
+async function successMsg() {
+    const successMessage = document.getElementById('newcontact-message');
+    const successOverlay = document.getElementById('newcontact-overlay');
+    successOverlay.classList.add('visible');
+    successMessage.classList.add('success-message-visible');
+    await new Promise(resolve => setTimeout(() => {
+        resolve();
+        location.reload();
+    }, 800));
+}
+
 
 // Funktion zum Laden der Kontakte
 function loadContacts() {

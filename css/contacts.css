@@ -571,3 +571,45 @@ body {
     font-weight: 400;
     line-height: 120%; /* 19.2px */
 }
+
+.newcontact_success {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20%;
+    overflow: hidden;
+}
+  
+.newcontact_message {
+    background-color: #2a3647;
+    border-radius: 0.5rem;
+    padding: 1rem 1.5rem;
+    color: white;
+    font-size: 1.25rem;
+    opacity: 0;
+    transform: translateY(750%);
+}
+  
+.newcontact_overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    visibility: hidden;
+}
+
+.newcontact_success .newcontact_overlay .newcontact_message{
+    display: none;
+}
+
+.success-message-visible {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    transition: all 0.25s ease-in-out !important;
+}
+
+.visible {
+    visibility: visible !important;
+}
