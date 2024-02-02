@@ -8,7 +8,7 @@
     <link href="/fonts/inter.css" rel="stylesheet" type="text/css">
     <link href="/fonts/opensans.css" rel="stylesheet" type="text/css">
     <script src="js/template_load.js"></script>
-    <script src="js/contacts.js"></script>
+    <script src="js/contacts.js" defer></script>
     <script src="js/header.js"></script>
     <script src="js/storage.js"></script>
     <title>Join</title>
@@ -19,9 +19,15 @@
     <div id="sideboard"></div>
     <div class="contacts_container" id="contactentry">
         <div class="add_new_conatct_btn_container">
-            <div class="add_new_contact_btn" onclick="add_contact()">Add new contact<img src="/img/person_add.svg">
+            <div class="add_new_contact_btn" onclick="addContact()">Add new contact<img src="/img/person_add.svg">
             </div>
         </div>
+    </div>
+    <div class="contact_title">Contacts
+        <img class="verticalbar" src="/img/Vector5.svg"></img>
+        <div class="contact_title_text">Better with a team</div>
+    </div>
+    <br>
+    <div class="floating_contact_container" id="floating_contact"></div>
 </body>
-
 </html>
