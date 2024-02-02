@@ -204,13 +204,15 @@ function loadContacts() {
 
     // Wenn keine Kontakte vorhanden sind, erstellen wir einen Demo-Kontakt
     if (!contacts || Object.keys(contacts).length === 0) {
-        contacts = [{
-            id: generateId(),
-            avatarid: rollDice(),
-            name: 'Demo Contact',
-            email: 'demo@contact.com',
-            phone: '0123456789'
-        }];
+        contacts = [
+        { id: generateId(), avatarid: rollDice(), name: 'Anton Mayer', email: 'antom@gmail.com', phone: '+49123456789'},
+        { id: generateId(), avatarid: rollDice(), name: 'Anja Schulz', email: 'schulz@hotmail.com', phone: '+49123456789'},
+        { id: generateId(), avatarid: rollDice(), name: 'Benedikt Ziegler', email: 'benedikt@gmail.com', phone: '+49123456789'},
+        { id: generateId(), avatarid: rollDice(), name: 'David Eisenberg', email: 'davidberg@gmail.com', phone: '+49123456789'},
+        { id: generateId(), avatarid: rollDice(), name: 'Eva Fischer', email: 'eva@gmail.com', phone: '+49123456789'},
+        { id: generateId(), avatarid: rollDice(), name: 'Emmanuel Mauer', email: 'emmanuelma@gmail.com', phone: '+49123456789'},
+        { id: generateId(), avatarid: rollDice(), name: 'Marcel Bauer', email: 'bauer@gmail.com', phone: '+49123456789' },
+        { id: generateId(), avatarid: rollDice(), name: 'Tatjana Wolf', email: 'wolf@gmail.com', phone: '+49123456789' },];
 
         // Speichern Sie den Demo-Kontakt im LocalStorage
         localStorage.setItem('contacts', JSON.stringify(contacts));

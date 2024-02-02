@@ -1,5 +1,5 @@
 let containerCount = 0;
-let contacts = [
+/* let contacts = [
     { name: 'Anton Mayer', email: 'antom@gmail.com', initial: 'AM', imagePath: 'img/Ellipse5-2.svg' },
     { name: 'Anja Schulz', email: 'schulz@hotmail.com', initial: 'AS', imagePath: 'img/Ellipse5-0.svg' },
     { name: 'Benedikt Ziegler', email: 'benedikt@gmail.com', initial: 'BZ', imagePath: 'img/Ellipse5-3.svg' },
@@ -8,8 +8,8 @@ let contacts = [
     { name: 'Emmanuel Mauer', email: 'emmanuelma@gmail.com', initial: 'EM', imagePath: 'img/Ellipse5-4.svg' },
     { name: 'Marcel Bauer', email: 'bauer@gmail.com', initial: 'MB', imagePath: 'img/Ellipse5-4.svg' },
     { name: 'Tatjana Wolf', email: 'wolf@gmail.com', initial: 'TW', imagePath: 'img/Ellipse5-4.svg' },
-];
-window.contacts = contacts;
+]; */
+// window.contacts = contacts;
 let selectedInitialsArray = [];
 
 if (window.location.pathname.endsWith("add-task.html")) {
@@ -25,6 +25,9 @@ function showDropdown() {
     let dropdownContent = document.getElementById("contactDropdown");
     dropdownContent.innerHTML = "";
 
+    // Zuerst holen wir die Kontakte aus dem LocalStorage
+    let contacts = JSON.parse(localStorage.getItem('contacts'));
+
     contacts.forEach(contact => {
         let isSelected = selectedInitialsArray.includes(contact.initial);
 
@@ -32,8 +35,8 @@ function showDropdown() {
         contactDiv.innerHTML = `
             <label class="contacts">
                 <div class="contacts-img-initial">
-                    <img src="${contact.imagePath}" alt="${contact.name}">
-                    <div class="initials-overlay">${contact.initial}</div>
+                    <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
+                    <div class="initials-overlay">${contact.name.split(' ').map(n => n[0]).join('')}</div>
                 </div>
                 <div class="dropdown-checkbox">
                     <div style="margin-left: 5px;">${contact.name}</div>
