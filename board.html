@@ -1,41 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Board</title>
-    <link rel="stylesheet" href="./css/board.css" />
-    <link rel="stylesheet" href="./css/add_task.css" />
-    <link rel="stylesheet" href="./css/contacts.css" />
-  </head>
-  <body onload="initHead()">
-    <header id="header"></header>
-    <div id="sideboard"></div>
-    <div class="head">
-      <div class="board-head">Board</div>
-      <div class="head-right">
-        <div class="input-container">
-          <input class="find-task-search" type="text" />
-          <img class="vector" src="./img/Vector 3.svg" alt="" />
-          <img class="search-icon" src="./img/search.svg" alt="" />
-        </div>
-        <button class="add-task-button" onclick="addTask()">
-          Add task
-          <img src="./img/add.svg" alt="" />
-        </button>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Board</title>
+  <link rel="stylesheet" href="./css/board.css" />
+  <link rel="stylesheet" href="./css/add_task.css" />
+  <link rel="stylesheet" href="./css/contacts.css" />
+</head>
+
+<body onload="initHead()">
+  <header id="header"></header>
+  <div id="sideboard"></div>
+  <div class="head">
+    <div class="board-head">Board</div>
+    <div class="head-right">
+      <div class="input-container">
+        <input class="find-task-search" type="text" />
+        <img class="vector" src="./img/Vector 3.svg" alt="" />
+        <img class="search-icon" src="./img/search.svg" alt="" />
       </div>
+      <button class="add-task-button" onclick="addTask()">
+        Add task
+        <img src="./img/add.svg" alt="" />
+      </button>
     </div>
+  </div>
 
-    <div class="board">
-      <div class="to-do-section">
-        <div class="instance">
-          <h3>To do</h3>
-          <div onclick="addTask()" class="plus-button">
-            <img src="./img/Capa 1.svg" alt="" />
-          </div>
+  <div class="board">
+    <div class="to-do-section">
+      <div class="instance">
+        <h3>To do</h3>
+        <div onclick="addTask()" class="plus-button">
+          <img src="./img/Capa 1.svg" alt="" />
         </div>
+      </div>
 
-        <div class="containerDiv" id="renderCard"></div>
+      <div class="containerDiv" id="renderCard"></div>
+
+      <div id="todo-column" class="board-column-content" ondrop="moveTo('board-column-todo')"
+        ondragover="allowDrop(event); highlight('board-column-todo')"
+        ondragleave="removeHighlight('board-column-todo')">
 
         <div onclick="openCard()" class="card-user-story">
           <div class="user-story">
@@ -69,14 +75,20 @@
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="in-progress-section">
-        <div class="instance">
-          <h3>In progress</h3>
-          <div onclick="addTask()" class="plus-button">
-            <img src="./img/Capa 1.svg" alt="" />
-          </div>
+    <div class="in-progress-section">
+      <div class="instance">
+        <h3>In progress</h3>
+        <div onclick="addTask()" class="plus-button">
+          <img src="./img/Capa 1.svg" alt="" />
         </div>
+      </div>
+
+      <div id="progress-column" class="board-column-content" ondrop="moveTo('board-column-progress')"
+        ondragover="allowDrop(event); highlight('board-column-progress')"
+        ondragleave="removeHighlight('board-column-progress')">
+
         <div onclick="openCard()" class="card-user-story-progress">
           <div class="user-story">
             <p class="in-progress-top">User Story</p>
@@ -111,14 +123,19 @@
           </div>
         </div>
       </div>
-
-      <div class="await-section">
-        <div class="instance">
-          <h3>Await feedback</h3>
-          <div onclick="addTask()" class="plus-button">
-            <img src="./img/Capa 1.svg" alt="" />
-          </div>
+    </div>
+    <div class="await-section">
+      <div class="instance">
+        <h3>Await feedback</h3>
+        <div onclick="addTask()" class="plus-button">
+          <img src="./img/Capa 1.svg" alt="" />
         </div>
+      </div>
+
+      <div id="await-column" class="board-column-content" ondrop="moveTo('board-column-await')"
+        ondragover="allowDrop(event); highlight('board-column-await')"
+        ondragleave="removeHighlight('board-column-await')">
+
         <div onclick="openCard()" class="card-await-feedback">
           <div class="technical-task">
             <p class="await-feedback-top">Technical Task</p>
@@ -173,9 +190,17 @@
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="done-section">
-        <div class="instance"><h3>Done</h3></div>
+    <div class="done-section">
+      <div class="instance">
+        <h3>Done</h3>
+      </div>
+
+      <div id="done-column" class="board-column-content" ondrop="moveTo('board-column-done')"
+        ondragover="allowDrop(event); highlight('board-column-done')"
+        ondragleave="removeHighlight('board-column-done')">
+
         <div class="card-done">
           <div class="technical-task">
             <p class="await-feedback-top">Technical Task</p>
@@ -211,12 +236,16 @@
         </div>
       </div>
     </div>
-    <script src="js/template_load.js"></script>
-    <script src="js/add-task.js"></script>
-    <script src="js/board_template.js"></script>
-    <script src="js/storage.js"></script>
-    <script src="js/header.js"></script>
-    <script src="js/board.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  </body>
+  </div>
+
+  <script src="js/template_load.js"></script>
+  <script src="js/add-task.js"></script>
+  <script src="js/board_template.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/header.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</body>
+
 </html>

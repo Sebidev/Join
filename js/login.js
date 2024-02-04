@@ -1,5 +1,3 @@
-let users = [];
-
 /**
  * add event listener for dom content loaded event to initialize functions
  */
@@ -14,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadUsers() {
     try {
         users = JSON.parse(await getItem('users'));
-    } catch(e) {
+    } catch (e) {
         console.error('Loading Users error:', e);
     }
 }
@@ -36,7 +34,7 @@ async function guestLogin() {
 async function login() {
     const emailLogin = document.getElementById('email-login');
     const passwordLogin = document.getElementById('password-login');
-    
+
     const user = users.find(user => user.email === emailLogin.value && user.password === passwordLogin.value);
     if (user) {
         await setUserToTrue(user);
@@ -88,7 +86,7 @@ async function signUp() {
         await addUserToArray(emailSignup, passwordSignup);
         resetSignupForm();
         successSignUp();
-    } else if (passwordSignup.value !== passwordConfirm.value && !checkedIcon){
+    } else if (passwordSignup.value !== passwordConfirm.value && !checkedIcon) {
         passwordInequal();
         errorCheckboxSignup();
     } else if (passwordSignup.value !== passwordConfirm.value && checkedIcon) {
@@ -133,7 +131,30 @@ async function addUserToArray(emailSignup, passwordSignup) {
         phone: null,
         password: passwordSignup.value,
         isYou: false,
-        userID: users.length
+        userID: users.length,
+        contacts,
+        categories: [
+            { name: "Start", color: 0 }
+        ],
+        tasks: [{
+            "title": "Start with Join",
+            "description": "For new tasks click on Add task.",
+            "date": getCurrentDateAsString(),
+            "prio": 0,
+            "category": { name: "Start", color: 0 },
+            "assignedTo": [{
+                name: `${setName('first')} (You)`,
+                email: emailSignup,
+                phone: '',
+                color: '#2d3e55',
+                tasks: []
+            }],
+            "subtasks": [
+                { name: "Create a task", done: false },
+                { name: "Check a task", done: false }
+            ],
+            "boardColumn": "todo-column"
+        }]
     });
 
     await setItem('users', JSON.stringify(users));
@@ -150,7 +171,7 @@ function signupButton(action) {
     if (action === 'disable') {
         signupBtn.disabled = true;
         signupBtn.classList.add('main-button-disabled');
-    } else if (action ==='enable') {
+    } else if (action === 'enable') {
         signupBtn.disabled = false;
         signupBtn.classList.remove('main-button-disabled');
     }
@@ -235,7 +256,7 @@ function setUserColor() {
     const letters = '0123456789ABCDEF';
     let color = '#';
     for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
+        color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
 }

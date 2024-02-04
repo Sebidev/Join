@@ -1,4 +1,5 @@
 users = [];
+let isUserLoggedIn = false;
 
 let currentDate = new Date();
 let currentTime = new Date().getHours();
@@ -27,8 +28,6 @@ async function loadData() {
  */
 
 function greetUser() {
-    let isUserLoggedIn = false;
-
     for (let i = 0; i < users.length; i++) {
         let user = users[i];
         if (user["isYou"]) {
