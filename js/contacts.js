@@ -114,8 +114,6 @@ async function saveContact() {
         }
 
         contacts.push(contact);
-
-        // Sortieren Sie die Kontakte alphabetisch nach Namen
         contacts.sort((a, b) => a.name.localeCompare(b.name));
 
         if (isUserLoggedIn) {
@@ -416,12 +414,10 @@ async function delContact(contactId) {
     contacts = contacts.filter(contact => contact.id !== contactId);
 
     if (isUserLoggedIn) {
-        // Aktualisieren Sie die Kontakte des aktuellen Benutzers
         let users = JSON.parse(await getItem('users'));
         users[currentUser].contacts = contacts;
         await setItem('users', JSON.stringify(users));
     } else {
-        // Aktualisieren Sie die Kontakte im localStorage
         localStorage.setItem('contacts', JSON.stringify(contacts));
     }
     location.reload();
