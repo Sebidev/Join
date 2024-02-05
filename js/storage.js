@@ -4,7 +4,7 @@ const STORAGE_URL = 'https://remote-storage.developerakademie.org/item';
 let users = [];
 let contacts = [];
 let tasks = [];
-let category = [];
+let categories = [];
 let subtasks = [];
 
 /**
