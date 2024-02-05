@@ -169,8 +169,6 @@ async function loadContacts() {
         contacts = JSON.parse(localStorage.getItem('contacts')) || [];
     }
 
-    createDemoContacts();
-
     let lastInitial;
 
     function createContactHTML(contact) {
@@ -375,6 +373,8 @@ async function saveEditedContact(contactid) {
             contact.email = email;
             contact.phone = phone;
 
+            contacts.sort((a, b) => a.name.localeCompare(b.name));
+
             if (isUserLoggedIn) {
                 let users = JSON.parse(await getItem('users'));
                 users[currentUser].contacts = contacts;
@@ -503,6 +503,7 @@ async function floatingContactRender(contactid){
  */
 document.addEventListener('DOMContentLoaded', async (event) => {
     await initUser();
+    createDemoContacts();
     loadContacts();
 });
 
