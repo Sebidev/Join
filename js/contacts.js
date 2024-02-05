@@ -86,7 +86,7 @@ window.saveContact = saveContact;
 /**
  * @description This function is called when the user clicks on the "Save" button in the modal window. It saves the new contact to the local storage.
  */
-function saveContact() {
+async function saveContact() {
     let form = document.getElementById('addcontactForm');
 
     if (form.checkValidity()) {
@@ -100,10 +100,36 @@ function saveContact() {
             email: email,
             phone: phone
         };
-        var contacts = JSON.parse(localStorage.getItem('contacts')) || [];
-        
+
+        let contacts;
+        if (isUserLoggedIn) {
+            // Laden Sie die Benutzerdaten
+            let users = JSON.parse(await getItem('users'));
+
+            // Überprüfen Sie, ob der aktuelle Benutzer existiert
+            if (users[currentUser]) {
+                // Verwenden Sie die Kontakte des aktuellen Benutzers
+                contacts = users[currentUser].contacts || [];
+            } else {
+                console.error('Aktueller Benutzer nicht gefunden:', currentUser);
+            }
+        } else {
+            contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+        }
+
         contacts.push(contact);
-        localStorage.setItem('contacts', JSON.stringify(contacts));
+
+        // Sortieren Sie die Kontakte alphabetisch nach Namen
+        contacts.sort((a, b) => a.name.localeCompare(b.name));
+
+        if (isUserLoggedIn) {
+            // Speichern Sie die aktualisierten Benutzerdaten
+            users[currentUser].contacts = contacts;
+            await setItem('users', JSON.stringify(users));
+        } else {
+            localStorage.setItem('contacts', JSON.stringify(contacts));
+        }
+
         document.querySelector('#addcontactForm').reset();
 
         successMsg();
@@ -128,11 +154,26 @@ async function successMsg() {
     }, 800));
 }
 
+
+window.loadContacts = loadContacts;
+
 /**
  * @description This function loads the contacts from the local storage and displays them on the contacts.html page.
  */
-function loadContacts() {
-    let contacts = JSON.parse(localStorage.getItem('contacts'));
+async function loadContacts() {
+    let contacts;
+
+    if (isUserLoggedIn) {
+        let users = JSON.parse(await getItem('users'));
+        if (users[currentUser]) {
+            contacts = users[currentUser].contacts;
+        } else {
+            console.error('Aktueller Benutzer nicht gefunden:', currentUser);
+        }
+    } else {
+        contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+    }
+
     if (!contacts || Object.keys(contacts).length === 0) {
         contacts = [
         { id: generateId(), avatarid: rollDice(), name: 'Anton Mayer', email: 'antom@gmail.com', phone: '+49123456789'},
@@ -146,21 +187,30 @@ function loadContacts() {
         localStorage.setItem('contacts', JSON.stringify(contacts));
     }
 
+    let lastInitial;
+
     function createContactHTML(contact) {
+        let initialLetterHTML = '';
+        const currentInitial = contact.name.charAt(0).toUpperCase();
+        if (currentInitial !== lastInitial) {
+            initialLetterHTML = `<div class="initial_letter">${currentInitial}</div>
+            <div class="line"><svg xmlns="http://www.w3.org/2000/svg" width="354" height="2" viewBox="0 0 354 2" fill="none"><path d="M1 1H353" stroke="#D1D1D1" stroke-linecap="round"/></svg></div>`;
+            lastInitial = currentInitial;
+        }
+
         return `
-        <div class="initial_letter">${contact.name.charAt(0)}</div>
-        <div class="line"><svg xmlns="http://www.w3.org/2000/svg" width="354" height="2" viewBox="0 0 354 2" fill="none"><path d="M1 1H353" stroke="#D1D1D1" stroke-linecap="round"/></svg></div>
-        <div class="contactentry" id=${contact.id}>
-            <div class="avatar">
-                <img src="img/Ellipse5-${contact.avatarid}.svg"></img>
-                <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
+            ${initialLetterHTML}
+            <div class="contactentry" id=${contact.id}>
+                <div class="avatar">
+                    <img src="img/Ellipse5-${contact.avatarid}.svg"></img>
+                    <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
+                </div>
+                <div class="contactentry_info">
+                    <div class="contactentry_name">${contact.name}</div>
+                    <div class="contactentry_email">${contact.email}</div>
+                </div>
             </div>
-            <div class="contactentry_info">
-                <div class="contactentry_name">${contact.name}</div>
-                <div class="contactentry_email">${contact.email}</div>
-            </div>
-        </div>
-    `;
+        `;
     }
 
     let contactsHTML = '';
@@ -193,11 +243,23 @@ window.editContact = editContact;
 /**
  * @description This function is called when the user clicks on the "Edit" button in the contacts.html page. 
  * It creates a modal window with a form to edit a contact.
- * @param {*} id contactid
+ * @param {*} contactid
  */
-function editContact(id){
-    let contacts = JSON.parse(localStorage.getItem('contacts'));
-    let contact = contacts.find(contact => contact.id === id);
+async function editContact(contactid){
+    let contacts;
+
+    if (isUserLoggedIn) {
+        let users = JSON.parse(await getItem('users'));
+        if (users[currentUser]) {
+            contacts = users[currentUser].contacts;
+        } else {
+            console.error('Aktueller Benutzer nicht gefunden:', currentUser);
+        }
+    } else {
+        contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+    }
+
+    let contact = contacts.find(contact => contact.id === contactid);
 
     if (contact) {
         overlay = document.createElement("div");
@@ -258,14 +320,26 @@ window.saveEditedContact = saveEditedContact;
 
 /**
  * @description This function is called when the user clicks on the "Save" button in the modal window. It saves the edited contact to the local storage.
- * @param {*} id contactid
+ * @param {*} contactid
  */
-function saveEditedContact(id) {
+async function saveEditedContact(contactid) {
     let form = document.getElementById('editcontact_form');
 
     if (form.checkValidity()) {
-        let contacts = JSON.parse(localStorage.getItem('contacts'));
-        let contact = contacts.find(contact => contact.id === id);
+        let contacts;
+
+        if (isUserLoggedIn) {
+            let users = JSON.parse(await getItem('users'));
+            if (users[currentUser]) {
+                contacts = users[currentUser].contacts;
+            } else {
+                console.error('Aktueller Benutzer nicht gefunden:', currentUser);
+            }
+        } else {
+            contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+        }
+
+        let contact = contacts.find(contact => contact.id === contactid);
 
         if (contact) {
             let name = document.getElementById('name').value;
@@ -276,12 +350,19 @@ function saveEditedContact(id) {
             contact.email = email;
             contact.phone = phone;
 
-            localStorage.setItem('contacts', JSON.stringify(contacts));
+            if (isUserLoggedIn) {
+                let users = JSON.parse(await getItem('users'));
+                users[currentUser].contacts = contacts;
+                await setItem('users', JSON.stringify(users));
+            } else {
+                localStorage.setItem('contacts', JSON.stringify(contacts));
+            }
+
             closeContactModal();
             location.reload();
         }
         else {
-            console.log(`Kein Kontakt mit der ID ${id} gefunden.`);
+            console.log(`Kein Kontakt mit der ID ${contactid} gefunden.`);
         }
     } else {
         form.reportValidity();
@@ -292,22 +373,59 @@ window.delContact = delContact;
 
 /**
  * @description This function is called when the user clicks on the "Delete" button in the modal window. It deletes the contact from the local storage.
- * @param {*} id contactid 
+ * @param {*} contactid 
  */
-function delContact(id){
-    let contacts = JSON.parse(localStorage.getItem('contacts'));
-    contacts = contacts.filter(contact => contact.id !== id);
-    localStorage.setItem('contacts', JSON.stringify(contacts));
+async function delContact(contactId) {
+    let contacts;
+    if (isUserLoggedIn) {
+        // Laden Sie die Benutzerdaten
+        let users = JSON.parse(await getItem('users'));
+
+        // Überprüfen Sie, ob der aktuelle Benutzer existiert
+        if (users[currentUser]) {
+            // Verwenden Sie die Kontakte des aktuellen Benutzers
+            contacts = users[currentUser].contacts;
+        } else {
+            console.error('Aktueller Benutzer nicht gefunden:', currentUser);
+        }
+    } else {
+        contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+    }
+
+    // Filtern Sie den Kontakt heraus, den Sie löschen möchten
+    contacts = contacts.filter(contact => contact.id !== contactId);
+
+    if (isUserLoggedIn) {
+        // Aktualisieren Sie die Kontakte des aktuellen Benutzers
+        let users = JSON.parse(await getItem('users'));
+        users[currentUser].contacts = contacts;
+        await setItem('users', JSON.stringify(users));
+    } else {
+        // Aktualisieren Sie die Kontakte im localStorage
+        localStorage.setItem('contacts', JSON.stringify(contacts));
+    }
     location.reload();
 }
 
 /**
  * @description This function renders the floating contact window with the contact information.
- * @param {*} id contactid
+ * @param {*} contactid
  */
-function floatingContactRender(id){
-    let contacts = JSON.parse(localStorage.getItem('contacts'));
-    let contact = contacts.find(contact => contact.id === id);
+async function floatingContactRender(contactid){
+    let contacts;
+
+    if (isUserLoggedIn) {
+        let users = JSON.parse(await getItem('users'));
+        if (users[currentUser]) {
+            contacts = users[currentUser].contacts;
+        } else {
+            console.error('Aktueller Benutzer nicht gefunden:', currentUser);
+        }
+    } else {
+        contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+    }
+
+    let contact = contacts.find(contact => contact.id === contactid);
 
     if (contact) {
         var floating_contactHTML = `
@@ -355,7 +473,7 @@ function floatingContactRender(id){
         floating_contactDiv.innerHTML = floating_contactHTML;
         floating_contactElement.appendChild(floating_contactDiv);
     } else {
-        console.log(`Kein Kontakt mit der ID ${id} gefunden.`);
+        console.log(`Kein Kontakt mit der ID ${contactid} gefunden.`);
     }
 }
 
@@ -363,7 +481,8 @@ function floatingContactRender(id){
  * @description This function is called when the contacts page is loaded. 
  * It loads the contacts from the local storage and displays them on the contacts.html page.
  */
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', async (event) => {
+    await initUser();
     loadContacts();
 });
 
