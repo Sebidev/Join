@@ -103,12 +103,8 @@ async function saveContact() {
 
         let contacts;
         if (isUserLoggedIn) {
-            // Laden Sie die Benutzerdaten
             let users = JSON.parse(await getItem('users'));
-
-            // Überprüfen Sie, ob der aktuelle Benutzer existiert
             if (users[currentUser]) {
-                // Verwenden Sie die Kontakte des aktuellen Benutzers
                 contacts = users[currentUser].contacts || [];
             } else {
                 console.error('Aktueller Benutzer nicht gefunden:', currentUser);
@@ -123,7 +119,6 @@ async function saveContact() {
         contacts.sort((a, b) => a.name.localeCompare(b.name));
 
         if (isUserLoggedIn) {
-            // Speichern Sie die aktualisierten Benutzerdaten
             users[currentUser].contacts = contacts;
             await setItem('users', JSON.stringify(users));
         } else {
@@ -378,12 +373,8 @@ window.delContact = delContact;
 async function delContact(contactId) {
     let contacts;
     if (isUserLoggedIn) {
-        // Laden Sie die Benutzerdaten
         let users = JSON.parse(await getItem('users'));
-
-        // Überprüfen Sie, ob der aktuelle Benutzer existiert
         if (users[currentUser]) {
-            // Verwenden Sie die Kontakte des aktuellen Benutzers
             contacts = users[currentUser].contacts;
         } else {
             console.error('Aktueller Benutzer nicht gefunden:', currentUser);
@@ -392,7 +383,6 @@ async function delContact(contactId) {
         contacts = JSON.parse(localStorage.getItem('contacts')) || [];
     }
 
-    // Filtern Sie den Kontakt heraus, den Sie löschen möchten
     contacts = contacts.filter(contact => contact.id !== contactId);
 
     if (isUserLoggedIn) {

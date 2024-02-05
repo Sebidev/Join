@@ -21,12 +21,22 @@ if (window.location.pathname.endsWith("add-task.html")) {
     });
 }
 
-function showDropdown() {
+async function showDropdown() {
     let dropdownContent = document.getElementById("contactDropdown");
     dropdownContent.innerHTML = "";
 
-    // Zuerst holen wir die Kontakte aus dem LocalStorage
-    let contacts = JSON.parse(localStorage.getItem('contacts'));
+    let contacts;
+
+    if (isUserLoggedIn) {
+        let users = JSON.parse(await getItem('users'));
+        if (users[currentUser]) {
+            contacts = users[currentUser].contacts;
+        } else {
+            console.error('Aktueller Benutzer nicht gefunden:', currentUser);
+        }
+    } else {
+        contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+    }
 
     contacts.forEach(contact => {
         let isSelected = selectedInitialsArray.includes(contact.initial);
@@ -52,38 +62,35 @@ function showDropdown() {
 }
 
 function toggleContactSelection(contact) {
-    let index = selectedInitialsArray.indexOf(contact.initial);
+    let index = selectedInitialsArray.findIndex(c => c.id === contact.id);
 
     if (index !== -1) {
         selectedInitialsArray.splice(index, 1);
     } else {
-        selectedInitialsArray.push(contact.initial);
+        selectedInitialsArray.push(contact);
     }
 
-    selectContact(contact);
+    selectContact();
 }
 
-function selectContact(contact) {
+function selectContact() {
     console.log("Selected Contacts:", selectedInitialsArray);
 
     let selectedContactsContainer = document.getElementById("selectedContactsContainer");
     selectedContactsContainer.innerHTML = "";
 
-    selectedInitialsArray.forEach(initial => {
-        let selectedContact = contacts.find(c => c.initial === initial);
-        if (selectedContact) {
-            let selectedContactDiv = document.createElement("div");
-            selectedContactDiv.innerHTML = `
-                <div class="selected-contact">
-                    <div class="contacts-img-initial">
-                        <img src="${selectedContact.imagePath}" alt="${selectedContact.name}">
-                        <div class="initials-overlay">${selectedContact.initial}</div>
-                    </div>
-                    <span>${selectedContact.name} (${initial})</span>
+    selectedInitialsArray.forEach(contact => {
+        let selectedContactDiv = document.createElement("div");
+        selectedContactDiv.innerHTML = `
+            <div class="selected-contact">
+                <div class="contacts-img-initial">
+                    <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
+                    <div class="initials-overlay">${contact.name.split(' ').map(n => n[0]).join('')}</div>
                 </div>
-            `;
-            selectedContactsContainer.appendChild(selectedContactDiv);
-        }
+                <span>${contact.name}</span>
+            </div>
+        `;
+        selectedContactsContainer.appendChild(selectedContactDiv);
     });
 }
 
