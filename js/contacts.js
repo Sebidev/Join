@@ -32,6 +32,7 @@ function addContact() {
 }
 
 window.addContact = addContact;
+window.closeContactModal = closeContactModal;
 
 /**
  * @description This function is called when the user clicks on the "Close" button in the modal window. It removes the modal window from the DOM.
@@ -165,7 +166,7 @@ function loadContacts() {
     let contactsHTML = '';
 
     for (let contact of contacts) {
-        contactsHTML += createContactHTML(contact);t
+        contactsHTML += createContactHTML(contact);
     }
 
     document.querySelector('.contacts_container').innerHTML += contactsHTML;
