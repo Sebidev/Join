@@ -1,8 +1,25 @@
 users = [];
+
+let currentUser;
 let isUserLoggedIn = false;
 
 let currentDate = new Date();
 let currentTime = new Date().getHours();
+
+function initUser() {
+    for (let i = 0; i < users.length; i++) {
+        let user = users[i];
+        if (user["isYou"]) {
+            currentUser = user["userID"];
+          isUserLoggedIn = true;
+          return;
+        }
+        else {
+          currentUser = 'Guest';
+          isUserLoggedIn = false;
+        }
+    }
+}
 
 /**
  * get data from backend server and render the content
@@ -36,7 +53,6 @@ function greetUser() {
                 fullName += ` ${user["lastName"]}`;
             }
             document.getElementById("loggedinUser").innerHTML = fullName;
-            isUserLoggedIn = true;
             break;
         }
     }
@@ -53,6 +69,7 @@ function greetUser() {
 function renderContent() {
     greetUser();
     greetingTimed();
+    initUser();
 }
 
 /**
