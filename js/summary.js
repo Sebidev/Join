@@ -67,9 +67,9 @@ function greetUser() {
  */
 
 function renderContent() {
+    initUser();
     greetUser();
     greetingTimed();
-    initUser();
 }
 
 /**
