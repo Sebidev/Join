@@ -35,6 +35,7 @@ function greetUser() {
                 fullName += ` ${user["lastName"]}`;
             }
             document.getElementById("loggedinUser").innerHTML = fullName;
+            isUserLoggedIn = true;
             break;
         }
     }
@@ -49,7 +50,6 @@ function greetUser() {
  */
 
 function renderContent() {
-    initUser();
     greetUser();
     greetingTimed();
 }

@@ -19,9 +19,8 @@ function initUserID() {
           isUserLoggedIn = true;
           return;
         }
-        else {
+        if (!isUserLoggedIn) {
           currentUser = 'Guest';
-          isUserLoggedIn = false;
         }
     }
 }
