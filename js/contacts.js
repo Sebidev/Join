@@ -169,18 +169,7 @@ async function loadContacts() {
         contacts = JSON.parse(localStorage.getItem('contacts')) || [];
     }
 
-    if (!contacts || Object.keys(contacts).length === 0) {
-        contacts = [
-        { id: generateId(), avatarid: rollDice(), name: 'Anton Mayer', email: 'antom@gmail.com', phone: '+49123456789'},
-        { id: generateId(), avatarid: rollDice(), name: 'Anja Schulz', email: 'schulz@hotmail.com', phone: '+49123456789'},
-        { id: generateId(), avatarid: rollDice(), name: 'Benedikt Ziegler', email: 'benedikt@gmail.com', phone: '+49123456789'},
-        { id: generateId(), avatarid: rollDice(), name: 'David Eisenberg', email: 'davidberg@gmail.com', phone: '+49123456789'},
-        { id: generateId(), avatarid: rollDice(), name: 'Eva Fischer', email: 'eva@gmail.com', phone: '+49123456789'},
-        { id: generateId(), avatarid: rollDice(), name: 'Emmanuel Mauer', email: 'emmanuelma@gmail.com', phone: '+49123456789'},
-        { id: generateId(), avatarid: rollDice(), name: 'Marcel Bauer', email: 'bauer@gmail.com', phone: '+49123456789' },
-        { id: generateId(), avatarid: rollDice(), name: 'Tatjana Wolf', email: 'wolf@gmail.com', phone: '+49123456789' },];
-        localStorage.setItem('contacts', JSON.stringify(contacts));
-    }
+    createDemoContacts();
 
     let lastInitial;
 
@@ -198,7 +187,7 @@ async function loadContacts() {
             <div class="contactentry" id=${contact.id}>
                 <div class="avatar">
                     <img src="img/Ellipse5-${contact.avatarid}.svg"></img>
-                    <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
+                    <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0].toUpperCase()).join('')}</div>
                 </div>
                 <div class="contactentry_info">
                     <div class="contactentry_name">${contact.name}</div>
@@ -230,6 +219,47 @@ async function loadContacts() {
             contactElement.classList.add('selected');
             floatingContactRender(contact.id);
         });
+    }
+}
+
+/**
+ * @description This function creates demo contacts if the user has no contacts yet.
+ */
+async function createDemoContacts() {
+    let contacts;
+
+    if (isUserLoggedIn) {
+        let users = JSON.parse(await getItem('users'));
+        if (users[currentUser]) {
+            contacts = users[currentUser].contacts;
+
+            if(!users[currentUser].contacts || Object.keys(users[currentUser].contacts).length === 0) {
+                contacts = [
+                    { id: generateId(), avatarid: rollDice(), name: users[currentUser].firstName, email: users[currentUser].email, phone: '+49123456789'}
+                ];
+
+                users[currentUser].contacts = contacts;
+                await setItem('users', JSON.stringify(users));
+            }
+        } else {
+            console.error('Aktueller Benutzer nicht gefunden:', currentUser);
+        }
+        
+    } else {
+        contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+
+        if (!contacts || Object.keys(contacts).length === 0) {
+            contacts = [
+                { id: generateId(), avatarid: rollDice(), name: 'Anton Mayer', email: 'antom@gmail.com', phone: '+49123456789'},
+                { id: generateId(), avatarid: rollDice(), name: 'Anja Schulz', email: 'schulz@hotmail.com', phone: '+49123456789'},
+                { id: generateId(), avatarid: rollDice(), name: 'Benedikt Ziegler', email: 'benedikt@gmail.com', phone: '+49123456789'},
+                { id: generateId(), avatarid: rollDice(), name: 'David Eisenberg', email: 'davidberg@gmail.com', phone: '+49123456789'},
+                { id: generateId(), avatarid: rollDice(), name: 'Eva Fischer', email: 'eva@gmail.com', phone: '+49123456789'},
+                { id: generateId(), avatarid: rollDice(), name: 'Emmanuel Mauer', email: 'emmanuelma@gmail.com', phone: '+49123456789'},
+                { id: generateId(), avatarid: rollDice(), name: 'Marcel Bauer', email: 'bauer@gmail.com', phone: '+49123456789' },
+                { id: generateId(), avatarid: rollDice(), name: 'Tatjana Wolf', email: 'wolf@gmail.com', phone: '+49123456789' },];
+            localStorage.setItem('contacts', JSON.stringify(contacts));
+        }
     }
 }
 
@@ -268,7 +298,7 @@ async function editContact(contactid){
         let avatarDiv = document.createElement("div");
         let avatarHTML = `
         <img class="avatar_contactModal" src="img/Ellipse5-${contact.avatarid}.svg"></img>
-        <div class="avatar_contactModal_initletter">${contact.name.charAt(0)}</div>
+        <div class="avatar_contactModal_initletter">${contact.name.charAt(0).toUpperCase()}</div>
         `;
         contactModal.innerHTML += avatarHTML;
         contactModal.appendChild(avatarDiv);
@@ -422,7 +452,7 @@ async function floatingContactRender(contactid){
         <div class="floating_contact">
             <div class="floating_contact_avatar">
                 <img src="img/Ellipse5-${contact.avatarid}.svg"></img>
-                    <div class="floating_contact_initletter">${contact.name.charAt(0)}</div>
+                    <div class="floating_contact_initletter">${contact.name.charAt(0).toUpperCase()}</div>
                 </img>
             </div>
             <div class="column">
