@@ -1,17 +1,6 @@
 let containerCount = 0;
 let selectedInitialsArray = [];
 
-
-if (window.location.pathname.endsWith("add-task.html")) {
-    document.addEventListener('click', function (event) {
-        let dropdown = document.getElementById('contactDropdown');
-        
-        if (!event.target.matches('.arrow_down') && !event.target.closest('.assigned-to-container')) {
-            dropdown.style.display = 'none';
-        }
-    });
-}
-
 async function showDropdown() {
     let dropdownContent = document.getElementById("contactDropdown");
     dropdownContent.innerHTML = "";
@@ -40,6 +29,23 @@ function getUserContacts() {
 function getLocalStorageContacts() {
     return JSON.parse(localStorage.getItem('contacts')) || [];
 }
+
+function initializeContactDropdown() {
+    if (window.location.pathname.endsWith("add-task.html")) {
+        document.addEventListener('click', function (event) {
+            let dropdown = document.getElementById('contactDropdown');
+
+            if (!event.target.matches('.arrow_down') && !event.target.closest('.assigned-to-container')) {
+                dropdown.style.display = 'none';
+            }
+
+            if (event.target.id === 'assignedTo') {
+                showDropdown();
+            }
+        });
+    }
+}
+initializeContactDropdown();
 
 function createContactDiv(contact, isSelected) {
     let contactDiv = document.createElement("div");
@@ -120,7 +126,6 @@ document.addEventListener('click', function (event) {
     }
 });
 
-
 function removeContact(contactavatarId) {
     let index = selectedInitialsArray.findIndex(contact => contact.avatarid === contactavatarId);
 
@@ -130,90 +135,16 @@ function removeContact(contactavatarId) {
 
         let selectedContactsContainer = document.getElementById("selectedContactsContainer");
         let contactToRemove = selectedContactsContainer.querySelector(`[data-avatarid="${contactavatarId}"]`);
-
-        if (contactToRemove) {
-            selectedContactsContainer.removeChild(contactToRemove);
-        }
     }
 }
 
-// --- addToBoard remote Storage attempt --- //
-/*
 async function addToBoard() {
-    debugger;
-
-    let taskTitle = document.getElementById('taskTitleInput').value;
-    let description = document.getElementById('descriptionInput').value;
-    let date = document.getElementById('date').value;
-    let category = document.getElementById('category').value;
+    let taskTitle = getFieldValueById('taskTitleInput');
+    let description = getFieldValueById('descriptionInput');
+    let date = getFieldValueById('date');
+    let category = getFieldValueById('category');
     let subtasksList = document.getElementById('subtaskList').children;
-
-    let selectedContactsContainer = document.getElementById("selectedContactsContainer");
-    let selectedContacts = [];
-
-    selectedContactsContainer.childNodes.forEach(contactDiv => {
-        if (contactDiv.nodeType === 1) {
-            let imgElement = contactDiv.querySelector('img');
-            let initials = imgElement.nextElementSibling.textContent.trim();
-
-            selectedContacts.push({
-                imagePath: imgElement.src,
-                initials: initials
-            });
-        }
-    });
-
-    containerCount++;
-
-    let task = {
-    content: {
-        title: taskTitle,
-        description: description,
-        date: date,
-        prio: 0, 
-        category: { name: category, color: 0 }, 
-        assignedTo: selectedContacts, 
-        subtasks: subtasksList.length, 
-        boardColumn: 'todo-column', 
-    },
-        id: 'containerDiv' + containerCount
-    };
-
-    // Check if user is logged in
-    if (isUserLoggedIn) {
-        // Get the current user
-        let users = JSON.parse(await getItem('users'));
-        let currentUserObject = users.find(user => user.userID === currentUser);
-
-        // Add the task to the user's tasks array
-        currentUserObject.tasks.push(task);
-        // Update the users array
-        users = users.map(user => user.userID === currentUser ? currentUserObject : user);
-        // Save the updated users array to storage
-        await setItem('users', JSON.stringify(users));
-    }
-
-    localStorage.setItem('selectedPriority', selectedPriority);
-    localStorage.setItem('sharedData', JSON.stringify(task));
-
-    // Zum Programmieren außer Kraft gesetzt
-    //window.location.href = 'board.html';
-
-    document.getElementById('taskTitleInput').value = '';
-    document.getElementById('descriptionInput').value = '';
-    document.getElementById('assignedTo').value = ''; // Beachten Sie, dass es kein Element mit ID 'assignedTo' gibt, bitte überprüfen Sie die ID
-    document.getElementById('date').value = '';
-    document.getElementById('category').value = '';
-}
-*/
-
-async function addToBoard() {
-    const taskTitle = getFieldValueById('taskTitleInput');
-    const description = getFieldValueById('descriptionInput');
-    const date = getFieldValueById('date');
-    const category = getFieldValueById('category');
-    const subtasksList = document.getElementById('subtaskList').children;
-    const selectedContacts = getSelectedContacts();
+    let selectedContacts = getSelectedContacts();
 
     saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts);
 
@@ -228,13 +159,13 @@ function getFieldValueById(id) {
 }
 
 function getSelectedContacts() {
-    const selectedContactsContainer = document.getElementById("selectedContactsContainer");
-    const selectedContacts = [];
+    let selectedContactsContainer = document.getElementById("selectedContactsContainer");
+    let selectedContacts = [];
 
     selectedContactsContainer.childNodes.forEach(contactDiv => {
         if (contactDiv.nodeType === 1) {
-            const imgElement = contactDiv.querySelector('img');
-            const initials = imgElement.nextElementSibling.textContent.trim();
+            let imgElement = contactDiv.querySelector('img');
+            let initials = imgElement.nextElementSibling.textContent.trim();
 
             selectedContacts.push({
                 imagePath: imgElement.src,
