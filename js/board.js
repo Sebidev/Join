@@ -1,5 +1,6 @@
 let currentDraggedElement;
 
+/*
 function createTask() {
     debugger;
 
@@ -55,7 +56,7 @@ function createTask() {
     document.getElementById('date').value = '';
     document.getElementById('category').value = '';
 }
-
+*/
 
 /**
  * id of the dragged task will be stored in currentDraggedElement

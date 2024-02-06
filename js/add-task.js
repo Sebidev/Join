@@ -231,20 +231,21 @@ function getSelectedContacts() {
 
 function saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts) {
     containerCount++;
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    tasks.push({
 
-    localStorage.setItem('selectedPriority', selectedPriority);
-
-    localStorage.setItem('sharedData', JSON.stringify({
         content: {
             title: taskTitle,
             description: description,
             date: date,
             category: category,
             subtasks: subtasksList.length,
-            selectedContacts: selectedContacts
-        },
-        id: 'containerDiv' + containerCount
-    }));
+            selectedContacts: selectedContacts,
+            boardColumn: 'todo-column'
+        },  id: 'task' + tasks.length,
+    });
+
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
 function resetFormFields() {

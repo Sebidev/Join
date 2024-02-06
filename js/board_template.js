@@ -176,15 +176,16 @@ function getValue(selector) {
 }
 
 function checkAndRenderSharedData() {
-    let sharedDataString = localStorage.getItem('sharedData');
+    let tasksString = localStorage.getItem('tasks');
 
-    if (sharedDataString) {
-        let data = JSON.parse(sharedDataString);
-        renderCard(data);
-        localStorage.removeItem('sharedData');
+    if (tasksString) {
+        let tasks = JSON.parse(tasksString);
+        for (let task of tasks) {
+            renderCard(task);
+        }
     }
 }
-checkAndRenderSharedData();
+document.addEventListener('DOMContentLoaded', checkAndRenderSharedData);
 
 function createAvatarDivs(selectedContacts) {
     let avatarDivsHTML = '';
@@ -206,7 +207,7 @@ function createAvatarDivs(selectedContacts) {
 
 function renderCard(data) {
     if (data && data.content) {
-        let containerDiv = document.getElementById('renderCard');
+        let containerDiv = document.getElementById('todo-column');
         let categoryClass = data.content.category === 'Technical task' ? 'technical-task' : 'user-story';
         let createdSubtasks = data.content.subtasks;
         let selectedPriority = localStorage.getItem('selectedPriority');
@@ -216,6 +217,7 @@ function renderCard(data) {
         let renderCard = document.createElement('div');
         renderCard.id = data.id;
         renderCard.className = 'card-user-story';
+        renderCard.onclick = () => openCard(data);
 
         renderCard.innerHTML = `
             <p class="${categoryClass}">${data.content.category}</p>
@@ -253,24 +255,24 @@ function getPriorityIcon(priority) {
     }
 }
 
-function openCard() {
-    let openCardHTML = `
+function openCard(data) {
+    let openCardHTML = /*html*/`
     <div id="card-overlay"></div>
     <div id="cardModal" class="card-modal">
             <div class="task-categorie">
-                <p class="card-modal-task">User Story</p>
-                <div class="close-card-modal" onclick="closeOpenCard()"">
+                <p class="card-modal-task">${data.content.category}</p>
+                <div class="close-card-modal" onclick="closeOpenCard()">
                     <img src="./img/close_modal.svg" alt="">
                 </div>
             </div>
 
             <div class="card-modal-title-container">
-                <p class="card-modal-title">Kochwelt Page & Recipe Recommender</p>
+                <p class="card-modal-title">${data.content.title}</p>
             </div>
-            <p class="card-modal-content">Create a contact form and imprint page...</p>
+            <p class="card-modal-content">${data.content.description}</p>
 
             <div class="card-modal-date">
-                <p class="due-date-card-modal">Due date:</p>
+                <p class="due-date-card-modal">${data.content.date}</p>
                 <div class="card-modal-date-number">
                     <p id="datePicker">10/05/2023</p>
                 </div>
