@@ -139,6 +139,7 @@ function removeContact(contactavatarId) {
 }
 
 async function addToBoard() {
+    debugger
     let taskTitle = getFieldValueById('taskTitleInput');
     let description = getFieldValueById('descriptionInput');
     let date = getFieldValueById('date');
@@ -151,10 +152,10 @@ async function addToBoard() {
     resetFormFields();
 
     // Zum Programmieren außer Kraft gesetzt
-    //window.location.href = 'board.html';
+    window.location.href = 'board.html';
 }
 
-
+/*
 async function addToBoard() {
     const taskTitle = getFieldValueById('taskTitleInput');
     const description = getFieldValueById('descriptionInput');
@@ -204,6 +205,7 @@ async function addToBoard() {
     // For development purposes
     //window.location.href = 'board.html';
 }
+*/
 
 function getFieldValueById(id) {
     return document.getElementById(id).value;
