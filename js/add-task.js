@@ -5,6 +5,7 @@ let selectedInitialsArray = [];
 if (window.location.pathname.endsWith("add-task.html")) {
     document.addEventListener('click', function (event) {
         let dropdown = document.getElementById('contactDropdown');
+        
         if (!event.target.matches('.arrow_down') && !event.target.closest('.assigned-to-container')) {
             dropdown.style.display = 'none';
         }
@@ -136,8 +137,6 @@ function removeContact(contactavatarId) {
     }
 }
 
-
-
 // --- addToBoard remote Storage attempt --- //
 /*
 async function addToBoard() {
@@ -209,21 +208,33 @@ async function addToBoard() {
 */
 
 async function addToBoard() {
-    debugger;
+    const taskTitle = getFieldValueById('taskTitleInput');
+    const description = getFieldValueById('descriptionInput');
+    const date = getFieldValueById('date');
+    const category = getFieldValueById('category');
+    const subtasksList = document.getElementById('subtaskList').children;
+    const selectedContacts = getSelectedContacts();
 
-    let taskTitle = document.getElementById('taskTitleInput').value;
-    let description = document.getElementById('descriptionInput').value;
-    let date = document.getElementById('date').value;
-    let category = document.getElementById('category').value;
-    let subtasksList = document.getElementById('subtaskList').children;
+    saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts);
 
-    let selectedContactsContainer = document.getElementById("selectedContactsContainer");
-    let selectedContacts = [];
+    resetFormFields();
+
+    // Zum Programmieren außer Kraft gesetzt
+    //window.location.href = 'board.html';
+}
+
+function getFieldValueById(id) {
+    return document.getElementById(id).value;
+}
+
+function getSelectedContacts() {
+    const selectedContactsContainer = document.getElementById("selectedContactsContainer");
+    const selectedContacts = [];
 
     selectedContactsContainer.childNodes.forEach(contactDiv => {
         if (contactDiv.nodeType === 1) {
-            let imgElement = contactDiv.querySelector('img');
-            let initials = imgElement.nextElementSibling.textContent.trim();
+            const imgElement = contactDiv.querySelector('img');
+            const initials = imgElement.nextElementSibling.textContent.trim();
 
             selectedContacts.push({
                 imagePath: imgElement.src,
@@ -232,12 +243,10 @@ async function addToBoard() {
         }
     });
 
-    console.log('taskTitle:', taskTitle);
-    console.log('description:', description);
-    console.log('date:', date);
-    console.log('category:', category);
-    console.log('subtasksList:', subtasksList);
+    return selectedContacts;
+}
 
+function saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts) {
     containerCount++;
 
     localStorage.setItem('selectedPriority', selectedPriority);
@@ -253,20 +262,14 @@ async function addToBoard() {
         },
         id: 'containerDiv' + containerCount
     }));
-
-    // Zum Programmieren außer Kraft gesetzt
-    //window.location.href = 'board.html';
-
-    document.getElementById('taskTitleInput').value = '';
-    document.getElementById('descriptionInput').value = '';
-    document.getElementById('assignedTo').value = '';
-    document.getElementById('date').value = '';
-    document.getElementById('category').value = '';
 }
 
+function resetFormFields() {
+    ['taskTitleInput', 'descriptionInput', 'assignedTo', 'date', 'category']
+        .forEach(id => document.getElementById(id).value = '');
+}
 
 function choose(priority) {
-    debugger
     let colorMap = { 'urgent': '#FF3D00', 'medium': '#FFA800', 'low': '#7AE229' };
     let setStyles = (elements, styles) => elements.forEach(e => e && Object.assign(e.style, styles));
 
@@ -284,7 +287,7 @@ function choose(priority) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    choose('medium');
+   choose('medium');
 });
 
 function toggleCategoryOptions(event) {
@@ -304,32 +307,6 @@ function updateSelectedCategory(category) {
 
         categoryOptions.style.display = "none";
     }
-}
-
-function changeSubImg() {
-    let subImgContainer = document.getElementById("subImgContainer");
-    let subImg = subImgContainer.querySelector('img');
-
-    if (!subImg) {
-        subImgContainer.innerHTML = `
-            <div class="subImgContainer">
-                <div class="add-subtask-line"></div>
-                <img onclick="revertSubImg()" src="./img/close_modal.svg" alt="">
-            </div>
-        `;
-
-        document.addEventListener('click', handleOutsideClick);
-    }
-}
-
-function closeSubImage() {
-    revertSubImg();
-}
-
-function revertSubImg() {
-    document.getElementById("subImgContainer").innerHTML = '';
-    document.getElementById('newSubtaskInput').value = '';
-    document.removeEventListener('click', handleOutsideClick);
 }
 
 function handleOutsideClick(event) {

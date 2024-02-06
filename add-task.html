@@ -90,15 +90,15 @@
             <div class="prio">Prio</div>
 
             <div class="prio-option-container">
-              <button onclick="choose('urgent')" class="button urgent">
+              <button type="button" onclick="choose('urgent')" class="button urgent">
                 <h3>Urgent</h3>
                 <img src="./img/Prio_up.svg" alt="" />
               </button>
-              <button onclick="choose('medium')" class="button medium">
+              <button type="button" onclick="choose('medium')" class="button medium">
                 <h3>Medium</h3>
                 <img src="./img/Prio_neutral.svg" alt="" />
               </button>
-              <button onclick="choose('low')" class="button low">
+              <button type="button" onclick="choose('low')" class="button low">
                 <h3>Low</h3>
                 <img src="./img/Prio_down.svg" alt="" />
               </button>
@@ -140,7 +140,6 @@
                 type="text"
                 id="newSubtaskInput"
                 placeholder="Add new subtask"
-                onclick="changeSubImg()"
                 id="subtask"
               />
               <img
