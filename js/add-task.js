@@ -139,7 +139,6 @@ function removeContact(contactavatarId) {
 }
 
 async function addToBoard() {
-    debugger
     let taskTitle = getFieldValueById('taskTitleInput');
     let description = getFieldValueById('descriptionInput');
     let date = getFieldValueById('date');
