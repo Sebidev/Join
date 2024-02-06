@@ -83,6 +83,76 @@ function selectContact() {
     });
 }
 
+// --- addToBoard remote Storage attempt --- //
+/*
+async function addToBoard() {
+    debugger;
+
+    let taskTitle = document.getElementById('taskTitleInput').value;
+    let description = document.getElementById('descriptionInput').value;
+    let date = document.getElementById('date').value;
+    let category = document.getElementById('category').value;
+    let subtasksList = document.getElementById('subtaskList').children;
+
+    let selectedContactsContainer = document.getElementById("selectedContactsContainer");
+    let selectedContacts = [];
+
+    selectedContactsContainer.childNodes.forEach(contactDiv => {
+        if (contactDiv.nodeType === 1) {
+            let imgElement = contactDiv.querySelector('img');
+            let initials = imgElement.nextElementSibling.textContent.trim();
+
+            selectedContacts.push({
+                imagePath: imgElement.src,
+                initials: initials
+            });
+        }
+    });
+
+    containerCount++;
+
+    let task = {
+    content: {
+        title: taskTitle,
+        description: description,
+        date: date,
+        prio: 0, 
+        category: { name: category, color: 0 }, 
+        assignedTo: selectedContacts, 
+        subtasks: subtasksList.length, 
+        boardColumn: 'todo-column', 
+    },
+        id: 'containerDiv' + containerCount
+    };
+
+    // Check if user is logged in
+    if (isUserLoggedIn) {
+        // Get the current user
+        let users = JSON.parse(await getItem('users'));
+        let currentUserObject = users.find(user => user.userID === currentUser);
+
+        // Add the task to the user's tasks array
+        currentUserObject.tasks.push(task);
+        // Update the users array
+        users = users.map(user => user.userID === currentUser ? currentUserObject : user);
+        // Save the updated users array to storage
+        await setItem('users', JSON.stringify(users));
+    }
+
+    localStorage.setItem('selectedPriority', selectedPriority);
+    localStorage.setItem('sharedData', JSON.stringify(task));
+
+    // Zum Programmieren außer Kraft gesetzt
+    //window.location.href = 'board.html';
+
+    document.getElementById('taskTitleInput').value = '';
+    document.getElementById('descriptionInput').value = '';
+    document.getElementById('assignedTo').value = ''; // Beachten Sie, dass es kein Element mit ID 'assignedTo' gibt, bitte überprüfen Sie die ID
+    document.getElementById('date').value = '';
+    document.getElementById('category').value = '';
+}
+*/
+
 async function addToBoard() {
     debugger;
 
@@ -138,6 +208,7 @@ async function addToBoard() {
     document.getElementById('date').value = '';
     document.getElementById('category').value = '';
 }
+
 
 function choose(priority) {
     let colorMap = { 'urgent': '#FF3D00', 'medium': '#FFA800', 'low': '#7AE229' };

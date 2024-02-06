@@ -136,25 +136,7 @@ async function addUserToArray(emailSignup, passwordSignup) {
         categories: [
             { name: "Start", color: 0 }
         ],
-        tasks: [{
-            "title": "Start with Join",
-            "description": "For new tasks click on Add task.",
-            "date": getCurrentDateAsString(),
-            "prio": 0,
-            "category": { name: "Start", color: 0 },
-            "assignedTo": [{
-                name: `${setName('first')} (You)`,
-                email: emailSignup,
-                phone: '',
-                color: '#2d3e55',
-                tasks: []
-            }],
-            "subtasks": [
-                { name: "Create a task", done: false },
-                { name: "Check a task", done: false }
-            ],
-            "boardColumn": "todo-column"
-        }]
+        tasks: []
     });
 
     await setItem('users', JSON.stringify(users));
