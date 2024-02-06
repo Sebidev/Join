@@ -1,6 +1,7 @@
 let containerCount = 0;
 let selectedInitialsArray = [];
 
+
 if (window.location.pathname.endsWith("add-task.html")) {
     document.addEventListener('click', function (event) {
         let dropdown = document.getElementById('contactDropdown');
@@ -14,74 +15,128 @@ async function showDropdown() {
     let dropdownContent = document.getElementById("contactDropdown");
     dropdownContent.innerHTML = "";
 
-    let contacts;
-
-    if (isUserLoggedIn) {
-        let users = JSON.parse(await getItem('users'));
-        if (users[currentUser]) {
-            contacts = users[currentUser].contacts;
-        } else {
-            console.error('Aktueller Benutzer nicht gefunden:', currentUser);
-        }
-    } else {
-        contacts = JSON.parse(localStorage.getItem('contacts')) || [];
-    }
+    let contacts = getContacts();
 
     contacts.forEach(contact => {
-        let isSelected = selectedInitialsArray.includes(contact.initial);
+        let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id);
 
-        let contactDiv = document.createElement("div");
-        contactDiv.innerHTML = `
-            <label class="contacts">
-                <div class="contacts-img-initial">
-                    <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
-                    <div class="initials-overlay">${contact.name.split(' ').map(n => n[0]).join('')}</div>
-                </div>
-                <div class="dropdown-checkbox">
-                    <div style="margin-left: 5px;">${contact.name}</div>
-                    <input type="checkbox" class="contact-checkbox" ${isSelected ? 'checked' : ''}>
-                </div>
-            </label>
-        `;
-        contactDiv.addEventListener("click", () => toggleContactSelection(contact));
+        let contactDiv = createContactDiv(contact, isSelected);
         dropdownContent.appendChild(contactDiv);
     });
 
     dropdownContent.style.display = 'block';
 }
 
-function toggleContactSelection(contact) {
+function getContacts() {
+    return isUserLoggedIn ? getUserContacts() : getLocalStorageContacts();
+}
+
+function getUserContacts() {
+    let users = JSON.parse(getItem('users'));
+    return users[currentUser]?.contacts || [];
+}
+
+function getLocalStorageContacts() {
+    return JSON.parse(localStorage.getItem('contacts')) || [];
+}
+
+function createContactDiv(contact, isSelected) {
+    let contactDiv = document.createElement("div");
+    contactDiv.innerHTML = `
+        <label class="contacts">
+            <div class="contacts-img-initial">
+                <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
+                <div class="initials-overlay">${contact.name.split(' ').map(n => n[0]).join('')}</div>
+            </div>
+            <div class="dropdown-checkbox">
+                <div style="margin-left: 5px;">${contact.name}</div>
+                <input type="checkbox" class="contact-checkbox" ${isSelected ? 'checked' : ''}>
+            </div>
+        </label>
+    `;
+    contactDiv.addEventListener("mousedown", (event) => {
+        event.preventDefault();
+        updateSelectedContacts(contact, isSelected ? 'remove' : 'add');
+    });
+    return contactDiv;
+}
+
+function updateSelectedContacts(contact, action) {
     let index = selectedInitialsArray.findIndex(c => c.id === contact.id);
 
-    if (index !== -1) {
-        selectedInitialsArray.splice(index, 1);
-    } else {
+    if (action === 'add' && index === -1) {
         selectedInitialsArray.push(contact);
+    } else if (action === 'remove' && index !== -1) {
+        selectedInitialsArray.splice(index, 1);
     }
 
+    saveAndDisplaySelectedContacts();
+}
+
+function saveAndDisplaySelectedContacts() {
+    saveSelectedContacts();
     selectContact();
 }
 
-function selectContact() {
-    console.log("Selected Contacts:", selectedInitialsArray);
+function createSelectedContactDiv(contact) {
+    let selectedContactDiv = document.createElement("div");
+    selectedContactDiv.innerHTML = `
+        <div class="selected-contact" data-avatarid="${contact.avatarid}">
+            <div class="contacts-img-initial">
+                <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
+                <div class="initials-overlay">${contact.name.split(' ').map(n => n[0]).join('')}</div>
+            </div>
+            <div class="contact-delete-container">
+                <div>
+                    <span>${contact.name}</span>
+                </div>
+                <span class="remove-contact" onclick="removeContact(${contact.avatarid})">
+                    <img src="./img/delete.svg">
+                </span>
+            </div>
+        </div>
+    `;
+    return selectedContactDiv;
+}
 
+function selectContact() {
     let selectedContactsContainer = document.getElementById("selectedContactsContainer");
     selectedContactsContainer.innerHTML = "";
 
     selectedInitialsArray.forEach(contact => {
-        let selectedContactDiv = document.createElement("div");
-        selectedContactDiv.innerHTML = `
-            <div class="selected-contact">
-                <div class="contacts-img-initial">
-                    <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
-                    <div class="initials-overlay">${contact.name.split(' ').map(n => n[0]).join('')}</div>
-                </div>
-                <span>${contact.name}</span>
-            </div>
-        `;
+        let selectedContactDiv = createSelectedContactDiv(contact);
         selectedContactsContainer.appendChild(selectedContactDiv);
     });
 }
+
+function saveSelectedContacts() {
+    localStorage.setItem('selectedContacts', JSON.stringify(selectedInitialsArray));
+}
+
+document.addEventListener('click', function (event) {
+    if (event.target.matches('.arrow_down')) {
+        showDropdown();
+    }
+});
+
+
+function removeContact(contactavatarId) {
+    let index = selectedInitialsArray.findIndex(contact => contact.avatarid === contactavatarId);
+
+    if (index !== -1) {
+        selectedInitialsArray.splice(index, 1);
+        selectContact();
+
+        let selectedContactsContainer = document.getElementById("selectedContactsContainer");
+        let contactToRemove = selectedContactsContainer.querySelector(`[data-avatarid="${contactavatarId}"]`);
+
+        if (contactToRemove) {
+            selectedContactsContainer.removeChild(contactToRemove);
+        }
+    }
+}
+
+
 
 // --- addToBoard remote Storage attempt --- //
 /*
@@ -204,13 +259,14 @@ async function addToBoard() {
 
     document.getElementById('taskTitleInput').value = '';
     document.getElementById('descriptionInput').value = '';
-    document.getElementById('assignedTo').value = ''; // Beachten Sie, dass es kein Element mit ID 'assignedTo' gibt, bitte überprüfen Sie die ID
+    document.getElementById('assignedTo').value = '';
     document.getElementById('date').value = '';
     document.getElementById('category').value = '';
 }
 
 
 function choose(priority) {
+    debugger
     let colorMap = { 'urgent': '#FF3D00', 'medium': '#FFA800', 'low': '#7AE229' };
     let setStyles = (elements, styles) => elements.forEach(e => e && Object.assign(e.style, styles));
 

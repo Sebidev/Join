@@ -227,6 +227,12 @@ body {
   left: 0;
 }
 
+.contact-delete-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
 .dropdown-checkbox {
   width: 100%;
   display: flex;
