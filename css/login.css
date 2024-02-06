@@ -115,7 +115,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: calc(100% - 52.5px)
+  height: calc(100% - 52.5px);
 }
 
 .login-card-container {
@@ -413,4 +413,105 @@ input:focus {
   opacity: 1 !important;
   transform: translateY(0) !important;
   transition: all 0.25s ease-in-out !important;
+}
+
+/* Media Queries */
+
+@media screen and (max-width: 600px) {
+  .content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .login-signup {
+    position: static;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 45px;
+    order: 2;
+  }
+
+  .login-signup-text {
+    width: 80%;
+    text-wrap: nowrap;
+  }
+
+  .container {
+    order: 1;
+    flex-direction: column;
+    height: auto;
+    padding-top: 150px;
+    padding-bottom: 70px;
+  }
+
+  footer {
+    order: 3;
+  }
+
+  .login-logo {
+    top: 2rem;
+    left: 2rem;
+    width: 64px;
+    height: 78.031px;
+  }
+
+  .login-card-container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .login-card {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    border-radius: 30px;
+    width: 90%;
+  }
+
+  .login-heading {
+    font-size: 2rem;
+  }
+
+  .login-input-wrapper {
+    width: 100%;
+  }
+
+  input {
+    width: 90%;
+  }
+
+  .email-icon, .lock-icon, .person-icon, .visibility-icon {
+    right: 0.75rem;
+  }
+
+  .login-button-container {
+    flex-direction: column;
+  }
+
+  .login-remember {
+    padding-left: 0;
+    justify-content: center;
+  }
+
+  .login-button-container{
+    gap: 21px;
+  }
+
+  .main-button {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .footer-container {
+    height: 100px;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .footer-link {
+    text-decoration: none;
+    color: #a8a8a8;
+    margin-bottom: 50px;
+  }
 }
