@@ -207,6 +207,7 @@ async function addToBoard() {
 }
 */
 
+/*
 async function addToBoard() {
     const taskTitle = getFieldValueById('taskTitleInput');
     const description = getFieldValueById('descriptionInput');
@@ -220,6 +221,57 @@ async function addToBoard() {
     resetFormFields();
 
     // Zum Programmieren außer Kraft gesetzt
+    //window.location.href = 'board.html';
+}
+*/
+
+async function addToBoard() {
+    const taskTitle = getFieldValueById('taskTitleInput');
+    const description = getFieldValueById('descriptionInput');
+    const date = getFieldValueById('date');
+    const category = getFieldValueById('category');
+    const subtasksList = document.getElementById('subtaskList').children;
+    const selectedContacts = getSelectedContacts();
+    containerCount++;
+
+    let task = {
+        content: {
+            title: taskTitle,
+            description: description,
+            dueDate: date,
+            category: category,
+            subtasks: subtasksList.length,
+            selectedContacts: selectedContacts,
+            boardcolumn: 'todo-column'
+        },
+        id: 'containerDiv' + containerCount
+    };
+
+    let tasks;
+    if (isUserLoggedIn) {
+        let users = JSON.parse(await getItem('users'));
+        if (users[currentUser]) {
+            tasks = users[currentUser].tasks || [];
+        } else {
+            console.error('Current user not found:', currentUser);
+        }
+    } else {
+        tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    }
+
+    tasks.push(task);
+    tasks.sort((a, b) => a.content.title.localeCompare(b.content.title));
+
+    if (isUserLoggedIn) {
+        users[currentUser].tasks = tasks;
+        await setItem('users', JSON.stringify(users));
+    } else {
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    resetFormFields();
+
+    // For development purposes
     //window.location.href = 'board.html';
 }
 
