@@ -175,17 +175,27 @@ function getValue(selector) {
     return element ? element.value : '';
 }
 
-function checkAndRenderSharedData() {
-    let tasksString = localStorage.getItem('tasks');
+async function checkAndRenderSharedData() {
+    let tasks;
 
-    if (tasksString) {
-        let tasks = JSON.parse(tasksString);
-        for (let task of tasks) {
-            renderCard(task);
-        }
+    if (isUserLoggedIn) {
+        // User is logged in, get the tasks from the remote storage
+        let usersString = await getItem('users');
+        let users = JSON.parse(usersString);
+        tasks = users[currentUser].tasks;
+    } else {
+        // User is a guest, get the tasks from the local storage
+        let tasksString = localStorage.getItem('tasks');
+        tasks = tasksString ? JSON.parse(tasksString) : [];
+    }
+
+    for (let task of tasks) {
+        renderCard(task);
     }
 }
-document.addEventListener('DOMContentLoaded', checkAndRenderSharedData);
+document.addEventListener('DOMContentLoaded', () => {
+    initUser().then(checkAndRenderSharedData);
+});
 
 function createAvatarDivs(selectedContacts) {
     let avatarDivsHTML = '';
@@ -494,7 +504,7 @@ function removeContact(contactId) {
 function createContactDropdown(callback) {
     let assignedToContainer = document.querySelector('.card-modal-assigned-to-headline');
     let cardContactsContainer = document.querySelector('.card-modal-contacts');
-    
+
     let dropdownMenu = document.createElement('div');
     dropdownMenu.classList.add('contact-dropdown-menu');
     dropdownMenu.id = 'openCardContactDropdown';

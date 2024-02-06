@@ -229,11 +229,8 @@ function getSelectedContacts() {
     return selectedContacts;
 }
 
-function saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts) {
-    containerCount++;
-    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    tasks.push({
-
+async function saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts) {
+    let task = {
         content: {
             title: taskTitle,
             description: description,
@@ -242,10 +239,20 @@ function saveToLocalStorage(taskTitle, description, date, category, subtasksList
             subtasks: subtasksList.length,
             selectedContacts: selectedContacts,
             boardColumn: 'todo-column'
-        },  id: 'task' + tasks.length,
-    });
+        },
+        id: 'task' + (isUserLoggedIn ? users[currentUser].tasks.length : (JSON.parse(localStorage.getItem('tasks')) || []).length),
+    };
 
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    if (isUserLoggedIn) {
+        // User is logged in, save the task to the remote storage
+        users[currentUser].tasks.push(task);
+        await setItem('users', JSON.stringify(users));
+    } else {
+        // User is a guest, save the task to the local storage
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks.push(task);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
 }
 
 function resetFormFields() {
