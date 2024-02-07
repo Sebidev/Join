@@ -7,6 +7,14 @@ body {
     z-index: 99;
 }
 
+.join_logo1{
+    display: none;
+    width: 32px;
+    height: 39.016px;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .userImage {
     height: 50px;
     width: 50px;
@@ -120,4 +128,34 @@ body {
 
 .avatar_icon, .help_icon {
     cursor: pointer;
+}
+
+@media (max-width: 600px) {
+    .join_logo1, .join_logo1 img {
+        display: flex;
+        width: 32px;
+        height: 39.016px;
+    }
+
+    .header {
+        padding: 20px 10px;
+    }
+
+    .logout-btn {
+        right: 10px;
+        top: 60px;
+    }
+
+    .header_text, .help_icon{
+        display: none;
+    }
+
+    .icon_box {
+        gap: 8px;
+    }
+
+    .userImage {
+        height: 40px;
+        width: 40px;
+    }
 }
