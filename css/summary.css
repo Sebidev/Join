@@ -262,6 +262,7 @@ body {
     /* 76.8px */
 }
 
+/* Media queries */
 @media only screen and (max-width: 600px) {
     .summary_container {
         flex-direction: column;
