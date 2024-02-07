@@ -1,5 +1,6 @@
 let containerCount = 0;
 let selectedInitialsArray = [];
+let selectedPriority;
 
 async function showDropdown() {
     let dropdownContent = document.getElementById("contactDropdown");
@@ -152,7 +153,7 @@ async function addToBoard() {
     resetFormFields();
 
     // Zum Programmieren außer Kraft gesetzt
-    window.location.href = 'board.html';
+    //window.location.href = 'board.html';
 }
 
 /*
@@ -257,10 +258,6 @@ async function saveToLocalStorage(taskTitle, description, date, category, subtas
     }
 }
 
-function getSelectedPriority() {
-    return localStorage.getItem('selectedPriority') || 'medium';
-}
-
 function resetFormFields() {
     ['taskTitleInput', 'descriptionInput', 'assignedTo', 'date', 'category']
         .forEach(id => document.getElementById(id).value = '');
@@ -280,7 +277,13 @@ function choose(priority) {
         setStyles([priorityImg], { filter: 'brightness(0) invert(1)' });
 
         selectedPriority = priority;
+        localStorage.setItem('selectedPriority', selectedPriority);
     }
+}
+
+function getSelectedPriority() {
+    let selectedPriority = localStorage.getItem('selectedPriority');
+    return selectedPriority;
 }
 
 document.addEventListener('DOMContentLoaded', function () {

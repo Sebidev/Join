@@ -231,6 +231,7 @@ function renderCard(data) {
         let selectedPriority = localStorage.getItem('selectedPriority');
         let selectedContacts = data.content.selectedContacts || [];
         let initialsHTML = createAvatarDivs(selectedContacts);
+        let priorityIconSrc = getPriorityIcon(selectedPriority);
 
         let renderCard = document.createElement('div');
         renderCard.id = data.id;
@@ -251,7 +252,7 @@ function renderCard(data) {
             <div class="to-do-bottom">
                 ${initialsHTML}
                 <div class="priority-symbol">
-                    <img src="${getPriorityIcon(selectedPriority)}" alt="">
+                    <img src="${priorityIconSrc}" alt="">
                 </div>
             </div>
         `;
