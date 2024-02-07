@@ -83,3 +83,39 @@ body{
 .sidemenu_element, .down_links{
     cursor: pointer;
 }
+
+/* Media Query für Geräte */
+@media only screen and (max-width: 600px) {
+    .sideboard{
+        position: fixed;
+        bottom: 80px;
+        top: auto;
+        left: auto;
+        width: 100vw;
+        height: 80px;
+        padding: 16px 0px;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .join_logo, .join_logo img{
+        display: none;
+    }
+
+    .menu_icons{
+        width: 76px;
+        height: 35px;
+    }
+
+    .sidemenu_element{
+        padding: 15px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .down{
+        display: none;
+    }
+}
