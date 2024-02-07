@@ -30,6 +30,8 @@ function showLogout() {
     <div class="popup-frame-logout" id="hide-btn" onclick="hideLogout()">
         <div onclick="doNotClose(event)">
             <div class="logout-btn">
+                <a class="mobile-btn" href="legal_notice.html">Legal notice</a>
+                <a class="mobile-btn" href="privacy_policy.html">Privacy Policy</a>
                 <div class="logout-inner-btn" onclick="logout()">Log out</div>
             </div>
         </div>

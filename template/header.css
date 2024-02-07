@@ -56,8 +56,17 @@ body {
     background: #29abe2;
 }
 
-.logout-inner-btn {
+.logout-inner-btn{
     display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #cdcdcd;
+    width: 100%;
+    height: 100%;
+}
+
+.mobile-btn, .mobile-btn a{
+    display: none;
     justify-content: center;
     align-items: center;
     color: #cdcdcd;
@@ -143,8 +152,9 @@ body {
     }
 
     .logout-btn {
-        right: 10px;
-        top: 60px;
+        right: 15px;
+        top: 70px;
+        height: 100px;
     }
 
     .header_text, .help_icon{
@@ -158,5 +168,9 @@ body {
     .userImage {
         height: 40px;
         width: 40px;
+    }
+
+    .mobile-btn, .mobile-btn a{
+        display: flex;
     }
 }

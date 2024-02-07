@@ -68,3 +68,43 @@
     background-color: #eeeeee;
     transform: scale(1.1);
 }
+
+/* Media Queries */
+@media only screen and (max-width: 600px) {
+    .headline {
+      align-items: flex-start;
+    }
+  
+    .content {
+      margin-left: 20px;
+      margin-top: 0px;
+      width: calc(100% - 40px);
+    }
+  
+    .content h1 {
+      font-size: 48px;
+    }
+  
+    .content h2 {
+      font-size: 24px;
+    }
+  
+    .content p, .content b {
+      font-size: 14px;
+    }
+  
+    .grid{
+      flex-direction: column;
+      gap: 20px;
+    }
+  
+    .backArrowHelp {
+      width: 30px;
+      height: 30px;
+      margin-top: 45px;
+    }
+  
+    .backArrowHelp:hover {
+      transform: scale(1.05);
+    }
+  }
