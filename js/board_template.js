@@ -2,7 +2,7 @@ let isPriorityOptionsOpen = false;
 //import { contacts } from './js/add-task.js';
 
 function addTask() {
-    let modalHTML = /*html*/`
+    let modalHTML = `
         <div id="overlay"></div>
         
         <div id="taskModal" class="add-task-create-open">
@@ -14,22 +14,30 @@ function addTask() {
                 <div class="Add-task-left-modal">
                     <div class="title-container">
                         <div class="title">Title</div>
-                        <input type="text" class="title-input" placeholder="Enter a title" required>
+                        <input id="taskTitleInput" type="text" class="title-input" placeholder="Enter a title" required>
                         <div class="required-info">This field is required</div>
                     </div>
 
                     <div class="description-container">
                         <div class="description">Description</div>
-                        <input type="text" class="description-input" placeholder="Enter a Description" required>
+                        <input id="descriptionInput" type="text" class="description-input" placeholder="Enter a Description" required>
                         <div class="required-info">This field is required</div>
                     </div>
 
                     <div class="assigned-to-container">
                         <div class="assigned-to">Assigned to</div>
                         <div class="input-container">
-                            <input type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
-                            <img class="arrow_down" src="./img/arrow_down.svg" alt="">
+                            <input id="assignedTo" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
+                            <img id="arrow_down" onclick="showDropdown()" class="arrow_down" src="./img/arrow_down.svg" alt="">
+                            <div id="contactDropdown" class="dropdown-content"></div>
                         </div>
+
+                        <div id="selectedContactsContainer"></div>
+                        <div class="input-container">
+                          <div class="dropdown-content"></div>
+                          <div class="arrow_down"></div>
+                        </div>
+
                         <div class="required-legend-modal">This field is required</div>
                     </div>
                 </div>
@@ -41,22 +49,22 @@ function addTask() {
                 <div class="Add-task-right-modal">
                     <div class="due-date-container">
                         <div class="due-date">Due date</div>
-                        <input class="due-date-input" type="date" placeholder="dd/mm/yyyy">
+                        <input class="due-date-input" id="date" type="date" placeholder="dd/mm/yyyy">
                     </div>
 
                     <div class="prio-container">
                         <div class="prio">Prio</div>
 
                         <div class="prio-option-container">
-                            <button onclick="choose('urgent')" class="button urgent">
+                            <button type="button" onclick="choose('urgent')" class="button urgent">
                                 <h3>Urgent</h3>
                                 <img src="./img/Prio_up.svg" alt="">
                             </button>
-                            <button onclick="choose('medium')" class="button medium">
+                            <button type="button" onclick="choose('medium')" class="button medium">
                                 <h3>Medium</h3>
                                 <img src="./img/Prio_neutral.svg" alt="">
                             </button>
-                            <button onclick="choose('low')" class="button low">
+                            <button type="button" onclick="choose('low')" class="button low">
                                 <h3>Low</h3>
                             <img src="./img/Prio_down.svg" alt="">
                             </button>
@@ -66,7 +74,7 @@ function addTask() {
                     <div class="category-container">
                         <div class="category">Category</div>
                         <div class="input-container">
-                            <input class="category-dropdown" type="text" placeholder="Select contacts to assign">
+                            <input id="category" class="category-dropdown" type="text" placeholder="Select contacts to assign">
                             <img class="arrow_down" src="./img/arrow_down.svg" onclick="toggleCategoryOptions()" alt="">
                             <div class="category-options" id="categoryOptions">
                                 <label onclick="updateSelectedCategory('Technical task')">
@@ -82,9 +90,9 @@ function addTask() {
                     <div class="subtasks-container">
                         <div class="subtasks-add-task">Subtasks</div>
                         <div class="input-container-subtask">
-                            <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask" onclick="changeSubImg()" id="subtask">
+                            <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask"id="subtask">
                             <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" onclick="addSubtask()">
-                            <div class="subImgContainer" id="subImgContainer">
+                            <div class="subImgContainer">
                             </div>   
                         </div>
                         <div class="subtask-list" id="subtaskList"></div>
@@ -96,7 +104,7 @@ function addTask() {
                             <img src="./img/iconoir_cancel.svg" alt="">
                         </button>
 
-                        <button class="create-task-button-modal" onclick="createTask()">
+                        <button class="create-task-button-modal" onclick="addToBoard()">
                             <h3>Create Task</h3>
                             <img src="./img/check.svg" alt="">
                         </button>
