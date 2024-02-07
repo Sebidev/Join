@@ -140,7 +140,7 @@ body {
 .to-do-section,
 .in-progress-section {
   width: 252px;
-  height: 500px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -170,6 +170,7 @@ body {
   box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.08);
   flex-direction: column;
   align-items: flex-start;
+  cursor: pointer;
 }
 
 .card-user-story-progress {
@@ -980,5 +981,4 @@ body {
 	gap: 20px;
 	box-sizing: border-box;
 	border-radius: 20px;
-	padding: 8px;
 }
