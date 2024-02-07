@@ -225,7 +225,7 @@ function createAvatarDivs(selectedContacts) {
 
 function renderCard(data) {
     if (data && data.content) {
-        let containerDiv = document.getElementById('todo-column');
+        let containerDiv = document.getElementById(data.content.boardColumn);
         let categoryClass = data.content.category === 'Technical task' ? 'technical-task' : 'user-story';
         let createdSubtasks = data.content.subtasks;
         let selectedPriority = data.content.priority;
@@ -237,6 +237,11 @@ function renderCard(data) {
         renderCard.id = data.id;
         renderCard.className = 'card-user-story';
         renderCard.onclick = () => openCard(data);
+
+        renderCard.draggable = true;
+        renderCard.ondragstart = (event) => startDragging(event);
+        renderCard.ondragend = (event) => endDragging(event);
+        renderCard.ondragover = (event) => preventDragOver(event);
 
         renderCard.innerHTML = `
             <p class="${categoryClass}">${data.content.category}</p>
