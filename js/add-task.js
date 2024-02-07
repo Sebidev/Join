@@ -145,8 +145,9 @@ async function addToBoard() {
     let category = getFieldValueById('category');
     let subtasksList = document.getElementById('subtaskList').children;
     let selectedContacts = getSelectedContacts();
+    let selectedPriority = getSelectedPriority();
 
-    saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts);
+    saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority);
 
     resetFormFields();
 
@@ -229,7 +230,7 @@ function getSelectedContacts() {
     return selectedContacts;
 }
 
-async function saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts) {
+async function saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority) {
     let task = {
         content: {
             title: taskTitle,
@@ -238,6 +239,7 @@ async function saveToLocalStorage(taskTitle, description, date, category, subtas
             category: category,
             subtasks: subtasksList.length,
             selectedContacts: selectedContacts,
+            priority: selectedPriority,
             boardColumn: 'todo-column'
         },
         id: 'task' + (isUserLoggedIn ? users[currentUser].tasks.length : (JSON.parse(localStorage.getItem('tasks')) || []).length),
@@ -253,6 +255,10 @@ async function saveToLocalStorage(taskTitle, description, date, category, subtas
         tasks.push(task);
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }
+}
+
+function getSelectedPriority() {
+    return localStorage.getItem('selectedPriority') || 'medium';
 }
 
 function resetFormFields() {
