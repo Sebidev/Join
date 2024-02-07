@@ -153,7 +153,7 @@ async function addToBoard() {
     resetFormFields();
 
     // Zum Programmieren außer Kraft gesetzt
-    //window.location.href = 'board.html';
+    window.location.href = 'board.html';
 }
 
 /*
