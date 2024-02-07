@@ -130,6 +130,7 @@ body {
     cursor: pointer;
 }
 
+/* Media Query */
 @media (max-width: 600px) {
     .join_logo1, .join_logo1 img {
         display: flex;

@@ -13,6 +13,7 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: start;
+    width: 100%;
     margin-top: 55px;
     margin-bottom: 48px;
     color: #000;
@@ -21,7 +22,6 @@ body {
     font-style: normal;
     font-weight: 700;
     line-height: 120%;
-    /* 73.2px */
     margin-left: 350px;
 }
 
@@ -260,4 +260,97 @@ body {
     font-weight: 700;
     line-height: 120%;
     /* 76.8px */
+}
+
+@media only screen and (max-width: 600px) {
+    .summary_container {
+        flex-direction: column;
+        align-items: center;
+        height: 175vh;
+        gap: 0px;
+    }
+
+    .column_container {
+        width: 95%;
+        margin: 0;
+        order: 2;
+    }
+
+    .header_summary {
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 47px;
+        margin-left: 20px;
+    }
+
+    .header_summary .verticalbar {
+        margin-left: 0;
+        margin-right: 0;
+        transform: rotate(90deg);
+    }
+
+    .verticalbar img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .header_summary_text {
+        font-size: 20px;
+    }
+
+    .right_textbox {
+        align-items: center;
+        justify-content: center;
+        height: 75vh;
+        order: 1;
+    }
+
+    .right_textgray, .right_textlightblue {
+        text-align: center; 
+    }
+
+    .boxs_box{
+        width: 100%;
+        margin: 0;
+    }
+    
+    .box_pencil, .box_check{
+        width: 141px;
+        height: 50px;
+        gap: 10px;
+        padding: 38px 19px;
+    }
+
+    .box_urgency {
+        width: 357px;
+        height: 81px;
+        padding: 25px 17px;
+        gap: 20px;
+    }
+
+    .box_number, .box_small_number{
+        font-size: 47px;
+    }
+
+    .box_text{
+        display: flex;
+        justify-content: center;
+        font-size: 14px;
+    }
+
+    .box_icon{
+        width: 40px;
+        height: 40px;
+    }
+
+    .box_small{
+        width: 115px;
+        height: 58px;
+        padding: 25px 0px;
+        gap: 13px;
+    }
+
+    .box_small_text, .box_small_text2{
+        font-size: 13px;
+    }
 }
