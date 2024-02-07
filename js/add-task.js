@@ -31,7 +31,7 @@ function getLocalStorageContacts() {
 }
 
 function initializeContactDropdown() {
-    if (window.location.pathname.endsWith("add-task.html")) {
+    if (window.location.pathname.endsWith("add-task.html") || window.location.pathname.endsWith("board.html")) {
         document.addEventListener('click', function (event) {
             let dropdown = document.getElementById('contactDropdown');
 
