@@ -139,7 +139,6 @@ function removeContact(contactavatarId) {
 }
 
 async function addToBoard() {
-    
     let taskTitle = getFieldValueById('taskTitleInput');
     let description = getFieldValueById('descriptionInput');
     let date = getFieldValueById('date');
@@ -230,22 +229,30 @@ function getSelectedContacts() {
     return selectedContacts;
 }
 
-function saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts) {
-    containerCount++;
-
-    localStorage.setItem('selectedPriority', selectedPriority);
-
-    localStorage.setItem('sharedData', JSON.stringify({
+async function saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts) {
+    let task = {
         content: {
             title: taskTitle,
             description: description,
             date: date,
             category: category,
             subtasks: subtasksList.length,
-            selectedContacts: selectedContacts
+            selectedContacts: selectedContacts,
+            boardColumn: 'todo-column'
         },
-        id: 'containerDiv' + containerCount
-    }));
+        id: 'task' + (isUserLoggedIn ? users[currentUser].tasks.length : (JSON.parse(localStorage.getItem('tasks')) || []).length),
+    };
+
+    if (isUserLoggedIn) {
+        // User is logged in, save the task to the remote storage
+        users[currentUser].tasks.push(task);
+        await setItem('users', JSON.stringify(users));
+    } else {
+        // User is a guest, save the task to the local storage
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks.push(task);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
 }
 
 function resetFormFields() {
