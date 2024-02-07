@@ -276,14 +276,14 @@ function choose(priority) {
         setStyles([priorityButton], { backgroundColor: colorMap[priority] });
         setStyles([priorityImg], { filter: 'brightness(0) invert(1)' });
 
-        selectedPriority = priority;
-        localStorage.setItem('selectedPriority', selectedPriority);
+        localStorage.setItem('selectedPriority', priority);
+        return priority;
     }
+    return null;
 }
 
 function getSelectedPriority() {
-    let selectedPriority = localStorage.getItem('selectedPriority');
-    return selectedPriority;
+    return localStorage.getItem('selectedPriority');
 }
 
 document.addEventListener('DOMContentLoaded', function () {

@@ -228,7 +228,7 @@ function renderCard(data) {
         let containerDiv = document.getElementById('todo-column');
         let categoryClass = data.content.category === 'Technical task' ? 'technical-task' : 'user-story';
         let createdSubtasks = data.content.subtasks;
-        let selectedPriority = localStorage.getItem('selectedPriority');
+        let selectedPriority = data.content.priority;
         let selectedContacts = data.content.selectedContacts || [];
         let initialsHTML = createAvatarDivs(selectedContacts);
         let priorityIconSrc = getPriorityIcon(selectedPriority);
