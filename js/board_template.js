@@ -56,18 +56,24 @@ function addTask() {
                         <div class="prio">Prio</div>
 
                         <div class="prio-option-container">
-                            <button type="button" onclick="choose('urgent')" class="button urgent">
-                                <h3>Urgent</h3>
-                                <img src="./img/Prio_up.svg" alt="">
-                            </button>
-                            <button type="button" onclick="choose('medium')" class="button medium">
-                                <h3>Medium</h3>
-                                <img src="./img/Prio_neutral.svg" alt="">
-                            </button>
-                            <button type="button" onclick="choose('low')" class="button low">
-                                <h3>Low</h3>
-                            <img src="./img/Prio_down.svg" alt="">
-                            </button>
+                          <button
+                            type="button"
+                            onclick="choose('urgent')"
+                            class="button urgent">
+                            <h3>Urgent</h3>
+                            <img src="./img/Prio_up.svg" alt="" />
+                          </button>
+                          <button
+                            type="button"
+                            onclick="choose('medium')"
+                            class="button medium">
+                            <h3>Medium</h3>
+                            <img src="./img/Prio_neutral.svg" alt="" />
+                          </button>
+                          <button type="button" onclick="choose('low')" class="button low">
+                            <h3>Low</h3>
+                            <img src="./img/Prio_down.svg" alt="" />
+                          </button>
                         </div>
                     </div>
 
@@ -122,6 +128,7 @@ function addTask() {
     overlay.style.display = 'block';
 }
 
+/*
 function choose(priority) {
     let colorMap = { 'urgent': '#FF3D00', 'medium': '#FFA800', 'low': '#7AE229' };
     let setStyles = (elements, styles) => elements.forEach(e => e && Object.assign(e.style, styles));
@@ -142,6 +149,7 @@ function choose(priority) {
 document.addEventListener('DOMContentLoaded', function () {
     choose('medium');
 });
+*/
 
 function clearFields() {
     let inputFields = document.querySelectorAll('.Add-task input, .Add-task textarea');
