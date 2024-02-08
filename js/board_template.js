@@ -2,8 +2,8 @@ let isPriorityOptionsOpen = false;
 let globalData;
 //import { contacts } from './js/add-task.js';
 
-function addTask() {
-    let modalHTML = `
+function addTask(column) {
+    let modalHTML = /*html*/`
         <div id="overlay"></div>
         
         <div id="taskModal" class="add-task-create-open">
@@ -111,7 +111,7 @@ function addTask() {
                             <img src="./img/iconoir_cancel.svg" alt="">
                         </button>
 
-                        <button class="create-task-button-modal" onclick="addToBoard()">
+                        <button class="create-task-button-modal" onclick="addToBoard('${column}')">
                             <h3>Create Task</h3>
                             <img src="./img/check.svg" alt="">
                         </button>
