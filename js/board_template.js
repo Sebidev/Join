@@ -335,7 +335,9 @@ function openCard(data, subtasksData) {
             <p class="card-modal-content">${data.content.description}</p>
 
             <div class="card-modal-date">
-                <p class="due-date-card-modal">${data.content.date}</p>
+                <p class="due-date-card-modal">Due date: 
+                    <p id="dueDateText">${data.content.date}</p>
+                </p>
                 <div class="card-modal-date-number">
                     <p id="datePicker"></p>
                 </div>
@@ -422,6 +424,7 @@ function openCard(data, subtasksData) {
 }
 
 function restoreCheckboxStatus() {
+    
     let checkboxStatus = JSON.parse(localStorage.getItem('checkboxStatus')) || {};
 
     document.querySelectorAll('.subtask-checkbox').forEach((checkbox, index) => {
@@ -438,6 +441,7 @@ document.addEventListener('change', function(event) {
 function edit() {
     let titleElement = document.querySelector('.card-modal-title');
     let contentElement = document.querySelector('.card-modal-content');
+    let dueDateText = document.getElementById('dueDateText');
     let dateContainer = document.querySelector('.card-modal-date-number');
     let priorityContainer = document.querySelector('.card-modal-priority');
 
@@ -448,20 +452,30 @@ function edit() {
     contentElement.style.border = '1px solid #3498db';
 
     let dateInput = document.createElement('input');
-    dateInput.type = 'date';
+    dateInput.type = 'text';
     dateInput.classList.add('dateInput');
-    dateInput.value = dateContainer.querySelector('p').textContent;
-    dateContainer.innerHTML = '';
+
+    let existingDate = dueDateText.textContent.replace('Due date: ', '');
+
+    dateInput.value = existingDate;
+
+    dueDateText.innerHTML = '';
+
     dateContainer.appendChild(dateInput);
+
+    $(dateInput).datepicker({
+        dateFormat: 'yy-mm-dd',
+        showButtonPanel: true
+    });
 
     priorityContainer.contentEditable = true;
     priorityContainer.style.border = '1px solid #3498db';
     priorityContainer.addEventListener('click', openPriorityOptions);
 
-    let priorityImgElement = document.querySelector('.card-modal-priority-symbol img');
-    let priorityh3Element = document.querySelector('.card-modal-priority h3');
-    priorityImgElement.addEventListener('click', openPriorityOptions);
-    priorityh3Element.addEventListener('click', openPriorityOptions);
+    //let priorityImgElement = document.querySelector('.card-modal-priority-symbol img');
+    //let priorityh3Element = document.querySelector('.card-modal-priority h3');
+    //priorityImgElement.addEventListener('click', openPriorityOptions);
+    //priorityh3Element.addEventListener('click', openPriorityOptions);
 
     let contacts = document.querySelectorAll('.card-modal-contact');
     contacts.forEach(contact => {
@@ -474,7 +488,15 @@ function edit() {
 
         contact.querySelector('.card-modal-contact-and-image').appendChild(removeButton);
     });
+/*
+    let saveButton = document.getElementById('saveButton'); 
+    saveButton.addEventListener('click', function () {
+        let updatedDate = $(dateInput).datepicker('getDate');
+        updatedDate = $.datepicker.formatDate('yy-mm-dd', updatedDate);
 
+        dueDateText.textContent = `Due date: ${updatedDate}`;
+    });
+*/
     createContactDropdown(() => {
         updateCheckboxState();
     });
@@ -565,16 +587,17 @@ function removeContact(contactId) {
     }
 }
 
-function createContactDropdown(callback) {
+function createContactDropdown() {
     let assignedToContainer = document.querySelector('.card-modal-assigned-to-headline');
     let cardContactsContainer = document.querySelector('.card-modal-contacts');
-
+    
     let dropdownMenu = document.createElement('div');
     dropdownMenu.classList.add('contact-dropdown-menu');
     dropdownMenu.id = 'openCardContactDropdown';
     dropdownMenu.style.width = `${cardContactsContainer.offsetWidth}px`;
+    dropdownMenu.innerHTML = '<img id="arrow_down" onclick="showDropdown()" class="arrow_down" src="./img/arrow_down.svg" alt="">';
 
-    if (window.contacts) {
+
         contacts.forEach(contact => {
             let isSelected = selectedInitialsArray.includes(contact.initial);
 
@@ -587,25 +610,21 @@ function createContactDropdown(callback) {
                     </div>
                     <div class="dropdown-checkbox">
                         <div style="margin-left: 5px;">${contact.name}</div>
-                        <input type="checkbox" class="contact-checkbox" ${isSelected ? 'checked' : ''} data-contact-id="${contact.id}">
+                        <input type="checkbox" class="contact-checkbox" ${isSelected ? 'checked' : ''}>
                     </div>
                 </label>
             `;
 
-            let labelElement = contactCardModal.querySelector('.contacts');
-            let inputElement = contactCardModal.querySelector('.contact-checkbox');
-
-            labelElement.addEventListener("click", (event) => {
-                toggleContactSelectionCardModal(contact, inputElement);
-            });
-
-            inputElement.addEventListener("click", (event) => {
-                toggleContactSelectionCardModal(contact, inputElement);
-            });
-
+             let labelElement = contactCardModal.querySelector('.contacts');
+             labelElement.addEventListener("click", () => {
+                 let checkboxElement = labelElement.querySelector('.contact-checkbox');
+                 checkboxElement.checked = !checkboxElement.checked;
+ 
+                 toggleContactSelectionCardModal(contact);
+             });
             dropdownMenu.appendChild(contactCardModal);
         });
-    }
+    
 
     let arrowIcon = document.createElement('span');
     arrowIcon.classList.add('arrow-down-icon');
@@ -619,8 +638,7 @@ function createContactDropdown(callback) {
 
     assignedToContainer.appendChild(arrowIcon);
     assignedToContainer.appendChild(dropdownMenu);
-
-    callback();
+    document.body.appendChild(dropdownMenu);
 }
 
 function assignContact(contact) {
