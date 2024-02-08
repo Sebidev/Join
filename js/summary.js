@@ -1,8 +1,6 @@
 let currentDate = new Date();
 let currentTime = new Date().getHours();
 
-
-
 /**
  * get data from backend server and render the content
  */
@@ -80,3 +78,27 @@ function formatDate(dateString) {
   
     document.getElementById("greetingTimed").innerHTML = greeting;
   }
+
+/**
+ * summary page only mobile animation play
+ */
+document.addEventListener('DOMContentLoaded', function() {
+  // Überprüfen Sie, ob die Fensterbreite weniger als 600px beträgt
+  if (window.innerWidth <= 600) {
+    var rightTextbox = document.querySelector('.right_textbox');
+    var summary = document.querySelector('.summary');
+
+    // Stellen Sie sicher, dass rightTextbox zuerst sichtbar ist und summary versteckt ist
+    if (rightTextbox) rightTextbox.classList.add('visible');
+    if (summary) summary.classList.add('hidden');
+    if (summary) summary.style.display = "none";
+
+    // Nach 3 Sekunden, verstecken Sie rightTextbox
+    setTimeout(function() {
+        if (rightTextbox) rightTextbox.classList.remove('visible');
+        if (rightTextbox) rightTextbox.style.display = "none";
+        if (summary) summary.classList.remove('hidden');
+        if (summary) summary.style.display = "flex";
+    }, 3000);
+  }
+});
