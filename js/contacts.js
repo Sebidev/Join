@@ -222,21 +222,24 @@ async function loadContacts() {
  * @description This function creates demo contacts if the user has no contacts yet.
  */
 async function createDemoContacts() {
-    let contacts;
+    let contacts = [
+        { id: generateId(), avatarid: rollDice(), name: 'Anton Mayer', email: 'antom@gmail.com', phone: '+49123456789'},
+        { id: generateId(), avatarid: rollDice(), name: 'Anja Schulz', email: 'schulz@hotmail.com', phone: '+49123456789'},
+        { id: generateId(), avatarid: rollDice(), name: 'Benedikt Ziegler', email: 'benedikt@gmail.com', phone: '+49123456789'},
+        { id: generateId(), avatarid: rollDice(), name: 'David Eisenberg', email: 'davidberg@gmail.com', phone: '+49123456789'},
+        { id: generateId(), avatarid: rollDice(), name: 'Eva Fischer', email: 'eva@gmail.com', phone: '+49123456789'},
+        { id: generateId(), avatarid: rollDice(), name: 'Emmanuel Mauer', email: 'emmanuelma@gmail.com', phone: '+49123456789'},
+        { id: generateId(), avatarid: rollDice(), name: 'Marcel Bauer', email: 'bauer@gmail.com', phone: '+49123456789' },
+        { id: generateId(), avatarid: rollDice(), name: 'Tatjana Wolf', email: 'wolf@gmail.com', phone: '+49123456789' },];
 
     if (isUserLoggedIn) {
         let users = JSON.parse(await getItem('users'));
         if (users[currentUser]) {
-            contacts = users[currentUser].contacts;
-
             if(!users[currentUser].contacts || Object.keys(users[currentUser].contacts).length === 0) {
-                contacts = [
-                    { id: generateId(), avatarid: rollDice(), name: users[currentUser].firstName, email: users[currentUser].email, phone: '+49123456789'}
-                ];
-
-                users[currentUser].contacts = contacts;
-                await setItem('users', JSON.stringify(users));
+                users[currentUser].contacts = contacts.concat({ id: generateId(), avatarid: rollDice(), name: users[currentUser].firstName, email: users[currentUser].email, phone: '+49123456789'});
+                contacts.sort((a, b) => a.name.localeCompare(b.name));
             }
+            await setItem('users', JSON.stringify(users));
         } else {
             console.error('Aktueller Benutzer nicht gefunden:', currentUser);
         }
@@ -245,15 +248,7 @@ async function createDemoContacts() {
         contacts = JSON.parse(localStorage.getItem('contacts')) || [];
 
         if (!contacts || Object.keys(contacts).length === 0) {
-            contacts = [
-                { id: generateId(), avatarid: rollDice(), name: 'Anton Mayer', email: 'antom@gmail.com', phone: '+49123456789'},
-                { id: generateId(), avatarid: rollDice(), name: 'Anja Schulz', email: 'schulz@hotmail.com', phone: '+49123456789'},
-                { id: generateId(), avatarid: rollDice(), name: 'Benedikt Ziegler', email: 'benedikt@gmail.com', phone: '+49123456789'},
-                { id: generateId(), avatarid: rollDice(), name: 'David Eisenberg', email: 'davidberg@gmail.com', phone: '+49123456789'},
-                { id: generateId(), avatarid: rollDice(), name: 'Eva Fischer', email: 'eva@gmail.com', phone: '+49123456789'},
-                { id: generateId(), avatarid: rollDice(), name: 'Emmanuel Mauer', email: 'emmanuelma@gmail.com', phone: '+49123456789'},
-                { id: generateId(), avatarid: rollDice(), name: 'Marcel Bauer', email: 'bauer@gmail.com', phone: '+49123456789' },
-                { id: generateId(), avatarid: rollDice(), name: 'Tatjana Wolf', email: 'wolf@gmail.com', phone: '+49123456789' },];
+
             localStorage.setItem('contacts', JSON.stringify(contacts));
         }
     }

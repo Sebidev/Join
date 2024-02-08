@@ -6,7 +6,7 @@ async function showDropdown() {
     let dropdownContent = document.getElementById("contactDropdown");
     dropdownContent.innerHTML = "";
 
-    let contacts = getContacts();
+    let contacts = await getContacts();
 
     contacts.forEach(contact => {
         let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id);
@@ -18,13 +18,13 @@ async function showDropdown() {
     dropdownContent.style.display = 'block';
 }
 
-function getContacts() {
+async function getContacts() {
     return isUserLoggedIn ? getUserContacts() : getLocalStorageContacts();
 }
 
-function getUserContacts() {
-    let users = JSON.parse(getItem('users'));
-    return users[currentUser]?.contacts || [];
+async function getUserContacts() {
+    let users = await getItem('users');
+    return JSON.parse(users)[currentUser]?.contacts || [];
 }
 
 function getLocalStorageContacts() {
