@@ -36,12 +36,14 @@ function initializeContactDropdown() {
         document.addEventListener('click', function (event) {
             let dropdown = document.getElementById('contactDropdown');
 
-            if (!event.target.matches('.arrow_down') && !event.target.closest('.assigned-to-container')) {
-                dropdown.style.display = 'none';
-            }
+            if (dropdown) {
+                if (!event.target.matches('.arrow_down') && !event.target.closest('.assigned-to-container')) {
+                    dropdown.style.display = 'none';
+                }
 
-            if (event.target.id === 'assignedTo') {
-                showDropdown();
+                if (event.target.id === 'assignedTo') {
+                    showDropdown();
+                }
             }
         });
     }
@@ -140,7 +142,6 @@ function removeContact(contactavatarId) {
 }
 
 async function addToBoard() {
-    debugger
     let taskTitle = getFieldValueById('taskTitleInput');
     let description = getFieldValueById('descriptionInput');
     let date = getFieldValueById('date');
@@ -154,7 +155,7 @@ async function addToBoard() {
     resetFormFields();
 
     // Zum Programmieren außer Kraft gesetzt
-    window.location.href = 'board.html';
+    //window.location.href = 'board.html';
 }
 
 /*
@@ -233,6 +234,10 @@ function getSelectedContacts() {
 }
 
 async function saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority) {
+    console.log(subtasksList); 
+
+    let subtasksData = Array.from(subtasksList).map(subtask => subtask.firstElementChild.innerText);
+
     let task = {
         content: {
             title: taskTitle,
@@ -240,6 +245,7 @@ async function saveToLocalStorage(taskTitle, description, date, category, subtas
             date: date,
             category: category,
             subtasks: subtasksList.length,
+            subtasksData: subtasksData,
             selectedContacts: selectedContacts,
             priority: selectedPriority,
             boardColumn: 'todo-column'

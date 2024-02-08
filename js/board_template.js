@@ -1,4 +1,5 @@
 let isPriorityOptionsOpen = false;
+let globalData;
 //import { contacts } from './js/add-task.js';
 
 function addTask() {
@@ -236,6 +237,7 @@ function renderCard(data) {
         let containerDiv = document.getElementById(data.content.boardColumn);
         let categoryClass = data.content.category === 'Technical task' ? 'technical-task' : 'user-story';
         let createdSubtasks = data.content.subtasks;
+        let subtasksData = data.content.subtasksData || [];
         let selectedPriority = data.content.priority;
         let selectedContacts = data.content.selectedContacts || [];
         let initialsHTML = createAvatarDivs(selectedContacts);
@@ -244,7 +246,7 @@ function renderCard(data) {
         let renderCard = document.createElement('div');
         renderCard.id = data.id;
         renderCard.className = 'card-user-story';
-        renderCard.onclick = () => openCard(data);
+        renderCard.onclick = () => openCard(data, subtasksData);
 
         renderCard.draggable = true;
         renderCard.ondragstart = (event) => startDragging(event);
@@ -259,7 +261,9 @@ function renderCard(data) {
             </div>
             <p style="display: none">${data.content.date}</p>
             <div class="progress">
-                <div class="progress-bar"></div>
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
                 <div class="subtasks">0/${createdSubtasks} Subtasks</div>
             </div>
             <div class="to-do-bottom">
@@ -269,9 +273,32 @@ function renderCard(data) {
                 </div>
             </div>
         `;
-
+        globalData = data; 
         containerDiv.appendChild(renderCard);
     }
+}
+
+function updateProgressBar() {
+    let totalSubtasks = document.querySelectorAll('.subtask-checkbox').length;
+    let checkedSubtasks = document.querySelectorAll('.subtask-checkbox:checked').length;
+    let progressFill = document.getElementById('progressFill');
+    let percentage = (checkedSubtasks / totalSubtasks) * 100;
+
+    progressFill.style.width = `${percentage}%`;
+
+    saveCheckboxStatus();
+
+    let subtasksInfo = document.querySelector('.subtasks');
+    subtasksInfo.textContent = `${checkedSubtasks}/${totalSubtasks} Subtasks`;
+}
+
+
+function saveCheckboxStatus() {
+    let checkboxStatus = {};
+    document.querySelectorAll('.subtask-checkbox').forEach((checkbox, index) => {
+        checkboxStatus[index] = checkbox.checked;
+    });
+    localStorage.setItem('checkboxStatus', JSON.stringify(checkboxStatus));
 }
 
 function getPriorityIcon(priority) {
@@ -287,8 +314,12 @@ function getPriorityIcon(priority) {
     }
 }
 
-function openCard(data) {
-    let openCardHTML = /*html*/`
+function openCard(data, subtasksData) {
+    let selectedPriority = data.content.priority;
+    let priorityIconSrc = getPriorityIcon(selectedPriority);
+    
+
+    let openCardHTML = `
     <div id="card-overlay"></div>
     <div id="cardModal" class="card-modal">
             <div class="task-categorie">
@@ -306,15 +337,15 @@ function openCard(data) {
             <div class="card-modal-date">
                 <p class="due-date-card-modal">${data.content.date}</p>
                 <div class="card-modal-date-number">
-                    <p id="datePicker">10/05/2023</p>
+                    <p id="datePicker"></p>
                 </div>
             </div>
 
             <div class="card-modal-priority">
-                <p class="card-modal-priority-letter">Priority:</p>
-                <h3> Medium </h3>
+                <p class="card-modal-priority-letter">Priority: <p>${data.content.priority}</p></p>
+                
                 <div class="card-modal-priority-symbol">
-                    <img src="./img/Prio_neutral.svg" alt="">
+                    <img src="${priorityIconSrc}" alt="">
                 </div>
             </div>
 
@@ -350,19 +381,13 @@ function openCard(data) {
             <div class="card-modal-subtasks-container">
                 <p class="card-modal-subtasks-container-headline">Subtasks</p>
                 <div class="card-modal-subtasks">
-                    <div class="card-modal-subtask-maincontainer">
-                        <div class="card-modal-subtask-checked">
-                            <img src="./img/check_button_checked.svg">
-                        </div>
-                        <div class="card-modal-subtask-description">Implement Recipe Recommendation</div>
+                ${(data.content.subtasksData || []).map(subtask => `
+                <div class="card-modal-subtask-maincontainer">
+                    <div class="card-modal-subtask-checked"> 
+                    <input type="checkbox" class="subtask-checkbox">                    
                     </div>
-
-                    <div class="card-modal-subtask-maincontainer">
-                        <div class="card-modal-subtask">
-                            <img src="./img/check button.svg">
-                        </div>
-                        <div class="card-modal-subtask-description">Start Page Layout</div>
-                    </div>  
+                    <div class="card-modal-subtask-description">${subtask}</div>
+                </div>`).join('')}
                 </div>
             </div>
 
@@ -389,9 +414,26 @@ function openCard(data) {
 
     document.body.insertAdjacentHTML('beforeend', openCardHTML);
 
+    updateProgressBar(globalData);
     let cardOverlay = document.getElementById('card-overlay');
     cardOverlay.style.display = 'block';
+
+    restoreCheckboxStatus();
 }
+
+function restoreCheckboxStatus() {
+    let checkboxStatus = JSON.parse(localStorage.getItem('checkboxStatus')) || {};
+
+    document.querySelectorAll('.subtask-checkbox').forEach((checkbox, index) => {
+        checkbox.checked = checkboxStatus[index] || false;
+    });
+}
+
+document.addEventListener('change', function(event) {
+    if (event.target.type === 'checkbox' && event.target.classList.contains('subtask-checkbox')) {
+        updateProgressBar(globalData);
+    }
+});
 
 function edit() {
     let titleElement = document.querySelector('.card-modal-title');

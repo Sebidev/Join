@@ -330,11 +330,10 @@ body {
   gap: 10px;
 }
 
-.progress-fill-in-progress {
-  width: 64px;
-  height: 8px;
+.progress-fill {
   align-self: stretch;
   border-radius: 16px;
+  height: 100%;
   background: var(--Version-2-main-color, #4589ff);
 }
 
