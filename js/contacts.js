@@ -222,7 +222,7 @@ async function loadContacts() {
  * @description This function creates demo contacts if the user has no contacts yet.
  */
 async function createDemoContacts() {
-    let contacts = [
+    let demoContacts = [
         { id: generateId(), avatarid: rollDice(), name: 'Anton Mayer', email: 'antom@gmail.com', phone: '+49123456789'},
         { id: generateId(), avatarid: rollDice(), name: 'Anja Schulz', email: 'schulz@hotmail.com', phone: '+49123456789'},
         { id: generateId(), avatarid: rollDice(), name: 'Benedikt Ziegler', email: 'benedikt@gmail.com', phone: '+49123456789'},
@@ -236,8 +236,8 @@ async function createDemoContacts() {
         let users = JSON.parse(await getItem('users'));
         if (users[currentUser]) {
             if(!users[currentUser].contacts || Object.keys(users[currentUser].contacts).length === 0) {
-                users[currentUser].contacts = contacts.concat({ id: generateId(), avatarid: rollDice(), name: users[currentUser].firstName, email: users[currentUser].email, phone: '+49123456789'});
-                contacts.sort((a, b) => a.name.localeCompare(b.name));
+                users[currentUser].contacts = demoContacts.concat({ id: generateId(), avatarid: rollDice(), name: users[currentUser].firstName, email: users[currentUser].email, phone: '+49123456789'});
+                demoContacts.sort((a, b) => a.name.localeCompare(b.name));
             }
             await setItem('users', JSON.stringify(users));
         } else {
@@ -245,11 +245,10 @@ async function createDemoContacts() {
         }
         
     } else {
-        contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+        let storedContacts = JSON.parse(localStorage.getItem('contacts')) || [];
 
-        if (!contacts || Object.keys(contacts).length === 0) {
-
-            localStorage.setItem('contacts', JSON.stringify(contacts));
+        if (!storedContacts || storedContacts.length === 0) {
+            localStorage.setItem('contacts', JSON.stringify(demoContacts));
         }
     }
 }
