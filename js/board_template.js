@@ -186,6 +186,8 @@ function closeOpenCard() {
 
     cardOverlay.remove();
     cardModal.remove();
+
+    endEdit(); 
 }
 
 function getValue(selector) {
