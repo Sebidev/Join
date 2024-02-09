@@ -862,11 +862,55 @@ body {
 }
 
 .card-modal-subtask-maincontainer {
+  position: relative;
   display: flex;
   height: 20px;
+  width: 80%;
   padding: 6px 16px;
   align-items: center;
   gap: 16px;
+}
+
+
+
+.subtask-icons-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px;
+  background-color: #f0f0f0;
+}
+
+.card-modal-subtask-maincontainer:hover .subtask-icons-container {
+  display: block;
+  width: 100px;
+  height: 18px;
+}
+
+.subtasks-edit-icons-container {
+  display: flex;
+}
+
+.subtasks-edit-icons-container-p {
+  display: flex;
+}
+
+.subtask-icon-edit img {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.subtask-icon-edit {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.subtask-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
 }
 
 .card-modal-subtask-checked {
@@ -949,7 +993,7 @@ body {
 }
 
 .card-modal-priority-options-container {
-  top: 26px;
+  top: 52px;
   position: absolute;
   z-index: 1001;
   width: 100%;

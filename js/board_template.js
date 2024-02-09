@@ -187,7 +187,7 @@ function closeOpenCard() {
     cardOverlay.remove();
     cardModal.remove();
 
-    endEdit(); 
+    endEdit();
 }
 
 function getValue(selector) {
@@ -347,8 +347,7 @@ function openCard(data, subtasksData) {
             </div>
 
             <div class="card-modal-priority">
-                <p class="card-modal-priority-letter">Priority: <p>${data.content.priority}</p></p>
-                
+                <p>Priority: <span class="card-modal-priority-letter">${data.content.priority}</span></p>
                 <div class="card-modal-priority-symbol">
                     <img src="${priorityIconSrc}" alt="">
                 </div>
@@ -372,6 +371,14 @@ function openCard(data, subtasksData) {
                     <input type="checkbox" class="subtask-checkbox">                    
                     </div>
                     <div class="card-modal-subtask-description">${subtask}</div>
+                        <div class="subtasks-edit-icons-container">
+                            <div class="subtasks-edit-icons-container-p">
+                                <p class="subtask-icon-edit"><img src="./img/edit.svg" alt="Edit Subtask"></p>
+                                <p class="subtask-icon-edit"><img src="./img/divider.svg" alt="Divider"></p>
+                                <p class="subtask-icon-edit"><img src="./img/delete.svg" alt="Delete Subtask"></p>
+                            </div>
+                        </div>
+                    
                 </div>`).join('')}
                 </div>
             </div>
@@ -452,14 +459,6 @@ function setupDueDateInput() {
     });
 }
 
-function enablePriorityEditing() {
-    let priorityContainer = document.querySelector('.card-modal-priority');
-
-    priorityContainer.contentEditable = true;
-    priorityContainer.style.border = '1px solid #3498db';
-    priorityContainer.addEventListener('click', openPriorityOptions);
-}
-
 function addRemoveButtonsToContacts() {
     let contacts = document.querySelectorAll('.card-modal-contact');
     contacts.forEach(contact => {
@@ -487,12 +486,56 @@ function edit() {
         enablePriorityEditing();
         addRemoveButtonsToContacts();
         initializeContactDropdownOpenCard();
+        enableSubtasksEditing();
         isEditActive = true;
     }
 }
 
 function endEdit() {
     isEditActive = false;
+}
+
+function enablePriorityEditing() {
+    let priorityContainer = document.querySelector('.card-modal-priority');
+
+    priorityContainer.contentEditable = true;
+    priorityContainer.style.border = '1px solid #3498db';
+    priorityContainer.addEventListener('click', openPriorityOptions);
+
+    let priorityLetterElement = priorityContainer.querySelector('.card-modal-priority-letter');
+    let priorityImgElement = priorityContainer.querySelector('.card-modal-priority-symbol img');
+}
+
+function createPriorityOptionsContainer() {
+    let priorityOptionsContainer = document.createElement('div');
+    priorityOptionsContainer.classList.add('card-modal-priority-options-container');
+
+    priorityOptionsContainer.innerHTML = `
+        <button onclick="chooseCardModal('urgent')" class="button urgent">
+            <h3>Urgent</h3>
+            <img src="./img/Prio_up.svg" alt="" />
+        </button>
+        <button onclick="chooseCardModal('medium')" class="button medium">
+            <h3>Medium</h3>
+            <img src="./img/Prio_neutral.svg" alt="" />
+        </button>
+        <button onclick="chooseCardModal('low')" class="button low">
+            <h3>Low</h3>
+            <img src="./img/Prio_down.svg" alt="" />
+        </button>
+    `;
+
+    return priorityOptionsContainer;
+}
+
+function addEventListenersToButtons(priorityOptionsContainer) {
+    let buttons = priorityOptionsContainer.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            priorityOptionsContainer.remove();
+            isPriorityOptionsOpen = false;
+        });
+    });
 }
 
 function openPriorityOptions(event) {
@@ -502,23 +545,7 @@ function openPriorityOptions(event) {
 
     isPriorityOptionsOpen = true;
 
-    let priorityOptionsContainer = document.createElement('div');
-    priorityOptionsContainer.classList.add('card-modal-priority-options-container');
-
-    priorityOptionsContainer.innerHTML = `
-        <button onclick="chooseCardModal('urgent')" class="button urgent">
-            <h3>Urgent</h3>
-            <img src="./img/Prio_up.svg" alt="" />
-        </button>
-        <button onclick="choose('medium')" class="button medium">
-            <h3>Medium</h3>
-            <img src="./img/Prio_neutral.svg" alt="" />
-        </button>
-        <button onclick="choose('low')" class="button low">
-            <h3>Low</h3>
-            <img src="./img/Prio_down.svg" alt="" />
-        </button>
-    `;
+    let priorityOptionsContainer = createPriorityOptionsContainer();
 
     let prioritySymbolContainer = event.currentTarget;
 
@@ -526,48 +553,38 @@ function openPriorityOptions(event) {
     priorityOptionsContainer.style.position = 'absolute';
     priorityOptionsContainer.style.width = '100%';
 
-    let buttons = priorityOptionsContainer.querySelectorAll('button');
-    buttons.forEach(button => {
-        button.addEventListener('click', function () {
-            priorityOptionsContainer.remove();
-            isPriorityOptionsOpen = false;
-        });
-    });
+    addEventListenersToButtons(priorityOptionsContainer);
 
     prioritySymbolContainer.appendChild(priorityOptionsContainer);
 
-    document.addEventListener('click', function closePriorityOptions(event) {
+    function closePriorityOptions(event) {
         if (!priorityOptionsContainer.contains(event.target) && event.target !== prioritySymbolContainer) {
             priorityOptionsContainer.remove();
             document.removeEventListener('click', closePriorityOptions);
 
             isPriorityOptionsOpen = false;
         }
-    });
+    }
+
+    document.addEventListener('click', closePriorityOptions);
 }
 
 function chooseCardModal(priority) {
-    let priorityTextElement = document.querySelector('.card-modal-priority h3');
+    let priorityTextElement = document.querySelector('.card-modal-priority .card-modal-priority-letter');
     let prioritySymbolElement = document.querySelector('.card-modal-priority-symbol img');
 
-    switch (priority) {
-        case 'urgent':
-            priorityTextElement.textContent = 'Urgent';
-            prioritySymbolElement.src = './img/Prio_up.svg';
-            break;
-        case 'medium':
-            priorityTextElement.textContent = 'Medium';
-            prioritySymbolElement.src = './img/Prio_neutral.svg';
-            break;
-        case 'low':
-            priorityTextElement.textContent = 'Low';
-            prioritySymbolElement.src = './img/Prio_down.svg';
-            break;
-        default:
-            break;
-    }
+    let priorityMappings = {
+        'urgent': { text: 'Urgent', symbolSrc: './img/Prio_up.svg' },
+        'medium': { text: 'Medium', symbolSrc: './img/Prio_neutral.svg' },
+        'low': { text: 'Low', symbolSrc: './img/Prio_down.svg' }
+    };
 
-    let priorityOptionsContainer = document.querySelector('.priority-options-container');
+    let selectedPriority = priorityMappings[priority] || {};
+
+    priorityTextElement.textContent = (selectedPriority.text || '').toUpperCase();
+    prioritySymbolElement.src = selectedPriority.symbolSrc || '';
+
+    let priorityOptionsContainer = document.querySelector('.card-modal-priority-options-container');
     if (priorityOptionsContainer) {
         priorityOptionsContainer.remove();
     }
@@ -627,8 +644,6 @@ function updateCheckboxState() {
             checkbox.checked = selectedInitialsArray.includes(contactId);
         }
     });
-
-    console.log("Updating checkbox state...");
 }
 
 function removeContactArray(contact) {
@@ -647,4 +662,48 @@ function removeContactArray(contact) {
     removeContact(contact);
     selectContactCardModal();
     updateDropdownCheckbox(contact);
+}
+
+function enableSubtasksEditing() {
+    let subtaskContainers = document.querySelectorAll('.card-modal-subtask-maincontainer');
+
+    subtaskContainers.forEach(subtaskContainer => {
+        subtaskContainer.addEventListener('mouseover', function () {
+            showSubtaskIcons(subtaskContainer);
+        });
+
+        subtaskContainer.addEventListener('mouseout', function () {
+            hideSubtaskIcons(subtaskContainer);
+        });
+    });
+}
+
+function showSubtaskIcons(subtaskContainer) {
+    if (!subtaskContainer.querySelector('.subtask-icons-container')) {
+        let iconsContainer = createSubtaskIconsContainer();
+        subtaskContainer.appendChild(iconsContainer);
+    }
+}
+
+function hideSubtaskIcons(subtaskContainer) {
+    let iconsContainer = subtaskContainer.querySelector('.subtask-edit-icons-container');
+
+    if (iconsContainer) {
+        iconsContainer.remove();
+    }
+}
+
+function createSubtaskIconsContainer() {
+    let iconsContainer = document.createElement('div');
+    iconsContainer.classList.add('subtask-edit-icons-container');
+
+    iconsContainer.innerHTML = `
+    <div class="subtasks-edit-icons-container">
+        <p class="subtask-icon-edit"><img src="./img/edit.svg" alt="Edit Subtask"></p>
+        <p class="subtask-icon-edit"><img src="./img/divider.svg" alt="Divider"></p>
+        <p class="subtask-icon-edit"><img src="./img/delete.svg" alt="Delete Subtask"></p>
+    </div>
+    `;
+
+    return iconsContainer;
 }
