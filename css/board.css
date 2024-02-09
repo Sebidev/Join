@@ -747,7 +747,6 @@ body {
 }
 
 .card-modal-contacts {
-  height: 208px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
