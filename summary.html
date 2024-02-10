@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <script src="js/template_load.js"></script>
     <title>Join</title>
 </head>
+
 <body onload="initSummary(), initHead(), initUser()">
     <header id="header"></header>
     <div id="sideboard"></div>
@@ -20,48 +22,60 @@
             </div>
             <div class="boxs_box">
                 <div class="boxs_top">
-                    <div class="box_pencil">
-                        <img class="box_icon" src="/img/pencil.svg"></img>
-                        <div class="column_container">
-                            <div class="box_number" id="summary-todo-number"></div>
-                            <div class="box_text">To-do</div>
+                    <a href="board.html">
+                        <div class="box_pencil">
+                            <img class="box_icon" src="/img/pencil.svg"></img>
+                            <div class="column_container">
+                                <div class="box_number" id="summary-todo-number"></div>
+                                <div class="box_text">To-do</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="box_check">
-                        <img class="box_icon" src="/img/group-7-summary.svg"></img>
-                        <div class="column_container">
-                            <div class="box_number" id="summary-done-number">1</div>
-                            <div class="box_text">Done</div>
+                    </a>
+                    <a href="board.html">
+                        <div class="box_check">
+                            <img class="box_icon" src="/img/group-7-summary.svg"></img>
+                            <div class="column_container">
+                                <div class="box_number" id="summary-done-number">1</div>
+                                <div class="box_text">Done</div>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="boxs_center">
-                    <div class="box_urgency">
-                        <img class="box_icon" src="/img/prio_up_box.svg"></img>
-                        <div class="column_container">
-                            <div class="box_number" id="summary-urgent-number">1</div>
-                            <div class="box_text">Urgent</div>
+                    <a href="board.html">
+                        <div class="box_urgency">
+                            <img class="box_icon" src="/img/prio_up_box.svg"></img>
+                            <div class="column_container">
+                                <div class="box_number" id="summary-urgent-number">1</div>
+                                <div class="box_text">Urgent</div>
+                            </div>
+                            <img class="box_urgency_verticalbar" src="/img/Vector5_2.svg"></img>
+                            <div class="column_container">
+                                <div class="box_urgency_date" id="summary-deadline"></div>
+                                <div class="box_urgency_deadline">Upcoming Deadline</div>
+                            </div>
                         </div>
-                        <img class="box_urgency_verticalbar" src="/img/Vector5_2.svg"></img>
-                        <div class="column_container">
-                            <div class="box_urgency_date" id="summary-deadline"></div>
-                            <div class="box_urgency_deadline">Upcoming Deadline</div>
-                        </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="boxs_down">
-                    <div class="box_small">
-                        <div class="box_small_number" id="summary-onboard-number">5</div>
-                        <div class="box_small_text">Tasks in Board</div>
-                    </div>
-                    <div class="box_small">
-                        <div class="box_small_number" id="summary-progress-number">2</div>
-                        <div class="box_small_text2">Tasks In Progress</div>
-                    </div>
-                    <div class="box_small">
-                        <div class="box_small_number" id="summary-await-number">2</div>
-                        <div class="box_small_text">Awaiting Feedback</div>
-                    </div>
+                    <a href="board.html">
+                        <div class="box_small">
+                            <div class="box_small_number" id="summary-onboard-number">5</div>
+                            <div class="box_small_text">Tasks in Board</div>
+                        </div>
+                    </a>
+                    <a href="board.html">
+                        <div class="box_small">
+                            <div class="box_small_number" id="summary-progress-number">2</div>
+                            <div class="box_small_text2">Tasks In Progress</div>
+                        </div>
+                    </a>
+                    <a href="board.html">
+                        <div class="box_small">
+                            <div class="box_small_number" id="summary-await-number">2</div>
+                            <div class="box_small_text">Awaiting Feedback</div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -75,4 +89,5 @@
     <script src="js/summary.js" defer></script>
     <script src="js/header.js"></script>
 </body>
+
 </html>
