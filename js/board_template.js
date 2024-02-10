@@ -127,6 +127,7 @@ function addSearch() {
         document.getElementById('done-column').innerHTML = '';
 
         matchingTasks.forEach(task => renderCard(task));
+        updatePlaceholderText();
     });
 };
 
