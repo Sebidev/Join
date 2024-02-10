@@ -1,33 +1,108 @@
 let currentDraggedElement;
 
+/** add a class to highlight a column
+ * 
+ * @param {string} columnId - current column id
+ */
+
+function highlight(columnId) {
+    let columnElement = document.getElementById(columnId);
+    if (columnElement) {
+        columnElement.classList.add('dragdrop-highlight');
+    }
+}
+
+/** remove the highlight class from the column
+ * 
+ * @param {string} columnId - current column id
+ */
+
+function removeHighlight(columnId) {
+    let columnElement = document.getElementById(columnId);
+    if (columnElement) {
+        columnElement.classList.remove('dragdrop-highlight');
+    }
+}
+
+/** prevents that you can place a task on another task via drag and drop
+ * 
+ * @param {string} ev - event
+ */
+
 function preventDragOver(ev) {
     ev.stopPropagation();
 }
+
+/** start dragging an element
+ * 
+ * @param {string} ev - event
+ */
 
 function startDragging(ev) {
     currentDraggedElement = ev.target.id;
     ev.dataTransfer.setData("text", ev.target.id);
 }
 
+/** stop dragging an element
+ * 
+ * @param {string} ev - event
+ */
+
 function endDragging(ev) {
     currentDraggedElement = null;
 }
 
+/** allows an element to be dropped
+ * 
+ * @param {string} ev - event
+ */
+
 function allowDrop(ev) {
     ev.preventDefault();
 }
+
+/** makes it possible to drop an element in a new column and update placeholder / column id
+ * 
+ * @param {string} ev - event
+ */
 
 async function drop(ev) {
     ev.preventDefault();
     var taskId = ev.dataTransfer.getData("text");
     var newColumnId = ev.target.id;
 
-    // Move the task element
     ev.target.appendChild(document.getElementById(taskId));
 
-    // Update the task data in the storage
+    removeHighlight(newColumnId);
     await updateTaskColumn(taskId, newColumnId);
+    updatePlaceholderText();
 }
+
+/**
+ * update the placeholder text depending on the column
+ */
+
+function updatePlaceholderText() {
+    let columnIds = ['todo-column', 'progress-column', 'await-column', 'done-column'];
+
+    for (let columnId of columnIds) {
+        let columnElement = document.getElementById(columnId);
+
+        if (columnElement && columnElement.childElementCount === 0 && !document.getElementById(columnId + '-placeholder')) {
+            addPlaceholderText(columnId);
+        } else if (columnElement && columnElement.childElementCount === 1 && document.getElementById(columnId + '-placeholder')) {
+            continue;
+        } else if (columnElement && columnElement.childElementCount > 1) {
+            removePlaceholderText(columnId);
+        }
+    }
+}
+
+/** update the task column in local or remote storage if dragged to another column
+ * 
+ * @param {string} taskId - current dragged task
+ * @param {string} newColumnId - new column id
+ */
 
 async function updateTaskColumn(taskId, newColumnId) {
     let tasks;

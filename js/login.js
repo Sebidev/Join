@@ -115,6 +115,87 @@ function checkEmailExists(email) {
     return false;
 }
 
+/** generate the demo contacts for a user when you sign up
+ * 
+ * @returns demo contacts in a json
+ */
+
+function generateDemoTasksUser() {
+    return [
+        {
+            content: {
+                title: 'Kochwelt Page & Recipe Recommender',
+                description: 'Build start page with recipe recommendation...',
+                date: '2024-12-31',
+                category: 'User Story',
+                subtasks: 2,
+                subtasksData: ['Subtask 1', 'Subtask 2'],
+                selectedContacts: [
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "EM" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "MB" }
+                ],
+                priority: 'medium',
+                boardColumn: 'progress-column',
+            },
+            id: 'task0',
+        },
+        {
+            content: {
+                title: 'HTML Base Template Creation',
+                description: 'Create reusable HTML base templates...',
+                date: '2024-12-31',
+                category: 'Technical task',
+                subtasks: 0,
+                subtasksData: [],
+                selectedContacts: [
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "DE" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS" }
+                ],
+                priority: 'low',
+                boardColumn: 'await-column',
+            },
+            id: 'task1',
+        },
+        {
+            content: {
+                title: 'Daily Kochwelt Recipe',
+                description: 'Implement daily recipe and portion calculator....',
+                date: '2024-08-05',
+                category: 'User Story',
+                subtasks: 0,
+                subtasksData: [],
+                selectedContacts: [
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "EF" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "TW" }
+                ],
+                priority: 'medium',
+                boardColumn: 'await-column',
+            },
+            id: 'task2',
+        },
+        {
+            content: {
+                title: 'CSS Architecture Planning',
+                description: 'Define CSS naming conventions and structure...',
+                date: '2024-12-31',
+                category: 'Technical task',
+                subtasks: 2,
+                subtasksData: ['Subtask 1', 'Subtask 2'],
+                selectedContacts: [
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "SM" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ" }
+                ],
+                priority: 'urgent',
+                boardColumn: 'done-column',
+            },
+            id: 'task3',
+        },
+    ]
+}
+
 /**
  * adding user data to array and then send post request
  * @param {element} emailSignup - stands for email input element
@@ -122,6 +203,9 @@ function checkEmailExists(email) {
  */
 async function addUserToArray(emailSignup, passwordSignup) {
     signupButton('disable');
+
+    let demoTasks = generateDemoTasksUser();
+
     users.push({
         firstName: setName('first'),
         lastName: setName('last'),
@@ -133,10 +217,7 @@ async function addUserToArray(emailSignup, passwordSignup) {
         isYou: false,
         userID: users.length,
         contacts,
-        categories: [
-            { name: "Start", color: 0 }
-        ],
-        tasks: []
+        tasks: demoTasks
     });
 
     await setItem('users', JSON.stringify(users));

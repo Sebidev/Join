@@ -3,8 +3,102 @@ let globalData;
 let isEditActive = false;
 //import { contacts } from './js/add-task.js';
 
-function initBoard() {
+async function initBoard() {
     addSearch();
+    await generateDemoTasks();
+}
+
+function generateDemoTasksGuest() {
+    return [
+        {
+            content: {
+                title: 'Kochwelt Page & Recipe Recommender',
+                description: 'Build start page with recipe recommendation...',
+                date: '2024-12-31',
+                category: 'User Story',
+                subtasks: 2,
+                subtasksData: ['Subtask 1', 'Subtask 2'],
+                selectedContacts: [
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "EM" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "MB" }
+                ],
+                priority: 'medium',
+                boardColumn: 'progress-column',
+            },
+            id: 'task0',
+        },
+        {
+            content: {
+                title: 'HTML Base Template Creation',
+                description: 'Create reusable HTML base templates...',
+                date: '2024-12-31',
+                category: 'Technical task',
+                subtasks: 0,
+                subtasksData: [],
+                selectedContacts: [
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "DE" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS" }
+                ],
+                priority: 'low',
+                boardColumn: 'await-column',
+            },
+            id: 'task1',
+        },
+        {
+            content: {
+                title: 'Daily Kochwelt Recipe',
+                description: 'Implement daily recipe and portion calculator....',
+                date: '2024-08-05',
+                category: 'User Story',
+                subtasks: 0,
+                subtasksData: [],
+                selectedContacts: [
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "EF" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "TW" }
+                ],
+                priority: 'medium',
+                boardColumn: 'await-column',
+            },
+            id: 'task2',
+        },
+        {
+            content: {
+                title: 'CSS Architecture Planning',
+                description: 'Define CSS naming conventions and structure...',
+                date: '2024-12-31',
+                category: 'Technical task',
+                subtasks: 2,
+                subtasksData: ['Subtask 1', 'Subtask 2'],
+                selectedContacts: [
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "SM" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ" }
+                ],
+                priority: 'urgent',
+                boardColumn: 'done-column',
+            },
+            id: 'task3',
+        },
+    ]
+}
+
+async function generateDemoTasks() {
+    let isUserLoggedIn = users.some(user => user.isYou);
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    // If there are already tasks, do not generate demo tasks
+    if (tasks.length > 0) {
+        return;
+    }
+
+    let demoTasks = generateDemoTasksGuest();
+
+    if (!isUserLoggedIn) {
+        // User is a guest, save the tasks to the local storage
+        localStorage.setItem('tasks', JSON.stringify(demoTasks));
+    }
 }
 
 /**
@@ -13,7 +107,7 @@ function initBoard() {
 function addSearch() {
     let searchInput = document.getElementById('input-search');
 
-    searchInput.addEventListener('input', async function() {
+    searchInput.addEventListener('input', async function () {
         let searchValue = searchInput.value.toLowerCase();
         let tasks;
         if (isUserLoggedIn) {
@@ -233,21 +327,75 @@ function getValue(selector) {
     return element ? element.value : '';
 }
 
+/** add the placeholder text depending on if there's a task on the board or not
+ * 
+ * @param {string} columnId 
+ */
+
+function addPlaceholderText(columnId) {
+    let columnElement = document.getElementById(columnId);
+    if (columnElement) {
+        let placeholderDiv = document.createElement('div');
+        placeholderDiv.id = columnId + '-placeholder';
+        placeholderDiv.className = 'no-tasks-here';
+
+        let placeholderText = document.createElement('p');
+
+        switch (columnId) {
+            case 'todo-column':
+                placeholderText.textContent = 'No tasks to do';
+                break;
+            case 'progress-column':
+                placeholderText.textContent = 'No tasks in progress';
+                break;
+            case 'await-column':
+                placeholderText.textContent = 'No tasks await feedback';
+                break;
+            case 'done-column':
+                placeholderText.textContent = 'No tasks done';
+                break;
+            default:
+                placeholderText.textContent = 'Nothing here';
+                break;
+        }
+
+        placeholderDiv.appendChild(placeholderText);
+        columnElement.appendChild(placeholderDiv);
+    }
+}
+
+/** remove the placeholder text
+ * 
+ * @param {string} columnId 
+ */
+
+function removePlaceholderText(columnId) {
+    let placeholderText = document.getElementById(columnId + '-placeholder');
+    if (placeholderText) {
+        placeholderText.remove();
+    }
+}
+
 async function checkAndRenderSharedData() {
     let tasks;
 
     if (isUserLoggedIn) {
-        // User is logged in, get the tasks from the remote storage
         let usersString = await getItem('users');
         let users = JSON.parse(usersString);
         tasks = users[currentUser].tasks;
     } else {
-        // User is a guest, get the tasks from the local storage
         let tasksString = localStorage.getItem('tasks');
         tasks = tasksString ? JSON.parse(tasksString) : [];
     }
 
+    addPlaceholderText('todo-column');
+    addPlaceholderText('progress-column');
+    addPlaceholderText('await-column');
+    addPlaceholderText('done-column');
+
     for (let task of tasks) {
+        removePlaceholderText(task.content.boardColumn);
+
         renderCard(task);
     }
 }
