@@ -3,6 +3,44 @@ let globalData;
 let isEditActive = false;
 //import { contacts } from './js/add-task.js';
 
+function initBoard() {
+    addSearch();
+}
+
+/**
+ * search functionality for the tasks in board.html
+ */
+function addSearch() {
+    let searchInput = document.getElementById('input-search');
+
+    searchInput.addEventListener('input', async function() {
+        let searchValue = searchInput.value.toLowerCase();
+        let tasks;
+        if (isUserLoggedIn) {
+            tasks = users[currentUser].tasks;
+        } else {
+            tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        }
+
+        let matchingTasks = tasks.filter(task =>
+            task.content.title.toLowerCase().includes(searchValue) ||
+            task.content.description.toLowerCase().includes(searchValue)
+        );
+
+        document.getElementById('todo-column').innerHTML = '';
+        document.getElementById('progress-column').innerHTML = '';
+        document.getElementById('await-column').innerHTML = '';
+        document.getElementById('done-column').innerHTML = '';
+
+        matchingTasks.forEach(task => renderCard(task));
+    });
+};
+
+/** open add-task popup
+ * 
+ * @param {string} column current column id (''todo-column, progress-column, etc.)
+ */
+
 function addTask(column) {
     let modalHTML = /*html*/`
         <div id="overlay"></div>
