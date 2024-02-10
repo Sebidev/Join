@@ -253,6 +253,7 @@ body {
   gap: 10px;
   border-radius: 8px;
   background: #1fd7c1;
+  color: white;
 }
 
 .user-story {
@@ -612,7 +613,7 @@ body {
   z-index: 1000;
 }
 
-.card-modal-task {
+.card-modal-userstory {
   margin-top: 0px;
   margin-bottom: 0px;
   width: 112px;
@@ -626,6 +627,29 @@ body {
   justify-content: center;
 
   color: #fff;
+
+  /* Version 2/t5 */
+  font-family: "Open Sans";
+  font-size: 23px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%; /* 27.6px */
+}
+
+.card-modal-technical {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  width: 155px;
+  height: 28px;
+  display: flex;
+  padding: 4px 24px;
+  align-items: center;
+  gap: 10px;
+  border-radius: 8px;
+  background: #1fd7c1;
+  justify-content: center;
+
+  color: #ffffff;
 
   /* Version 2/t5 */
   font-family: "Open Sans";

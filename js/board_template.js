@@ -358,13 +358,13 @@ function getPriorityIcon(priority) {
 function openCard(data, subtasksData) {
     let selectedPriority = data.content.priority;
     let priorityIconSrc = getPriorityIcon(selectedPriority);
-
+    let categoryClass = data.content.category === 'Technical task' ? 'card-modal-technical' : 'card-modal-userstory';
 
     let openCardHTML = `
     <div id="card-overlay"></div>
     <div id="cardModal" class="card-modal">
             <div class="task-categorie">
-                <p class="card-modal-task">${data.content.category}</p>
+                <p class=${categoryClass}>${data.content.category}</p>
                 <div class="close-card-modal" onclick="closeOpenCard()">
                     <img src="./img/close_modal.svg" alt="">
                 </div>
