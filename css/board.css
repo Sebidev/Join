@@ -1053,7 +1053,7 @@ body {
 	background-color: #2a36470d;
 	border: 1px dashed #2A3647;
 	box-shadow: 0px 0px 1px 0px #0000001A;
-	border-radius: 24px;
+	border-radius: 10px;
 }
 
 .no-tasks-here p {
