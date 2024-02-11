@@ -303,6 +303,7 @@ function clearFields() {
 
     let subtaskList = document.getElementById('subtaskList');
     subtaskList.innerHTML = '';
+    closeModal();
 }
 
 function closeModal() {
