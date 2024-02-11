@@ -505,12 +505,44 @@ function getPriorityIcon(priority) {
     }
 }
 
+async function deleteTask() {
+    let taskId = document.querySelector('.card-modal-delete-button').dataset.id;
+
+    document.getElementById(taskId).remove();
+
+    let tasks;
+
+    if (isUserLoggedIn) {
+        let usersString = await getItem('users');
+        let users = JSON.parse(usersString);
+        tasks = users[currentUser].tasks;
+    } else {
+        let tasksString = localStorage.getItem('tasks');
+        tasks = tasksString ? JSON.parse(tasksString) : [];
+    }
+
+    let taskIndex = tasks.findIndex(task => task.id === taskId);
+
+    if (taskIndex !== -1) {
+        tasks.splice(taskIndex, 1);
+
+        if (isUserLoggedIn) {
+            users[currentUser].tasks = tasks;
+            await setItem('users', JSON.stringify(users));
+        } else {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+    }
+    updatePlaceholderText();
+    closeOpenCard();
+}
+
 function openCard(data, subtasksData) {
     let selectedPriority = data.content.priority;
     let priorityIconSrc = getPriorityIcon(selectedPriority);
     let categoryClass = data.content.category === 'Technical task' ? 'card-modal-technical' : 'card-modal-userstory';
 
-    let openCardHTML = `
+    let openCardHTML = /*html*/`
     <div id="card-overlay"></div>
     <div id="cardModal" class="card-modal">
             <div class="task-categorie">
@@ -572,7 +604,7 @@ function openCard(data, subtasksData) {
             </div>
 
             <div class="card-modal-edit-and-delete-container">
-                <button onclick="delete()" class="card-modal-delete-button">
+                <button onclick="deleteTask()" data-id="${data.id}" class="card-modal-delete-button">
                     <img src="./img/delete.svg">
                     <p> Delete </p>
                 </button>
