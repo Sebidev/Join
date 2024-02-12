@@ -542,7 +542,7 @@ function openCard(data, subtasksData) {
     let priorityIconSrc = getPriorityIcon(selectedPriority);
     let categoryClass = data.content.category === 'Technical task' ? 'card-modal-technical' : 'card-modal-userstory';
     let selectedContacts = data.content.selectedContacts || [];
-    let initialsHTML = createAvatarDivs(selectedContacts);
+    
 
 
     let openCardHTML = /*html*/`
@@ -580,8 +580,15 @@ function openCard(data, subtasksData) {
                 <p class="card-modal-assigned-to-headline">Assigned to:</p>
                 <div class="card-modal-contacts-container">
                     <div id="selectedContactsContainer" class="card-modal-initial-container">
-                    ${initialsHTML}
-                        
+                        ${(selectedContacts || []).map(contact => `
+                            <div class="initial-container-open-card">
+                                <div class="avatar">
+                                    <img src="${contact.imagePath}" alt="Avatar">
+                                    <div class="avatar_initletter">${contact.initials}</div>
+                                    
+                                </div>
+                                <div class="avatar-name">${contact.name || ''}</div>
+                            </div>`).join('')}
                     </div>
                 </div>
             </div>

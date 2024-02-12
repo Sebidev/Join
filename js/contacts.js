@@ -223,7 +223,7 @@ async function loadContacts() {
  */
 async function createDemoContacts() {
     let demoContacts = [
-        { id: generateId(), avatarid: rollDice(), name: 'Anton Mayer', email: 'antom@gmail.com', phone: '+49123456789'},
+        { id: generateId(), avatarid: rollDice(), name: 'Anton Mayer', email: 'antonm@gmail.com', phone: '+49123456789'},
         { id: generateId(), avatarid: rollDice(), name: 'Anja Schulz', email: 'schulz@hotmail.com', phone: '+49123456789'},
         { id: generateId(), avatarid: rollDice(), name: 'Benedikt Ziegler', email: 'benedikt@gmail.com', phone: '+49123456789'},
         { id: generateId(), avatarid: rollDice(), name: 'David Eisenberg', email: 'davidberg@gmail.com', phone: '+49123456789'},

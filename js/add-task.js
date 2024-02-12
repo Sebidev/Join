@@ -150,12 +150,14 @@ async function addToBoard(column) {
     let selectedContacts = getSelectedContacts();
     let selectedPriority = getSelectedPriority();
 
+    console.log("Selected Contacts in addToBoard:", selectedContacts);  
+
     saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column);
 
     resetFormFields();
 
     // Zum Programmieren außer Kraft gesetzt
-    window.location.href = 'board.html';
+    //window.location.href = 'board.html';
 }
 
 function getFieldValueById(id) {
@@ -171,9 +173,18 @@ function getSelectedContacts() {
             let imgElement = contactDiv.querySelector('img');
             let initials = imgElement.nextElementSibling.textContent.trim();
 
+            // Überprüfen Sie, ob das 'data-name' Attribut vorhanden ist
+            let datasetName = imgElement.dataset.name;
+
+            // Verwenden Sie das 'data-name' Attribut, wenn es vorhanden ist, andernfalls verwenden Sie den Textinhalt des Bildes
+            let name = datasetName || imgElement.alt;
+
+            console.log('Name from dataset:', name);
+
             selectedContacts.push({
                 imagePath: imgElement.src,
-                initials: initials
+                initials: initials,
+                name: name
             });
         }
     });
@@ -181,8 +192,9 @@ function getSelectedContacts() {
     return selectedContacts;
 }
 
+
 async function saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column) {
-    console.log(subtasksList); 
+    console.log("Selected Contacts Before:", selectedContacts);
 
     let subtasksData = Array.from(subtasksList).map(subtask => subtask.firstElementChild.innerText);
 
@@ -200,6 +212,16 @@ async function saveToLocalStorage(taskTitle, description, date, category, subtas
         },
         id: 'task' + (isUserLoggedIn ? users[currentUser].tasks.length : (JSON.parse(localStorage.getItem('tasks')) || []).length),
     };
+
+    task.content.selectedContacts.forEach(contact => {
+        let matchingContact = contacts.find(existingContact => existingContact.id === contact.id);
+        if (matchingContact) {
+            console.log("Matching Contact:", matchingContact);  // Fügen Sie diese Zeile hinzu
+            contact.name = matchingContact.name;
+        }
+    });
+
+    console.log("Selected Contacts After:", selectedContacts);
 
     if (isUserLoggedIn) {
         // User is logged in, save the task to the remote storage
