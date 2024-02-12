@@ -95,17 +95,19 @@ body{
 
 /* Media Query */
 @media only screen and (max-width: 600px) {
-    .sideboard{
+    .sideboard {
         position: fixed;
-        bottom: 0px;
+        bottom: 80px;
         top: auto;
         left: auto;
+        right: auto;
         width: 100vw;
         height: 80px;
         padding: 16px 0px;
         flex-direction: row;
         justify-content: space-around;
-    }
+        z-index: 9999;
+    } 
 
     .join_logo, .join_logo img{
         display: none;
