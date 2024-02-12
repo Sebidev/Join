@@ -19,8 +19,8 @@ function generateDemoTasksGuest() {
                 subtasks: 2,
                 subtasksData: ['Subtask 1', 'Subtask 2'],
                 selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer"  },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "EM", name: "Emmanuel Mauer"},
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "EM", name: "Emmanuel Mauer" },
                     { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "MB", name: "Marcel Bauer" }
                 ],
                 priority: 'medium',
@@ -537,12 +537,64 @@ async function deleteTask() {
     closeOpenCard();
 }
 
+/**
+ * Save the selected task to local or remote storage and display the changes 
+ * 
+ */ 
+/*
+async function saveEditedTask() {
+    let taskId = document.querySelector('.card-modal-save-button').dataset.id;
+    console.log('taskId:', taskId);
+    let taskTitle = document.querySelector('.card-modal-title').textContent;
+    let description = document.querySelector('.card-modal-content').textContent;
+    let date = document.getElementById('dueDateText').textContent;
+    let category = document.querySelector('.task-categorie p').textContent;
+    let priority = document.querySelector('.card-modal-priority').textContent;
+
+    let tasks;
+
+    if (isUserLoggedIn) {
+        let usersString = await getItem('users');
+        let users = JSON.parse(usersString);
+        tasks = users[currentUser].tasks;
+    } else {
+        let tasksString = localStorage.getItem('tasks');
+        tasks = tasksString ? JSON.parse(tasksString) : [];
+    }
+
+    let task = tasks.find(task => task.id === taskId);
+
+    if (task) {
+        task.content.title = taskTitle;
+        task.content.description = description;
+        task.content.date = date;
+        task.content.category = category;
+        task.content.priority = priority;
+
+        if (isUserLoggedIn) {
+            users[currentUser].tasks = tasks;
+            await setItem('users', JSON.stringify(users));
+        } else {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+    }
+
+    let taskElement = document.getElementById(taskId);
+    console.log('taskElement:', taskElement);
+    taskElement.querySelector('.card-title').textContent = taskTitle;
+    taskElement.querySelector('.card-content').textContent = description;
+
+    closeOpenCard();
+    endEdit();
+}
+*/
+
 function openCard(data, subtasksData) {
     let selectedPriority = data.content.priority;
     let priorityIconSrc = getPriorityIcon(selectedPriority);
     let categoryClass = data.content.category === 'Technical task' ? 'card-modal-technical' : 'card-modal-userstory';
     let selectedContacts = data.content.selectedContacts || [];
-    
+
 
 
     let openCardHTML = /*html*/`
@@ -629,8 +681,10 @@ function openCard(data, subtasksData) {
                     <p> Edit </p>
                 </button>
 
+                <button onclick="saveEditedTask()" data-id="${data.id}" class="card-modal-save-button">
+                    <p> OK </p>
+                </button>
             </div>
-            
         </div>
     </div>
     `;
