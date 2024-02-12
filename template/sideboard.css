@@ -33,7 +33,7 @@ body{
     justify-content: center;
     align-items: center;
     flex-direction: row; 
-    padding: 15px 56px;
+    padding: 13px 61px;
     gap: 8px;
 }
 
@@ -91,6 +91,15 @@ body{
 
 .sidemenu_element, .down_links{
     cursor: pointer;
+}
+
+.selected{
+    background-color: #091931;
+    color: white;
+}
+
+.selected img{
+    filter: brightness(1000%);
 }
 
 /* Media Query */

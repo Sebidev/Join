@@ -128,7 +128,7 @@ body {
     /* 24px */
 }
 
-.column_container {
+.column_container .box_urgency_column {
     display: flex;
     flex-direction: column;
 }
@@ -203,6 +203,7 @@ body {
 }
 
 .box_urgency_deadline {
+    color: #2A3647;
     font-family: Inter;
     font-size: 16px;
     font-style: normal;
@@ -360,7 +361,7 @@ body {
         gap: 0px;
     }
 
-    .column_container {
+    .column_container{
         width: 95%;
         margin: 0;
     }
@@ -416,12 +417,20 @@ body {
     .box_urgency {
         width: 357px;
         height: 81px;
-        padding: 25px 17px;
+        padding: 25px 20px;
         gap: 20px;
+    }
+
+    .box_urgency_column {
+        width: 275%;
     }
 
     .box_number, .box_small_number {
         font-size: 47px;
+    }
+
+    .box_urgency_date {
+        font-size: 16px;
     }
 
     .box_text {
