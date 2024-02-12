@@ -541,6 +541,9 @@ function openCard(data, subtasksData) {
     let selectedPriority = data.content.priority;
     let priorityIconSrc = getPriorityIcon(selectedPriority);
     let categoryClass = data.content.category === 'Technical task' ? 'card-modal-technical' : 'card-modal-userstory';
+    let selectedContacts = data.content.selectedContacts || [];
+    let initialsHTML = createAvatarDivs(selectedContacts);
+
 
     let openCardHTML = /*html*/`
     <div id="card-overlay"></div>
@@ -577,6 +580,7 @@ function openCard(data, subtasksData) {
                 <p class="card-modal-assigned-to-headline">Assigned to:</p>
                 <div class="card-modal-contacts-container">
                     <div id="selectedContactsContainer" class="card-modal-initial-container">
+                    ${initialsHTML}
                         
                     </div>
                 </div>
@@ -591,11 +595,11 @@ function openCard(data, subtasksData) {
                     <input type="checkbox" class="subtask-checkbox">                    
                     </div>
                     <div class="card-modal-subtask-description">${subtask}</div>
-                        <div class="subtasks-edit-icons-container">
+                        <div class="subtasks-edit-icons-container d-none">
                             <div class="subtasks-edit-icons-container-p">
                                 <p class="subtask-icon-edit"><img src="./img/edit.svg" alt="Edit Subtask"></p>
                                 <p class="subtask-icon-edit"><img src="./img/divider.svg" alt="Divider"></p>
-                                <p class="subtask-icon-edit"><img src="./img/delete.svg" alt="Delete Subtask"></p>
+                                <p class="subtask-icon-delete"><img src="./img/delete.svg" alt="Delete Subtask"></p>
                             </div>
                         </div>
                     
@@ -895,35 +899,45 @@ function enableSubtasksEditing() {
         subtaskContainer.addEventListener('mouseout', function () {
             hideSubtaskIcons(subtaskContainer);
         });
+
+        subtaskContainer.addEventListener('click', function () {
+            editSubtaskDescription(subtaskContainer);
+        });
+
+        let deleteIcon = subtaskContainer.querySelector('.subtask-icon-delete img');
+        if (deleteIcon) {
+            deleteIcon.addEventListener('click', function (event) {
+                event.stopPropagation();
+                deleteSubtask(subtaskContainer);
+            });
+        }
     });
 }
 
 function showSubtaskIcons(subtaskContainer) {
-    if (!subtaskContainer.querySelector('.subtask-icons-container')) {
-        let iconsContainer = createSubtaskIconsContainer();
-        subtaskContainer.appendChild(iconsContainer);
+    let iconsContainer = subtaskContainer.querySelector('.subtasks-edit-icons-container');
+
+    if (iconsContainer) {
+        iconsContainer.classList.remove('d-none');
     }
 }
 
 function hideSubtaskIcons(subtaskContainer) {
-    let iconsContainer = subtaskContainer.querySelector('.subtask-edit-icons-container');
+    let iconsContainer = subtaskContainer.querySelector('.subtasks-edit-icons-container');
 
     if (iconsContainer) {
-        iconsContainer.remove();
+        iconsContainer.classList.add('d-none');
     }
 }
 
-function createSubtaskIconsContainer() {
-    let iconsContainer = document.createElement('div');
-    iconsContainer.classList.add('subtask-edit-icons-container');
+function editSubtaskDescription(element) {
+    let subtaskContainer = element.closest('.card-modal-subtask-maincontainer');
+    let descriptionElement = subtaskContainer.querySelector('.card-modal-subtask-description');
 
-    iconsContainer.innerHTML = `
-    <div class="subtasks-edit-icons-container">
-        <p class="subtask-icon-edit"><img src="./img/edit.svg" alt="Edit Subtask"></p>
-        <p class="subtask-icon-edit"><img src="./img/divider.svg" alt="Divider"></p>
-        <p class="subtask-icon-edit"><img src="./img/delete.svg" alt="Delete Subtask"></p>
-    </div>
-    `;
+    descriptionElement.contentEditable = true;
+    descriptionElement.focus();
+}
 
-    return iconsContainer;
+function deleteSubtask(subtaskContainer) {
+    subtaskContainer.remove();
 }

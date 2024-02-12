@@ -931,6 +931,10 @@ body {
   margin-right: 5px;
 }
 
+.subtask-edit-icons-container.d-block {
+  display: block;
+}
+
 .subtask-icon {
   width: 20px;
   height: 20px;
