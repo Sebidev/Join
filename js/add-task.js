@@ -170,10 +170,13 @@ function getSelectedContacts() {
         if (contactDiv.nodeType === 1) {
             let imgElement = contactDiv.querySelector('img');
             let initials = imgElement.nextElementSibling.textContent.trim();
+            let datasetName = imgElement.dataset.name;
+            let name = datasetName || imgElement.alt;
 
             selectedContacts.push({
                 imagePath: imgElement.src,
-                initials: initials
+                initials: initials,
+                name: name
             });
         }
     });
@@ -181,9 +184,8 @@ function getSelectedContacts() {
     return selectedContacts;
 }
 
-async function saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column) {
-    console.log(subtasksList); 
 
+async function saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column) {
     let subtasksData = Array.from(subtasksList).map(subtask => subtask.firstElementChild.innerText);
 
     let task = {
@@ -200,6 +202,13 @@ async function saveToLocalStorage(taskTitle, description, date, category, subtas
         },
         id: 'task' + (isUserLoggedIn ? users[currentUser].tasks.length : (JSON.parse(localStorage.getItem('tasks')) || []).length),
     };
+
+    task.content.selectedContacts.forEach(contact => {
+        let matchingContact = contacts.find(existingContact => existingContact.id === contact.id);
+        if (matchingContact) {
+            contact.name = matchingContact.name;
+        }
+    });
 
     if (isUserLoggedIn) {
         // User is logged in, save the task to the remote storage

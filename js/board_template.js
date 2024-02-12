@@ -19,9 +19,9 @@ function generateDemoTasksGuest() {
                 subtasks: 2,
                 subtasksData: ['Subtask 1', 'Subtask 2'],
                 selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "EM" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "MB" }
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer"  },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "EM", name: "Emmanuel Mauer"},
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "MB", name: "Marcel Bauer" }
                 ],
                 priority: 'medium',
                 boardColumn: 'progress-column',
@@ -37,9 +37,9 @@ function generateDemoTasksGuest() {
                 subtasks: 0,
                 subtasksData: [],
                 selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "DE" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS" }
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "DE", name: "David Eisenberg" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ", name: "Benedikt Ziegler" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS", name: "Anja Schulz" }
                 ],
                 priority: 'low',
                 boardColumn: 'await-column',
@@ -55,9 +55,9 @@ function generateDemoTasksGuest() {
                 subtasks: 0,
                 subtasksData: [],
                 selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "EF" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "TW" }
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "EF", name: "Eva Fischer" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS", name: "Anja Schulz" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "TW", name: "Tatjana Wolf" }
                 ],
                 priority: 'medium',
                 boardColumn: 'await-column',
@@ -73,8 +73,8 @@ function generateDemoTasksGuest() {
                 subtasks: 2,
                 subtasksData: ['Subtask 1', 'Subtask 2'],
                 selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "SM" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ" }
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ", name: "Benedikt Ziegler" }
                 ],
                 priority: 'urgent',
                 boardColumn: 'done-column',
@@ -542,7 +542,7 @@ function openCard(data, subtasksData) {
     let priorityIconSrc = getPriorityIcon(selectedPriority);
     let categoryClass = data.content.category === 'Technical task' ? 'card-modal-technical' : 'card-modal-userstory';
     let selectedContacts = data.content.selectedContacts || [];
-    let initialsHTML = createAvatarDivs(selectedContacts);
+    
 
 
     let openCardHTML = /*html*/`
@@ -580,8 +580,15 @@ function openCard(data, subtasksData) {
                 <p class="card-modal-assigned-to-headline">Assigned to:</p>
                 <div class="card-modal-contacts-container">
                     <div id="selectedContactsContainer" class="card-modal-initial-container">
-                    ${initialsHTML}
-                        
+                        ${(selectedContacts || []).map(contact => `
+                            <div class="initial-container-open-card">
+                                <div class="avatar">
+                                    <img src="${contact.imagePath}" alt="Avatar">
+                                    <div class="avatar_initletter">${contact.initials}</div>
+                                    
+                                </div>
+                                <div class="avatar-name">${contact.name || ''}</div>
+                            </div>`).join('')}
                     </div>
                 </div>
             </div>
