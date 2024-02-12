@@ -216,41 +216,6 @@ async function loadContacts() {
     }
 }
 
-/**
- * @description This function creates demo contacts if the user has no contacts yet.
- */
-async function createDemoContacts() {
-    let demoContacts = [
-        { id: generateId(), avatarid: rollDice(), name: 'Anton Mayer', email: 'antom@gmail.com', phone: '+49123456789'},
-        { id: generateId(), avatarid: rollDice(), name: 'Anja Schulz', email: 'schulz@hotmail.com', phone: '+49123456789'},
-        { id: generateId(), avatarid: rollDice(), name: 'Benedikt Ziegler', email: 'benedikt@gmail.com', phone: '+49123456789'},
-        { id: generateId(), avatarid: rollDice(), name: 'David Eisenberg', email: 'davidberg@gmail.com', phone: '+49123456789'},
-        { id: generateId(), avatarid: rollDice(), name: 'Eva Fischer', email: 'eva@gmail.com', phone: '+49123456789'},
-        { id: generateId(), avatarid: rollDice(), name: 'Emmanuel Mauer', email: 'emmanuelma@gmail.com', phone: '+49123456789'},
-        { id: generateId(), avatarid: rollDice(), name: 'Marcel Bauer', email: 'bauer@gmail.com', phone: '+49123456789' },
-        { id: generateId(), avatarid: rollDice(), name: 'Tatjana Wolf', email: 'wolf@gmail.com', phone: '+49123456789' },];
-
-    if (isUserLoggedIn) {
-        let users = JSON.parse(await getItem('users'));
-        if (users[currentUser]) {
-            if(!users[currentUser].contacts || Object.keys(users[currentUser].contacts).length === 0) {
-                users[currentUser].contacts = demoContacts.concat({ id: generateId(), avatarid: rollDice(), name: users[currentUser].firstName, email: users[currentUser].email, phone: '+49123456789'});
-                demoContacts.sort((a, b) => a.name.localeCompare(b.name));
-            }
-            await setItem('users', JSON.stringify(users));
-        } else {
-            console.error('Aktueller Benutzer nicht gefunden:', currentUser);
-        }
-        
-    } else {
-        let storedContacts = JSON.parse(localStorage.getItem('contacts')) || [];
-
-        if (!storedContacts || storedContacts.length === 0) {
-            localStorage.setItem('contacts', JSON.stringify(demoContacts));
-        }
-    }
-}
-
 window.editContact = editContact;
 
 /**
@@ -362,9 +327,8 @@ async function saveEditedContact(contactid) {
             contact.name = name;
             contact.email = email;
             contact.phone = phone;
-
+            
             contacts.sort((a, b) => a.name.localeCompare(b.name));
-
             if (isUserLoggedIn) {
                 let users = JSON.parse(await getItem('users'));
                 users[currentUser].contacts = contacts;

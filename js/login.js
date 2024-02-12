@@ -1,10 +1,58 @@
 /**
+ * @description This function generates a random id for a new contact.
+ * @returns a random id
+ */
+function generateId() {
+    return '_' + Math.random().toString(36).substr(2, 9);
+}
+
+var numbers = [0, 1, 2, 3, 4];
+var index = numbers.length;
+
+/**
+ * @description This function shuffles the elements of an array.
+ * @param {*} array 
+ */
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+/**
+ * @description This function simulates the rolling of a dice. It returns a random number between 0 and 4.
+ */
+function rollDice() {
+    if (index === numbers.length) {
+        shuffleArray(numbers);
+        index = 0;
+    }
+    return numbers[index++];
+}
+
+/**
  * add event listener for dom content loaded event to initialize functions
  */
 document.addEventListener('DOMContentLoaded', async () => {
     await loadUsers();
     loadLoginData();
 })
+
+/**
+ * @description Demo Contacts for the user
+ */
+let demoContacts = [
+    { id: generateId(), avatarid: rollDice(), name: 'Anton Mayer', email: 'antom@gmail.com', phone: '+49123456789'},
+    { id: generateId(), avatarid: rollDice(), name: 'Anja Schulz', email: 'schulz@hotmail.com', phone: '+49123456789'},
+    { id: generateId(), avatarid: rollDice(), name: 'Benedikt Ziegler', email: 'benedikt@gmail.com', phone: '+49123456789'},
+    { id: generateId(), avatarid: rollDice(), name: 'David Eisenberg', email: 'davidberg@gmail.com', phone: '+49123456789'},
+    { id: generateId(), avatarid: rollDice(), name: 'Eva Fischer', email: 'eva@gmail.com', phone: '+49123456789'},
+    { id: generateId(), avatarid: rollDice(), name: 'Emmanuel Mauer', email: 'emmanuelma@gmail.com', phone: '+49123456789'},
+    { id: generateId(), avatarid: rollDice(), name: 'Marcel Bauer', email: 'bauer@gmail.com', phone: '+49123456789' },
+    { id: generateId(), avatarid: rollDice(), name: 'Tatjana Wolf', email: 'wolf@gmail.com', phone: '+49123456789' },
+];
+
 
 /**
  * fetch users array
@@ -21,6 +69,11 @@ async function loadUsers() {
  * set all users inside the user object to false if guest login, then forward to summary
  */
 async function guestLogin() {
+    let storedContacts = JSON.parse(localStorage.getItem('contacts')) || [];
+    if (!storedContacts || storedContacts.length === 0) {
+        localStorage.setItem('contacts', JSON.stringify(demoContacts));
+    }
+
     for (const user of users) {
         user.isYou = false;
     }
@@ -196,41 +249,6 @@ function generateDemoTasksUser() {
     ]
 }
 
-
-/**
- * @description This function generates a random id for a new contact.
- * @returns a random id
- */
-function generateId() {
-    return '_' + Math.random().toString(36).substr(2, 9);
-}
-
-var numbers = [0, 1, 2, 3, 4];
-var index = numbers.length;
-
-/**
- * @description This function shuffles the elements of an array.
- * @param {*} array 
- */
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-}
-
-/**
- * @description This function simulates the rolling of a dice. It returns a random number between 0 and 4.
- */
-function rollDice() {
-    if (index === numbers.length) {
-        shuffleArray(numbers);
-        index = 0;
-    }
-
-    return numbers[index++];
-}
-
 /**
  * @description This function generates demo contacts for a user.
  * @param {*} firstName
@@ -238,17 +256,6 @@ function rollDice() {
  * @returns demo contacts in a json
  * */
 function generateDemoContacts(firstName, emailSignup) {
-    let demoContacts = [
-        { id: generateId(), avatarid: rollDice(), name: 'Anton Mayer', email: 'antom@gmail.com', phone: '+49123456789'},
-        { id: generateId(), avatarid: rollDice(), name: 'Anja Schulz', email: 'schulz@hotmail.com', phone: '+49123456789'},
-        { id: generateId(), avatarid: rollDice(), name: 'Benedikt Ziegler', email: 'benedikt@gmail.com', phone: '+49123456789'},
-        { id: generateId(), avatarid: rollDice(), name: 'David Eisenberg', email: 'davidberg@gmail.com', phone: '+49123456789'},
-        { id: generateId(), avatarid: rollDice(), name: 'Eva Fischer', email: 'eva@gmail.com', phone: '+49123456789'},
-        { id: generateId(), avatarid: rollDice(), name: 'Emmanuel Mauer', email: 'emmanuelma@gmail.com', phone: '+49123456789'},
-        { id: generateId(), avatarid: rollDice(), name: 'Marcel Bauer', email: 'bauer@gmail.com', phone: '+49123456789' },
-        { id: generateId(), avatarid: rollDice(), name: 'Tatjana Wolf', email: 'wolf@gmail.com', phone: '+49123456789' },
-    ];
-    
     demoContacts = demoContacts.concat({id: generateId(), avatarid: rollDice(), name: firstName, email: emailSignup, phone: '+49123456789'});
     demoContacts.sort((a, b) => a.name.localeCompare(b.name));
     return demoContacts;
