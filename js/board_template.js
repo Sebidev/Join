@@ -215,7 +215,7 @@ function addTask(column) {
                     <div class="category-container">
                         <div class="category">Category</div>
                         <div class="input-container">
-                            <input id="category" class="category-dropdown" type="text" placeholder="Select contacts to assign">
+                            <input id="category" class="category-dropdown" type="text" placeholder="Select task category">
                             <img class="arrow_down" src="./img/arrow_down.svg" onclick="toggleCategoryOptions()" alt="">
                             <div class="category-options" id="categoryOptions">
                                 <label onclick="updateSelectedCategory('Technical task')">
@@ -897,6 +897,18 @@ function removeContactArray(contact) {
 
 function enableSubtasksEditing() {
     let subtaskContainers = document.querySelectorAll('.card-modal-subtask-maincontainer');
+    let subtasksContainer = document.querySelector('.card-modal-subtasks-container-headline');
+
+    let inputContainer = document.createElement('div');
+    inputContainer.className = 'input-container-subtask';
+    inputContainer.innerHTML = `
+        <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask" id="subtask">
+        <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" onclick="addSubtaskOpenCard()">
+        <div class="subImgContainer">
+        </div>
+    `;
+
+    subtasksContainer.appendChild(inputContainer);
 
     subtaskContainers.forEach(subtaskContainer => {
         subtaskContainer.addEventListener('mouseover', function () {
@@ -947,4 +959,23 @@ function editSubtaskDescription(element) {
 
 function deleteSubtask(subtaskContainer) {
     subtaskContainer.remove();
+}
+
+function addSubtaskOpenCard() {
+    let inputElement = document.getElementById('newSubtaskInput');
+    let subtaskList = document.getElementById('subtaskList');
+    let subtaskText = inputElement.value.trim();
+
+    if (subtaskText !== '') {
+        let subtaskHTML = `
+                    <div class="subtask-item">
+                        <div class="subtask-text">${subtaskText}</div>
+                        <div class="delete-button" onclick="deleteSubtaskItem(this.parentNode)">
+                            <img src="./img/iconoir_cancel.svg" alt="">
+                        </div>
+                    </div>
+                    `;
+        subtaskList.innerHTML += subtaskHTML;
+        inputElement.value = '';
+    }
 }
