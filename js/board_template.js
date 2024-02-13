@@ -541,12 +541,12 @@ async function deleteTask() {
  * Save the selected task to local or remote storage and display the changes 
  * ----- Only description and title working for now --------
  */ 
-/*
+
 async function saveEditedTask() {
     let taskId = document.querySelector('.card-modal-save-button').dataset.id;
     let taskTitle = document.querySelector('.card-modal-title').textContent;
     let description = document.querySelector('.card-modal-content').textContent;
-    let date = document.getElementById('dueDateText').textContent;
+    let date = document.querySelector('.dateInput').value;
     let category = document.querySelector('.task-categorie p').textContent;
     let priority = document.querySelector('.card-modal-priority').textContent;
 
@@ -583,18 +583,38 @@ async function saveEditedTask() {
     let taskElement = document.getElementById(taskId);
     taskElement.querySelector('.card-title').textContent = taskTitle;
     taskElement.querySelector('.card-content').textContent = description;
+    let dateElement = taskElement.querySelector('.due-date-card-modal');
+    if (dateElement) {
+        dateElement.textContent = `Due date: ${date}`;
+    }
 
     closeOpenCard();
     endEdit();
 }
-*/
 
-function openCard(data, subtasksData) {
+async function openCard(data, subtasksData) {
+    let taskId = data.id;
+    let tasks;
+
+    if (isUserLoggedIn) {
+        let usersString = await getItem('users');
+        let users = JSON.parse(usersString);
+        tasks = users[currentUser].tasks;
+    } else {
+        let tasksString = localStorage.getItem('tasks');
+        tasks = tasksString ? JSON.parse(tasksString) : [];
+    }
+
+    let task = tasks.find(task => task.id === taskId);
+
+    if (task) {
+        data = task;
+    }
+
     let selectedPriority = data.content.priority;
     let priorityIconSrc = getPriorityIcon(selectedPriority);
     let categoryClass = data.content.category === 'Technical task' ? 'card-modal-technical' : 'card-modal-userstory';
     let selectedContacts = data.content.selectedContacts || [];
-
 
 
     let openCardHTML = /*html*/`
@@ -740,7 +760,11 @@ function setupDueDateInput() {
 
     $(dateInput).datepicker({
         dateFormat: 'yy-mm-dd',
-        showButtonPanel: true
+        showButtonPanel: true,
+        onSelect: function(dateText) {
+            // Update the dueDateText element's text content when a new date is selected
+            dueDateText.textContent = dateText;
+        }
     });
 }
 

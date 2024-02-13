@@ -4,6 +4,10 @@ body {
   height: 100%;
 }
 
+.hide {
+  display: none;
+}
+
 .head {
   margin-top: 79.5px;
   margin-left: 296px;
