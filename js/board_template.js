@@ -19,9 +19,9 @@ function generateDemoTasksGuest() {
                 subtasks: 2,
                 subtasksData: ['Subtask 1', 'Subtask 2'],
                 selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "EM" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "MB" }
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "EM", name: "Emmanuel Mauer" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "MB", name: "Marcel Bauer" }
                 ],
                 priority: 'medium',
                 boardColumn: 'progress-column',
@@ -37,9 +37,9 @@ function generateDemoTasksGuest() {
                 subtasks: 0,
                 subtasksData: [],
                 selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "DE" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS" }
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "DE", name: "David Eisenberg" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ", name: "Benedikt Ziegler" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS", name: "Anja Schulz" }
                 ],
                 priority: 'low',
                 boardColumn: 'await-column',
@@ -55,9 +55,9 @@ function generateDemoTasksGuest() {
                 subtasks: 0,
                 subtasksData: [],
                 selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "EF" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "TW" }
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "EF", name: "Eva Fischer" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS", name: "Anja Schulz" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "TW", name: "Tatjana Wolf" }
                 ],
                 priority: 'medium',
                 boardColumn: 'await-column',
@@ -73,8 +73,8 @@ function generateDemoTasksGuest() {
                 subtasks: 2,
                 subtasksData: ['Subtask 1', 'Subtask 2'],
                 selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "SM" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ" }
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ", name: "Benedikt Ziegler" }
                 ],
                 priority: 'urgent',
                 boardColumn: 'done-column',
@@ -537,12 +537,64 @@ async function deleteTask() {
     closeOpenCard();
 }
 
+/**
+ * Save the selected task to local or remote storage and display the changes 
+ * ----- Only description and title working for now --------
+ */ 
+/*
+async function saveEditedTask() {
+    let taskId = document.querySelector('.card-modal-save-button').dataset.id;
+    let taskTitle = document.querySelector('.card-modal-title').textContent;
+    let description = document.querySelector('.card-modal-content').textContent;
+    let date = document.getElementById('dueDateText').textContent;
+    let category = document.querySelector('.task-categorie p').textContent;
+    let priority = document.querySelector('.card-modal-priority').textContent;
+
+    let tasks;
+
+    if (isUserLoggedIn) {
+        let usersString = await getItem('users');
+        let users = JSON.parse(usersString);
+        tasks = users[currentUser].tasks;
+    } else {
+        let tasksString = localStorage.getItem('tasks');
+        tasks = tasksString ? JSON.parse(tasksString) : [];
+    }
+
+    let task = tasks.find(task => task.id === taskId);
+
+    if (task) {
+        task.content.title = taskTitle;
+        task.content.description = description;
+        task.content.date = date;
+        task.content.category = category;
+        task.content.priority = priority;
+
+        data = task;
+
+        if (isUserLoggedIn) {
+            users[currentUser].tasks = tasks;
+            await setItem('users', JSON.stringify(users));
+        } else {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+    }
+
+    let taskElement = document.getElementById(taskId);
+    taskElement.querySelector('.card-title').textContent = taskTitle;
+    taskElement.querySelector('.card-content').textContent = description;
+
+    closeOpenCard();
+    endEdit();
+}
+*/
+
 function openCard(data, subtasksData) {
     let selectedPriority = data.content.priority;
     let priorityIconSrc = getPriorityIcon(selectedPriority);
     let categoryClass = data.content.category === 'Technical task' ? 'card-modal-technical' : 'card-modal-userstory';
     let selectedContacts = data.content.selectedContacts || [];
-    
+
 
 
     let openCardHTML = /*html*/`
@@ -629,8 +681,10 @@ function openCard(data, subtasksData) {
                     <p> Edit </p>
                 </button>
 
+                <button onclick="saveEditedTask()" data-id="${data.id}" class="card-modal-save-button">
+                    <p> OK </p>
+                </button>
             </div>
-            
         </div>
     </div>
     `;

@@ -3,6 +3,24 @@ body {
     background-color: rgb(246, 247, 248);
 }
 
+.hover {
+    transition: 220ms ease-in-out;
+}
+
+.hover:hover {
+    cursor: pointer;
+    background-color: #2A3647;
+    color: white;
+    scale: 1.05;
+    box-shadow: 0 4px 5px #5551;
+}
+
+.hover:hover .box_icon img {
+    background-color: #2A3647;
+    filter: invert(1);
+    transition: 220ms ease-in-out;
+}
+
 .summary {
     display: flex;
     margin-left: 250px;
@@ -73,9 +91,10 @@ body {
     gap: 18px;
     flex-shrink: 0;
     border-radius: 30px;
-    background: #FFF;
     box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.10);
     cursor: pointer;
+    color: black;
+    background-color: white;
 }
 
 .box_icon img {
@@ -83,8 +102,14 @@ body {
     height: 69px;
 }
 
+.box_icon {
+    filter: invert(0);
+    background-color: #2A3647;
+    border-radius: 50%;
+
+}
+
 .box_number {
-    color: #000;
     text-align: center;
     font-family: Inter;
     font-size: 64px;
@@ -95,7 +120,6 @@ body {
 }
 
 .box_text {
-    color: #2A3647;
     font-family: Inter;
     font-size: 20px;
     font-style: normal;
@@ -104,7 +128,7 @@ body {
     /* 24px */
 }
 
-.column_container {
+.column_container .box_urgency_column {
     display: flex;
     flex-direction: column;
 }
@@ -136,6 +160,7 @@ body {
     background: #FFF;
     box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.10);
     cursor: pointer;
+    color: black;
 }
 
 .boxs_center {
@@ -156,6 +181,7 @@ body {
     background: #FFF;
     box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.10);
     cursor: pointer;
+    color: black;
 }
 
 .box_urgency_verticalbar img {
@@ -167,7 +193,6 @@ body {
 }
 
 .box_urgency_date {
-    color: #2A3647;
     font-family: Inter;
     font-size: 21px;
     font-style: normal;
@@ -209,10 +234,10 @@ body {
     background: #FFF;
     box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.10);
     cursor: pointer;
+    color: black;
 }
 
 .box_small_number {
-    color: #000;
     text-align: center;
     font-family: Inter;
     font-size: 64px;
@@ -223,7 +248,6 @@ body {
 }
 
 .box_small_text {
-    color: #2A3647;
     text-align: center;
     font-family: Inter;
     font-size: 20px;
@@ -234,7 +258,6 @@ body {
 }
 
 .box_small_text2 {
-    color: #2A3647;
     text-align: center;
     font-family: "OpenSans";
     font-size: 21px;
@@ -273,23 +296,43 @@ body {
 }
 
 @keyframes fadeIn {
-    0% {opacity: 0;}
-    100% {opacity: 1;}
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 @keyframes fadeOut {
-    0% {opacity: 1;}
-    100% {opacity: 0;}
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
 }
 
 @-webkit-keyframes fadeIn {
-    0% {opacity: 0;}
-    100% {opacity: 1;}
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 @-webkit-keyframes fadeOut {
-    0% {opacity: 1;}
-    100% {opacity: 0;}
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
 }
 
 /* Media queries */
@@ -298,16 +341,16 @@ body {
         opacity: 0;
         animation: fadeIn 2s linear 0s 1 normal forwards, fadeOut 2s linear 3s 1 normal forwards;
     }
-    
+
     .summary {
         opacity: 0;
         animation: fadeIn 2s linear 1.5s 1 normal forwards;
     }
-    
+
     .visible {
         opacity: 1;
     }
-    
+
     .hidden {
         opacity: 0;
     }
@@ -318,7 +361,7 @@ body {
         gap: 0px;
     }
 
-    .column_container {
+    .column_container{
         width: 95%;
         margin: 0;
     }
@@ -356,15 +399,15 @@ body {
     }
 
     .right_textgray, .right_textlightblue {
-        text-align: center; 
+        text-align: center;
     }
 
-    .boxs_box{
+    .boxs_box {
         width: 100%;
         margin: 0;
     }
-    
-    .box_pencil, .box_check{
+
+    .box_pencil, .box_check {
         width: 141px;
         height: 50px;
         gap: 10px;
@@ -374,33 +417,41 @@ body {
     .box_urgency {
         width: 357px;
         height: 81px;
-        padding: 25px 17px;
+        padding: 25px 20px;
         gap: 20px;
     }
 
-    .box_number, .box_small_number{
+    .box_urgency_column {
+        width: 275%;
+    }
+
+    .box_number, .box_small_number {
         font-size: 47px;
     }
 
-    .box_text{
+    .box_urgency_date {
+        font-size: 16px;
+    }
+
+    .box_text {
         display: flex;
         justify-content: center;
         font-size: 14px;
     }
 
-    .box_icon{
+    .box_icon {
         width: 40px;
         height: 40px;
     }
 
-    .box_small{
+    .box_small {
         width: 115px;
         height: 58px;
         padding: 25px 0px;
         gap: 13px;
     }
 
-    .box_small_text, .box_small_text2{
+    .box_small_text, .box_small_text2 {
         font-size: 13px;
     }
 }

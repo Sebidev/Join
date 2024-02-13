@@ -1,10 +1,58 @@
 /**
+ * @description This function generates a random id for a new contact.
+ * @returns a random id
+ */
+function generateId() {
+    return '_' + Math.random().toString(36).substr(2, 9);
+}
+
+var numbers = [0, 1, 2, 3, 4];
+var index = numbers.length;
+
+/**
+ * @description This function shuffles the elements of an array.
+ * @param {*} array 
+ */
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+/**
+ * @description This function simulates the rolling of a dice. It returns a random number between 0 and 4.
+ */
+function rollDice() {
+    if (index === numbers.length) {
+        shuffleArray(numbers);
+        index = 0;
+    }
+    return numbers[index++];
+}
+
+/**
  * add event listener for dom content loaded event to initialize functions
  */
 document.addEventListener('DOMContentLoaded', async () => {
     await loadUsers();
     loadLoginData();
 })
+
+/**
+ * @description Demo Contacts for the user
+ */
+let demoContacts = [
+    { id: generateId(), avatarid: rollDice(), name: 'Anton Mayer', email: 'antom@gmail.com', phone: '+49123456789'},
+    { id: generateId(), avatarid: rollDice(), name: 'Anja Schulz', email: 'schulz@hotmail.com', phone: '+49123456789'},
+    { id: generateId(), avatarid: rollDice(), name: 'Benedikt Ziegler', email: 'benedikt@gmail.com', phone: '+49123456789'},
+    { id: generateId(), avatarid: rollDice(), name: 'David Eisenberg', email: 'davidberg@gmail.com', phone: '+49123456789'},
+    { id: generateId(), avatarid: rollDice(), name: 'Eva Fischer', email: 'eva@gmail.com', phone: '+49123456789'},
+    { id: generateId(), avatarid: rollDice(), name: 'Emmanuel Mauer', email: 'emmanuelma@gmail.com', phone: '+49123456789'},
+    { id: generateId(), avatarid: rollDice(), name: 'Marcel Bauer', email: 'bauer@gmail.com', phone: '+49123456789' },
+    { id: generateId(), avatarid: rollDice(), name: 'Tatjana Wolf', email: 'wolf@gmail.com', phone: '+49123456789' },
+];
+
 
 /**
  * fetch users array
@@ -21,6 +69,11 @@ async function loadUsers() {
  * set all users inside the user object to false if guest login, then forward to summary
  */
 async function guestLogin() {
+    let storedContacts = JSON.parse(localStorage.getItem('contacts')) || [];
+    if (!storedContacts || storedContacts.length === 0) {
+        localStorage.setItem('contacts', JSON.stringify(demoContacts));
+    }
+
     for (const user of users) {
         user.isYou = false;
     }
@@ -131,9 +184,9 @@ function generateDemoTasksUser() {
                 subtasks: 2,
                 subtasksData: ['Subtask 1', 'Subtask 2'],
                 selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "EM" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "MB" }
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer"  },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "EM", name: "Emmanuel Mauer"},
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "MB", name: "Marcel Bauer" }
                 ],
                 priority: 'medium',
                 boardColumn: 'progress-column',
@@ -149,9 +202,9 @@ function generateDemoTasksUser() {
                 subtasks: 0,
                 subtasksData: [],
                 selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "DE" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS" }
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "DE", name: "David Eisenberg" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ", name: "Benedikt Ziegler" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS", name: "Anja Schulz" }
                 ],
                 priority: 'low',
                 boardColumn: 'await-column',
@@ -167,9 +220,9 @@ function generateDemoTasksUser() {
                 subtasks: 0,
                 subtasksData: [],
                 selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "EF" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "TW" }
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "EF", name: "Eva Fischer" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS", name: "Anja Schulz" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "TW", name: "Tatjana Wolf" }
                 ],
                 priority: 'medium',
                 boardColumn: 'await-column',
@@ -185,8 +238,8 @@ function generateDemoTasksUser() {
                 subtasks: 2,
                 subtasksData: ['Subtask 1', 'Subtask 2'],
                 selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "SM" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ" }
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer" },
+                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ", name: "Benedikt Ziegler" }
                 ],
                 priority: 'urgent',
                 boardColumn: 'done-column',
@@ -197,6 +250,19 @@ function generateDemoTasksUser() {
 }
 
 /**
+ * @description This function generates demo contacts for a user.
+ * @param {*} firstName
+ * @param {*} emailSignup
+ * @returns demo contacts in a json
+ * */
+function generateDemoContacts(firstName, emailSignup) {
+    demoContacts = demoContacts.concat({id: generateId(), avatarid: rollDice(), name: firstName, email: emailSignup, phone: '+49123456789'});
+    demoContacts.sort((a, b) => a.name.localeCompare(b.name));
+    return demoContacts;
+}
+
+
+/**
  * adding user data to array and then send post request
  * @param {element} emailSignup - stands for email input element
  * @param {element} passwordSignup - stands for password input element
@@ -205,6 +271,7 @@ async function addUserToArray(emailSignup, passwordSignup) {
     signupButton('disable');
 
     let demoTasks = generateDemoTasksUser();
+    let demoContacts = generateDemoContacts(setName('first'), emailSignup.value);
 
     users.push({
         firstName: setName('first'),
@@ -216,7 +283,7 @@ async function addUserToArray(emailSignup, passwordSignup) {
         password: passwordSignup.value,
         isYou: false,
         userID: users.length,
-        contacts,
+        contacts: demoContacts,
         tasks: demoTasks
     });
 
