@@ -1,4 +1,4 @@
-window.onload = function() {
+window.addEventListener('load', function() {
     var menuItems = document.querySelectorAll('.sidemenu_element');
     var currentUrl = window.location.href;
   
@@ -11,4 +11,4 @@ window.onload = function() {
             item.classList.remove('selected');
         }
     });
-};
+});
