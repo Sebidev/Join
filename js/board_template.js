@@ -539,12 +539,11 @@ async function deleteTask() {
 
 /**
  * Save the selected task to local or remote storage and display the changes 
- * 
+ * ----- Only description and title working for now --------
  */ 
 /*
 async function saveEditedTask() {
     let taskId = document.querySelector('.card-modal-save-button').dataset.id;
-    console.log('taskId:', taskId);
     let taskTitle = document.querySelector('.card-modal-title').textContent;
     let description = document.querySelector('.card-modal-content').textContent;
     let date = document.getElementById('dueDateText').textContent;
@@ -571,6 +570,8 @@ async function saveEditedTask() {
         task.content.category = category;
         task.content.priority = priority;
 
+        data = task;
+
         if (isUserLoggedIn) {
             users[currentUser].tasks = tasks;
             await setItem('users', JSON.stringify(users));
@@ -580,7 +581,6 @@ async function saveEditedTask() {
     }
 
     let taskElement = document.getElementById(taskId);
-    console.log('taskElement:', taskElement);
     taskElement.querySelector('.card-title').textContent = taskTitle;
     taskElement.querySelector('.card-content').textContent = description;
 
