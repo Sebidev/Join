@@ -1017,19 +1017,29 @@ function deleteSubtask(subtaskContainer) {
 
 function addSubtaskOpenCard() {
     let inputElement = document.getElementById('newSubtaskInput');
-    let subtaskList = document.getElementById('subtaskList');
+    let subtasksContainer = document.querySelector('.card-modal-subtasks');
     let subtaskText = inputElement.value.trim();
 
     if (subtaskText !== '') {
-        let subtaskHTML = `
-                    <div class="subtask-item">
-                        <div class="subtask-text">${subtaskText}</div>
-                        <div class="delete-button" onclick="deleteSubtaskItem(this.parentNode)">
-                            <img src="./img/iconoir_cancel.svg" alt="">
-                        </div>
-                    </div>
-                    `;
-        subtaskList.innerHTML += subtaskHTML;
+        let subtaskContainer = document.createElement('div');
+        subtaskContainer.className = 'card-modal-subtask-maincontainer';
+
+        subtaskContainer.innerHTML = `
+            <div class="card-modal-subtask-checked"> 
+                <input type="checkbox" class="subtask-checkbox">                    
+            </div>
+            <div class="card-modal-subtask-description">${subtaskText}</div>
+            <div class="subtasks-edit-icons-container d-none">
+                <div class="subtasks-edit-icons-container-p">
+                    <p class="subtask-icon-edit"><img src="./img/edit.svg" alt="Edit Subtask"></p>
+                    <p class="subtask-icon-edit"><img src="./img/divider.svg" alt="Divider"></p>
+                    <p class="subtask-icon-delete"><img src="./img/delete.svg" alt="Delete Subtask"></p>
+                </div>
+            </div>
+        `;
+
+        subtasksContainer.appendChild(subtaskContainer);
+
         inputElement.value = '';
     }
 }
