@@ -461,7 +461,7 @@ function renderCard(data) {
                 <div class="progress-bar" id="progressBar">
                     <div class="progress-fill" id="progressFill_${data.id}"></div>
                 </div>
-                <div class="subtasks">0/${createdSubtasks} Subtasks</div>
+                <div class="subtasks" id="subtasks_${data.id}">0/${createdSubtasks} Subtasks</div>
             </div>
             <div class="to-do-bottom">
                 ${initialsHTML}
@@ -477,17 +477,20 @@ function renderCard(data) {
 
 function updateProgressBar() {
     let taskId = currentTaskId;
-    let totalSubtasks = document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox`).length;
-    let checkedSubtasks = document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox:checked`).length;
     let progressFill = document.getElementById(`progressFill_${taskId}`);
-    let percentage = (checkedSubtasks / totalSubtasks) * 100;
+    let subtasksInfo = document.querySelector(`#subtasks_${taskId}`);
 
-    progressFill.style.width = `${percentage}%`;
+    if (progressFill && subtasksInfo) {
+        let totalSubtasks = document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox`).length;
+        let checkedSubtasks = document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox:checked`).length;
+        let percentage = (checkedSubtasks / totalSubtasks) * 100;
 
-    saveCheckboxStatus(taskId);
+        progressFill.style.width = `${percentage}%`;
 
-    let subtasksInfo = document.querySelector(`#cardModal_${taskId} .subtasks`);
-    subtasksInfo.textContent = `${checkedSubtasks}/${totalSubtasks} Subtasks`;
+        saveCheckboxStatus(taskId);
+
+        subtasksInfo.textContent = `${checkedSubtasks}/${totalSubtasks} Subtasks`;
+    }
 }
 
 function saveCheckboxStatus(taskId) {
@@ -713,7 +716,7 @@ async function openCard(data, subtasksData) {
     </div>`;
 
     document.body.insertAdjacentHTML('beforeend', openCardHTML);
-    updateProgressBar(globalData);
+    updateProgressBar(taskId);
     let cardOverlay = document.getElementById('card-overlay');
     cardOverlay.style.display = 'block';
 
