@@ -232,7 +232,7 @@ function addTask(column) {
                     <div class="subtasks-container">
                         <div class="subtasks-add-task">Subtasks</div>
                         <div class="input-container-subtask">
-                            <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask"id="subtask">
+                            <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask" id="subtask">
                             <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" onclick="addSubtask()">
                             <div class="subImgContainer">
                             </div>   
@@ -439,9 +439,10 @@ function renderCard(data) {
         let selectedContacts = data.content.selectedContacts || [];
         let initialsHTML = createAvatarDivs(selectedContacts);
         let priorityIconSrc = getPriorityIcon(selectedPriority);
+        let taskId = data.id;
 
         let renderCard = document.createElement('div');
-        renderCard.id = data.id;
+        renderCard.id = taskId;
         renderCard.className = 'card-user-story';
         renderCard.onclick = () => openCard(data, subtasksData);
 
@@ -449,6 +450,8 @@ function renderCard(data) {
         renderCard.ondragstart = (event) => startDragging(event);
         renderCard.ondragend = (event) => endDragging(event);
         renderCard.ondragover = (event) => preventDragOver(event);
+
+        let currentSubtasks = countSubtasks(taskId);
 
         renderCard.innerHTML = `
             <p class="${categoryClass}">${data.content.category}</p>
@@ -459,9 +462,9 @@ function renderCard(data) {
             <p style="display: none">${data.content.date}</p>
             <div class="progress">
                 <div class="progress-bar" id="progressBar">
-                    <div class="progress-fill" id="progressFill_${data.id}" style="width: 0;"></div>
+                    <div class="progress-fill" id="progressFill_${taskId}" style="width: 0;"></div>
                 </div>
-                <div class="subtasks" id="subtasks_${data.id}">0/${createdSubtasks} Subtasks</div>
+                <div class="subtasks" id="subtasks_${taskId}">${currentSubtasks}/${createdSubtasks} Subtasks</div>
             </div>
             <div class="to-do-bottom">
                 ${initialsHTML}
@@ -470,9 +473,15 @@ function renderCard(data) {
                 </div>
             </div>
         `;
-        currentTaskId = data.id;
+
+        currentTaskId = taskId;
         containerDiv.appendChild(renderCard);
     }
+}
+
+function countSubtasks(taskId) {
+    let subtasksContainer = document.querySelector(`#subtasks_${taskId}`);
+    return subtasksContainer ? subtasksContainer.children.length : 0;
 }
 
 function updateProgressBar() {
@@ -559,7 +568,7 @@ async function saveEditedTask() {
     let description = document.querySelector('.card-modal-content').textContent;
     let date = document.querySelector('.dateInput').value;
     let category = document.querySelector('.task-categorie p').textContent;
-    let priority = document.querySelector('.card-modal-priority-letter').textContent.toLowerCase();
+    let priority = document.querySelector('.card-modal-priority').textContent;
 
     let tasks;
 
