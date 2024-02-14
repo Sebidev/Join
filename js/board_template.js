@@ -568,7 +568,7 @@ async function saveEditedTask() {
     let description = document.querySelector('.card-modal-content').textContent;
     let date = document.querySelector('.dateInput').value;
     let category = document.querySelector('.task-categorie p').textContent;
-    let priority = document.querySelector('.card-modal-priority').textContent;
+    let priority = document.querySelector('.card-modal-priority-letter').textContent.toLowerCase();
 
     let tasks;
 
