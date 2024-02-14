@@ -918,42 +918,18 @@ function chooseCardModal(priority) {
     }
 }
 
-async function createContactDropdown() {
-    let assignedToContainer = document.querySelector('.card-modal-assigned-to-headline');
-    let cardContactsContainer = document.querySelector('.card-modal-contacts');
-    let contacts = await getContacts();
+function createContactDropdown() {
+    let contactDropdownEdit = document.querySelector('.card-modal-assigned-to-headline');
 
-    let dropdownMenu = document.createElement('div');
-    dropdownMenu.classList.add('contact-dropdown-menu');
-    dropdownMenu.id = 'openCardContactDropdown';
-    dropdownMenu.style.width = `${cardContactsContainer.offsetWidth}px`;
+    let inputContainer = document.createElement('div');
+    inputContainer.className = 'input-container';
+    inputContainer.innerHTML = `
+        <input id="assignedTo" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
+        <img id="arrow_down" onclick="showDropdown()" class="arrow_down" src="./img/arrow_down.svg" alt="">
+        <div id="contactDropdown" class="dropdown-content"></div>
+        `;
 
-    contacts.forEach(contact => {
-        let isSelected = selectedInitialsArray.includes(contact.initial);
-
-        let contactDiv = createContactDiv(contact, isSelected);
-
-        dropdownMenu.appendChild(contactDiv);
-    });
-
-    let arrowIcon = document.createElement('span');
-    arrowIcon.classList.add('arrow-down-icon');
-    arrowIcon.innerHTML = '&#9660';
-
-    arrowIcon.addEventListener('click', function () {
-        dropdownMenu.style.display = (dropdownMenu.style.display === 'none') ? 'block' : 'none';
-    });
-
-    document.addEventListener('click', function (event) {
-        if (!dropdownMenu.contains(event.target) && event.target !== arrowIcon) {
-            dropdownMenu.style.display = 'none';
-        }
-    });
-
-    dropdownMenu.style.display = 'none';
-
-    assignedToContainer.appendChild(arrowIcon);
-    assignedToContainer.appendChild(dropdownMenu);
+    contactDropdownEdit.appendChild(inputContainer);
 }
 
 function updateDropdownCheckbox(contactId) {
