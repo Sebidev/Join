@@ -232,7 +232,7 @@ function addTask(column) {
                     <div class="subtasks-container">
                         <div class="subtasks-add-task">Subtasks</div>
                         <div class="input-container-subtask">
-                            <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask"id="subtask">
+                            <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask" id="subtask">
                             <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" onclick="addSubtask()">
                             <div class="subImgContainer">
                             </div>   
@@ -439,9 +439,10 @@ function renderCard(data) {
         let selectedContacts = data.content.selectedContacts || [];
         let initialsHTML = createAvatarDivs(selectedContacts);
         let priorityIconSrc = getPriorityIcon(selectedPriority);
+        let taskId = data.id;
 
         let renderCard = document.createElement('div');
-        renderCard.id = data.id;
+        renderCard.id = taskId;
         renderCard.className = 'card-user-story';
         renderCard.onclick = () => openCard(data, subtasksData);
 
@@ -449,6 +450,8 @@ function renderCard(data) {
         renderCard.ondragstart = (event) => startDragging(event);
         renderCard.ondragend = (event) => endDragging(event);
         renderCard.ondragover = (event) => preventDragOver(event);
+
+        let currentSubtasks = countSubtasks(taskId);
 
         renderCard.innerHTML = `
             <p class="${categoryClass}">${data.content.category}</p>
@@ -459,9 +462,9 @@ function renderCard(data) {
             <p style="display: none">${data.content.date}</p>
             <div class="progress">
                 <div class="progress-bar" id="progressBar">
-                    <div class="progress-fill" id="progressFill_${data.id}" style="width: 0;"></div>
+                    <div class="progress-fill" id="progressFill_${taskId}" style="width: 0;"></div>
                 </div>
-                <div class="subtasks" id="subtasks_${data.id}">0/${createdSubtasks} Subtasks</div>
+                <div class="subtasks" id="subtasks_${taskId}">${currentSubtasks}/${createdSubtasks} Subtasks</div>
             </div>
             <div class="to-do-bottom">
                 ${initialsHTML}
@@ -470,9 +473,15 @@ function renderCard(data) {
                 </div>
             </div>
         `;
-        currentTaskId = data.id;
+
+        currentTaskId = taskId;
         containerDiv.appendChild(renderCard);
     }
+}
+
+function countSubtasks(taskId) {
+    let subtasksContainer = document.querySelector(`#subtasks_${taskId}`);
+    return subtasksContainer ? subtasksContainer.children.length : 0;
 }
 
 function updateProgressBar() {
@@ -908,42 +917,18 @@ function chooseCardModal(priority) {
     }
 }
 
-async function createContactDropdown() {
-    let assignedToContainer = document.querySelector('.card-modal-assigned-to-headline');
-    let cardContactsContainer = document.querySelector('.card-modal-contacts');
-    let contacts = await getContacts();
+function createContactDropdown() {
+    let contactDropdownEdit = document.querySelector('.card-modal-assigned-to-headline');
 
-    let dropdownMenu = document.createElement('div');
-    dropdownMenu.classList.add('contact-dropdown-menu');
-    dropdownMenu.id = 'openCardContactDropdown';
-    dropdownMenu.style.width = `${cardContactsContainer.offsetWidth}px`;
+    let inputContainer = document.createElement('div');
+    inputContainer.className = 'input-container';
+    inputContainer.innerHTML = `
+        <input id="assignedTo" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
+        <img id="arrow_down" onclick="showDropdown()" class="arrow_down" src="./img/arrow_down.svg" alt="">
+        <div id="contactDropdown" class="dropdown-content"></div>
+        `;
 
-    contacts.forEach(contact => {
-        let isSelected = selectedInitialsArray.includes(contact.initial);
-
-        let contactDiv = createContactDiv(contact, isSelected);
-
-        dropdownMenu.appendChild(contactDiv);
-    });
-
-    let arrowIcon = document.createElement('span');
-    arrowIcon.classList.add('arrow-down-icon');
-    arrowIcon.innerHTML = '&#9660';
-
-    arrowIcon.addEventListener('click', function () {
-        dropdownMenu.style.display = (dropdownMenu.style.display === 'none') ? 'block' : 'none';
-    });
-
-    document.addEventListener('click', function (event) {
-        if (!dropdownMenu.contains(event.target) && event.target !== arrowIcon) {
-            dropdownMenu.style.display = 'none';
-        }
-    });
-
-    dropdownMenu.style.display = 'none';
-
-    assignedToContainer.appendChild(arrowIcon);
-    assignedToContainer.appendChild(dropdownMenu);
+    contactDropdownEdit.appendChild(inputContainer);
 }
 
 function updateDropdownCheckbox(contactId) {
