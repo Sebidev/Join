@@ -550,7 +550,6 @@ async function deleteTask() {
 
 /**
  * Save the selected task to local or remote storage and display the changes 
- * ----- Only description and title working for now --------
  */
 
 async function saveEditedTask() {
