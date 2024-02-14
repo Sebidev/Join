@@ -459,7 +459,7 @@ function renderCard(data) {
             <p style="display: none">${data.content.date}</p>
             <div class="progress">
                 <div class="progress-bar" id="progressBar">
-                    <div class="progress-fill" id="progressFill_${data.id}"></div>
+                    <div class="progress-fill" id="progressFill_${data.id}" style="width: 0;"></div>
                 </div>
                 <div class="subtasks" id="subtasks_${data.id}">0/${createdSubtasks} Subtasks</div>
             </div>
@@ -483,7 +483,9 @@ function updateProgressBar() {
     if (progressFill && subtasksInfo) {
         let totalSubtasks = document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox`).length;
         let checkedSubtasks = document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox:checked`).length;
-        let percentage = (checkedSubtasks / totalSubtasks) * 100;
+        let percentage = totalSubtasks > 0 ? (checkedSubtasks / totalSubtasks) * 100 : 0;
+
+        percentage = Math.round(percentage * 100) / 100;
 
         progressFill.style.width = `${percentage}%`;
 
