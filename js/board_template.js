@@ -1,6 +1,7 @@
 let isPriorityOptionsOpen = false;
 let globalData;
 let isEditActive = false;
+let currentTaskId;
 //import { contacts } from './js/add-task.js';
 
 async function initBoard() {
@@ -316,12 +317,17 @@ function closeModal() {
 
 function closeOpenCard() {
     let cardOverlay = document.getElementById('card-overlay');
-    let cardModal = document.getElementById('cardModal');
+    let taskId = currentTaskId;
 
-    cardOverlay.remove();
-    cardModal.remove();
+    if (cardOverlay) {
+        cardOverlay.remove();
 
-    endEdit();
+        let cardModal = document.getElementById(`cardModal_${taskId}`);
+        if (cardModal) {
+            cardModal.remove();
+            endEdit();
+        }
+    }
 }
 
 function getValue(selector) {
@@ -464,32 +470,32 @@ function renderCard(data) {
                 </div>
             </div>
         `;
-        globalData = data;
+        currentTaskId = data.id;
         containerDiv.appendChild(renderCard);
     }
 }
 
 function updateProgressBar() {
-    let totalSubtasks = document.querySelectorAll('.subtask-checkbox').length;
-    let checkedSubtasks = document.querySelectorAll('.subtask-checkbox:checked').length;
+    let taskId = currentTaskId;
+    let totalSubtasks = document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox`).length;
+    let checkedSubtasks = document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox:checked`).length;
     let progressFill = document.getElementById('progressFill');
     let percentage = (checkedSubtasks / totalSubtasks) * 100;
 
     progressFill.style.width = `${percentage}%`;
 
-    saveCheckboxStatus();
+    saveCheckboxStatus(taskId);
 
     let subtasksInfo = document.querySelector('.subtasks');
     subtasksInfo.textContent = `${checkedSubtasks}/${totalSubtasks} Subtasks`;
 }
 
-
-function saveCheckboxStatus() {
+function saveCheckboxStatus(taskId) {
     let checkboxStatus = {};
-    document.querySelectorAll('.subtask-checkbox').forEach((checkbox, index) => {
+    document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox`).forEach((checkbox, index) => {
         checkboxStatus[index] = checkbox.checked;
     });
-    localStorage.setItem('checkboxStatus', JSON.stringify(checkboxStatus));
+    localStorage.setItem(`checkboxStatus_${taskId}`, JSON.stringify(checkboxStatus));
 }
 
 function getPriorityIcon(priority) {
@@ -540,7 +546,7 @@ async function deleteTask() {
 /**
  * Save the selected task to local or remote storage and display the changes 
  * ----- Only description and title working for now --------
- */ 
+ */
 
 async function saveEditedTask() {
     let taskId = document.querySelector('.card-modal-save-button').dataset.id;
@@ -593,8 +599,9 @@ async function saveEditedTask() {
 }
 
 async function openCard(data, subtasksData) {
-    let taskId = data.id;
     let tasks;
+    let taskId = data.id;
+    currentTaskId = taskId;
 
     if (isUserLoggedIn) {
         let usersString = await getItem('users');
@@ -614,12 +621,11 @@ async function openCard(data, subtasksData) {
     let selectedPriority = data.content.priority;
     let priorityIconSrc = getPriorityIcon(selectedPriority);
     let categoryClass = data.content.category === 'Technical task' ? 'card-modal-technical' : 'card-modal-userstory';
-    let selectedContacts = data.content.selectedContacts || [];
-
+    let selectedContacts = data.content.selectedContacts || {};
 
     let openCardHTML = /*html*/`
-    <div id="card-overlay"></div>
-    <div id="cardModal" class="card-modal">
+        <div id="card-overlay"></div>
+        <div id="cardModal_${taskId}" class="card-modal">
             <div class="task-categorie">
                 <p class=${categoryClass}>${data.content.category}</p>
                 <div class="close-card-modal" onclick="closeOpenCard()">
@@ -657,7 +663,6 @@ async function openCard(data, subtasksData) {
                                 <div class="avatar">
                                     <img src="${contact.imagePath}" alt="Avatar">
                                     <div class="avatar_initletter">${contact.initials}</div>
-                                    
                                 </div>
                                 <div class="avatar-name">${contact.name || ''}</div>
                             </div>`).join('')}
@@ -668,21 +673,20 @@ async function openCard(data, subtasksData) {
             <div class="card-modal-subtasks-container">
                 <p class="card-modal-subtasks-container-headline">Subtasks</p>
                 <div class="card-modal-subtasks">
-                ${(data.content.subtasksData || []).map(subtask => `
-                <div class="card-modal-subtask-maincontainer">
-                    <div class="card-modal-subtask-checked"> 
-                    <input type="checkbox" class="subtask-checkbox">                    
-                    </div>
-                    <div class="card-modal-subtask-description">${subtask}</div>
-                        <div class="subtasks-edit-icons-container d-none">
-                            <div class="subtasks-edit-icons-container-p">
-                                <p class="subtask-icon-edit"><img src="./img/edit.svg" alt="Edit Subtask"></p>
-                                <p class="subtask-icon-edit"><img src="./img/divider.svg" alt="Divider"></p>
-                                <p class="subtask-icon-delete"><img src="./img/delete.svg" alt="Delete Subtask"></p>
+                    ${(data.content.subtasksData || []).map((subtask, index) => `
+                        <div class="card-modal-subtask-maincontainer">
+                            <div class="card-modal-subtask-checked"> 
+                                <input type="checkbox" class="subtask-checkbox" id="subtaskCheckbox_${data.id}_${index + 1}">                     
                             </div>
-                        </div>
-                    
-                </div>`).join('')}
+                            <div class="card-modal-subtask-description">${subtask}</div>
+                            <div class="subtasks-edit-icons-container d-none">
+                                <div class="subtasks-edit-icons-container-p">
+                                    <p class="subtask-icon-edit"><img src="./img/edit.svg" alt="Edit Subtask"></p>
+                                    <p class="subtask-icon-edit"><img src="./img/divider.svg" alt="Divider"></p>
+                                    <p class="subtask-icon-delete"><img src="./img/delete.svg" alt="Delete Subtask"></p>
+                                </div>
+                            </div>
+                        </div>`).join('')}
                 </div>
             </div>
 
@@ -706,25 +710,27 @@ async function openCard(data, subtasksData) {
                 </button>
             </div>
         </div>
-    </div>
-    `;
+    </div>`;
 
     document.body.insertAdjacentHTML('beforeend', openCardHTML);
-
     updateProgressBar(globalData);
     let cardOverlay = document.getElementById('card-overlay');
     cardOverlay.style.display = 'block';
 
-    restoreCheckboxStatus();
+    restoreCheckboxStatus(taskId);
 }
 
-function restoreCheckboxStatus() {
-
-    let checkboxStatus = JSON.parse(localStorage.getItem('checkboxStatus')) || {};
-
-    document.querySelectorAll('.subtask-checkbox').forEach((checkbox, index) => {
-        checkbox.checked = checkboxStatus[index] || false;
-    });
+function restoreCheckboxStatus(taskId) {
+    let checkboxStatusString = localStorage.getItem(`checkboxStatus_${taskId}`);
+    if (checkboxStatusString) {
+        let checkboxStatus = JSON.parse(checkboxStatusString);
+        Object.entries(checkboxStatus).forEach(([index, checked]) => {
+            let checkbox = document.querySelector(`#cardModal_${taskId} .subtask-checkbox:nth-child(${parseInt(index) + 1})`);
+            if (checkbox) {
+                checkbox.checked = checked;
+            }
+        });
+    }
 }
 
 document.addEventListener('change', function (event) {
@@ -761,8 +767,7 @@ function setupDueDateInput() {
     $(dateInput).datepicker({
         dateFormat: 'yy-mm-dd',
         showButtonPanel: true,
-        onSelect: function(dateText) {
-            // Update the dueDateText element's text content when a new date is selected
+        onSelect: function (dateText) {
             dueDateText.textContent = dateText;
         }
     });
@@ -1043,14 +1048,17 @@ function addSubtaskOpenCard() {
     let inputElement = document.getElementById('newSubtaskInput');
     let subtasksContainer = document.querySelector('.card-modal-subtasks');
     let subtaskText = inputElement.value.trim();
+    let taskId = currentTaskId;
 
     if (subtaskText !== '') {
         let subtaskContainer = document.createElement('div');
         subtaskContainer.className = 'card-modal-subtask-maincontainer';
 
+        let checkboxId = `subtaskCheckbox_${taskId}_${subtasksContainer.children.length + 1}`;
+
         subtaskContainer.innerHTML = `
             <div class="card-modal-subtask-checked"> 
-                <input type="checkbox" class="subtask-checkbox">                    
+                <input type="checkbox" class="subtask-checkbox" id="${checkboxId}">                    
             </div>
             <div class="card-modal-subtask-description">${subtaskText}</div>
             <div class="subtasks-edit-icons-container d-none">
