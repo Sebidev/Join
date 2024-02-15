@@ -833,6 +833,7 @@ function edit() {
         addRemoveButtonsToContacts();
         initializeContactDropdownOpenCard();
         $('.avatar-name').hide();
+        $('#selectedContactsContainerEdit').css('display', 'flex');
         enableSubtasksEditing();
         isEditActive = true;
     }
@@ -840,6 +841,7 @@ function edit() {
 
 function endEdit() {
     $('.avatar-name').show();
+    $('#selectedContactsContainerEdit').css('display', 'block');
     isEditActive = false;
 }
 
