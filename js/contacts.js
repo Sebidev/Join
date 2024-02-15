@@ -29,6 +29,10 @@ function addContact() {
 
     overlay.style.display = "block";
     contactModal.style.display = "block";
+
+    setTimeout(() => {
+        contactModal.classList.add('show');
+    }, 0);
 }
 
 window.addContact = addContact;
@@ -42,8 +46,11 @@ function closeContactModal() {
     var contactModal = document.getElementById('contactModal');
 
     if (overlay && contactModal) {
-        overlay.parentNode.removeChild(overlay);
-        contactModal.parentNode.removeChild(contactModal);
+        contactModal.classList.remove('show');
+        setTimeout(() => {
+            overlay.parentNode.removeChild(overlay);
+            contactModal.parentNode.removeChild(contactModal);
+        }, 200);
     }
 }
 
@@ -288,6 +295,9 @@ async function editContact(contactid){
         contactModal.appendChild(formDiv);
         overlay.style.display = "block";
         contactModal.style.display = "block";
+        setTimeout(() => {
+            contactModal.classList.add('show');
+        }, 0);
     }
     else {
         console.log(`Kein Kontakt mit der ID ${id} gefunden.`);

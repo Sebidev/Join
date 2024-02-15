@@ -18,7 +18,10 @@ function generateDemoTasksGuest() {
                 date: '2024-12-31',
                 category: 'User Story',
                 subtasks: 2,
-                subtasksData: ['Subtask 1', 'Subtask 2'],
+                subtasksData: [
+                    { name: 'Subtask 1', status: false },
+                    { name: 'Subtask 2', status: false }
+                ],
                 selectedContacts: [
                     { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer" },
                     { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "EM", name: "Emmanuel Mauer" },
@@ -72,7 +75,9 @@ function generateDemoTasksGuest() {
                 date: '2024-12-31',
                 category: 'Technical task',
                 subtasks: 2,
-                subtasksData: ['Subtask 1', 'Subtask 2'],
+                subtasksData: [
+                    { name: 'Subtask 1', status: false },
+                    { name: 'Subtask 2', status: false }],
                 selectedContacts: [
                     { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer" },
                     { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ", name: "Benedikt Ziegler" }
@@ -976,7 +981,7 @@ function createSelectedContactDivEdit(contact) {
     let selectedContactDiv = document.createElement("div");
     selectedContactDiv.classList.add("initial-container-open-card");
     selectedContactDiv.id = "selectedContactEdit";
-    
+
     selectedContactDiv.innerHTML = `
         <div data-avatarid="${contact.avatarid}">
             <div class="avatar">
