@@ -558,8 +558,7 @@ async function deleteTask() {
 }
 
 /**
- * Save the selected task to local or remote storage and display the changes 
- * ----- Only description and title working for now --------
+ * Save the selected task to local or remote storage and display the changes.
  */
 
 async function saveEditedTask() {
@@ -608,8 +607,16 @@ async function saveEditedTask() {
         dateElement.textContent = `Due date: ${date}`;
     }
 
+    let priorityIconElement = taskElement.querySelector('.priority-symbol img');
+    let newPriorityIconSrc = getPriorityIcon(priority);
+    priorityIconElement.src = newPriorityIconSrc;
+
     closeOpenCard();
     endEdit();
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 async function openCard(data, subtasksData) {
@@ -636,6 +643,7 @@ async function openCard(data, subtasksData) {
     let priorityIconSrc = getPriorityIcon(selectedPriority);
     let categoryClass = data.content.category === 'Technical task' ? 'card-modal-technical' : 'card-modal-userstory';
     let selectedContacts = data.content.selectedContacts || {};
+    let priority = capitalizeFirstLetter(data.content.priority);
 
     let openCardHTML = /*html*/`
         <div id="card-overlay"></div>
@@ -662,9 +670,12 @@ async function openCard(data, subtasksData) {
             </div>
 
             <div class="card-modal-priority">
-                <p>Priority: <span class="card-modal-priority-letter">${data.content.priority}</span></p>
-                <div class="card-modal-priority-symbol">
-                    <img src="${priorityIconSrc}" alt="">
+                <p class="priority-card-modal-text">Priority:</p> 
+                <div class="card-modal-priority-container">
+                    <span class="card-modal-priority-letter">${priority}</span>
+                    <div class="card-modal-priority-symbol">
+                        <img src="${priorityIconSrc}" alt="">
+                    </div>
                 </div>
             </div>
 

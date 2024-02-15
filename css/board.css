@@ -717,7 +717,7 @@ body {
   align-self: stretch;
 }
 
-.due-date-card-modal {
+.due-date-card-modal, .priority-card-modal-text {
   margin: 0;
   color: var(--Version-2-main-color, #2a3647);
   /* Version 2/t6 */
@@ -739,6 +739,10 @@ body {
   line-height: 120%; /* 24px */
 }
 
+#dueDateText {
+  margin: 0;
+}
+
 .card-modal-date-number p {
   margin: 0;
 }
@@ -746,7 +750,7 @@ body {
 .card-modal-priority {
   display: flex;
   align-items: center;
-  gap: 25px;
+  gap: 44px;
   align-self: stretch;
 }
 
@@ -764,9 +768,13 @@ body {
   line-height: 120%; /* 24px */
 }
 
+.card-modal-priority-container {
+  display: flex;
+  gap: 5px;
+}
+
 .card-modal-priority-symbol {
   display: flex;
-  padding: 4px 18px;
   justify-content: center;
   align-items: center;
   gap: 10px;
