@@ -143,9 +143,15 @@ function removeContact(contactavatarId) {
 
 async function addToBoard(column) {
     let taskTitle = getFieldValueById('taskTitleInput');
+    let category = getFieldValueById('category');
+
+    if (!taskTitle || !category) {
+        alert('Please fill out the title and the category');
+        return;
+    }
+
     let description = getFieldValueById('descriptionInput');
     let date = getFieldValueById('date');
-    let category = getFieldValueById('category');
     let subtasksList = document.getElementById('subtaskList').children;
     let selectedContacts = getSelectedContacts();
     let selectedPriority = getSelectedPriority();
