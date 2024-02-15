@@ -431,7 +431,7 @@ body {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transition: transform 0.2s;
   background-color: white;
   border: 1px solid #ccc;
   z-index: 1000;
@@ -476,6 +476,7 @@ body {
 .add-task-create-open {
   flex-direction: column;
   align-items: center;
+  transform: translate(-50%, -50%);
 }
 
 .Add-task-content {

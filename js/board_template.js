@@ -262,6 +262,12 @@ function addTask(column) {
 
     let overlay = document.getElementById('overlay');
     overlay.style.display = 'block';
+    let modal = document.getElementById('taskModal');
+    modal.style.transform = "translate(0%, -50%) translateX(100%)";
+
+    setTimeout(() => {
+        modal.style.transform = "translate(-50%, -50%)";
+    }, 100);
 }
 
 /*
@@ -311,8 +317,12 @@ function closeModal() {
     let modal = document.getElementById('taskModal');
     let overlay = document.getElementById('overlay');
 
-    modal.remove();
-    overlay.remove();
+    modal.style.transform = "translate(0%, -50%) translateX(100%)";
+
+    setTimeout(() => {
+        modal.remove();
+        overlay.remove();
+    }, 200);
 }
 
 function closeOpenCard() {
