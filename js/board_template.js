@@ -835,12 +835,14 @@ function edit() {
         enablePriorityEditing();
         addRemoveButtonsToContacts();
         initializeContactDropdownOpenCard();
+        $('.avatar-name').hide();
         enableSubtasksEditing();
         isEditActive = true;
     }
 }
 
 function endEdit() {
+    $('.avatar-name').show();
     isEditActive = false;
 }
 
