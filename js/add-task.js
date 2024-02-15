@@ -111,7 +111,7 @@ function createSelectedContactDiv(contact) {
 
 function selectContact() {
     let selectedContactsContainer = document.getElementById("selectedContactsContainer");
-    //selectedContactsContainer.innerHTML = "";
+    selectedContactsContainer.innerHTML = "";
 
     selectedInitialsArray.forEach(contact => {
         let selectedContactDiv = createSelectedContactDiv(contact);

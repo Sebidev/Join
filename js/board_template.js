@@ -692,7 +692,7 @@ async function openCard(data, subtasksData) {
             <div class="card-modal-contacts">
                 <p class="card-modal-assigned-to-headline">Assigned to:</p>
                 <div class="card-modal-contacts-container">
-                    <div id="selectedContactsContainer" class="card-modal-initial-container">
+                    <div id="selectedContactsContainerEdit" class="card-modal-initial-container">
                         ${(selectedContacts || []).map(contact => `
                             <div class="initial-container-open-card">
                                 <div class="avatar">
@@ -802,9 +802,6 @@ function setupDueDateInput() {
     $(dateInput).datepicker({
         dateFormat: 'yy-mm-dd',
         showButtonPanel: true,
-        onSelect: function (dateText) {
-            dueDateText.textContent = dateText;
-        }
     });
 }
 
@@ -948,11 +945,71 @@ function createContactDropdown() {
     inputContainer.className = 'input-container';
     inputContainer.innerHTML = `
         <input id="assignedTo" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
-        <img id="arrow_down" onclick="showDropdown()" class="arrow_down" src="./img/arrow_down.svg" alt="">
+        <img id="arrow_down" onclick="showDropdownEdit()" class="arrow_down" src="./img/arrow_down.svg" alt="">
         <div id="contactDropdown" class="dropdown-content"></div>
         `;
 
     contactDropdownEdit.appendChild(inputContainer);
+}
+
+async function showDropdownEdit() {
+    let dropdownContent = document.getElementById("contactDropdown");
+    dropdownContent.innerHTML = "";
+
+    let contacts = await getContacts();
+
+    contacts.forEach(contact => {
+        let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id);
+        /*
+        let contactDiv = createContactDivEdit(contact, isSelected);
+        dropdownContent.appendChild(contactDiv);*/
+    });
+
+    dropdownContent.style.display = 'block';
+}
+
+function updateSelectedContacts(contact, action) {
+    let index = selectedInitialsArray.findIndex(c => c.id === contact.id);
+
+    if (action === 'add' && index === -1) {
+        selectedInitialsArray.push(contact);
+    } else if (action === 'remove' && index !== -1) {
+        selectedInitialsArray.splice(index, 1);
+    }
+
+    saveAndDisplaySelectedContactsEdit();
+}
+
+function saveAndDisplaySelectedContactsEdit() {
+    saveSelectedContacts();
+    selectContactEdit();
+}
+
+function createSelectedContactDivEdit(contact) {
+    let selectedContactDiv = document.createElement("div");
+    selectedContactDiv.classList.add("initial-container-open-card");
+    selectedContactDiv.id = "selectedContactEdit";
+    
+    selectedContactDiv.innerHTML = `
+        <div data-avatarid="${contact.avatarid}">
+            <div class="avatar">
+                <img src="img/Ellipse5-${contact.avatarid}.svg" alt="Avatar">
+                <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
+            </div>
+        </div>
+    `;
+    return selectedContactDiv;
+}
+
+function selectContactEdit() {
+    let selectedContactsContainer = document.getElementById("selectedContactsContainerEdit");
+
+    let currentSelection = selectedInitialsArray.slice();
+
+    currentSelection.forEach(contact => {
+        let selectedContactDiv = createSelectedContactDivEdit(contact);
+        selectedContactsContainer.appendChild(selectedContactDiv);
+    });
 }
 
 function updateDropdownCheckbox(contactId) {
