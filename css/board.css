@@ -1101,20 +1101,40 @@ body {
   display: none;
 }
 
+.mobile-searchbar {
+  display: none;
+}
+
 /* Media Queries */
 @media only screen and (max-width: 600px) {
+
+  body, html{
+    overflow-x: hidden;
+  }
+
   .head{
-    margin-left: 30px;
+    margin-left: 16px;
     margin-top: 48px;
   }
 
-  .input-container-mobile{
+  .mobile-searchbar{
     display: flex;
     width: 100%;
+    gap: 10px;
+    margin-top: 30px;
+    margin-left: 16px;
+    margin-bottom: 70px;
+  }
+
+  .input-container-mobile{
+    position: absolute;
+    display: flex;
+    width: 93%;
   }
 
   .find-task-search{
-    width: 100%;
+    position: absolute;
+    width: 85vw;
   }
 
   .add-task-button{
@@ -1123,15 +1143,15 @@ body {
 
   .search-icon{
     display: flex;
-    position: static;
-    transform: none;
+    position: absolute;
+    top: 24px;
     height: auto;
   }
 
   .vector{
     display: flex;
-    position: static;
-    transform: none;
+    position: absolute;
+    top: 24px;
     height: auto;
   }
 
@@ -1155,22 +1175,22 @@ body {
   }
 
   .no-tasks-here{
-    width: 90vw;
+    width: 93vw;
   }
 
   .board{
     height: 100%;
+    width: 100vw;
     flex-direction: column;
-    margin-left: 30px;
+    margin-left: 16px;
   }
 
   .instance{
-    width: 90vw;
+    width: 94vw;
   }
 
   .card-modal {
-    top: 42%;
-    left: 45%;
+    position: absolute;
     width: 75%; 
     height: auto;
     padding: 20px;

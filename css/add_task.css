@@ -707,12 +707,12 @@ body {
   .Add-task {
     margin-left: 5px;
     flex-direction: column;
-    height: 100vw;
+    height: 95vw;
   }
 
   .Add-task-left {
     height: 188px;
-    width: 100vw;
+    width: 95vw;
     margin-left: 5px;
   }
 
@@ -784,13 +784,17 @@ body {
   }
 
   .due-date-container {
-    width: 100vw;
+    width: 95vw;
     margin-bottom: 8px;
   }
 
   .due-date-input {
     padding: 8px 21px;
     width: 84vw;
+  }
+
+  .prio-container {
+    width: 95vw;
   }
 
   .prio-option-container {
@@ -818,7 +822,7 @@ body {
   }
 
   .category-container {
-    width: 100vw;
+    width: 95vw;
   }
 
   .category, .category-dropdown {
@@ -869,8 +873,6 @@ body {
     position: absolute;
     right: 10px;
     margin-top: 4.5px;
-    height: 24px;
-    width: 24px;
   }
 
   .clear-and-create-section {
@@ -881,7 +883,7 @@ body {
     padding: 8px;
     gap: 8px;
     right: 0px;
-    width: 100vw;
+    width: 95vw;
     background-color: white;
   }
 

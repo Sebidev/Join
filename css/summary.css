@@ -358,6 +358,7 @@ body {
         flex-direction: column;
         align-items: center;
         gap: 0px;
+        width: 100%;
     }
 
     .column_container{
@@ -451,6 +452,6 @@ body {
     }
 
     .box_small_text, .box_small_text2 {
-        font-size: 13px;
+        font-size: 11px;
     }
 }
