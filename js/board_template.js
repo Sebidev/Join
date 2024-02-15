@@ -805,20 +805,6 @@ function setupDueDateInput() {
     });
 }
 
-function addRemoveButtonsToContacts() {
-    let contacts = document.querySelectorAll('.card-modal-contact');
-    contacts.forEach(contact => {
-        let removeButton = document.createElement('span');
-        removeButton.classList.add('remove-contact');
-        removeButton.textContent = 'X';
-        removeButton.onclick = function () {
-            removeContact(contact.dataset.contactId);
-        };
-
-        contact.querySelector('.card-modal-contact-and-image').appendChild(removeButton);
-    });
-}
-
 function initializeContactDropdownOpenCard() {
     createContactDropdown(() => {
         updateCheckboxState();
@@ -830,7 +816,6 @@ function edit() {
         enableContentEditing();
         setupDueDateInput();
         enablePriorityEditing();
-        addRemoveButtonsToContacts();
         initializeContactDropdownOpenCard();
         $('.avatar-name').hide();
         $('#selectedContactsContainerEdit').css('display', 'flex');
@@ -1006,18 +991,20 @@ function createSelectedContactDivEdit(contact) {
 function selectContactEdit() {
     let selectedContactsContainer = document.getElementById("selectedContactsContainerEdit");
 
-    let currentSelection = selectedInitialsArray.slice();
+    selectedContactsContainer.innerHTML = "";
 
-    currentSelection.forEach(contact => {
-        let selectedContactDiv = createSelectedContactDivEdit(contact);
-        selectedContactsContainer.appendChild(selectedContactDiv);
+    selectedInitialsArray.forEach(contact => {
+        if (!document.querySelector(`#selectedContactsContainerEdit [data-avatarid="${contact.avatarid}"]`)) {
+            let selectedContactDiv = createSelectedContactDivEdit(contact);
+            selectedContactsContainer.appendChild(selectedContactDiv);
+        }
     });
 }
 
 function updateDropdownCheckbox(contactId) {
     let checkbox = document.querySelector(`.contact-checkbox[data-contact-id="${contactId}"]`);
     if (checkbox) {
-        checkbox.checked = selectedInitialsArray.includes(contactId);
+        checkbox.checked = selectedInitialsArray.some(contact => contact.avatarid === contactId);
     }
 }
 
@@ -1027,19 +1014,24 @@ function updateCheckboxState() {
         let checkbox = document.querySelector(`.contact-checkbox[data-contact-id="${contactId}"]`);
 
         if (checkbox) {
-            checkbox.checked = selectedInitialsArray.includes(contactId);
+            checkbox.checked = selectedInitialsArray.some(contact => contact.avatarid === contactId);
         }
     });
 }
 
 function removeContactArray(contact) {
-    let index = selectedInitialsArray.indexOf(contact.initial);
+    let index = selectedInitialsArray.findIndex(c => c.avatarid === contact.avatarid);
     if (index !== -1) {
         selectedInitialsArray.splice(index, 1);
     }
 
+    let contactDiv = document.querySelector(`#selectedContactsContainerEdit [data-avatarid="${contact.avatarid}"]`);
+    if (contactDiv) {
+        contactDiv.remove();
+    }
+
     if (contact) {
-        let checkbox = document.querySelector(`.contact-checkbox[data-contact-id="${contact.initial}"]`);
+        let checkbox = document.querySelector(`.contact-checkbox[data-contact-id="${contact.avatarid}"]`);
         if (checkbox) {
             checkbox.checked = false;
         }
@@ -1047,7 +1039,7 @@ function removeContactArray(contact) {
 
     removeContact(contact);
     selectContactCardModal();
-    updateDropdownCheckbox(contact);
+    updateDropdownCheckbox(contact.avatarid);
 }
 
 function enableSubtasksEditing() {
