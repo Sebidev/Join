@@ -18,7 +18,10 @@ function generateDemoTasksGuest() {
                 date: '2024-12-31',
                 category: 'User Story',
                 subtasks: 2,
-                subtasksData: ['Subtask 1', 'Subtask 2'],
+                subtasksData: [
+                    { description: 'Implement Recipe Recommendation', checked: true },
+                    { description: 'Start Page Layout', checked: false }
+                ],
                 selectedContacts: [
                     { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer" },
                     { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "EM", name: "Emmanuel Mauer" },
@@ -72,7 +75,10 @@ function generateDemoTasksGuest() {
                 date: '2024-12-31',
                 category: 'Technical task',
                 subtasks: 2,
-                subtasksData: ['Subtask 1', 'Subtask 2'],
+                subtasksData: [
+                    { description: 'Establish CSS Methodology', checked: true },
+                    { description: 'Setup Base Styles', checked: true }
+                ],
                 selectedContacts: [
                     { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer" },
                     { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ", name: "Benedikt Ziegler" }
@@ -439,11 +445,10 @@ function createAvatarDivs(selectedContacts) {
     return avatarDivsHTML;
 }
 
-function renderCard(data) {
+async function renderCard(data) {
     if (data && data.content) {
         let containerDiv = document.getElementById(data.content.boardColumn);
         let categoryClass = data.content.category === 'Technical task' ? 'technical-task' : 'user-story';
-        let createdSubtasks = data.content.subtasks;
         let subtasksData = data.content.subtasksData || [];
         let selectedPriority = data.content.priority;
         let selectedContacts = data.content.selectedContacts || [];
@@ -461,7 +466,9 @@ function renderCard(data) {
         renderCard.ondragend = (event) => endDragging(event);
         renderCard.ondragover = (event) => preventDragOver(event);
 
-        let currentSubtasks = countSubtasks(taskId);
+        let currentSubtasks = await countSubtasks(taskId);
+        let totalSubtasks = data.content.subtasks;
+        let progress = totalSubtasks > 0 ? (currentSubtasks / totalSubtasks) * 100 : 0;
 
         renderCard.innerHTML = `
             <p class="${categoryClass}">${data.content.category}</p>
@@ -471,10 +478,10 @@ function renderCard(data) {
             </div>
             <p style="display: none">${data.content.date}</p>
             <div class="progress">
-                <div class="progress-bar" id="progressBar">
-                    <div class="progress-fill" id="progressFill_${taskId}" style="width: 0;"></div>
+                <div class="progress-bar" id="progressBar_${taskId}">
+                    <div class="progress-fill" id="progressFill_${taskId}" style="width: ${progress}%;"></div>
                 </div>
-                <div class="subtasks" id="subtasks_${taskId}">${currentSubtasks}/${createdSubtasks} Subtasks</div>
+                <div class="subtasks" id="subtasks_${taskId}">${currentSubtasks}/${totalSubtasks} Subtasks</div>
             </div>
             <div class="to-do-bottom">
                 ${initialsHTML}
@@ -489,9 +496,22 @@ function renderCard(data) {
     }
 }
 
-function countSubtasks(taskId) {
-    let subtasksContainer = document.querySelector(`#subtasks_${taskId}`);
-    return subtasksContainer ? subtasksContainer.children.length : 0;
+async function countSubtasks(taskId) {
+    let tasks;
+    if (isUserLoggedIn) {
+        let usersString = await getItem('users');
+        let users = JSON.parse(usersString);
+        tasks = users[currentUser].tasks;
+    } else {
+        let tasksString = localStorage.getItem('tasks');
+        tasks = tasksString ? JSON.parse(tasksString) : [];
+    }
+
+    let task = tasks.find(task => task.id === taskId);
+    let subtasksData = task.content.subtasksData || [];
+    let checkedSubtasks = subtasksData.filter(subtask => subtask.checked).length;
+
+    return checkedSubtasks;
 }
 
 function updateProgressBar() {
@@ -508,18 +528,42 @@ function updateProgressBar() {
 
         progressFill.style.width = `${percentage}%`;
 
-        saveCheckboxStatus(taskId);
-
         subtasksInfo.textContent = `${checkedSubtasks}/${totalSubtasks} Subtasks`;
     }
+
+    saveCheckboxStatus(taskId);
 }
 
-function saveCheckboxStatus(taskId) {
-    let checkboxStatus = {};
-    document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox`).forEach((checkbox, index) => {
-        checkboxStatus[index] = checkbox.checked;
-    });
-    localStorage.setItem(`checkboxStatus_${taskId}`, JSON.stringify(checkboxStatus));
+async function saveCheckboxStatus(taskId) {
+    let tasks;
+
+    if (isUserLoggedIn) {
+        let usersString = await getItem('users');
+        let users = JSON.parse(usersString);
+        tasks = users[currentUser].tasks;
+    } else {
+        let tasksString = localStorage.getItem('tasks');
+        tasks = tasksString ? JSON.parse(tasksString) : [];
+    }
+
+    let task = tasks.find(task => task.id === taskId);
+
+    if (task) {
+        let subtasksData = Array.from(document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox`)).map((checkbox, index) => {
+            return {
+                description: task.content.subtasksData[index].description,
+                checked: checkbox.checked
+            };
+        });
+        task.content.subtasksData = subtasksData;
+
+        if (isUserLoggedIn) {
+            users[currentUser].tasks = tasks;
+            await setItem('users', JSON.stringify(users));
+        } else {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+    }
 }
 
 function getPriorityIcon(priority) {
@@ -598,6 +642,14 @@ async function saveEditedTask() {
         task.content.date = date;
         task.content.category = category;
         task.content.priority = priority;
+
+        let subtasksData = Array.from(document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox`)).map((checkbox, index) => {
+            return {
+                description: task.content.subtasksData[index].description,
+                checked: checkbox.checked
+            };
+        });
+        task.content.subtasksData = subtasksData;
 
         data = task;
 
@@ -711,9 +763,9 @@ async function openCard(data, subtasksData) {
                     ${(data.content.subtasksData || []).map((subtask, index) => `
                         <div class="card-modal-subtask-maincontainer">
                             <div class="card-modal-subtask-checked"> 
-                                <input type="checkbox" class="subtask-checkbox" id="subtaskCheckbox_${data.id}_${index + 1}">                     
+                                <input type="checkbox" class="subtask-checkbox" id="subtaskCheckbox_${data.id}_${index + 1}" ${subtask.checked ? 'checked' : ''}>                     
                             </div>
-                            <div class="card-modal-subtask-description">${subtask}</div>
+                            <div class="card-modal-subtask-description">${subtask.description}</div>
                             <div class="subtasks-edit-icons-container d-none">
                                 <div class="subtasks-edit-icons-container-p">
                                     <p class="subtask-icon-edit"><img src="./img/edit.svg" alt="Edit Subtask"></p>
@@ -751,14 +803,31 @@ async function openCard(data, subtasksData) {
     updateProgressBar(taskId);
     let cardOverlay = document.getElementById('card-overlay');
     cardOverlay.style.display = 'block';
-
-    restoreCheckboxStatus(taskId);
 }
 
-function restoreCheckboxStatus(taskId) {
-    let checkboxStatusString = localStorage.getItem(`checkboxStatus_${taskId}`);
-    if (checkboxStatusString) {
-        let checkboxStatus = JSON.parse(checkboxStatusString);
+async function restoreCheckboxStatus(taskId) {
+    let checkboxStatus;
+
+    if (isUserLoggedIn) {
+        let usersString = await getItem('users');
+        let users = JSON.parse(usersString);
+        let tasks = users[currentUser].tasks;
+        let task = tasks.find(task => task.id === taskId);
+
+        if (task && task.content.checkboxStatus) {
+            checkboxStatus = task.content.checkboxStatus;
+        }
+    } else {
+        let tasksString = localStorage.getItem('tasks');
+        let tasks = tasksString ? JSON.parse(tasksString) : [];
+        let task = tasks.find(task => task.id === taskId);
+
+        if (task && task.content.checkboxStatus) {
+            checkboxStatus = task.content.checkboxStatus;
+        }
+    }
+
+    if (checkboxStatus) {
         Object.entries(checkboxStatus).forEach(([index, checked]) => {
             let checkbox = document.querySelector(`#cardModal_${taskId} .subtask-checkbox:nth-child(${parseInt(index) + 1})`);
             if (checkbox) {

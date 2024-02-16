@@ -192,7 +192,12 @@ function getSelectedContacts() {
 
 
 async function saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column) {
-    let subtasksData = Array.from(subtasksList).map(subtask => subtask.firstElementChild.innerText);
+    let subtasksData = Array.from(subtasksList).map(subtask => {
+        return {
+            description: subtask.firstElementChild.innerText,
+            checked: false
+        };
+    });
 
     let task = {
         content: {
