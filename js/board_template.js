@@ -1006,6 +1006,7 @@ function createContactDropdown() {
         `;
 
     contactDropdownEdit.appendChild(inputContainer);
+    document.getElementById('arrow_down').addEventListener('click', showDropdownEdit);
 }
 
 async function showDropdownEdit() {
@@ -1016,12 +1017,34 @@ async function showDropdownEdit() {
 
     contacts.forEach(contact => {
         let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id);
-        /*
         let contactDiv = createContactDivEdit(contact, isSelected);
-        dropdownContent.appendChild(contactDiv);*/
+        dropdownContent.appendChild(contactDiv);
     });
 
+        updateCheckboxState();
+
     dropdownContent.style.display = 'block';
+}
+
+function createContactDivEdit(contact, isSelected) {
+    let contactDiv = document.createElement("div");
+    contactDiv.innerHTML = `
+        <label class="contacts">
+            <div class="contacts-img-initial">
+                <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
+                <div class="initials-overlay">${contact.name.split(' ').map(n => n[0]).join('')}</div>
+            </div>
+            <div class="dropdown-checkbox">
+                <div style="margin-left: 5px;">${contact.name}</div>
+                <input type="checkbox" class="contact-checkbox" ${isSelected ? 'checked' : ''}>
+            </div>
+        </label>
+    `;
+    contactDiv.addEventListener("mousedown", (event) => {
+        event.preventDefault();
+        updateSelectedContacts(contact, isSelected ? 'remove' : 'add');
+    });
+    return contactDiv;
 }
 
 function updateSelectedContacts(contact, action) {
@@ -1070,23 +1093,21 @@ function selectContactEdit() {
     });
 }
 
-function updateDropdownCheckbox(contactId) {
-    let checkbox = document.querySelector(`.contact-checkbox[data-contact-id="${contactId}"]`);
-    if (checkbox) {
-        checkbox.checked = selectedInitialsArray.some(contact => contact.avatarid === contactId);
-    }
-}
-
 function updateCheckboxState() {
+    selectedInitialsArray = JSON.parse(localStorage.getItem('selectedContacts')) || [];
+    console.log('selectedInitialsArray:', selectedInitialsArray);
+
     contacts.forEach(contact => {
         let contactId = contact.id;
         let checkbox = document.querySelector(`.contact-checkbox[data-contact-id="${contactId}"]`);
 
         if (checkbox) {
             checkbox.checked = selectedInitialsArray.some(contact => contact.avatarid === contactId);
+            console.log(`Contact ${contactId} checkbox state: ${checkbox.checked}`);
         }
     });
 }
+
 
 function removeContactArray(contact) {
     let index = selectedInitialsArray.findIndex(c => c.avatarid === contact.avatarid);
