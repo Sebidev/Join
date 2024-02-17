@@ -40,7 +40,7 @@ export const addContactTemplate = `
         </div>
         <div class="button_container">
             <div class="close_button2" onclick="closeContactModal()">Close<img src="img/close.svg"></img></div>
-            <div class="createcontact_button" onclick="saveContact()">Create contact<img src="img/check.svg"></img></div>
+            <div class="createcontact_button hover-color" onclick="saveContact()">Create contact<img src="img/check.svg"></img></div>
         </div>
     </form>
 </div>`;

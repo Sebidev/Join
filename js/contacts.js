@@ -287,7 +287,7 @@ async function editContact(contactid){
             </div>
             <div class="button_container">
                 <div class="close_button2" onclick="delContact('${contact.id}')">Delete<img src="img/close.svg"></img></div>
-                <div class="createcontact_button" onclick="saveEditedContact('${contact.id}')">Save<img src="img/check.svg"></img></div>
+                <div class="createcontact_button hover-color" onclick="saveEditedContact('${contact.id}')">Save<img src="img/check.svg"></img></div>
             </div>
         </form>`;
 

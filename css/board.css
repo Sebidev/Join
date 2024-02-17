@@ -82,6 +82,10 @@ body {
   line-height: 120%; /* 25.2px */
 }
 
+.hover-color:hover {
+  background-color: #29abe2;
+}
+
 .instance {
   height: 28px;
   width: 252px;
@@ -104,6 +108,8 @@ body {
 }
 
 .plus-button {
+  color: #2a3647;
+  background-color: transparent;
   cursor: pointer;
   display: flex;
   width: 18px;
@@ -115,6 +121,11 @@ body {
   flex-shrink: 0;
   border-radius: 8px;
   border: 2px solid var(--Version-2-main-color, #2a3647);
+}
+
+.hover-inv:hover {
+  background-color: #29abe2;
+  border-color: #29abe2;
 }
 
 .board-head {
