@@ -1,3 +1,9 @@
+/**
+ * @file contacts_template.js
+ * This file is used to store the HTML templates for the contacts page.
+ * 
+ */
+
 export const editContactTemplate = `
 <div id="bluebar">
     <img class="bluebar_joinlogo" src="img/join_logo.svg"></img>

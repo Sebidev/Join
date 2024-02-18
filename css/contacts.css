@@ -630,3 +630,105 @@ body {
 .visible {
     visibility: visible !important;
 }
+
+.backArrow {
+    display: none;
+    position: absolute;
+    right: 10px;
+    width: 37px;
+    height: 37px;
+    border-radius: 50%;
+}
+  
+.backArrow:hover {
+    cursor: pointer;
+    background-color: #eeeeee;
+    transform: scale(1.1);
+}
+
+/* Media Queries */
+@media only screen and (max-width: 600px) {
+
+    .contacts_container {
+        width: 100%;
+        margin: 0px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-bottom: 100px;
+    }
+
+    .contact_title, .floating_contact_container{
+        display: none;
+    }
+
+    .add_new_conatct_btn_container{
+        display: contents;
+    }
+
+    .add_new_contact_btn {
+        position: fixed;
+        bottom: 112px;
+        right: 16px;
+        padding: 12px;
+        height: 32px;
+        width: 32px;
+        gap: 10px;
+        border-radius: 46px;
+        border: 1px solid #2A3647;
+        background: #2A3647;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    }
+
+    .add_new_contact_btn span{
+        display: none;
+    }
+
+    .contact_title, .floating_contact_container{
+        margin: 0;
+        margin-top: 48px;
+        margin-left: 15px;
+    }
+
+    .contact_title{
+        font-size: 47px;
+    }
+
+    .contact_title_text{
+        font-size: 20px;
+        text-align: left;
+    }
+
+    .verticalbar {
+        position: absolute;
+        top: 200px;
+        left: 45px;
+        transform: rotate(90deg);
+    }
+
+    .verticalbar img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .floating_contact{
+        gap: 20px
+    }
+
+    .floating_contact_name{
+        font-size: 36px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 120%;
+    }
+
+    .backArrow {
+        display: flex;
+        margin-top: -65px;
+        width: 30px;
+        height: 30px;
+    }
+    
+    .backArrow:hover {
+        transform: scale(1.05);
+    }
+}
