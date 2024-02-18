@@ -467,7 +467,7 @@ async function renderCard(data) {
         renderCard.ondragover = (event) => preventDragOver(event);
 
         let currentSubtasks = await countSubtasks(taskId);
-        let totalSubtasks = data.content.subtasks;
+        let totalSubtasks = data.content.subtasksData.length;
         let progress = totalSubtasks > 0 ? (currentSubtasks / totalSubtasks) * 100 : 0;
 
         renderCard.innerHTML = `
@@ -643,13 +643,17 @@ async function saveEditedTask() {
         task.content.category = category;
         task.content.priority = priority;
 
-        let subtasksData = Array.from(document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox`)).map((checkbox, index) => {
+        let subtasksData = Array.from(document.querySelectorAll(`#cardModal_${taskId} .card-modal-subtask-maincontainer`)).map((subtaskContainer) => {
+            let description = subtaskContainer.querySelector('.card-modal-subtask-description').textContent;
+            let checkbox = subtaskContainer.querySelector('.subtask-checkbox');
             return {
-                description: task.content.subtasksData[index].description,
+                description: description,
                 checked: checkbox.checked
             };
         });
         task.content.subtasksData = subtasksData;
+        task.content.subtasks = subtasksData.length;
+
 
         data = task;
 
@@ -673,6 +677,7 @@ async function saveEditedTask() {
     let newPriorityIconSrc = getPriorityIcon(priority);
     priorityIconElement.src = newPriorityIconSrc;
 
+    updateProgressBar();
     closeOpenCard();
     endEdit();
 }
