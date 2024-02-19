@@ -433,19 +433,38 @@ document.addEventListener('DOMContentLoaded', () => {
     initUser().then(checkAndRenderSharedData);
 });
 
+/** this function creates the contact images with intitials in our board.html
+ * 
+ * @param {string} selectedContacts 
+ * @returns selected contacts
+ */
+
 function createAvatarDivs(selectedContacts) {
     let avatarDivsHTML = '';
+    let maxVisibleContacts = 3;
 
     for (let i = 0; i < selectedContacts.length; i++) {
         let selectedContact = selectedContacts[i];
 
-        avatarDivsHTML += `
-            <div class="initial-container">
-                <div class="avatar" id="${selectedContact.id}">
-                    <img src="${selectedContact.imagePath}">
-                    <div class="avatar_initletter">${selectedContact.initials}</div>
-                </div>
-            </div>`;
+        if (i < maxVisibleContacts - 1 || selectedContacts.length <= maxVisibleContacts) {
+            avatarDivsHTML += `
+                <div class="initial-container">
+                    <div class="avatar" id="${selectedContact.id}">
+                        <img src="${selectedContact.imagePath}">
+                        <div class="avatar_initletter">${selectedContact.initials}</div>
+                    </div>
+                </div>`;
+        } else if (i === maxVisibleContacts - 1) {
+            let remainingContacts = selectedContacts.length - maxVisibleContacts + 1;
+            avatarDivsHTML += `
+                <div class="initial-container">
+                    <div class="avatar" id="${selectedContact.id}">
+                        <img src="${selectedContact.imagePath}">
+                        <div class="avatar_initletter">+${remainingContacts}</div>
+                    </div>
+                </div>`;
+            break;
+        }
     }
 
     return avatarDivsHTML;
@@ -490,7 +509,9 @@ async function renderCard(data) {
                 <div class="subtasks" id="subtasks_${taskId}">${currentSubtasks}/${totalSubtasks} Subtasks</div>
             </div>
             <div class="to-do-bottom">
-                ${initialsHTML}
+                <div class="initials-cont">
+                    ${initialsHTML}
+                </div>
                 <div class="priority-symbol">
                     <img src="${priorityIconSrc}" alt="">
                 </div>

@@ -311,6 +311,7 @@ body {
   font-style: normal;
   font-weight: 700;
   line-height: 120%; /* 19.2px */
+  line-break: anywhere;
 }
 
 .card-content {
@@ -323,6 +324,7 @@ body {
   font-style: normal;
   font-weight: 400;
   line-height: 120%; /* 19.2px */
+  line-break: anywhere;
 }
 
 .progress {
@@ -381,9 +383,13 @@ body {
   align-self: stretch;
 }
 
-.initial-container {
+.initials-cont {
+  display: flex;
   margin-left: 8px;
-  width: 80px;
+}
+
+.initial-container {
+  margin-left: -8px;
   height: 32px;
   display: flex;
   align-items: flex-start;
@@ -707,6 +713,7 @@ body {
   font-style: normal;
   font-weight: 700;
   line-height: 120%; /* 73.2px */
+  line-break: anywhere;
 }
 
 .card-modal-content {
@@ -719,6 +726,7 @@ body {
   font-style: normal;
   font-weight: 400;
   line-height: 120%; /* 24px */
+  line-break: anywhere;
 }
 
 .card-modal-date {
