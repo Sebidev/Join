@@ -1,7 +1,7 @@
 /**
  * @file add-task-mobile.js
  * @summary JavaScript file for the Add Task page on mobile devices.
- * @description This file contains the JavaScript code for the Add Task page on mobile devices.
+ * This file contains the JavaScript code for the Add Task page on mobile devices.
  * It contains the code for rearranging the elements on the page when the screen size changes.
  */
 

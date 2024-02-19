@@ -114,6 +114,7 @@ async function generateDemoTasks() {
 
 /**
  * search functionality for the tasks in board.html
+ * @param {HTMLElement} searchInput
  */
 function addSearch(searchInput) {
     searchInput.addEventListener('input', async function () {
@@ -146,136 +147,139 @@ function addSearch(searchInput) {
  */
 
 function addTask(column) {
-    let modalHTML = /*html*/`
-        <div id="overlay"></div>
-        
-        <div id="taskModal" class="add-task-create-open">
-            <div class="modal-headline">Add task</div>
-            <div onclick="closeModal()">
-            <img class="close-modal" src="./img/close_modal.svg" alt="">
-            </div>
-            <div class="Add-task-content">
-                <div class="Add-task-left-modal">
-                    <div class="title-container">
-                        <div class="title">Title</div>
-                        <input id="taskTitleInput" type="text" class="title-input" placeholder="Enter a title" required>
-                        <div class="required-info">This field is required</div>
-                    </div>
-
-                    <div class="description-container">
-                        <div class="description">Description</div>
-                        <input id="descriptionInput" type="text" class="description-input" placeholder="Enter a Description" required>
-                        <div class="required-info">This field is required</div>
-                    </div>
-
-                    <div class="assigned-to-container">
-                        <div class="assigned-to">Assigned to</div>
-                        <div class="input-container">
-                            <input id="assignedTo" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
-                            <img id="arrow_down" onclick="showDropdown()" class="arrow_down" src="./img/arrow_down.svg" alt="">
-                            <div id="contactDropdown" class="dropdown-content"></div>
-                        </div>
-
-                        <div id="selectedContactsContainer"></div>
-                        <div class="input-container">
-                          <div class="dropdown-content"></div>
-                          <div class="arrow_down"></div>
-                        </div>
-
-                        <div class="required-legend-modal">This field is required</div>
-                    </div>
+    if(window.innerWidth <= 800) {
+        window.location.href = "add-task.html";
+    } else {
+        let modalHTML = /*html*/`
+            <div id="overlay"></div>
+            <div id="taskModal" class="add-task-create-open">
+                <div class="modal-headline">Add task</div>
+                <div onclick="closeModal()">
+                <img class="close-modal" src="./img/close_modal.svg" alt="">
                 </div>
+                <div class="Add-task-content">
+                    <div class="Add-task-left-modal">
+                        <div class="title-container">
+                            <div class="title">Title</div>
+                            <input id="taskTitleInput" type="text" class="title-input" placeholder="Enter a title" required>
+                            <div class="required-info">This field is required</div>
+                        </div>
 
-                <div class="divider">
-                    <img src="./img/divider.svg" alt="">
-                </div>
+                        <div class="description-container">
+                            <div class="description">Description</div>
+                            <input id="descriptionInput" type="text" class="description-input" placeholder="Enter a Description" required>
+                            <div class="required-info">This field is required</div>
+                        </div>
 
-                <div class="Add-task-right-modal">
-                    <div class="due-date-container">
-                        <div class="due-date">Due date</div>
-                        <input class="due-date-input" id="date" type="date" placeholder="dd/mm/yyyy">
-                    </div>
+                        <div class="assigned-to-container">
+                            <div class="assigned-to">Assigned to</div>
+                            <div class="input-container">
+                                <input id="assignedTo" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
+                                <img id="arrow_down" onclick="showDropdown()" class="arrow_down" src="./img/arrow_down.svg" alt="">
+                                <div id="contactDropdown" class="dropdown-content"></div>
+                            </div>
 
-                    <div class="prio-container">
-                        <div class="prio">Prio</div>
+                            <div id="selectedContactsContainer"></div>
+                            <div class="input-container">
+                            <div class="dropdown-content"></div>
+                            <div class="arrow_down"></div>
+                            </div>
 
-                        <div class="prio-option-container">
-                          <button
-                            type="button"
-                            onclick="choose('urgent')"
-                            class="button urgent">
-                            <h3>Urgent</h3>
-                            <img src="./img/Prio_up.svg" alt="" />
-                          </button>
-                          <button
-                            type="button"
-                            onclick="choose('medium')"
-                            class="button medium">
-                            <h3>Medium</h3>
-                            <img src="./img/Prio_neutral.svg" alt="" />
-                          </button>
-                          <button type="button" onclick="choose('low')" class="button low">
-                            <h3>Low</h3>
-                            <img src="./img/Prio_down.svg" alt="" />
-                          </button>
+                            <div class="required-legend-modal">This field is required</div>
                         </div>
                     </div>
 
-                    <div class="category-container">
-                        <div class="category">Category</div>
-                        <div class="input-container">
-                            <input id="category" class="category-dropdown" type="text" placeholder="Select task category">
-                            <img class="arrow_down" src="./img/arrow_down.svg" onclick="toggleCategoryOptions()" alt="">
-                            <div class="category-options" id="categoryOptions">
-                                <label onclick="updateSelectedCategory('Technical task')">
-                                    Technical task
-                                </label>
-                                <label onclick="updateSelectedCategory('User Story')">
-                                    User Story
-                                </label>
+                    <div class="divider">
+                        <img src="./img/divider.svg" alt="">
+                    </div>
+
+                    <div class="Add-task-right-modal">
+                        <div class="due-date-container">
+                            <div class="due-date">Due date</div>
+                            <input class="due-date-input" id="date" type="date" placeholder="dd/mm/yyyy">
+                        </div>
+
+                        <div class="prio-container">
+                            <div class="prio">Prio</div>
+
+                            <div class="prio-option-container">
+                            <button
+                                type="button"
+                                onclick="choose('urgent')"
+                                class="button urgent">
+                                <h3>Urgent</h3>
+                                <img src="./img/Prio_up.svg" alt="" />
+                            </button>
+                            <button
+                                type="button"
+                                onclick="choose('medium')"
+                                class="button medium">
+                                <h3>Medium</h3>
+                                <img src="./img/Prio_neutral.svg" alt="" />
+                            </button>
+                            <button type="button" onclick="choose('low')" class="button low">
+                                <h3>Low</h3>
+                                <img src="./img/Prio_down.svg" alt="" />
+                            </button>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="subtasks-container">
-                        <div class="subtasks-add-task">Subtasks</div>
-                        <div class="input-container-subtask">
-                            <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask" id="subtask">
-                            <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" onclick="addSubtask()">
-                            <div class="subImgContainer">
-                            </div>   
+                        <div class="category-container">
+                            <div class="category">Category</div>
+                            <div class="input-container">
+                                <input id="category" class="category-dropdown" type="text" placeholder="Select task category">
+                                <img class="arrow_down" src="./img/arrow_down.svg" onclick="toggleCategoryOptions()" alt="">
+                                <div class="category-options" id="categoryOptions">
+                                    <label onclick="updateSelectedCategory('Technical task')">
+                                        Technical task
+                                    </label>
+                                    <label onclick="updateSelectedCategory('User Story')">
+                                        User Story
+                                    </label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="subtask-list" id="subtaskList"></div>
-                    </div>
 
-                    <div class="clear-and-create-section-modal">
-                        <button onclick="clearFields()" class="cancel-button-modal">
-                            <h3>Cancel</h3>
-                            <img src="./img/iconoir_cancel.svg" alt="">
-                        </button>
+                        <div class="subtasks-container">
+                            <div class="subtasks-add-task">Subtasks</div>
+                            <div class="input-container-subtask">
+                                <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask" id="subtask">
+                                <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" onclick="addSubtask()">
+                                <div class="subImgContainer">
+                                </div>   
+                            </div>
+                            <div class="subtask-list" id="subtaskList"></div>
+                        </div>
 
-                        <button class="create-task-button-modal" onclick="addToBoard('${column}')">
-                            <h3>Create Task</h3>
-                            <img src="./img/check.svg" alt="">
-                        </button>
+                        <div class="clear-and-create-section-modal">
+                            <button onclick="clearFields()" class="cancel-button-modal">
+                                <h3>Cancel</h3>
+                                <img src="./img/iconoir_cancel.svg" alt="">
+                            </button>
+
+                            <button class="create-task-button-modal" onclick="addToBoard('${column}')">
+                                <h3>Create Task</h3>
+                                <img src="./img/check.svg" alt="">
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    `;
+        `;
 
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
 
-    choose('medium');
+        choose('medium');
 
-    let overlay = document.getElementById('overlay');
-    overlay.style.display = 'block';
-    let modal = document.getElementById('taskModal');
-    modal.style.transform = "translate(0%, -50%) translateX(100%)";
+        let overlay = document.getElementById('overlay');
+        overlay.style.display = 'block';
+        let modal = document.getElementById('taskModal');
+        modal.style.transform = "translate(0%, -50%) translateX(100%)";
 
-    setTimeout(() => {
-        modal.style.transform = "translate(-50%, -50%)";
-    }, 100);
+        setTimeout(() => {
+            modal.style.transform = "translate(-50%, -50%)";
+        }, 100);
+    }
 }
 
 /*

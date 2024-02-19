@@ -1,6 +1,6 @@
 /**
  * @file contacts.js
- * @description This file contains the JavaScript code for the contacts.html page.
+ * This file contains the JavaScript code for the contacts.html page.
  */
 
 import { editContactTemplate, addContactTemplate } from './contacts_template.js';
@@ -12,7 +12,6 @@ var overlay;
 var contactModal;
 
 /**
- * addContact
  * This function is called when the user clicks on the "Add Contact" button. It creates a modal window with a form to add a new contact.
  */
 function addContact() {
@@ -40,7 +39,6 @@ window.addContact = addContact;
 window.closeContactModal = closeContactModal;
 
 /**
- * closeContactModal
  * This function is called when the user clicks on the "Close" button in the modal window. It removes the modal window from the DOM.
  */
 function closeContactModal() {
@@ -57,7 +55,7 @@ function closeContactModal() {
 }
 
 /**
- * @description This function generates a random id for a new contact.
+ * This function generates a random id for a new contact.
  * @returns a random id
  */
 function generateId() {
@@ -68,7 +66,7 @@ var numbers = [0, 1, 2, 3, 4];
 var index = numbers.length;
 
 /**
- * @description This function shuffles the elements of an array.
+ * This function shuffles the elements of an array.
  * @param {*} array 
  */
 function shuffleArray(array) {
@@ -79,7 +77,7 @@ function shuffleArray(array) {
 }
 
 /**
- * @description This function simulates the rolling of a dice. It returns a random number between 0 and 4.
+ * This function simulates the rolling of a dice. It returns a random number between 0 and 4.
  */
 function rollDice() {
     if (index === numbers.length) {
@@ -93,7 +91,7 @@ function rollDice() {
 window.saveContact = saveContact;
 
 /**
- * @description This function is called when the user clicks on the "Save" button in the modal window. It saves the new contact to the local storage.
+ * This function is called when the user clicks on the "Save" button in the modal window. It saves the new contact to the local storage.
  */
 async function saveContact() {
     let form = document.getElementById('addcontactForm');
@@ -142,7 +140,7 @@ async function saveContact() {
 }
 
 /**
- * @description This function displays a success message when a new contact has been added.
+ * This function displays a success message when a new contact has been added.
  */
 async function successMsg() {
     const successMessage = document.getElementById('newcontact-message');
@@ -160,7 +158,7 @@ async function successMsg() {
 window.loadContacts = loadContacts;
 
 /**
- * @description This function loads the contacts from the local storage and displays them on the contacts.html page.
+ * This function loads the contacts from the local storage and displays them on the contacts.html page.
  */
 async function loadContacts() {
     let contacts;
@@ -228,7 +226,7 @@ async function loadContacts() {
 window.editContact = editContact;
 
 /**
- * @description This function is called when the user clicks on the "Edit" button in the contacts.html page. 
+ * This function is called when the user clicks on the "Edit" button in the contacts.html page. 
  * It creates a modal window with a form to edit a contact.
  * @param {*} contactid
  */
@@ -309,7 +307,7 @@ async function editContact(contactid){
 window.saveEditedContact = saveEditedContact;
 
 /**
- * @description This function is called when the user clicks on the "Save" button in the modal window. It saves the edited contact to the local storage.
+ * This function is called when the user clicks on the "Save" button in the modal window. It saves the edited contact to the local storage.
  * @param {*} contactid
  */
 async function saveEditedContact(contactid) {
@@ -363,7 +361,7 @@ async function saveEditedContact(contactid) {
 window.delContact = delContact;
 
 /**
- * @description This function is called when the user clicks on the "Delete" button in the modal window. It deletes the contact from the local storage.
+ * This function is called when the user clicks on the "Delete" button in the modal window. It deletes the contact from the local storage.
  * @param {*} contactid 
  */
 async function delContact(contactId) {
@@ -392,7 +390,7 @@ async function delContact(contactId) {
 }
 
 /**
- * @description This function renders the floating contact window with the contact information.
+ * This function renders the floating contact window with the contact information.
  * @param {*} contactid
  */
 async function floatingContactRender(contactid){
@@ -462,7 +460,7 @@ async function floatingContactRender(contactid){
 }
 
 /**
- * @description This function is called when the contacts page is loaded. 
+ * This function is called when the contacts page is loaded. 
  * It loads the contacts from the local storage and displays them on the contacts.html page.
  */
 document.addEventListener('DOMContentLoaded', async (event) => {
