@@ -435,7 +435,7 @@ function createAvatarDivs(selectedContacts) {
 
         avatarDivsHTML += `
             <div class="initial-container">
-                <div class="avatar">
+                <div class="avatar" id="${selectedContact.id}">
                     <img src="${selectedContact.imagePath}">
                     <div class="avatar_initletter">${selectedContact.initials}</div>
                 </div>
@@ -751,7 +751,7 @@ async function openCard(data, subtasksData) {
                 <div class="card-modal-contacts-container">
                     <div id="selectedContactsContainerEdit" class="card-modal-initial-container">
                         ${(selectedContacts || []).map(contact => `
-                            <div class="initial-container-open-card">
+                            <div class="initial-container-open-card" data-id="${contact.id}">
                                 <div class="avatar">
                                     <img src="${contact.imagePath}" alt="Avatar">
                                     <div class="avatar_initletter">${contact.initials}</div>
@@ -1075,7 +1075,7 @@ function createSelectedContactDivEdit(contact) {
     selectedContactDiv.id = "selectedContactEdit";
 
     selectedContactDiv.innerHTML = `
-        <div data-avatarid="${contact.avatarid}">
+        <div data-avatarid="${contact.avatarid}" id="${contact.id}">
             <div class="avatar">
                 <img src="img/Ellipse5-${contact.avatarid}.svg" alt="Avatar">
                 <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>

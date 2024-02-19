@@ -91,9 +91,9 @@ function saveAndDisplaySelectedContacts() {
 function createSelectedContactDiv(contact) {
     let selectedContactDiv = document.createElement("div");
     selectedContactDiv.innerHTML = `
-        <div class="selected-contact" data-avatarid="${contact.avatarid}">
+        <div class="selected-contact" data-avatarid="${contact.avatarid}" data-id="${contact.id}">
             <div class="contacts-img-initial">
-                <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
+                <img id="${contact.id}" src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
                 <div class="initials-overlay">${contact.name.split(' ').map(n => n[0]).join('')}</div>
             </div>
             <div class="contact-delete-container">
@@ -144,16 +144,17 @@ function removeContact(contactavatarId) {
 async function addToBoard(column) {
     let taskTitle = getFieldValueById('taskTitleInput');
     let category = getFieldValueById('category');
-
+/*
     if (!taskTitle || !category) {
         alert('Please fill out the title and the category');
         return;
     }
-
+*/
     let description = getFieldValueById('descriptionInput');
     let date = getFieldValueById('date');
     let subtasksList = document.getElementById('subtaskList').children;
     let selectedContacts = getSelectedContacts();
+    console.log('Selected Contacts:', selectedContacts);
     let selectedPriority = getSelectedPriority();
 
     saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column);
@@ -161,7 +162,7 @@ async function addToBoard(column) {
     resetFormFields();
 
     // Zum Programmieren außer Kraft gesetzt
-    window.location.href = 'board.html';
+    //window.location.href = 'board.html';
 }
 
 function getFieldValueById(id) {
@@ -178,18 +179,19 @@ function getSelectedContacts() {
             let initials = imgElement.nextElementSibling.textContent.trim();
             let datasetName = imgElement.dataset.name;
             let name = datasetName || imgElement.alt;
+            let id = imgElement.id;
 
             selectedContacts.push({
                 imagePath: imgElement.src,
                 initials: initials,
-                name: name
+                name: name,
+                id: id
             });
         }
     });
 
     return selectedContacts;
 }
-
 
 async function saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column) {
     let subtasksData = Array.from(subtasksList).map(subtask => {
@@ -212,7 +214,10 @@ async function saveToLocalStorage(taskTitle, description, date, category, subtas
             boardColumn: column,
         },
         id: 'task' + (isUserLoggedIn ? users[currentUser].tasks.length : (JSON.parse(localStorage.getItem('tasks')) || []).length),
+        dataId: selectedContacts[0].id
     };
+
+    console.log('Task before processing contacts:', task);
 
     task.content.selectedContacts.forEach(contact => {
         let matchingContact = contacts.find(existingContact => existingContact.id === contact.id);
@@ -220,6 +225,8 @@ async function saveToLocalStorage(taskTitle, description, date, category, subtas
             contact.name = matchingContact.name;
         }
     });
+
+    console.log('Task after processing contacts:', task);
 
     if (isUserLoggedIn) {
         // User is logged in, save the task to the remote storage
