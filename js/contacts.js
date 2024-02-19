@@ -114,7 +114,7 @@ async function saveContact() {
             if (users[currentUser]) {
                 contacts = users[currentUser].contacts || [];
             } else {
-                console.error('Aktueller Benutzer nicht gefunden:', currentUser);
+                console.error('User not found:', currentUser);
             }
         } else {
             contacts = JSON.parse(localStorage.getItem('contacts')) || [];
@@ -168,7 +168,7 @@ async function loadContacts() {
         if (users[currentUser]) {
             contacts = users[currentUser].contacts;
         } else {
-            console.error('Aktueller Benutzer nicht gefunden:', currentUser);
+            console.error('User not found:', currentUser);
         }
     } else {
         contacts = JSON.parse(localStorage.getItem('contacts')) || [];
@@ -183,6 +183,12 @@ async function loadContacts() {
             initialLetterHTML = `<div class="initial_letter">${currentInitial}</div>
             <div class="line"><svg xmlns="http://www.w3.org/2000/svg" width="354" height="2" viewBox="0 0 354 2" fill="none"><path d="M1 1H353" stroke="#D1D1D1" stroke-linecap="round"/></svg></div>`;
             lastInitial = currentInitial;
+        }
+
+        if (currentUser !== undefined && users[currentUser] && users[currentUser].firstName) {
+            if (contact.name === users[currentUser].firstName) {
+                contact.name += " (You)";
+            }
         }
 
         return `
@@ -214,10 +220,10 @@ async function loadContacts() {
         contactElement.addEventListener('click', function() {
             let contactEntries = document.querySelectorAll('.contactentry');
             for (let entry of contactEntries) {
-                entry.classList.remove('selected');
+                entry.classList.remove('contact_selected');
             }
 
-            contactElement.classList.add('selected');
+            contactElement.classList.add('contact_selected');
             floatingContactRender(contact.id);
         });
     }
@@ -238,7 +244,7 @@ async function editContact(contactid){
         if (users[currentUser]) {
             contacts = users[currentUser].contacts;
         } else {
-            console.error('Aktueller Benutzer nicht gefunden:', currentUser);
+            console.error('User not found:', currentUser);
         }
     } else {
         contacts = JSON.parse(localStorage.getItem('contacts')) || [];
@@ -300,7 +306,7 @@ async function editContact(contactid){
         }, 0);
     }
     else {
-        console.log(`Kein Kontakt mit der ID ${id} gefunden.`);
+        console.log(`No contact found with ID ${contactid}.`);
     }
 }
 
@@ -321,7 +327,7 @@ async function saveEditedContact(contactid) {
             if (users[currentUser]) {
                 contacts = users[currentUser].contacts;
             } else {
-                console.error('Aktueller Benutzer nicht gefunden:', currentUser);
+                console.error(`No contact found with ID ${contactid}.`);
             }
         } else {
             contacts = JSON.parse(localStorage.getItem('contacts')) || [];
@@ -351,7 +357,7 @@ async function saveEditedContact(contactid) {
             location.reload();
         }
         else {
-            console.log(`Kein Kontakt mit der ID ${contactid} gefunden.`);
+            console.log(`No contact found with ID ${contactid}.`);
         }
     } else {
         form.reportValidity();
@@ -371,7 +377,7 @@ async function delContact(contactId) {
         if (users[currentUser]) {
             contacts = users[currentUser].contacts;
         } else {
-            console.error('Aktueller Benutzer nicht gefunden:', currentUser);
+            console.error('User not found:', currentUser);
         }
     } else {
         contacts = JSON.parse(localStorage.getItem('contacts')) || [];
@@ -401,7 +407,7 @@ async function floatingContactRender(contactid){
         if (users[currentUser]) {
             contacts = users[currentUser].contacts;
         } else {
-            console.error('Aktueller Benutzer nicht gefunden:', currentUser);
+            console.error('User not found:', currentUser);
         }
     } else {
         contacts = JSON.parse(localStorage.getItem('contacts')) || [];
@@ -410,6 +416,12 @@ async function floatingContactRender(contactid){
     let contact = contacts.find(contact => contact.id === contactid);
 
     if (contact) {
+        if (currentUser !== undefined && users[currentUser] && users[currentUser].firstName) {
+            if (contact.name === users[currentUser].firstName) {
+                contact.name += " (You)";
+            }
+        }
+
         var floating_contactHTML = `
         <div class="floating_contact">
             <div class="floating_contact_avatar">
@@ -455,7 +467,7 @@ async function floatingContactRender(contactid){
         floating_contactDiv.innerHTML = floating_contactHTML;
         floating_contactElement.appendChild(floating_contactDiv);
     } else {
-        console.log(`Kein Kontakt mit der ID ${contactid} gefunden.`);
+        console.log(`No contact found with ID ${contactid}.`);
     }
 }
 

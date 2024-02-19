@@ -326,11 +326,11 @@ body {
     cursor: pointer;
 }
 
-.selected {
+.contact_selected {
     background: #2A3647;
 }
 
-.selected .contactentry_name {
+.contact_selected .contactentry_name {
     color: #FFF;
 }
 
