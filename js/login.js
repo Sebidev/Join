@@ -183,8 +183,8 @@ function generateDemoTasksUser() {
                 category: 'User Story',
                 subtasks: 2,
                 subtasksData: [
-                    { description: 'Subtask 1', checked: false },
-                    { description: 'Subtask 2', checked: false }
+                    { description: 'Implement Recipe Recommendation', checked: true },
+                    { description: 'Start Page Layout', checked: false }
                 ],
                 selectedContacts: [
                     { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer"  },
@@ -240,8 +240,8 @@ function generateDemoTasksUser() {
                 category: 'Technical task',
                 subtasks: 2,
                 subtasksData: [
-                    { description: 'Subtask 1', checked: false },
-                    { description: 'Subtask 2', checked: false }
+                    { description: 'Establish CSS Methodology', checked: true },
+                    { description: 'Setup Base Styles', checked: true }
                 ],
                 selectedContacts: [
                     { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer" },
