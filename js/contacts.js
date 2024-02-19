@@ -12,7 +12,8 @@ var overlay;
 var contactModal;
 
 /**
- * @description This function is called when the user clicks on the "Add Contact" button. It creates a modal window with a form to add a new contact.
+ * addContact
+ * This function is called when the user clicks on the "Add Contact" button. It creates a modal window with a form to add a new contact.
  */
 function addContact() {
     overlay = document.createElement("div");
@@ -39,7 +40,8 @@ window.addContact = addContact;
 window.closeContactModal = closeContactModal;
 
 /**
- * @description This function is called when the user clicks on the "Close" button in the modal window. It removes the modal window from the DOM.
+ * closeContactModal
+ * This function is called when the user clicks on the "Close" button in the modal window. It removes the modal window from the DOM.
  */
 function closeContactModal() {
     var overlay = document.getElementById('overlay');

@@ -2,10 +2,14 @@ let isPriorityOptionsOpen = false;
 let globalData;
 let isEditActive = false;
 let currentTaskId;
+let searchInputDesktop = document.getElementById('input-search');
+let searchInputMobile = document.getElementById('input-search-mobile');
+
 //import { contacts } from './js/add-task.js';
 
 async function initBoard() {
-    addSearch();
+    addSearch(searchInputDesktop);
+    addSearch(searchInputMobile);
     await generateDemoTasks();
 }
 
@@ -111,9 +115,7 @@ async function generateDemoTasks() {
 /**
  * search functionality for the tasks in board.html
  */
-function addSearch() {
-    let searchInput = document.getElementById('input-search');
-
+function addSearch(searchInput) {
     searchInput.addEventListener('input', async function () {
         let searchValue = searchInput.value.toLowerCase();
         let tasks;

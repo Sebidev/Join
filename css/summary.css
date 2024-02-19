@@ -357,8 +357,9 @@ body {
     .summary_container {
         flex-direction: column;
         align-items: center;
+        overflow-y: hidden;
+        overflow-x: hidden;
         gap: 0px;
-        width: 100%;
     }
 
     .column_container{
@@ -377,9 +378,12 @@ body {
         margin-left: 20px;
     }
 
-    .header_summary .verticalbar {
-        margin-left: 0;
+    .header_summary {
+        margin-left: 20px;
         margin-right: 0;
+    }
+
+    .verticalbar {
         transform: rotate(90deg);
     }
 
@@ -390,6 +394,7 @@ body {
 
     .header_summary_text {
         font-size: 20px;
+        margin-top: -65px;
     }
 
     .right_textbox {
