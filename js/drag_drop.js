@@ -30,7 +30,7 @@ function removeHighlight(columnId) {
  */
 
 function preventDragOver(ev) {
-    ev.stopPropagation();
+    ev.preventDefault();
 }
 
 /** start dragging an element
@@ -69,9 +69,9 @@ function allowDrop(ev) {
 async function drop(ev) {
     ev.preventDefault();
     var taskId = ev.dataTransfer.getData("text");
-    var newColumnId = ev.target.id;
+    var newColumnId = ev.target.closest('.board-column-content').id;
 
-    ev.target.appendChild(document.getElementById(taskId));
+    document.getElementById(newColumnId).appendChild(document.getElementById(taskId));
 
     removeHighlight(newColumnId);
     await updateTaskColumn(taskId, newColumnId);
