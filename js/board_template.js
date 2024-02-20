@@ -161,7 +161,7 @@ function addSearch(searchInput) {
  */
 
 function addTask(column) {
-    if(window.innerWidth <= 800) {
+    if (window.innerWidth <= 800) {
         window.location.href = "add-task.html";
     } else {
         let modalHTML = /*html*/`
@@ -489,6 +489,7 @@ function createAvatarDivs(selectedContacts) {
 }
 
 async function renderCard(data) {
+
     if (data && data.content) {
         let containerDiv = document.getElementById(data.content.boardColumn);
         let categoryClass = data.content.category === 'Technical task' ? 'technical-task' : 'user-story';
@@ -498,6 +499,7 @@ async function renderCard(data) {
         let initialsHTML = createAvatarDivs(selectedContacts);
         let priorityIconSrc = getPriorityIcon(selectedPriority);
         let taskId = data.id;
+        console.log('taskId', taskId);
 
         let renderCard = document.createElement('div');
         renderCard.id = taskId;
@@ -956,6 +958,10 @@ function edit() {
         $('.card-modal-contacts').addClass('height-contacts');
         $('.card-modal-save-button').removeClass('hide-button');
     }
+    //console.log('taskId', currentTaskId);
+    selectedInitialsArray.forEach(contact => {
+        console.log('Selected Contact ID:', contact.id);
+    });
 }
 
 function endEdit() {
@@ -1079,20 +1085,27 @@ function createContactDropdown() {
 }
 
 async function showDropdownEdit() {
+    if (!currentTaskId) {
+        console.error("currentTaskId is not defined");
+        return;
+    }
+
+    console.log(`selectedInitialsArray cardModal_${currentTaskId}:`, selectedInitialsArray);
     let dropdownContent = document.getElementById("contactDropdown");
     dropdownContent.innerHTML = "";
 
     let contacts = await getContacts();
 
     contacts.forEach(contact => {
-        let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id);
+        let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id && selectedContact.taskId === currentTaskId);
         let contactDiv = createContactDivEdit(contact, isSelected);
         dropdownContent.appendChild(contactDiv);
     });
 
-        updateCheckboxState();
+    updateCheckboxState(currentTaskId);
 
     dropdownContent.style.display = 'block';
+    console.log('currentTaskId', currentTaskId);
 }
 
 function createContactDivEdit(contact, isSelected) {
@@ -1117,7 +1130,7 @@ function createContactDivEdit(contact, isSelected) {
 }
 
 function updateSelectedContacts(contact, action) {
-    let index = selectedInitialsArray.findIndex(c => c.id === contact.id);
+    let index = selectedInitialsArray.findIndex(c => c.id === contact.id && c.taskId === currentTaskId);
 
     if (action === 'add' && index === -1) {
         selectedInitialsArray.push(contact);
