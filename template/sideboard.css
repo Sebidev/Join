@@ -121,7 +121,7 @@ body{
 @media only screen and (max-width: 926px) {
     .sideboard {
         position: fixed;
-        bottom: 91px;
+        bottom: 0px;
         top: auto;
         left: auto;
         right: auto;
