@@ -85,7 +85,7 @@ body {
     display: flex;
     width: 264px;
     height: 168px;
-    padding: 38px 19px;
+    padding: 15px 19px;
     justify-content: center;
     align-items: center;
     gap: 18px;
@@ -151,7 +151,7 @@ body {
     display: flex;
     width: 264px;
     height: 168px;
-    padding: 38px 19px;
+    padding: 15px 19px;
     justify-content: center;
     align-items: center;
     gap: 18px;
@@ -173,7 +173,7 @@ body {
     display: flex;
     width: 545px;
     height: 168px;
-    padding: 28px 48px;
+    padding: 10px 48px;
     justify-content: center;
     align-items: center;
     gap: 61px;
@@ -223,7 +223,7 @@ body {
     display: flex;
     width: 195px;
     height: 168px;
-    padding: 25px 0px;
+    padding: 5px 0px;
     flex-direction: column;
     justify-content: center;
     align-items: center;

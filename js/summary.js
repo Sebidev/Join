@@ -1,6 +1,14 @@
 let currentDate = new Date();
 let currentTime = new Date().getHours();
 
+/**
+ * Counts tasks in various categories and updates the HTML document with these counts.
+ *
+ * This function retrieves tasks, counts the number of tasks in each column, counts the number of urgent tasks,
+ * finds the earliest deadline among the tasks, and updates the HTML document with these counts and the formatted earliest deadline.
+ *
+ * @returns {Promise<void>} A Promise that resolves when the function has completed.
+ */
 async function countTasks() {
   let tasks = getTasks();
   let counts = countTaskColumns(tasks);
@@ -16,11 +24,24 @@ async function countTasks() {
   document.getElementById('summary-deadline').innerHTML = formatDate(earliestDeadline);
 }
 
+/**
+ * Retrieves tasks based on whether a user is logged in or not.
+ *
+ * @returns {Array} An array of tasks. If a user is logged in, it returns the tasks of the logged-in user. 
+ *                  If no user is logged in, it retrieves tasks from local storage. 
+ *                  If no tasks are found in local storage, it returns an empty array.
+ */
 function getTasks() {
   let isUserLoggedIn = users.some(user => user.isYou);
   return isUserLoggedIn ? users.find(user => user.isYou).tasks : JSON.parse(localStorage.getItem('tasks')) || [];
 }
 
+/**
+ * Counts the number of tasks in each column.
+ *
+ * @param {Array} tasks - An array of task objects, each with a 'content' property that includes a 'boardColumn' property.
+ * @returns {Object} An object with the counts of tasks in each column.
+ */
 function countTaskColumns(tasks) {
   let counts = { todoCount: 0, doneCount: 0, progressCount: 0, awaitCount: 0, onboardCount: 0 };
 
@@ -40,10 +61,22 @@ function countTaskColumns(tasks) {
   return counts;
 }
 
+/**
+ * Counts the number of tasks with 'urgent' priority.
+ *
+ * @param {Array} tasks - An array of task objects.
+ * @returns {number} The number of tasks with 'urgent' priority.
+ */
 function countUrgentTasks(tasks) {
   return tasks.filter(task => task.content.priority === 'urgent').length;
 }
 
+/**
+ * Finds the earliest deadline among a list of tasks.
+ *
+ * @param {Array} tasks - An array of task objects, each with a 'content' property that includes a 'date' property.
+ * @returns {Date|null} The earliest deadline as a Date object, or null if the tasks array is empty.
+ */
 function findEarliestDeadline(tasks) {
   return tasks.length > 0 ? tasks.reduce((earliest, task) => {
     let taskDate = new Date(task.content.date);
@@ -51,6 +84,12 @@ function findEarliestDeadline(tasks) {
   }, new Date(tasks[0].content.date)) : null;
 }
 
+/**
+ * Formats a date to a more readable format or returns a default string if no date is provided.
+ *
+ * @param {Date} date - The date to be formatted.
+ * @returns {string} The formatted date string, or 'No tasks' if no date is provided.
+ */
 function formatDate(date) {
   const options = { year: "numeric", month: "long", day: "numeric" };
   return date ? date.toLocaleDateString("en-US", options) : 'No tasks';
