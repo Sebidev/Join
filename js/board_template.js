@@ -7,11 +7,20 @@ let searchInputMobile = document.getElementById('input-search-mobile');
 
 //import { contacts } from './js/add-task.js';
 
+/**
+ * initializes the board
+ */
+
 async function initBoard() {
     addSearch(searchInputDesktop);
     addSearch(searchInputMobile);
     await generateDemoTasks();
 }
+
+/** returns the demo tasks for a guest user in a json
+ * 
+ * @returns tasks content in a json
+ */
 
 function generateDemoTasksGuest() {
     return [
@@ -94,6 +103,11 @@ function generateDemoTasksGuest() {
         },
     ]
 }
+
+/** generates the demo tasks for a guest and user depending on logged in status
+ * 
+ * @returns demo tasks
+ */
 
 async function generateDemoTasks() {
     let isUserLoggedIn = users.some(user => user.isYou);
@@ -350,6 +364,10 @@ function closeOpenCard() {
             endEdit();
         }
     }
+
+    $('.card-modal-delete-button').removeClass('hide-button');
+    $('.card-modal-edit-button').removeClass('hide-button');
+    $('.card-modal-save-button').addClass('hide-button');
 }
 
 function getValue(selector) {
@@ -606,6 +624,10 @@ function getPriorityIcon(priority) {
     }
 }
 
+/**
+ * This function deletes a task completely from our board aswell as remote or local storage
+ */
+
 async function deleteTask() {
     let taskId = document.querySelector('.card-modal-delete-button').dataset.id;
 
@@ -709,6 +731,10 @@ async function saveEditedTask() {
     endEdit();
 }
 
+/**
+ * This function capitalizes the first letter (for the priority)
+ */
+
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -742,6 +768,7 @@ async function openCard(data, subtasksData) {
     let openCardHTML = /*html*/`
         <div id="card-overlay"></div>
         <div id="cardModal_${taskId}" class="card-modal">
+        <div class="card-modal-cont">
             <div class="task-categorie">
                 <p class=${categoryClass}>${data.content.category}</p>
                 <div class="close-card-modal" onclick="closeOpenCard()">
@@ -808,6 +835,7 @@ async function openCard(data, subtasksData) {
                         </div>`).join('')}
                 </div>
             </div>
+            </div>
 
             <div class="card-modal-edit-and-delete-container">
                 <button onclick="deleteTask()" data-id="${data.id}" class="card-modal-delete-button">
@@ -824,7 +852,7 @@ async function openCard(data, subtasksData) {
                     <p> Edit </p>
                 </button>
 
-                <button onclick="saveEditedTask()" data-id="${data.id}" class="card-modal-save-button">
+                <button onclick="saveEditedTask()" data-id="${data.id}" class="card-modal-save-button hide-button">
                     <p> OK </p>
                 </button>
             </div>
@@ -922,6 +950,11 @@ function edit() {
         $('#selectedContactsContainerEdit').css('display', 'flex');
         enableSubtasksEditing();
         isEditActive = true;
+
+        $('.card-modal-delete-button').addClass('hide-button');
+        $('.card-modal-edit-button').addClass('hide-button');
+        $('.card-modal-contacts').addClass('height-contacts');
+        $('.card-modal-save-button').removeClass('hide-button');
     }
 }
 
@@ -929,6 +962,10 @@ function endEdit() {
     $('.avatar-name').show();
     $('#selectedContactsContainerEdit').css('display', 'block');
     isEditActive = false;
+
+    $('.card-modal-delete-button').removeClass('hide-button');
+    $('.card-modal-edit-button').removeClass('hide-button');
+    $('.card-modal-save-button').addClass('hide-button');
 }
 
 function enablePriorityEditing() {

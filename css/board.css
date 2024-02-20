@@ -616,6 +616,13 @@ body {
   width: 24px;
 }
 
+.card-modal-cont {
+  gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .card-modal {
   height: 835px;
   width: 445px;
@@ -633,6 +640,7 @@ body {
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.16);
   z-index: 1000;
   word-break: break-word;
+  justify-content: space-between;
 }
 
 .card-modal-userstory {
@@ -805,6 +813,8 @@ body {
   align-items: flex-end;
   gap: 8px;
   align-self: stretch;
+  overflow: auto;
+  height: 207px;
 }
 
 .card-modal-assigned-to-headline {
@@ -892,8 +902,25 @@ body {
   gap: 20px;
 }
 
+.card-modal-save-button {
+  border-radius: 10%;
+  width: 60px;
+  height: 40px;
+  border: 2px #2a3647;
+  background-color: #2a3647;
+  color: white;
+  cursor: pointer;
+}
+
+.card-modal-save-button:hover {
+  background-color: #29abe2;
+}
+
+.card-modal-save-button p {
+  font-size: 11pt;
+}
+
 .card-modal-subtasks-container {
-  height: 100px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -914,12 +941,18 @@ body {
 }
 
 .card-modal-subtasks {
-  height: 68px;
+  height: 96px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 4px;
   align-self: stretch;
+  overflow: auto;
+}
+
+.height-contacts {
+  height: 137px !important;
+  overflow: unset;
 }
 
 .card-modal-subtask-maincontainer {
@@ -1036,6 +1069,7 @@ body {
   gap: 8px;
   background-color: #fff;
   border: none;
+  cursor: pointer;
 }
 
 .card-modal-devider {
@@ -1052,6 +1086,11 @@ body {
   gap: 8px;
   background-color: #fff;
   border: none;
+  cursor: pointer;
+}
+
+.hide-button {
+  display: none;
 }
 
 .dateInput {
