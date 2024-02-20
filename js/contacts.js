@@ -10,6 +10,7 @@ let addcontact_innerHTML = addContactTemplate;
 
 var overlay;
 var contactModal;
+var showMoreMenuButton;
 
 /**
  * This function is called when the user clicks on the "Add Contact" button. It creates a modal window with a form to add a new contact.
@@ -395,6 +396,59 @@ async function delContact(contactId) {
     location.reload();
 }
 
+
+window.showMoreMenu = showMoreMenu;
+
+/**
+ * This function is called when the user clicks on the "More" button in the contacts.html page.
+ * It shows or hides the edit menu for the contact.
+ * only for mobile visible
+ * @param {*} event 
+ */
+function showMoreMenu(event) {
+    var elements = document.querySelectorAll(".contact-editmenu_entriy_mobile, .contact-editmenu_mobile");
+
+    elements.forEach(function(element) {
+        var currentDisplay = window.getComputedStyle(element).display;
+        if (currentDisplay === "none") {
+            element.style.display = "flex";
+        } else {
+            element.style.display = "none";
+        }
+    });
+
+    if (window.getComputedStyle(elements[0]).display !== "none") {
+        showMoreMenuButton = event.target;
+        document.addEventListener('click', hideMenuOnClickOutside);
+    }
+}
+
+/**
+ * This function hides the edit menu when the user clicks outside of the menu.
+ * @param {*} event 
+ */
+function hideMenuOnClickOutside(event) {
+    var elements = document.querySelectorAll(".contact-editmenu_entriy_mobile, .contact-editmenu_mobile");
+
+    if (event.target === showMoreMenuButton) {
+        return;
+    }
+
+    for (var i = 0; i < elements.length; i++) {
+        var element = elements[i];
+
+        if (element.contains(event.target)) {
+            return;
+        }
+    }
+
+    elements.forEach(function(element) {
+        element.style.display = "none";
+    });
+
+    document.removeEventListener('click', hideMenuOnClickOutside);
+}
+
 /**
  * This function renders the floating contact window with the contact information.
  * @param {*} contactid
@@ -455,6 +509,17 @@ async function floatingContactRender(contactid){
             <div class="floating_contact_phonetext">Phone</div>
             <div class="floating_contact_phonenumber">${contact.phone}</div>
         </div>
+        <div class="more_button_mobile" onclick='showMoreMenu(event)'><img src="img/more.svg"></img></div>
+        <div class="contact-editmenu_mobile">
+            <div class="contact-editmenu_entriy_mobile" onclick="editContact('${contact.id}')">
+                <img src="img/edit.svg"></img>
+                Edit
+            </div>
+            <div class="contact-editmenu_entriy_mobile" onclick="delContact('${contact.id}')">
+                <img src="img/delete.svg"></img>
+                Delete
+            </div>
+        </div>
         `;
 
         var floating_contactElement = document.getElementById("floating_contact");
@@ -469,7 +534,7 @@ async function floatingContactRender(contactid){
     } else {
         console.log(`No contact found with ID ${contactid}.`);
     }
-}
+} 
 
 /**
  * This function is called when the contacts page is loaded. 

@@ -27,7 +27,7 @@ if (isMobile) {
 
         const contactentries = document.querySelectorAll('.contactentry');
         contactentries.forEach((contactentry) => {
-            contactentry.classList.remove('selected');
+            contactentry.classList.remove('contact_selected');
         });
 
         const contactsContainer = document.querySelector('.contacts_container');
