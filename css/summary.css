@@ -480,3 +480,45 @@ body {
         font-size: 11px;
     }
 }
+
+@media only screen and (max-width: 926px) {
+    .summary_container {
+        margin-left: 10px;
+        transition: margin 0.5s ease-in-out;
+    }
+
+    .boxs_box {
+        margin-left: 10px;
+        transition: margin 0.5s ease-in-out;
+    }
+
+    .right_textbox {
+        margin-left: 10px;
+        transition: margin 0.5s ease-in-out;
+    }
+
+    .header_summary {
+        margin-left: 10px;
+        transition: margin 0.5s ease-in-out;
+    }
+
+    .header_summary_text {
+        margin-left: 10px;
+        transition: margin 0.5s ease-in-out;
+    }
+}
+
+@media only screen and (max-width: 1200px){
+    .summary_container {
+        flex-direction: column;
+    }
+
+    .right_textbox {
+        margin-left: 550px;
+        transition: margin 0.5s ease-in-out;
+    } 
+    
+    .header{
+        width: 100%;
+    }
+}

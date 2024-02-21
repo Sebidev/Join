@@ -174,3 +174,9 @@ body {
         display: flex;
     }
 }
+
+@media screen and (max-width: 1380px){
+    .header {
+        width: 100%;
+    }
+}
