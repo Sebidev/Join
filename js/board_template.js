@@ -773,14 +773,14 @@ async function openCard(data, subtasksData) {
     let openCardHTML = /*html*/`
         <div id="card-overlay"></div>
         <div id="cardModal_${taskId}" class="card-modal">
-        <div class="card-modal-cont">
+
             <div class="task-categorie">
                 <p class=${categoryClass}>${data.content.category}</p>
                 <div class="close-card-modal" onclick="closeOpenCard()">
                     <img src="./img/close_modal.svg" alt="">
                 </div>
             </div>
-
+            <div class="card-modal-cont">
             <div class="card-modal-title-container">
                 <p class="card-modal-title">${data.content.title}</p>
             </div>
