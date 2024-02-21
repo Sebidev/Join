@@ -948,7 +948,6 @@ body {
   align-items: flex-start;
   gap: 4px;
   align-self: stretch;
-  overflow: auto;
 }
 
 .height-contacts {
