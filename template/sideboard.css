@@ -16,6 +16,7 @@ body{
     flex-shrink: 0;
     background: #2A3647;
     box-sizing: border-box;
+    z-index: 9999;
 }
 
 .join_logo{
@@ -120,6 +121,7 @@ body{
 /* Media Query */
 @media only screen and (max-width: 926px) {
     .sideboard {
+        display: flex;
         position: fixed;
         bottom: 0px;
         top: auto;
@@ -132,11 +134,7 @@ body{
         justify-content: space-between;
         align-items: center;
         z-index: 9999;
-    }
-
-    .sideboard {
-        display: flex;
-        flex-direction: row;
+        overflow: hidden;
     }
 
     .sideboard .sidemenu_element:nth-of-type(1) {

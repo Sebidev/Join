@@ -173,10 +173,22 @@ body {
     .mobile-btn, .mobile-btn a{
         display: flex;
     }
+
+    .header {
+        width: auto !important;
+    }
+
+    .icon_box {
+        padding-right: 0px;
+    }
 }
 
 @media screen and (max-width: 1380px){
     .header {
         width: 100%;
+    }
+
+    .icon_box {
+        padding-right: 20px;
     }
 }

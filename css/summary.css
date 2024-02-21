@@ -421,6 +421,7 @@ body {
         align-items: center;
         justify-content: center;
         height: 75vh;
+        margin-left: 0 !important;
     }
 
     .right_textgray, .right_textlightblue {
