@@ -1414,3 +1414,26 @@ body {
     overflow: scroll;
   }
 }
+
+@media only screen and (max-width: 926px){
+  .head{
+    margin-left: 10px;
+    transition: margin 0.5s ease-in-out;
+  }
+
+  .board{
+    flex-direction: column;
+    margin-left: 16px;
+    transition: margin 0.5s ease-in-out;
+    padding-bottom: 100px;
+  }
+
+  .board-column-content{
+    flex-direction: row;
+  }
+
+  .done-section, .in-progress-section, .to-do-section, .await-section{
+    min-height: auto;
+    flex: 0;
+  }
+}

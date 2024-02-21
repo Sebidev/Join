@@ -4,7 +4,7 @@
  *
  */
 
-const isMobile = window.matchMedia("only screen and (max-width: 760px)").matches;
+const isMobile = window.matchMedia("only screen and (max-width: 926px)").matches;
 
 if (isMobile) {
     const contactEntry = document.getElementById('contactentry');

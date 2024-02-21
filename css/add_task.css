@@ -724,7 +724,7 @@ body {
   }
 
   .Add-task {
-    margin-left: 5px;
+    margin-left: 5px !important;
     flex-direction: column;
     height: 95vw;
   }
@@ -902,7 +902,7 @@ body {
     padding: 8px;
     gap: 8px;
     right: 0px;
-    width: 95vw;
+    width: 100vw;
     background-color: white;
   }
 
@@ -935,5 +935,23 @@ body {
 
   .required-legend::before {
     font-size: 14px;
+  }
+}
+
+@media only screen and (max-width: 926px){
+  .header-add-task{
+    margin-left: 15px; 
+    transition: margin 0.5s ease-in-out;
+  }
+
+  .Add-task{
+    margin-left: -80px;
+    transition: margin 0.5s ease-in-out;
+  }
+
+  .clear-and-create-section{
+    right: 0;
+    bottom: 80px;
+    transition: bottom 0.5s ease-in-out;
   }
 }

@@ -720,7 +720,7 @@ body {
 }
 
 /* Media Queries */
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 926px) {
 
     .contacts_container {
         position: absolute;
@@ -821,5 +821,47 @@ body {
     
     .backArrow:hover {
         transform: scale(1.05);
+    }
+}
+
+@media only screen and (max-width: 1380px){
+    .contact_title{
+        margin-left: 10px;
+        transition: margin 0.5s ease-in-out;
+    }
+
+    .contact_title_text{
+        margin-left: 10px;
+        transition: margin 0.5s ease-in-out;
+    }
+
+    .floating_contact_container{
+        margin-left: 10px;
+        transition: margin 0.5s ease-in-out;
+    }
+
+    .floating_contact_avatar{
+        margin-left: 10px;
+        transition: margin 0.5s ease-in-out;
+    }
+
+    .floating_contact_name{
+        margin-left: 10px;
+        transition: margin 0.5s ease-in-out;
+    }
+
+    .floating_contact_info{
+        margin-left: 10px;
+        transition: margin 0.5s ease-in-out;
+    }
+
+    .floating_contact_email{
+        margin-left: 10px;
+        transition: margin 0.5s ease-in-out;
+    }
+
+    .floating_contact_phone{
+        margin-left: 10px;
+        transition: margin 0.5s ease-in-out;
     }
 }
