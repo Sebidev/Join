@@ -14,117 +14,8 @@ let searchInputMobile = document.getElementById('input-search-mobile');
 async function initBoard() {
     addSearch(searchInputDesktop);
     addSearch(searchInputMobile);
-    await generateDemoTasks();
 }
 
-/** returns the demo tasks for a guest user in a json
- * 
- * @returns tasks content in a json
- */
-
-function generateDemoTasksGuest() {
-    return [
-        {
-            content: {
-                title: 'Kochwelt Page & Recipe Recommender',
-                description: 'Build start page with recipe recommendation...',
-                date: '2024-12-31',
-                category: 'User Story',
-                subtasks: 2,
-                subtasksData: [
-                    { description: 'Implement Recipe Recommendation', checked: true },
-                    { description: 'Start Page Layout', checked: false }
-                ],
-                selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "EM", name: "Emmanuel Mauer" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "MB", name: "Marcel Bauer" }
-                ],
-                priority: 'medium',
-                boardColumn: 'progress-column',
-            },
-            id: 'task0',
-        },
-        {
-            content: {
-                title: 'HTML Base Template Creation',
-                description: 'Create reusable HTML base templates...',
-                date: '2024-12-31',
-                category: 'Technical task',
-                subtasks: 0,
-                subtasksData: [],
-                selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "DE", name: "David Eisenberg" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ", name: "Benedikt Ziegler" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS", name: "Anja Schulz" }
-                ],
-                priority: 'low',
-                boardColumn: 'await-column',
-            },
-            id: 'task1',
-        },
-        {
-            content: {
-                title: 'Daily Kochwelt Recipe',
-                description: 'Implement daily recipe and portion calculator....',
-                date: '2024-08-05',
-                category: 'User Story',
-                subtasks: 0,
-                subtasksData: [],
-                selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "EF", name: "Eva Fischer" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS", name: "Anja Schulz" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "TW", name: "Tatjana Wolf" }
-                ],
-                priority: 'medium',
-                boardColumn: 'await-column',
-            },
-            id: 'task2',
-        },
-        {
-            content: {
-                title: 'CSS Architecture Planning',
-                description: 'Define CSS naming conventions and structure...',
-                date: '2024-12-31',
-                category: 'Technical task',
-                subtasks: 2,
-                subtasksData: [
-                    { description: 'Establish CSS Methodology', checked: true },
-                    { description: 'Setup Base Styles', checked: true }
-                ],
-                selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ", name: "Benedikt Ziegler" }
-                ],
-                priority: 'urgent',
-                boardColumn: 'done-column',
-            },
-            id: 'task3',
-        },
-    ]
-}
-
-/** generates the demo tasks for a guest and user depending on logged in status
- * 
- * @returns demo tasks
- */
-
-async function generateDemoTasks() {
-    let isUserLoggedIn = users.some(user => user.isYou);
-    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-
-    // If there are already tasks, do not generate demo tasks
-    if (tasks.length > 0) {
-        return;
-    }
-
-    let demoTasks = generateDemoTasksGuest();
-
-    if (!isUserLoggedIn) {
-        // User is a guest, save the tasks to the local storage
-        localStorage.setItem('tasks', JSON.stringify(demoTasks));
-    }
-}
 
 /**
  * search functionality for the tasks in board.html
@@ -358,19 +249,24 @@ function closeOpenCard() {
     let cardOverlay = document.getElementById('card-overlay');
     let taskId = currentTaskId;
 
-    if (cardOverlay) {
-        cardOverlay.remove();
+    let cardEffect = document.getElementById(`cardModal_${taskId}`);
+    cardEffect.style.transform = "translate(100%, -50%) translateX(100%)";
 
-        let cardModal = document.getElementById(`cardModal_${taskId}`);
-        if (cardModal) {
-            cardModal.remove();
-            endEdit();
+    setTimeout(() => {
+        if (cardOverlay) {
+            cardOverlay.remove();
+
+            let cardModal = document.getElementById(`cardModal_${taskId}`);
+            if (cardModal) {
+                cardModal.remove();
+                endEdit();
+            }
         }
-    }
 
-    $('.card-modal-delete-button').removeClass('hide-button');
-    $('.card-modal-edit-button').removeClass('hide-button');
-    $('.card-modal-save-button').addClass('hide-button');
+        $('.card-modal-delete-button').removeClass('hide-button');
+        $('.card-modal-edit-button').removeClass('hide-button');
+        $('.card-modal-save-button').addClass('hide-button');
+    }, 100);
 }
 
 function getValue(selector) {
@@ -868,6 +764,13 @@ async function openCard(data, subtasksData) {
     updateProgressBar(taskId);
     let cardOverlay = document.getElementById('card-overlay');
     cardOverlay.style.display = 'block';
+
+    let cardEffect = document.getElementById(`cardModal_${taskId}`);
+        cardEffect.style.transform = "translate(100%, -50%) translateX(100%)";
+
+        setTimeout(() => {
+            cardEffect.style.transform = "translate(-50%, -50%)";
+    }, 100);
 }
 
 async function restoreCheckboxStatus(taskId) {

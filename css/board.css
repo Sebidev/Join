@@ -633,7 +633,6 @@ body {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
   background-color: #fff;
   padding: 48px 40px;
   display: flex;
@@ -643,6 +642,7 @@ body {
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.16);
   z-index: 1000;
   word-break: break-word;
+  transition: transform 0.125s
 }
 
 .card-modal-userstory {
@@ -1133,7 +1133,7 @@ body {
 
 .dragdrop-highlight {
   background-color: #2a36470d;
-  border: 1px dashed #2a3647;
+  border: 1px dotted #2a3647;
   box-shadow: 0px 0px 1px 0px #0000001a;
   border-radius: 10px;
 }

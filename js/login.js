@@ -78,6 +78,10 @@ async function guestLogin() {
         user.isYou = false;
     }
     await setItem('users', JSON.stringify(users));
+
+    let demoTasks = generateDemoTasks();
+    localStorage.setItem('tasks', JSON.stringify(demoTasks));
+
     window.open('summary.html', '_self');
 }
 
@@ -173,7 +177,7 @@ function checkEmailExists(email) {
  * @returns demo contacts in a json
  */
 
-function generateDemoTasksUser() {
+function generateDemoTasks() {
     return [
         {
             content: {
@@ -276,7 +280,7 @@ function generateDemoContacts(firstName, emailSignup) {
 async function addUserToArray(emailSignup, passwordSignup) {
     signupButton('disable');
 
-    let demoTasks = generateDemoTasksUser();
+    let demoTasks = generateDemoTasks();
     let demoContacts = generateDemoContacts(setName('first'), emailSignup.value);
 
     users.push({
