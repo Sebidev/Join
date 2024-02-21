@@ -150,7 +150,10 @@ function addSearch(searchInput) {
         document.getElementById('await-column').innerHTML = '';
         document.getElementById('done-column').innerHTML = '';
 
-        matchingTasks.forEach(task => renderCard(task));
+        for (let task of matchingTasks) {
+            await renderCard(task);
+        }
+
         updatePlaceholderText();
     });
 };
