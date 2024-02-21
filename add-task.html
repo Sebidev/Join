@@ -1,186 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Add Task</title>
-    <link rel="stylesheet" href="./fonts/inter.css" />
-    <link rel="stylesheet" href="./css/add_task.css" />
-    <link rel="stylesheet" href="./css/contacts.css" />
-  </head>
-  <body onload="initHead(), initUser()">
-    <header id="header"></header>
-    <div id="sideboard"></div>
 
-    <div class="header-add-task">Add Task</div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Task</title>
+  <link rel="stylesheet" href="./fonts/inter.css" />
+  <link rel="stylesheet" href="./css/add_task.css" />
+  <link rel="stylesheet" href="./css/contacts.css" />
+</head>
 
-    <div class="Add-task">
-      <div class="Add-task-left">
-        <div class="title-container-add-task">
-          <div class="title">Title</div>
-          <input
-            id="taskTitleInput"
-            type="text"
-            class="title-input"
-            placeholder="Enter a title"
-            required
-          />
-          <div class="required-info">This field is required</div>
-        </div>
+<body onload="initHead(), initUser()">
+  <header id="header"></header>
+  <div id="sideboard"></div>
 
-        <div class="description-container">
-          <div class="description">Description</div>
-          <input
-            id="descriptionInput"
-            type="text"
-            class="description-input"
-            placeholder="Enter a Description"
-            required
-          />
-          <div class="required-info">This field is required</div>
-        </div>
+  <div class="header-add-task">Add Task</div>
 
-        <div class="assigned-to-container">
-          <div class="assigned-to">Assigned to</div>
-          <div class="input-container">
-            <input
-              id="assignedTo"
-              type="text"
-              class="assigned-dropdown"
-              placeholder="Select contacts to assign"
-            />
-            <img
-              id="arrow_down"
-              onclick="showDropdown()"
-              class="arrow_down"
-              src="./img/arrow_down.svg"
-              alt=""
-            />
-            <div id="contactDropdown" class="dropdown-content"></div>
-          </div>
-
-          <div id="selectedContactsContainer"></div>
-          <div class="input-container">
-            <div class="dropdown-content"></div>
-            <div class="arrow_down"></div>
-          </div>
-
-          <div class="required-legend">This field is required</div>
-        </div>
+  <div class="Add-task">
+    <div class="Add-task-left">
+      <div class="title-container-add-task">
+        <div class="title">Title</div>
+        <input id="taskTitleInput" type="text" class="title-input" placeholder="Enter a title" required />
+        <div class="required-info">This field is required</div>
       </div>
 
-      <div class="divider">
-        <img src="./img/divider.svg" alt="" />
+      <div class="description-container">
+        <div class="description">Description</div>
+        <input id="descriptionInput" type="text" class="description-input" placeholder="Enter a Description" required />
+        <div class="required-info">This field is required</div>
       </div>
 
-      <div class="Add-task-right">
-        <div class="due-date-container">
-          <div class="due-date">Due date</div>
-          <input
-            id="date"
-            class="due-date-input"
-            type="date"
-            placeholder="dd/mm/yyyy"
-            required
-          />
+      <div class="assigned-to-container">
+        <div class="assigned-to">Assigned to</div>
+        <div class="input-container">
+          <input id="assignedTo" type="text" class="assigned-dropdown" placeholder="Select contacts to assign" />
+          <img id="arrow_down" onclick="showDropdown()" class="arrow_down" src="./img/arrow_down.svg" alt="" />
+          <div id="contactDropdown" class="dropdown-content"></div>
         </div>
 
-        <div class="prio-container">
-          <div class="prio">Prio</div>
-
-          <div class="prio-option-container">
-            <button
-              type="button"
-              onclick="choose('urgent')"
-              class="button urgent"
-            >
-              <h3>Urgent</h3>
-              <img src="./img/Prio_up.svg" alt="" />
-            </button>
-            <button
-              type="button"
-              onclick="choose('medium')"
-              class="button medium"
-            >
-              <h3>Medium</h3>
-              <img src="./img/Prio_neutral.svg" alt="" />
-            </button>
-            <button type="button" onclick="choose('low')" class="button low">
-              <h3>Low</h3>
-              <img src="./img/Prio_down.svg" alt="" />
-            </button>
-          </div>
+        <div id="selectedContactsContainer"></div>
+        <div class="input-container">
+          <div class="dropdown-content"></div>
+          <div class="arrow_down"></div>
         </div>
 
-        <div class="category-container">
-          <div class="category">Category</div>
-          <div class="input-container">
-            <input
-              id="category"
-              class="category-dropdown"
-              type="text"
-              placeholder="Select task category"
-              required
-            />
-            <img
-              class="arrow_down"
-              src="./img/arrow_down.svg"
-              onclick="toggleCategoryOptions()"
-              alt=""
-            />
-            <div class="category-options" id="categoryOptions">
-              <label onclick="updateSelectedCategory('Technical task')">
-                Technical task
-              </label>
-              <label onclick="updateSelectedCategory('User Story')">
-                User Story
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="subtasks-container">
-          <div class="subtasks-add-task">Subtasks</div>
-          <div class="input-container-subtask">
-            <input
-              class="subtasks-input"
-              type="text"
-              id="newSubtaskInput"
-              placeholder="Add new subtask"
-              id="subtask"
-            />
-            <img
-              class="add-icon"
-              src="./img/Subtasks icons11.svg"
-              alt=""
-              onclick="addSubtask()"
-            />
-            <div class="subImgContainer" id="subImgContainer"></div>
-          </div>
-          <div class="subtask-list" id="subtaskList"></div>
-        </div>
-
-        <div class="clear-and-create-section">
-          <button class="clear-button" onclick="clearFields()">
-            <h3>Clear</h3>
-            <img src="./img/iconoir_cancel.svg" alt="" />
-          </button>
-
-          <button class="create-task-button hover-color" onclick="addToBoard('todo-column')">
-            <h3>Create Task</h3>
-            <img src="./img/check.svg" alt="" />
-          </button>
-        </div>
+        <div class="required-legend">This field is required</div>
       </div>
     </div>
 
-    <script src="js/userManager.js"></script>
-    <script src="js/template_load.js"></script>
-    <script src="js/add-task.js"></script>
-    <script src="js/storage.js"></script>
-    <script src="js/header.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/selected.js"></script>
-    <script src="js/add-task_mobile.js"></script>
-  </body>
+    <div class="divider">
+      <img src="./img/divider.svg" alt="" />
+    </div>
+
+    <div class="Add-task-right">
+      <div class="due-date-container">
+        <div class="due-date">Due date</div>
+        <input id="date" class="due-date-input" type="date" placeholder="dd/mm/yyyy" required />
+      </div>
+
+      <div class="prio-container">
+        <div class="prio">Prio</div>
+
+        <div class="prio-option-container">
+          <button type="button" onclick="choose('urgent')" class="button urgent">
+            <h3>Urgent</h3>
+            <img src="./img/Prio_up.svg" alt="" />
+          </button>
+          <button type="button" onclick="choose('medium')" class="button medium">
+            <h3>Medium</h3>
+            <img src="./img/Prio_neutral.svg" alt="" />
+          </button>
+          <button type="button" onclick="choose('low')" class="button low">
+            <h3>Low</h3>
+            <img src="./img/Prio_down.svg" alt="" />
+          </button>
+        </div>
+      </div>
+
+      <div class="category-container">
+        <div class="category">Category</div>
+        <div class="input-container">
+          <input id="category" class="category-dropdown" type="text" placeholder="Select task category" required />
+          <img class="arrow_down" src="./img/arrow_down.svg" onclick="toggleCategoryOptions()" alt="" />
+          <div class="category-options" id="categoryOptions">
+            <label onclick="updateSelectedCategory('Technical task')">
+              Technical task
+            </label>
+            <label onclick="updateSelectedCategory('User Story')">
+              User Story
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="subtasks-container">
+        <div class="subtasks-add-task">Subtasks</div>
+        <div class="input-container-subtask">
+          <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask" id="subtask" />
+          <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" onclick="addSubtask()" />
+          <div class="subImgContainer" id="subImgContainer"></div>
+        </div>
+        <div class="subtask-list" id="subtaskList"></div>
+      </div>
+
+      <div class="clear-and-create-section">
+        <div class="clear-buton-div">
+          <button class="clear-button" onclick="clearFields()">
+            <h3>Clear</h3>
+            <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g id="iconoir:cancel">
+                <path id="Vector"
+                  d="M12.2496 11.9998L17.4926 17.2428M7.00659 17.2428L12.2496 11.9998L7.00659 17.2428ZM17.4926 6.75684L12.2486 11.9998L17.4926 6.75684ZM12.2486 11.9998L7.00659 6.75684L12.2486 11.9998Z"
+                  stroke="#2A3647" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </g>
+            </svg>
+          </button>
+        </div>
+        <button class="create-task-button hover-color" onclick="addToBoard('todo-column')">
+          <h3>Create Task</h3>
+          <img src="./img/check.svg" alt="" />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/userManager.js"></script>
+  <script src="js/template_load.js"></script>
+  <script src="js/add-task.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/header.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/selected.js"></script>
+  <script src="js/add-task_mobile.js"></script>
+</body>
+
 </html>

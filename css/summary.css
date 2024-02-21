@@ -4,7 +4,7 @@ body {
 }
 
 .hover {
-    transition: 220ms ease-in-out;
+    transition: 125ms ease-in-out;
 }
 
 .hover:hover {
@@ -19,6 +19,26 @@ body {
     background-color: #2A3647;
     filter: invert(1);
     transition: 220ms ease-in-out;
+}
+
+.box_check:hover circle{
+    fill: white;
+    transition: 125ms ease-in-out;
+}
+
+.box_pencil:hover circle{
+    fill: white;
+    transition: 125ms ease-in-out;
+}
+
+.box_pencil:hover path{
+    fill: #2A3647;
+    transition: 125ms ease-in-out;
+}
+
+.box_check:hover path{
+    stroke: #2A3647;
+    transition: 125ms ease-in-out;
 }
 
 .summary {

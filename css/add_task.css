@@ -620,9 +620,22 @@ body {
   align-items: center;
   gap: 4px;
   border-radius: 10px;
-  border: 1px solid var(--Version-2-main-color, #2a3647) !important;
+  border: 1px solid var(--Version-2-main-color, #2a3647);
   background-color: transparent;
   color: #2a3647;
+}
+
+.clear-button:hover {
+  border: 1px solid #29abe2;
+  color: #29abe2;
+}
+
+.clear-button:hover svg path {
+  stroke: #29abe2;
+}
+
+.clear-button:hover h3 {
+  color: #29abe2;
 }
 
 .clear-button h3 {
@@ -643,13 +656,14 @@ body {
 .create-task-button {
   cursor: pointer;
   width: 186.2px;
-  height: 59.2px;
+  height: 57.6px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 4px;
   border-radius: 10px;
   background: #2a3647;
+  border: #2a3647;
 }
 
 .create-task-button h3 {
