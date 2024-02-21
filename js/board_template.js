@@ -2,6 +2,7 @@ let isPriorityOptionsOpen = false;
 let globalData;
 let isEditActive = false;
 let currentTaskId;
+let currentEditData;
 let searchInputDesktop = document.getElementById('input-search');
 let searchInputMobile = document.getElementById('input-search-mobile');
 
@@ -203,29 +204,6 @@ function addTask(column) {
     }
 }
 
-/*
-function choose(priority) {
-    let colorMap = { 'urgent': '#FF3D00', 'medium': '#FFA800', 'low': '#7AE229' };
-    let setStyles = (elements, styles) => elements.forEach(e => e && Object.assign(e.style, styles));
-
-    setStyles(document.querySelectorAll('.button'), { backgroundColor: '#fff' });
-    setStyles(document.querySelectorAll('.button img'), { filter: 'brightness(1) invert(0)' });
-
-    let [priorityButton, priorityImg] = [document.querySelector(`.${priority}`), document.querySelector(`.${priority} img`)];
-
-    if (priorityButton && priorityImg && colorMap[priority]) {
-        setStyles([priorityButton], { backgroundColor: colorMap[priority] });
-        setStyles([priorityImg], { filter: 'brightness(0) invert(1)' });
-
-        selectedPriority = priority;
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-    choose('medium');
-});
-*/
-
 function clearFields() {
     let inputFields = document.querySelectorAll('.Add-task input, .Add-task textarea');
     let AllInputFields = document.querySelectorAll('.Add-task-content input, .Add-task-content textarea');
@@ -411,7 +389,6 @@ async function renderCard(data) {
         let initialsHTML = createAvatarDivs(selectedContacts);
         let priorityIconSrc = getPriorityIcon(selectedPriority);
         let taskId = data.id;
-        console.log('taskId', taskId);
 
         let renderCard = document.createElement('div');
         renderCard.id = taskId;
@@ -784,6 +761,8 @@ async function openCard(data, subtasksData) {
     setTimeout(() => {
         cardEffect.style.transform = "translate(-50%, -50%)";
     }, 100);
+    currentEditData = data; 
+    console.log('Task Data:', JSON.stringify(data));
 }
 
 async function restoreCheckboxStatus(taskId) {
@@ -877,11 +856,13 @@ function edit() {
         $('.card-modal-contacts').addClass('height-contacts');
         $('.card-modal-save-button').removeClass('hide-button');
         $('.card-modal-devider').addClass('hide-button');
+
+        if (currentEditData) {
+            console.log('Task Data in Edit:', JSON.stringify(currentEditData));
+        } else {
+            console.error('No data available for editing.');
+        }
     }
-    //console.log('taskId', currentTaskId);
-    selectedInitialsArray.forEach(contact => {
-        console.log('Selected Contact ID:', contact.id);
-    });
 }
 
 function endEdit() {
@@ -996,7 +977,7 @@ function createContactDropdown() {
     inputContainer.className = 'input-container';
     inputContainer.innerHTML = `
         <input id="assignedTo" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
-        <img id="arrow_down" onclick="showDropdownEdit()" class="arrow_down" src="./img/arrow_down.svg" alt="">
+        <img id="arrow_down" onclick="showDropdownEdit(${currentTaskId})" class="arrow_down" src="./img/arrow_down.svg" alt="">
         <div id="contactDropdown" class="dropdown-content"></div>
         `;
 
