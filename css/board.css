@@ -829,6 +829,7 @@ body {
 
 .card-modal-priority-container {
   display: flex;
+  align-items: center;
   gap: 5px;
 }
 
@@ -1315,7 +1316,7 @@ body {
   .card-modal {
     top: 45vh;
     position: absolute;
-    width: 75%; 
+    width: 85%; 
     height: auto;
     padding: 20px;
   }
@@ -1346,7 +1347,7 @@ body {
   }
 
   .card-modal-priority-letter{
-    margin-left: 22px;
+    margin-left: 15px;
   }
 
   .card-modal-date, .card-modal-priority {
@@ -1360,6 +1361,10 @@ body {
   }
 
   .card-modal-name {
+    font-size: 16px;
+  }
+
+  .due-date-card-modal, .priority-card-modal-text {
     font-size: 16px;
   }
 
@@ -1417,7 +1422,8 @@ body {
     flex-direction: row;
     width: 150%;
     gap: 10px;
-    overflow: scroll;
+    max-height: 500px; /* Passen Sie diesen Wert an Ihre Bedürfnisse an */
+    overflow: auto;
   }
 }
 

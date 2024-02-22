@@ -198,12 +198,33 @@ body {
     background-color: transparent;
 }
 
+.delete_button{
+    display: flex;
+    padding: 16px;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    border-radius: 10px;
+    border: 1px solid var(--Version-2-main-color, #2A3647);
+    color: #2a3647;
+    background-color: transparent;
+}
+
 .close_button2:hover {
     color: #29abe2;
     border: 1px solid #29abe2;
 }
   
 .close_button2:hover svg path {
+    fill: #29abe2;
+}
+
+.delete_button:hover {
+    color: #29abe2;
+    border: 1px solid #29abe2;
+}
+  
+.delete_button:hover svg path {
     fill: #29abe2;
 }
 
@@ -869,7 +890,12 @@ body {
         border: none;
         background: transparent;
         box-shadow: none;
-        margin-top: -40px;
+        margin-top: -47px;
+    }
+
+    .avatar_contactModal_initletter{
+        margin-top: -78px;
+        margin-left: 165px;
     }
 
     .form_container{
@@ -886,14 +912,13 @@ body {
         filter: brightness(0) invert(1);
     }
 
-    .close_button2 {
-        
+    .close_button2{
+        display: none;
     }
 
-    .createcontact_button{
-        margin-left: 60%;
-        margin-right: 40%;
-        text-wrap: nowrap;
+    .button_container{
+        margin-left: auto;
+        margin-right: auto;
     }
 
 }
