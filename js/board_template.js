@@ -761,8 +761,8 @@ async function openCard(data, subtasksData) {
     setTimeout(() => {
         cardEffect.style.transform = "translate(-50%, -50%)";
     }, 100);
-    currentEditData = data; 
-    console.log('Task Data:', JSON.stringify(data));
+    currentEditData = data;
+    //console.log('Task Data:', JSON.stringify(data));
 }
 
 async function restoreCheckboxStatus(taskId) {
@@ -858,7 +858,7 @@ function edit() {
         $('.card-modal-devider').addClass('hide-button');
 
         if (currentEditData) {
-            console.log('Task Data in Edit:', JSON.stringify(currentEditData));
+            //console.log('Task Data in Edit:', JSON.stringify(currentEditData));
         } else {
             console.error('No data available for editing.');
         }
@@ -982,31 +982,42 @@ function createContactDropdown() {
         `;
 
     contactDropdownEdit.appendChild(inputContainer);
-    document.getElementById('arrow_down').addEventListener('click', showDropdownEdit);
+    document.getElementById('arrow_down').addEventListener('click', function () {
+        showDropdownEdit(currentTaskId);
+    });
 }
 
-async function showDropdownEdit() {
+function getTaskById(taskId) {
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    return tasks.find(task => task.id === taskId);
+}
+
+async function showDropdownEdit(currentTaskId) {
     if (!currentTaskId) {
         console.error("currentTaskId is not defined");
         return;
     }
 
-    console.log(`selectedInitialsArray cardModal_${currentTaskId}:`, selectedInitialsArray);
     let dropdownContent = document.getElementById("contactDropdown");
     dropdownContent.innerHTML = "";
 
-    let contacts = await getContacts();
+    let currentEditData = getTaskById(currentTaskId);
 
-    contacts.forEach(contact => {
-        let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id && selectedContact.taskId === currentTaskId);
-        let contactDiv = createContactDivEdit(contact, isSelected);
-        dropdownContent.appendChild(contactDiv);
-    });
+    if (currentEditData && currentEditData.content && currentEditData.content.selectedContacts) {
+        selectedInitialsArray = currentEditData.content.selectedContacts;
 
-    updateCheckboxState(currentTaskId);
+        let contacts = await getContacts();
 
-    dropdownContent.style.display = 'block';
-    console.log('currentTaskId', currentTaskId);
+        contacts.forEach(contact => {
+            let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id);
+            let contactDiv = createContactDivEdit(contact, isSelected);
+            dropdownContent.appendChild(contactDiv);
+        });
+        updateCheckboxState(currentTaskId);
+
+        dropdownContent.style.display = 'block';
+        console.log('currentTaskId', currentEditData);
+    }
 }
 
 function createContactDivEdit(contact, isSelected) {
@@ -1077,20 +1088,26 @@ function selectContactEdit() {
 }
 
 function updateCheckboxState() {
-    selectedInitialsArray = JSON.parse(localStorage.getItem('selectedContacts')) || [];
-    console.log('selectedInitialsArray:', selectedInitialsArray);
+    console.log('aufruf');
+    console.log('Selected Contacts Property:', currentEditData.content && currentEditData.content.selectedContacts);
+    currentEditData = JSON.parse(localStorage.getItem('selectedContacts')) || [];
 
     contacts.forEach(contact => {
         let contactId = contact.id;
-        let checkbox = document.querySelector(`.contact-checkbox[data-contact-id="${contactId}"]`);
+        let taskId = currentTaskId;
+        let currentEditData = JSON.parse(localStorage.getItem(taskId));
 
-        if (checkbox) {
-            checkbox.checked = selectedInitialsArray.some(contact => contact.avatarid === contactId);
-            console.log(`Contact ${contactId} checkbox state: ${checkbox.checked}`);
+        if (currentEditData && currentEditData.content && currentEditData.content.selectedContacts) {
+            let selectedContactsForTask = currentEditData.content.selectedContacts;
+            let checkbox = document.querySelector(`.contact-checkbox[data-contact-id="${contactId}"]`);
+
+            if (checkbox) {
+                checkbox.checked = selectedContactsForTask.some(selectedContact => selectedContact.id === contactId);
+                console.log(`Contact ${contactId} checkbox state: ${checkbox.checked}`);
+            }
         }
     });
 }
-
 
 function removeContactArray(contact) {
     let index = selectedInitialsArray.findIndex(c => c.avatarid === contact.avatarid);

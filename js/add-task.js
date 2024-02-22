@@ -144,12 +144,12 @@ function removeContact(contactavatarId) {
 async function addToBoard(column) {
     let taskTitle = getFieldValueById('taskTitleInput');
     let category = getFieldValueById('category');
-/*
+
     if (!taskTitle || !category) {
         alert('Please fill out the title and the category');
         return;
     }
-*/
+
     let description = getFieldValueById('descriptionInput');
     let date = getFieldValueById('date');
     let subtasksList = document.getElementById('subtaskList').children;
@@ -162,7 +162,7 @@ async function addToBoard(column) {
     resetFormFields();
 
     // Zum Programmieren außer Kraft gesetzt
-    //window.location.href = 'board.html';
+    window.location.href = 'board.html';
 }
 
 function getFieldValueById(id) {
