@@ -257,6 +257,9 @@ function closeOpenCard() {
         $('.card-modal-delete-button').removeClass('hide-button');
         $('.card-modal-edit-button').removeClass('hide-button');
         $('.card-modal-save-button').addClass('hide-button');
+        $('.card-modal-technical').removeClass('hide-button');
+        $('.card-modal-userstory').removeClass('hide-button');
+        $('.due-date-card-modal').removeClass('hide-button');
     }, 100);
 }
 
@@ -557,9 +560,9 @@ async function deleteTask() {
 
 async function saveEditedTask() {
     let taskId = document.querySelector('.card-modal-save-button').dataset.id;
-    let taskTitle = document.querySelector('.card-modal-title').textContent;
-    let description = document.querySelector('.card-modal-content').textContent;
-    let date = document.querySelector('.dateInput').value;
+    let taskTitle = document.querySelector('.title-container-add-task input').value;
+    let description = document.querySelector('.description-container textarea').value;
+    let date = document.querySelector('.due-date-input').value;
     let category = document.querySelector('.task-categorie p').textContent;
     let priority = document.querySelector('.card-modal-priority-letter').textContent.toLowerCase();
 
@@ -744,7 +747,8 @@ async function openCard(data, subtasksData) {
                 </button>
 
                 <button onclick="saveEditedTask()" data-id="${data.id}" class="card-modal-save-button hide-button">
-                    <p> OK </p>
+                    <p> Ok </p>
+                    <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="check"><mask id="mask0_126260_6098" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="25" height="24"><rect id="Bounding box" x="0.248535" width="24" height="24" fill="#D9D9D9"/></mask><g mask="url(#mask0_126260_6098)"><path id="check_2" d="M9.79923 15.15L18.2742 6.675C18.4742 6.475 18.7117 6.375 18.9867 6.375C19.2617 6.375 19.4992 6.475 19.6992 6.675C19.8992 6.875 19.9992 7.1125 19.9992 7.3875C19.9992 7.6625 19.8992 7.9 19.6992 8.1L10.4992 17.3C10.2992 17.5 10.0659 17.6 9.79923 17.6C9.53256 17.6 9.29923 17.5 9.09923 17.3L4.79923 13C4.59923 12.8 4.5034 12.5625 4.51173 12.2875C4.52006 12.0125 4.62423 11.775 4.82423 11.575C5.02423 11.375 5.26173 11.275 5.53673 11.275C5.81173 11.275 6.04923 11.375 6.24923 11.575L9.79923 15.15Z" fill="white"/></g></g></svg>
                 </button>
             </div>
         </div>
@@ -807,13 +811,33 @@ function enableContentEditing() {
     let titleElement = document.querySelector('.card-modal-title');
     let contentElement = document.querySelector('.card-modal-content');
 
-    titleElement.contentEditable = true;
     contentElement.contentEditable = true;
+    titleElement.contentEditable = true;
 
-    titleElement.style.border = '1px solid #3498db';
-    contentElement.style.border = '1px solid #3498db';
+    let titleContainer = document.createElement('div');
+    titleContainer.className = 'title-container-add-task';
+    let titleHeadline = document.createElement('div');
+    titleHeadline.textContent = 'Title';
+    let titleInput = document.createElement('input');
+    titleInput.type = 'text';
+    titleInput.value = titleElement.textContent;
+    titleContainer.appendChild(titleHeadline);
+    titleContainer.appendChild(titleInput);
+    titleElement.replaceWith(titleContainer);
+
+    let contentContainer = document.createElement('div');
+    contentContainer.className = 'description-container';
+    let contentHeadline = document.createElement('div');
+    contentHeadline.textContent = 'Description';
+    let contentInput = document.createElement('textarea');
+    contentInput.type = 'text';
+    contentInput.value = contentElement.textContent;
+    contentContainer.appendChild(contentHeadline);
+    contentContainer.appendChild(contentInput);
+    contentElement.replaceWith(contentContainer);
+
 }
-
+/*
 function setupDueDateInput() {
     let dueDateText = document.getElementById('dueDateText');
     let dateContainer = document.querySelector('.card-modal-date-number');
@@ -833,6 +857,35 @@ function setupDueDateInput() {
         showButtonPanel: true,
     });
 }
+*/
+
+function setupDueDateInput() {
+    let dateElement = document.getElementById('dueDateText');
+
+    let dateContainer = document.createElement('div');
+    dateContainer.className = 'due-date-container';
+    let dateHeadline = document.createElement('div');
+    dateHeadline.textContent = 'Due Date';
+    let dateInput = document.createElement('input');
+    dateInput.type = 'date';
+    dateInput.className = 'due-date-input';
+    dateInput.required = true;
+
+    // Extract the date from the date element's text content
+    let dateText = dateElement.textContent;
+    let dateValue = dateText.replace('Due date: ', '');
+    dateInput.value = dateValue;
+
+    dateContainer.appendChild(dateHeadline);
+    dateContainer.appendChild(dateInput);
+    dateElement.replaceWith(dateContainer);
+
+    $(dateInput).datepicker({
+        dateFormat: 'yy-mm-dd',
+        showButtonPanel: true,
+    });
+}
+
 
 function initializeContactDropdownOpenCard() {
     createContactDropdown(() => {
@@ -856,6 +909,10 @@ function edit() {
         $('.card-modal-contacts').addClass('height-contacts');
         $('.card-modal-save-button').removeClass('hide-button');
         $('.card-modal-devider').addClass('hide-button');
+        $('.card-modal-technical').addClass('hide-button');
+        $('.card-modal-userstory').addClass('hide-button');
+        $('.due-date-card-modal').addClass('hide-button');
+        $('.task-categorie ').addClass('justify-end');
 
         if (currentEditData) {
             //console.log('Task Data in Edit:', JSON.stringify(currentEditData));

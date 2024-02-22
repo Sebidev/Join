@@ -623,6 +623,7 @@ body {
   border: 1px solid var(--Version-2-main-color, #2a3647);
   background-color: transparent;
   color: #2a3647;
+  transition: 55ms ease-in-out;
 }
 
 .clear-button:hover {
@@ -664,6 +665,7 @@ body {
   border-radius: 10px;
   background: #2a3647;
   border: #2a3647;
+  transition: 55ms ease-in-out;
 }
 
 .create-task-button h3 {

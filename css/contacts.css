@@ -131,6 +131,7 @@ body {
     align-items: center;
     flex-shrink: 0;
     border-radius: 56px;
+    transition: 45ms ease-in-out;
 }
 
 .close_button1:hover {
@@ -196,6 +197,7 @@ body {
     border: 1px solid var(--Version-2-main-color, #2A3647);
     color: #2a3647;
     background-color: transparent;
+    transition: 45ms ease-in-out;
 }
 
 .close_button2:hover {
@@ -221,6 +223,7 @@ body {
     font-style: normal;
     font-weight: 700;
     line-height: 120%; /* 25.2px */
+    transition: 55ms ease-in-out;
 }
 
 .button_container {
@@ -289,6 +292,7 @@ body {
     font-style: normal;
     font-weight: 700;
     line-height: 120%; /* 25.2px */
+    transition: 55ms ease-in-out;
 }
 
 .add_new_contact_btn:hover {
@@ -508,6 +512,7 @@ body {
     line-height: 120%; /* 19.2px */
     margin-top: 8px;
     margin-right: 16px;
+    transition: 45ms ease-in-out;
 }
 
 .floating_contact_buttons img{

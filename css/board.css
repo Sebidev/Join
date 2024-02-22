@@ -79,7 +79,9 @@ body {
   font-size: 21px;
   font-style: normal;
   font-weight: 700;
-  line-height: 120%; /* 25.2px */
+  line-height: 120%;
+  transition: 105ms ease-in-out;
+  /* 25.2px */
 }
 
 .hover-color:hover {
@@ -104,7 +106,8 @@ body {
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
-  line-height: 120%; /* 24px */
+  line-height: 120%;
+  /* 24px */
 }
 
 .plus-button {
@@ -121,6 +124,7 @@ body {
   flex-shrink: 0;
   border-radius: 8px;
   border: 2px solid var(--Version-2-main-color, #2a3647);
+  transition: 45ms ease-in-out;
 }
 
 .hover-inv:hover {
@@ -136,7 +140,8 @@ body {
   font-size: 61px;
   font-style: normal;
   font-weight: 700;
-  line-height: 120%; /* 73.2px */
+  line-height: 120%;
+  /* 73.2px */
 }
 
 .board {
@@ -178,6 +183,7 @@ body {
   align-items: flex-start;
   cursor: pointer;
   word-break: break-word;
+  transition: 95ms ease-in-out;
 }
 
 .card-user-story:hover {
@@ -250,7 +256,8 @@ body {
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 19.2px */
+  line-height: 120%;
+  /* 19.2px */
 }
 
 .technical-task {
@@ -285,7 +292,8 @@ body {
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 19.2px */
+  line-height: 120%;
+  /* 19.2px */
 }
 
 .title-container {
@@ -306,7 +314,8 @@ body {
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
-  line-height: 120%; /* 19.2px */
+  line-height: 120%;
+  /* 19.2px */
 }
 
 .card-content {
@@ -318,7 +327,8 @@ body {
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 19.2px */
+  line-height: 120%;
+  /* 19.2px */
 }
 
 .progress {
@@ -365,7 +375,8 @@ body {
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 14.4px */
+  line-height: 120%;
+  /* 14.4px */
 }
 
 .to-do-bottom {
@@ -459,7 +470,8 @@ body {
   font-size: 61px;
   font-style: normal;
   font-weight: 700;
-  line-height: 120%; /* 73.2px */
+  line-height: 120%;
+  /* 73.2px */
 }
 
 #overlay #card-overlay {
@@ -548,7 +560,8 @@ body {
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 24px */
+  line-height: 120%;
+  /* 24px */
 }
 
 .cancel-button-modal:hover {
@@ -585,7 +598,8 @@ body {
   font-size: 21px;
   font-style: normal;
   font-weight: 700;
-  line-height: 120%; /* 25.2px */
+  line-height: 120%;
+  /* 25.2px */
 }
 
 .create-task-button-modal:hover {
@@ -636,7 +650,7 @@ body {
 }
 
 .card-modal-cont {
-  gap: 1.5rem;
+  gap: 1.4rem;
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
@@ -647,8 +661,10 @@ body {
   }
 
   /* Hide scrollbar for IE, Edge and Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .card-modal {
@@ -689,7 +705,8 @@ body {
   font-size: 23px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 27.6px */
+  line-height: 120%;
+  /* 27.6px */
 }
 
 .card-modal-technical {
@@ -712,7 +729,8 @@ body {
   font-size: 23px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 27.6px */
+  line-height: 120%;
+  /* 27.6px */
 }
 
 .close-card-modal {
@@ -723,6 +741,127 @@ body {
   cursor: pointer;
   border-radius: 50%;
   padding: 4px;
+  transition: 125ms ease-in-out;
+}
+
+.title-container-add-task {
+  align-self: stretch;
+  color: #2a3647;
+  height: 77px !important;
+  font-family: Inter;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  width: 440px
+}
+
+.title-container-add-task input {
+  margin-top: 8px;
+  margin-bottom: 4px;
+  display: flex;
+  padding: 9px 19px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 10px;
+  border: 1px solid var(--Style, #d1d1d1);
+  background: #fff;
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%;
+}
+
+.justify-end {
+  justify-content: end !important;
+}
+
+.description-container {
+  display: flex;
+  width: 440px;
+  height: 168px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  font-family: Inter;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  margin-top: 0px !important;
+}
+
+.description-container textarea {
+  display: flex;
+  height: 84px;
+  padding: 15px 16px;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 10px;
+  border: 1px solid var(--Style, #d1d1d1);
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%;
+  resize: none;
+}
+
+.due-date-container {
+  display: flex;
+  width: 440px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 24px;
+  font-family: Inter;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px
+}
+
+.due-date {
+  color: var(--Version-2-main-color, #2a3647);
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%;
+  /* 24px */
+}
+
+.due-date-input {
+  /* background-image: url(../img/event.svg) !important; */
+  background-repeat: no-repeat !important;
+  background-position-x: calc(96%) !important;
+  background-position-y: center !important;
+  display: flex;
+  width: 408px;
+  height: 24px;
+  padding: 12px 16px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 10px;
+  border: 1px solid var(--Style, #d1d1d1);
+  color: unset !important;
+  background: #fff;
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%;
+  /* 24px */
+  cursor: pointer;
+}
+
+.due-date-calendar {
+  display: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 1000;
 }
 
 .close-card-modal:hover {
@@ -752,7 +891,8 @@ body {
   font-size: 61px;
   font-style: normal;
   font-weight: 700;
-  line-height: 120%; /* 73.2px */
+  line-height: 120%;
+  /* 73.2px */
 }
 
 .card-modal-content {
@@ -764,7 +904,8 @@ body {
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 24px */
+  line-height: 120%;
+  /* 24px */
   justify-content: space-between;
 }
 
@@ -784,7 +925,8 @@ body {
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 24px */
+  line-height: 120%;
+  /* 24px */
 }
 
 .card-modal-date-number {
@@ -795,7 +937,8 @@ body {
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 24px */
+  line-height: 120%;
+  /* 24px */
 }
 
 #dueDateText {
@@ -824,7 +967,8 @@ body {
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 24px */
+  line-height: 120%;
+  /* 24px */
 }
 
 .card-modal-priority-container {
@@ -857,7 +1001,8 @@ body {
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 24px */
+  line-height: 120%;
+  /* 24px */
 }
 
 .card-modal-initial-container {
@@ -892,7 +1037,8 @@ body {
   font-size: 19px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 22.8px */
+  line-height: 120%;
+  /* 22.8px */
 }
 
 .card-modal-bottom {
@@ -935,12 +1081,16 @@ body {
 
 .card-modal-save-button {
   border-radius: 10%;
-  width: 60px;
-  height: 40px;
+  width: 70px;
+  height: 45px;
   border: 2px #2a3647;
   background-color: #2a3647;
   color: white;
   cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  transition: 75ms ease-in-out;
 }
 
 .card-modal-save-button:hover {
@@ -976,7 +1126,8 @@ body {
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 24px */
+  line-height: 120%;
+  /* 24px */
 }
 
 .card-modal-subtasks {
@@ -1086,7 +1237,8 @@ body {
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 19.2px */
+  line-height: 120%;
+  /* 19.2px */
 }
 
 .card-modal-edit-and-delete-container {
@@ -1108,6 +1260,7 @@ body {
   background-color: #fff;
   border: none;
   cursor: pointer;
+  transition: 55ms ease-in-out;
 }
 
 .card-modal-delete-button:hover {
@@ -1133,6 +1286,7 @@ body {
   background-color: #fff;
   border: none;
   cursor: pointer;
+  transition: 55ms ease-in-out;
 }
 
 .card-modal-edit-button:hover {
@@ -1218,16 +1372,16 @@ body {
 /* Media Queries */
 @media only screen and (max-width: 600px) {
 
-  body, html{
+  body, html {
     overflow-x: hidden;
   }
 
-  .head{
+  .head {
     margin-left: 16px;
     margin-top: 48px;
   }
 
-  .mobile-searchbar{
+  .mobile-searchbar {
     display: flex;
     width: 100%;
     gap: 10px;
@@ -1236,36 +1390,36 @@ body {
     margin-bottom: 70px;
   }
 
-  .input-container-mobile{
+  .input-container-mobile {
     position: relative;
     display: flex;
     width: 93%;
   }
 
-  .find-task-search{
+  .find-task-search {
     position: absolute;
     width: 85vw;
   }
 
-  .add-task-button{
+  .add-task-button {
     display: block;
   }
 
-  .search-icon{
+  .search-icon {
     display: flex;
     position: absolute;
     top: 24px;
     height: auto;
   }
 
-  .vector{
+  .vector {
     display: flex;
     position: absolute;
     top: 24px;
     height: auto;
   }
 
-  .add-task-button-mobile{
+  .add-task-button-mobile {
     display: flex;
     width: 40px;
     height: 40px;
@@ -1280,17 +1434,17 @@ body {
     border: none;
   }
 
-  .head-right{
+  .head-right {
     display: none;
   }
 
-  .no-tasks-here{
+  .no-tasks-here {
     width: 93vw;
     height: 48px;
     overflow: visible !important;
   }
 
-  .board{
+  .board {
     height: 100%;
     width: 100vw;
     flex-direction: column;
@@ -1298,12 +1452,12 @@ body {
     padding-bottom: 100px;
   }
 
-  .done-section, .in-progress-section, .to-do-section, .await-section{
+  .done-section, .in-progress-section, .to-do-section, .await-section {
     min-height: auto;
     flex: 0;
   }
 
-  .instance{
+  .instance {
     width: 94vw;
   }
 
@@ -1315,7 +1469,7 @@ body {
   .card-modal {
     top: 45vh;
     position: absolute;
-    width: 75%; 
+    width: 75%;
     height: auto;
     padding: 20px;
   }
@@ -1345,7 +1499,7 @@ body {
     font-size: 16px;
   }
 
-  .card-modal-priority-letter{
+  .card-modal-priority-letter {
     margin-left: 22px;
   }
 
@@ -1421,29 +1575,29 @@ body {
   }
 }
 
-@media only screen and (max-width: 926px){
-  .head{
+@media only screen and (max-width: 926px) {
+  .head {
     margin-left: 10px;
     transition: margin 0.5s ease-in-out;
   }
 
-  .board{
+  .board {
     flex-direction: column;
     margin-left: 16px;
     transition: margin 0.5s ease-in-out;
     padding-bottom: 100px;
   }
 
-  .right_textbox{
+  .right_textbox {
     margin-left: 150px;
     transition: margin 0.5s ease-in-out;
   }
 
-  .board-column-content{
+  .board-column-content {
     flex-direction: row;
   }
 
-  .done-section, .in-progress-section, .to-do-section, .await-section{
+  .done-section, .in-progress-section, .to-do-section, .await-section {
     min-height: auto;
     flex: 0;
   }
