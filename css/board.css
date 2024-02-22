@@ -551,6 +551,7 @@ body {
   border-radius: 10px;
   border: 1px solid var(--Version-2-main-color, #2a3647);
   background: #f6f7f8;
+  transition: 55ms ease-in-out;
 }
 
 .cancel-button-modal h3 {
@@ -588,6 +589,7 @@ body {
   border-radius: 10px;
   background: #2a3647;
   border: #2A3647;
+  transition: 55ms ease-in-out;
 }
 
 .create-task-button-modal h3 {
@@ -638,6 +640,7 @@ body {
   cursor: pointer;
   border-radius: 50%;
   padding: 2px;
+  transition: 55ms ease-in-out;
 }
 
 .close-modal img {
