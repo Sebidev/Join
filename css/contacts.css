@@ -200,14 +200,36 @@ body {
     transition: 45ms ease-in-out;
 }
 
+.delete_button{
+    display: flex;
+    padding: 16px;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    border-radius: 10px;
+    border: 1px solid var(--Version-2-main-color, #2A3647);
+    color: #2a3647;
+    background-color: transparent;
+    cursor: pointer;
+}
+
 .close_button2:hover {
     color: #29abe2;
     border: 1px solid #29abe2;
-  }
+}
   
-  .close_button2:hover svg path {
+.close_button2:hover svg path {
     fill: #29abe2;
-  }
+}
+
+.delete_button:hover {
+    color: #29abe2;
+    border: 1px solid #29abe2;
+}
+  
+.delete_button:hover svg path {
+    fill: #29abe2;
+}
 
 .createcontact_button{
     display: flex;
@@ -827,6 +849,84 @@ body {
     .backArrow:hover {
         transform: scale(1.05);
     }
+
+    #contactModal{
+        top: 45%;
+        width: 95%;
+        height: 85%;
+    }
+
+    .bluebar_joinlogo{
+        display: none;
+    }
+
+    #bluebar{
+        height: 323px;
+        width: 100%;
+        gap: 12px;
+        border-top-left-radius: 30px;
+        border-top-right-radius: 30px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+
+    .bluebar_titel{
+        font-size: 47px;
+        margin-left: 24px;
+        margin-right: 0px;
+    }
+
+    .bluebar_text{
+        font-size: 20px;
+        margin-left: 24px;
+        margin-right: 0px;
+        margin-bottom: -8px;
+    }
+
+    .bluebar_line{
+        margin-left: 24px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+    }
+
+    .avatar_contactModal{
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        border: none;
+        background: transparent;
+        box-shadow: none;
+        margin-top: -47px;
+    }
+
+    .avatar_contactModal_initletter{
+        margin-top: -78px;
+        margin-left: 165px;
+    }
+
+    .form_container{
+        position: absolute;
+        top: 412px;
+        right: 22px;
+        gap: 10px;
+        width: 90%;
+    }
+
+    .close_button1 {
+        top: 24px;
+        right: 16px;
+        filter: brightness(0) invert(1);
+    }
+
+    .close_button2{
+        display: none;
+    }
+
+    .button_container{
+        margin-left: auto;
+        margin-right: auto;
+    }
+
 }
 
 @media only screen and (max-width: 1380px){
