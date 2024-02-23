@@ -1099,29 +1099,19 @@ function createContactDivEdit(contact, isSelected) {
 }
 
 function updateSelectedContacts(contact, action) {
-    let index = selectedInitialsArray.findIndex(c => c.id === contact.id && c.taskId === currentTaskId);
+    let index = selectedInitialsArray.findIndex(c => c.id === contact.id);
 
     if (action === 'add' && index === -1) {
         selectedInitialsArray.push(contact);
-
-        let selectedContactsContainer = document.getElementById("selectedContactsContainerEdit");
-        let selectedContactDiv = createSelectedContactDivEdit(contact);
-        selectedContactsContainer.appendChild(selectedContactDiv);
     } else if (action === 'remove' && index !== -1) {
         selectedInitialsArray.splice(index, 1);
-
-        let selectedContactDiv = document.querySelector(`#selectedContactsContainerEdit [data-avatarid="${contact.avatarid}"]`);
-        if (selectedContactDiv) {
-            selectedContactDiv.remove();
-        }
     }
-
     saveAndDisplaySelectedContactsEdit();
 }
 
 function saveAndDisplaySelectedContactsEdit() {
     saveSelectedContacts();
-    //selectContactEdit();
+    selectContactEdit();
 }
 
 function createSelectedContactDivEdit(contact) {
