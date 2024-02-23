@@ -1115,29 +1115,44 @@ function saveAndDisplaySelectedContactsEdit() {
 }
 
 function createSelectedContactDivEdit(contact) {
-    let selectedContactDiv = document.createElement("div");
-    selectedContactDiv.classList.add("initial-container-open-card");
-    selectedContactDiv.id = "selectedContactEdit";
-    selectedContactDiv.innerHTML = `
-        <div data-avatarid="${contact.avatarid}">
-            <div class="avatar">
-                <img src="img/Ellipse5-${contact.avatarid}.svg" alt="Avatar">
-                <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
+    if (contact.avatarid !== undefined) {
+        let selectedContactDiv = document.createElement("div");
+        selectedContactDiv.classList.add("initial-container-open-card");
+        selectedContactDiv.id = "selectedContactEdit";
+        selectedContactDiv.innerHTML = `
+            <div data-avatarid="${contact.avatarid}">
+                <div class="avatar">
+                    <img src="img/Ellipse5-${contact.avatarid}.svg" alt="Avatar">
+                    <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
+                </div>
             </div>
-        </div>
-    `;
-    return selectedContactDiv;
+        `;
+        return selectedContactDiv;
+    }
+    return null;
 }
 
 function selectContactEdit() {
     let selectedContactsContainer = document.getElementById("selectedContactsContainerEdit");
     selectedContactsContainer.innerHTML = "";
     selectedInitialsArray.forEach(contact => {
-        if (!document.querySelector(`#selectedContactsContainerEdit [data-avatarid="${contact.avatarid}"]`)) {
-            let selectedContactDiv = createSelectedContactDivEdit(contact);
-            selectedContactsContainer.appendChild(selectedContactDiv);
+        if (contact.avatarid !== undefined) {
+
+            if (!isContactInContainer(contact)) {
+                let selectedContactDiv = createSelectedContactDivEdit(contact);
+
+                if (selectedContactDiv !== null) {
+                    selectedContactsContainer.appendChild(selectedContactDiv);
+                }
+            }
         }
     });
+}
+
+// Hilfsfunktion zum Überprüfen, ob ein Kontakt bereits im Container vorhanden ist
+function isContactInContainer(contact) {
+    let selectedContactsContainer = document.getElementById("selectedContactsContainerEdit");
+    return selectedContactsContainer.querySelector(`[data-avatarid="${contact.avatarid}"]`) !== null;
 }
 
 function updateCheckboxState() {
