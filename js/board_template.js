@@ -260,6 +260,8 @@ function closeOpenCard() {
         $('.card-modal-technical').removeClass('hide-button');
         $('.card-modal-userstory').removeClass('hide-button');
         $('.due-date-card-modal').removeClass('hide-button');
+        $('.card-modal-priority-symbol').removeClass('hide-button');
+        $('.priority-card-modal-text').removeClass('hide-button');
     }, 100);
 }
 
@@ -564,7 +566,8 @@ async function saveEditedTask() {
     let description = document.querySelector('.description-container textarea').value;
     let date = document.querySelector('.due-date-input').value;
     let category = document.querySelector('.task-categorie p').textContent;
-    let priority = document.querySelector('.card-modal-priority-letter').textContent.toLowerCase();
+    let priorityElement = document.querySelector('.prio-option-container .button.active');
+    let priority = priorityElement ? priorityElement.textContent.toLowerCase().trim() : '';
 
     let tasks;
 
@@ -722,7 +725,6 @@ async function openCard(data, subtasksData) {
                             <div class="subtasks-edit-icons-container d-none">
                                 <div class="subtasks-edit-icons-container-p">
                                     <p class="subtask-icon-edit"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="edit"><mask id="mask0_130935_4276" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect id="Bounding box" width="24" height="24" fill="#D9D9D9"/></mask><g mask="url(#mask0_130935_4276)"><path id="edit_2" d="M5 19H6.4L15.025 10.375L13.625 8.975L5 17.6V19ZM19.3 8.925L15.05 4.725L16.45 3.325C16.8333 2.94167 17.3042 2.75 17.8625 2.75C18.4208 2.75 18.8917 2.94167 19.275 3.325L20.675 4.725C21.0583 5.10833 21.2583 5.57083 21.275 6.1125C21.2917 6.65417 21.1083 7.11667 20.725 7.5L19.3 8.925ZM17.85 10.4L7.25 21H3V16.75L13.6 6.15L17.85 10.4Z" fill="#2A3647"/></g></g></svg></p>
-                                    <p class="subtask-icon-edit"><img src="./img/divider.svg" alt="Divider"></p>
                                     <p class="subtask-icon-delete"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="delete"><mask id="mask0_130935_4270" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect id="Bounding box" width="24" height="24" fill="#D9D9D9"/></mask><g mask="url(#mask0_130935_4270)"><path id="delete_2" d="M7 21C6.45 21 5.97917 20.8042 5.5875 20.4125C5.19583 20.0208 5 19.55 5 19V6C4.71667 6 4.47917 5.90417 4.2875 5.7125C4.09583 5.52083 4 5.28333 4 5C4 4.71667 4.09583 4.47917 4.2875 4.2875C4.47917 4.09583 4.71667 4 5 4H9C9 3.71667 9.09583 3.47917 9.2875 3.2875C9.47917 3.09583 9.71667 3 10 3H14C14.2833 3 14.5208 3.09583 14.7125 3.2875C14.9042 3.47917 15 3.71667 15 4H19C19.2833 4 19.5208 4.09583 19.7125 4.2875C19.9042 4.47917 20 4.71667 20 5C20 5.28333 19.9042 5.52083 19.7125 5.7125C19.5208 5.90417 19.2833 6 19 6V19C19 19.55 18.8042 20.0208 18.4125 20.4125C18.0208 20.8042 17.55 21 17 21H7ZM7 6V19H17V6H7ZM9 16C9 16.2833 9.09583 16.5208 9.2875 16.7125C9.47917 16.9042 9.71667 17 10 17C10.2833 17 10.5208 16.9042 10.7125 16.7125C10.9042 16.5208 11 16.2833 11 16V9C11 8.71667 10.9042 8.47917 10.7125 8.2875C10.5208 8.09583 10.2833 8 10 8C9.71667 8 9.47917 8.09583 9.2875 8.2875C9.09583 8.47917 9 8.71667 9 9V16ZM13 16C13 16.2833 13.0958 16.5208 13.2875 16.7125C13.4792 16.9042 13.7167 17 14 17C14.2833 17 14.5208 16.9042 14.7125 16.7125C14.9042 16.5208 15 16.2833 15 16V9C15 8.71667 14.9042 8.47917 14.7125 8.2875C14.5208 8.09583 14.2833 8 14 8C13.7167 8 13.4792 8.09583 13.2875 8.2875C13.0958 8.47917 13 8.71667 13 9V16Z" fill="#2A3647"/></g></g></svg></p>
                                 </div>
                             </div>
@@ -912,6 +914,8 @@ function edit() {
         $('.card-modal-technical').addClass('hide-button');
         $('.card-modal-userstory').addClass('hide-button');
         $('.due-date-card-modal').addClass('hide-button');
+        $('.priority-card-modal-text').addClass('hide-button');
+        $('.card-modal-priority-symbol').addClass('hide-button');
         $('.task-categorie ').addClass('justify-end');
 
         if (currentEditData) {
@@ -933,14 +937,67 @@ function endEdit() {
 }
 
 function enablePriorityEditing() {
-    let priorityContainer = document.querySelector('.card-modal-priority');
+    let priorityElement = document.querySelector('.card-modal-priority-letter');
+    let currentPriority = priorityElement.textContent.toLowerCase();
+    let priorityContainer = document.createElement('div');
+    priorityContainer.className = 'prio-container';
 
-    priorityContainer.contentEditable = true;
-    priorityContainer.style.border = '1px solid #3498db';
-    priorityContainer.addEventListener('click', openPriorityOptions);
+    let priorityHeadline = document.createElement('div');
+    priorityHeadline.className = 'prio';
+    priorityHeadline.textContent = 'Priority';
+    priorityContainer.appendChild(priorityHeadline);
 
-    let priorityLetterElement = priorityContainer.querySelector('.card-modal-priority-letter');
-    let priorityImgElement = priorityContainer.querySelector('.card-modal-priority-symbol img');
+    let optionContainer = document.createElement('div');
+    optionContainer.className = 'prio-option-container';
+
+    let urgentButton = document.createElement('button');
+    urgentButton.type = 'button';
+    urgentButton.className = 'button urgent';
+    urgentButton.innerHTML = '<h3>Urgent</h3><img src="./img/Prio_up.svg" alt="" />';
+    urgentButton.onclick = function() { chooseCardModal('urgent'); };
+
+    let mediumButton = document.createElement('button');
+    mediumButton.type = 'button';
+    mediumButton.className = 'button medium';
+    mediumButton.innerHTML = '<h3>Medium</h3><img src="./img/Prio_neutral.svg" alt="" />';
+    mediumButton.onclick = function() { chooseCardModal('medium'); };
+
+    let lowButton = document.createElement('button');
+    lowButton.type = 'button';
+    lowButton.className = 'button low';
+    lowButton.innerHTML = '<h3>Low</h3><img src="./img/Prio_down.svg" alt="" />';
+    lowButton.onclick = function() { chooseCardModal('low'); };
+
+    optionContainer.appendChild(urgentButton);
+    optionContainer.appendChild(mediumButton);
+    optionContainer.appendChild(lowButton);
+
+    priorityContainer.appendChild(optionContainer);
+    priorityElement.replaceWith(priorityContainer);
+
+    let buttons = priorityContainer.querySelectorAll('.button');
+    buttons.forEach(button => {
+        if (button.classList.contains(currentPriority)) {
+            button.classList.add('active');
+            let imgElement = button.querySelector('img');
+            switch(currentPriority) {
+                case 'low':
+                    button.style.backgroundColor = 'rgb(122, 226, 41)';
+                    break;
+                case 'medium':
+                    button.style.backgroundColor = 'rgb(255, 168, 0)';
+                    break;
+                case 'urgent':
+                    button.style.backgroundColor = 'rgb(255, 61, 0)';
+                    break;
+            }
+            if (imgElement) {
+                imgElement.style.filter = 'brightness(0) invert(1)';
+            }
+        }
+    });
+
+    priorityElement.replaceWith(priorityContainer);
 }
 
 function createPriorityOptionsContainer() {
@@ -1007,8 +1064,35 @@ function openPriorityOptions(event) {
 }
 
 function chooseCardModal(priority) {
-    let priorityTextElement = document.querySelector('.card-modal-priority .card-modal-priority-letter');
-    let prioritySymbolElement = document.querySelector('.card-modal-priority-symbol img');
+    let priorityTextElement = document.querySelector('.card-modal-priority-container .card-modal-priority-letter');
+    let prioritySymbolElement = document.querySelector('.card-modal-priority-container .card-modal-priority-symbol img');
+    let buttons = document.querySelectorAll('.prio-option-container .button');
+    buttons.forEach(button => {
+        let imgElement = button.querySelector('img');
+        if (button.classList.contains(priority)) {
+            button.classList.add('active');
+            switch(priority) {
+                case 'low':
+                    button.style.backgroundColor = 'rgb(122, 226, 41)';
+                    break;
+                case 'medium':
+                    button.style.backgroundColor = 'rgb(255, 168, 0)';
+                    break;
+                case 'urgent':
+                    button.style.backgroundColor = 'rgb(255, 61, 0)';
+                    break;
+            }
+            if (imgElement) {
+                imgElement.style.filter = 'brightness(0) invert(1)';
+            }
+        } else {
+            button.classList.remove('active');
+            button.style.backgroundColor = '';
+            if (imgElement) {
+                imgElement.style.filter = 'brightness(1) invert(0)';
+            }
+        }
+    });
 
     let priorityMappings = {
         'urgent': { text: 'Urgent', symbolSrc: './img/Prio_up.svg' },
@@ -1018,8 +1102,10 @@ function chooseCardModal(priority) {
 
     let selectedPriority = priorityMappings[priority] || {};
 
-    priorityTextElement.textContent = (selectedPriority.text || '').toUpperCase();
-    prioritySymbolElement.src = selectedPriority.symbolSrc || '';
+    if(priorityTextElement && prioritySymbolElement) {
+        priorityTextElement.textContent = (selectedPriority.text || '').toUpperCase();
+        prioritySymbolElement.src = selectedPriority.symbolSrc || '';
+    }
 
     let priorityOptionsContainer = document.querySelector('.card-modal-priority-options-container');
     if (priorityOptionsContainer) {
