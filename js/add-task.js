@@ -214,7 +214,7 @@ async function saveToLocalStorage(taskTitle, description, date, category, subtas
             boardColumn: column,
         },
         id: 'task' + (isUserLoggedIn ? users[currentUser].tasks.length : (JSON.parse(localStorage.getItem('tasks')) || []).length),
-        dataId: selectedContacts[0].id
+        //dataId: selectedContacts[0].id
     };
 
     console.log('Task before processing contacts:', task);
