@@ -1145,6 +1145,7 @@ body {
   align-items: flex-start;
   gap: 4px;
   align-self: stretch;
+  padding-top: 13px;
 }
 
 .height-contacts {
@@ -1156,10 +1157,12 @@ body {
   position: relative;
   display: flex;
   height: 20px;
-  width: 80%;
-  padding: 6px 16px;
+  width: 100%;
   align-items: center;
-  gap: 16px;
+  cursor: pointer;
+  justify-content: space-between;
+  padding-top: 6px;
+  padding-bottom: 6px;
 }
 
 .subtask-icons-container {
@@ -1174,6 +1177,11 @@ body {
   display: block;
   width: 100px;
   height: 18px;
+}
+
+.card-modal-subtask-maincontainer:hover {
+  background-color: rgba(128, 128, 128, 0.158);
+  border-radius: 5px;
 }
 
 .subtasks-edit-icons-container {
@@ -1195,6 +1203,14 @@ body {
   width: 20px;
   height: 20px;
   margin-right: 5px;
+}
+
+.subtask-icon-edit:hover {
+  opacity: 60%;
+}
+
+.subtask-icon-delete:hover {
+  opacity: 60%;
 }
 
 .subtask-edit-icons-container.d-block {
@@ -1240,6 +1256,7 @@ body {
 
 .card-modal-subtask-description {
   color: #000;
+  padding-left: 8px;
 
   /* Version 2/body */
   font-family: Inter;
@@ -1285,6 +1302,13 @@ body {
   height: 24px;
   stroke-width: 1px;
   stroke: var(--Style, #d1d1d1);
+}
+
+.card-modal-description-checkbox {
+  padding: 6px 16px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
 }
 
 .card-modal-edit-button {

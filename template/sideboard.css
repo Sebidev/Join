@@ -96,6 +96,10 @@ body{
     text-decoration: none;
 }
 
+.down_links:hover {
+    color: #29ABE2;
+}
+
 .hidden{
     display: none;
 }
