@@ -1128,9 +1128,8 @@ function createSelectedContactDivEdit(contact) {
     let selectedContactDiv = document.createElement("div");
     selectedContactDiv.classList.add("initial-container-open-card");
     selectedContactDiv.id = "selectedContactEdit";
-
     selectedContactDiv.innerHTML = `
-        <div data-avatarid="${contact.avatarid}" id="${contact.id}">
+        <div data-avatarid="${contact.avatarid}">
             <div class="avatar">
                 <img src="img/Ellipse5-${contact.avatarid}.svg" alt="Avatar">
                 <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
@@ -1142,9 +1141,7 @@ function createSelectedContactDivEdit(contact) {
 
 function selectContactEdit() {
     let selectedContactsContainer = document.getElementById("selectedContactsContainerEdit");
-
     selectedContactsContainer.innerHTML = "";
-
     selectedInitialsArray.forEach(contact => {
         if (!document.querySelector(`#selectedContactsContainerEdit [data-avatarid="${contact.avatarid}"]`)) {
             let selectedContactDiv = createSelectedContactDivEdit(contact);
@@ -1154,23 +1151,16 @@ function selectContactEdit() {
 }
 
 function updateCheckboxState() {
-    console.log('aufruf');
-    console.log('Selected Contacts Property:', currentEditData.content && currentEditData.content.selectedContacts);
-    currentEditData = JSON.parse(localStorage.getItem('selectedContacts')) || [];
+    selectedInitialsArray = JSON.parse(localStorage.getItem('selectedContacts')) || [];
+    console.log('selectedInitialsArray:', selectedInitialsArray);
 
     contacts.forEach(contact => {
         let contactId = contact.id;
-        let taskId = currentTaskId;
-        let currentEditData = JSON.parse(localStorage.getItem(taskId));
+        let checkbox = document.querySelector(`.contact-checkbox[data-contact-id="${contactId}"]`);
 
-        if (currentEditData && currentEditData.content && currentEditData.content.selectedContacts) {
-            let selectedContactsForTask = currentEditData.content.selectedContacts;
-            let checkbox = document.querySelector(`.contact-checkbox[data-contact-id="${contactId}"]`);
-
-            if (checkbox) {
-                checkbox.checked = selectedContactsForTask.some(selectedContact => selectedContact.id === contactId);
-                console.log(`Contact ${contactId} checkbox state: ${checkbox.checked}`);
-            }
+        if (checkbox) {
+            checkbox.checked = selectedInitialsArray.some(contact => contact.avatarid === contactId);
+            console.log(`Contact ${contactId} checkbox state: ${checkbox.checked}`);
         }
     });
 }
@@ -1180,19 +1170,16 @@ function removeContactArray(contact) {
     if (index !== -1) {
         selectedInitialsArray.splice(index, 1);
     }
-
     let contactDiv = document.querySelector(`#selectedContactsContainerEdit [data-avatarid="${contact.avatarid}"]`);
     if (contactDiv) {
         contactDiv.remove();
     }
-
     if (contact) {
         let checkbox = document.querySelector(`.contact-checkbox[data-contact-id="${contact.avatarid}"]`);
         if (checkbox) {
             checkbox.checked = false;
         }
     }
-
     removeContact(contact);
     selectContactCardModal();
     updateDropdownCheckbox(contact.avatarid);
