@@ -191,9 +191,9 @@ function generateDemoTasks() {
                     { description: 'Start Page Layout', checked: false }
                 ],
                 selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer"  },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "EM", name: "Emmanuel Mauer"},
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "MB", name: "Marcel Bauer" }
+                    { id: "_993jjpwo2", imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer"  },
+                    { id: "_oinqqdyix", imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "EM", name: "Emmanuel Mauer"},
+                    { id: "_yjhagjmwm", imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "MB", name: "Marcel Bauer" }
                 ],
                 priority: 'medium',
                 boardColumn: 'progress-column',
@@ -209,9 +209,9 @@ function generateDemoTasks() {
                 subtasks: 0,
                 subtasksData: [],
                 selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "DE", name: "David Eisenberg" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ", name: "Benedikt Ziegler" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS", name: "Anja Schulz" }
+                    { id: "_5gtq3iyry", imagePath: "http://127.0.0.1:5501/img/Ellipse5-1.svg", initials: "DE", name: "David Eisenberg" },
+                    { id: "_fuwny1vkm", imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ", name: "Benedikt Ziegler" },
+                    { id: "_mj6rm6e11", imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS", name: "Anja Schulz" }
                 ],
                 priority: 'low',
                 boardColumn: 'await-column',
@@ -227,9 +227,9 @@ function generateDemoTasks() {
                 subtasks: 0,
                 subtasksData: [],
                 selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "EF", name: "Eva Fischer" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS", name: "Anja Schulz" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "TW", name: "Tatjana Wolf" }
+                    { id: "_3cr2yicdi", imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "EF", name: "Eva Fischer" },
+                    { id: "_mj6rm6e11", imagePath: "http://127.0.0.1:5501/img/Ellipse5-3.svg", initials: "AS", name: "Anja Schulz" },
+                    { id: "_g9mhajz4q", imagePath: "http://127.0.0.1:5501/img/Ellipse5-2.svg", initials: "TW", name: "Tatjana Wolf" }
                 ],
                 priority: 'medium',
                 boardColumn: 'await-column',
@@ -248,8 +248,8 @@ function generateDemoTasks() {
                     { description: 'Setup Base Styles', checked: true }
                 ],
                 selectedContacts: [
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer" },
-                    { imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ", name: "Benedikt Ziegler" }
+                    { id: "_993jjpwo2", imagePath: "http://127.0.0.1:5501/img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer" },
+                    { id: "_fuwny1vkm", imagePath: "http://127.0.0.1:5501/img/Ellipse5-4.svg", initials: "BZ", name: "Benedikt Ziegler" }
                 ],
                 priority: 'urgent',
                 boardColumn: 'done-column',
