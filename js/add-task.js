@@ -141,6 +141,10 @@ function removeContact(contactavatarId) {
     }
 }
 
+function clearSelectedContacts() {
+    localStorage.removeItem('selectedContacts');
+}
+
 async function addToBoard(column) {
     let taskTitle = getFieldValueById('taskTitleInput');
     let category = getFieldValueById('category');
@@ -159,8 +163,8 @@ async function addToBoard(column) {
 
     saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column);
 
+    clearSelectedContacts();
     resetFormFields();
-
     // Zum Programmieren außer Kraft gesetzt
     window.location.href = 'board.html';
 }
@@ -341,4 +345,5 @@ function clearFields() {
 
     let subtaskList = document.getElementById('subtaskList');
     subtaskList.innerHTML = '';
+    clearSelectedContacts();
 }

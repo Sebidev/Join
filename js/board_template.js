@@ -222,6 +222,7 @@ function clearFields() {
     let subtaskList = document.getElementById('subtaskList');
     subtaskList.innerHTML = '';
     closeModal();
+    clearSelectedContacts();
 }
 
 function closeModal() {
@@ -263,6 +264,7 @@ function closeOpenCard() {
         $('.card-modal-priority-symbol').removeClass('hide-button');
         $('.priority-card-modal-text').removeClass('hide-button');
     }, 100);
+    clearSelectedContacts();
 }
 
 function getValue(selector) {
@@ -552,8 +554,16 @@ async function deleteTask() {
             localStorage.setItem('tasks', JSON.stringify(tasks));
         }
     }
+    clearSelectedContacts();
     updatePlaceholderText();
     closeOpenCard();
+}
+/**
+ * clears the selectedContacts cache
+ */
+
+function clearSelectedContacts() {
+    localStorage.removeItem('selectedContacts');
 }
 
 /**
@@ -589,6 +599,15 @@ async function saveEditedTask() {
         task.content.category = category;
         task.content.priority = priority;
 
+        let selectedContactsString = localStorage.getItem('selectedContacts');
+        let newSelectedContacts = selectedContactsString ? JSON.parse(selectedContactsString) : [];
+
+        newSelectedContacts.forEach(newContact => {
+            if (!task.content.selectedContacts.some(contact => contact.id === newContact.id)) {
+                task.content.selectedContacts.push(newContact);
+            }
+        });
+
         let subtasksData = Array.from(document.querySelectorAll(`#cardModal_${taskId} .card-modal-subtask-maincontainer`)).map((subtaskContainer) => {
             let description = subtaskContainer.querySelector('.card-modal-subtask-description').textContent;
             let checkbox = subtaskContainer.querySelector('.subtask-checkbox');
@@ -600,7 +619,6 @@ async function saveEditedTask() {
         task.content.subtasksData = subtasksData;
         task.content.subtasks = subtasksData.length;
 
-
         data = task;
 
         if (isUserLoggedIn) {
@@ -609,6 +627,10 @@ async function saveEditedTask() {
         } else {
             localStorage.setItem('tasks', JSON.stringify(tasks));
         }
+
+        let oldCard = document.getElementById(taskId);
+        oldCard.parentNode.removeChild(oldCard);
+        await renderCard(task);
     }
 
     let taskElement = document.getElementById(taskId);
@@ -623,6 +645,7 @@ async function saveEditedTask() {
     let newPriorityIconSrc = getPriorityIcon(priority);
     priorityIconElement.src = newPriorityIconSrc;
 
+    clearSelectedContacts();
     updateProgressBar();
     closeOpenCard();
     endEdit();
@@ -930,6 +953,7 @@ function edit() {
             console.error('No data available for editing.');
         }
     }
+    clearSelectedContacts();
 }
 
 function endEdit() {
