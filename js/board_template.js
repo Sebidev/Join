@@ -1193,12 +1193,12 @@ function createContactDivEdit(contact, isSelected) {
     `;
     contactDiv.addEventListener("mousedown", (event) => {
         event.preventDefault();
-        updateSelectedContacts(contact, isSelected ? 'remove' : 'add');
+        updateSelectedContactsEdit(contact, isSelected ? 'remove' : 'add');
     });
     return contactDiv;
 }
 
-function updateSelectedContacts(contact, action) {
+function updateSelectedContactsEdit(contact, action) {
     let index = selectedInitialsArray.findIndex(c => c.id === contact.id);
 
     if (action === 'add' && index === -1) {
