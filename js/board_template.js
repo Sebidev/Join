@@ -1360,20 +1360,41 @@ function addSubtaskOpenCard() {
         let checkboxId = `subtaskCheckbox_${taskId}_${subtasksContainer.children.length + 1}`;
 
         subtaskContainer.innerHTML = `
+        <div class="card-modal-description-checkbox">
             <div class="card-modal-subtask-checked"> 
                 <input type="checkbox" class="subtask-checkbox" id="${checkboxId}">                    
             </div>
             <div class="card-modal-subtask-description">${subtaskText}</div>
+        </div>
             <div class="subtasks-edit-icons-container d-none">
                 <div class="subtasks-edit-icons-container-p">
                     <p class="subtask-icon-edit"><img src="./img/edit.svg" alt="Edit Subtask"></p>
-                    <p class="subtask-icon-edit"><img src="./img/divider.svg" alt="Divider"></p>
                     <p class="subtask-icon-delete"><img src="./img/delete.svg" alt="Delete Subtask"></p>
                 </div>
             </div>
         `;
 
         subtasksContainer.appendChild(subtaskContainer);
+
+        subtaskContainer.addEventListener('mouseover', function () {
+            showSubtaskIcons(subtaskContainer);
+        });
+
+        subtaskContainer.addEventListener('mouseout', function () {
+            hideSubtaskIcons(subtaskContainer);
+        });
+
+        subtaskContainer.addEventListener('click', function () {
+            editSubtaskDescription(subtaskContainer);
+        });
+
+        let deleteIcon = subtaskContainer.querySelector('.subtask-icon-delete img');
+        if (deleteIcon) {
+            deleteIcon.addEventListener('click', function (event) {
+                event.stopPropagation();
+                deleteSubtask(subtaskContainer);
+            });
+        }
 
         inputElement.value = '';
     }
