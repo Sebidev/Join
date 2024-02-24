@@ -1126,12 +1126,12 @@ function createContactDropdown() {
     inputContainer.className = 'input-container';
     inputContainer.innerHTML = `
         <input id="assignedTo" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
-        <img id="arrow_down" onclick="showDropdownEdit(${currentTaskId})" class="arrow_down" src="./img/arrow_down.svg" alt="">
-        <div id="contactDropdown" class="dropdown-content"></div>
+        <img id="arrow_down_edit" onclick="showDropdownEdit(${currentTaskId})" class="arrow_down_edit" src="./img/arrow_down.svg" alt="">
+        <div id="contactDropdownEdit" class="dropdown-content"></div>
         `;
 
     contactDropdownEdit.appendChild(inputContainer);
-    document.getElementById('arrow_down').addEventListener('click', function () {
+    document.getElementById('arrow_down_edit').addEventListener('click', function () {
         showDropdownEdit(currentTaskId);
     });
 }
@@ -1147,7 +1147,7 @@ async function showDropdownEdit(currentTaskId) {
         return;
     }
 
-    let dropdownContent = document.getElementById("contactDropdown");
+    let dropdownContent = document.getElementById("contactDropdownEdit");
     dropdownContent.innerHTML = "";
 
     let currentEditData = getTaskById(currentTaskId);
@@ -1166,6 +1166,14 @@ async function showDropdownEdit(currentTaskId) {
 
         dropdownContent.style.display = 'block';
         console.log('currentTaskId', currentEditData);
+    }
+    document.addEventListener("mousedown", closeDropdownOnClickOutside);
+}
+function closeDropdownOnClickOutside(event) {
+    const dropdown = document.getElementById("contactDropdownEdit");
+
+    if (event.target !== dropdown && !dropdown.contains(event.target)) {
+        dropdown.style.display = 'none';
     }
 }
 
