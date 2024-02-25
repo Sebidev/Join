@@ -1013,6 +1013,16 @@ body {
   /* 24px */
 }
 
+.arrow_down_edit {
+  top: 6px;
+  right: 0px;
+  padding: 8px;
+  position: absolute;
+  cursor: pointer;
+  overflow: visible;
+  border-radius: 50%;
+}
+
 .card-modal-initial-container {
   width: 100%;
 }
