@@ -933,7 +933,7 @@ body {
 }
 
 .prio-container {
-  margin-bottom: unset !important;
+  margin-bottom: unset;
 }
 
 .card-modal-date-number {
@@ -1000,7 +1000,7 @@ body {
   align-self: stretch;
 }
 
-.card-modal-assigned-to-headline {
+.card-modal-assigned-to-headline, .card-modal-assigned-to-headline_edit_mobile {
   margin: 0;
   align-self: stretch;
   color: var(--Version-2-main-color, #2a3647);
@@ -1135,7 +1135,7 @@ body {
   border: 2px solid #29abe2;
 }
 
-.card-modal-subtasks-container-headline {
+.card-modal-subtasks-container-headline, .card-modal-subtasks-container-headline_edit_mobile {
   margin: 0;
   align-self: stretch;
   color: var(--Version-2-main-color, #2a3647);
@@ -1507,6 +1507,7 @@ body {
   #card-overlay {
     width: 100%;
     height: 100%;
+    z-index: 9999;
   }
 
   .card-modal {
@@ -1515,6 +1516,7 @@ body {
     width: 85%; 
     height: auto;
     padding: 20px;
+    z-index: 9999;
   }
 
   .task-categorie {
@@ -1578,6 +1580,10 @@ body {
     margin-top: -10px;
   }
 
+  .card-modal-subtasks-container-headline_edit_mobile {
+    margin-top: 30px;
+  }
+
   .initial-container-open-card {
     gap: 10px;
   }
@@ -1618,8 +1624,67 @@ body {
     flex-direction: row;
     width: 150%;
     gap: 10px;
-    max-height: 500px; /* Passen Sie diesen Wert an Ihre Bedürfnisse an */
+    max-height: 500px;
     overflow: auto;
+  }
+
+  .title-container-add-task input {
+    width: 80%;
+    font-size: 16px;
+    padding: 7px 15px;
+  }
+
+  .description-container {
+    width: 80%;
+    font-size: 16px; 
+  }
+
+  .description-container textarea {
+    width: 83%;
+    font-size: 16px; 
+    padding: 10px 12px;
+  }
+
+  .prio-container {
+    margin-bottom: -77px !important;
+  }
+
+  .prio-option-container {
+    width: 85vw !important;
+  }
+
+  .card-modal-assigned-to-headline_edit_mobile {
+    margin-top: 60px;
+  }
+
+  .due-date-input {
+    width: 94% !important;
+    margin-bottom: -7px !important;
+  }
+
+  .height-contacts {
+    pointer-events: none;
+  }
+
+  .due-date-container {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .title-container-add-task {
+    height: 53px !important;
+  }
+
+  .input-container-subtask {
+    width: 99% !important;
+  }
+
+  .input-container-subtask input {
+    width: 90% !important;
+  }
+
+  .input-container-subtask img {
+    right: 20px !important;
   }
 }
 

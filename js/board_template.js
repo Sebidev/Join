@@ -947,6 +947,9 @@ function edit() {
         $('.card-modal-priority-symbol').addClass('hide-button');
         $('.task-categorie ').addClass('justify-end');
 
+        $('.card-modal-assigned-to-headline').addClass('card-modal-assigned-to-headline_edit_mobile'); // added class for mobile view
+        $('.card-modal-subtasks-container-headline').addClass('card-modal-subtasks-container-headline_edit_mobile'); // added class for mobile view
+
         if (currentEditData) {
             //console.log('Task Data in Edit:', JSON.stringify(currentEditData));
         } else {
