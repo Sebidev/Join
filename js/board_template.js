@@ -1173,7 +1173,6 @@ async function showDropdownEdit(currentTaskId) {
 
     if (currentEditData && currentEditData.content && currentEditData.content.selectedContacts) {
         selectedInitialsArray = currentEditData.content.selectedContacts;
-        // Lade die Kontakte asynchron
         let contacts = await getContacts();
 
         contacts.forEach(contact => {
@@ -1182,16 +1181,15 @@ async function showDropdownEdit(currentTaskId) {
             dropdownContent.appendChild(contactDiv);
         });
 
-        // Stelle sicher, dass diese Funktion den aktuellen Zustand korrekt reflektiert
         updateCheckboxState();
         dropdownContent.style.display = 'block';
     }
     document.addEventListener("mousedown", closeDropdownOnClickOutside);
 }
 function closeDropdownOnClickOutside(event) {
-    const dropdown = document.getElementById("contactDropdownEdit");
+    let dropdown = document.getElementById("contactDropdownEdit");
 
-    if (event.target !== dropdown && !dropdown.contains(event.target)) {
+    if (dropdown && event.target !== dropdown && !dropdown.contains(event.target)) {
         dropdown.style.display = 'none';
     }
 }
@@ -1273,7 +1271,6 @@ function isContactInContainer(contact) {
 
 function updateCheckboxState() {
     selectedInitialsArray = JSON.parse(localStorage.getItem('selectedContacts')) || [];
-    console.log('selectedInitialsArray:', selectedInitialsArray);
 
     contacts.forEach(contact => {
         let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id);
@@ -1284,27 +1281,6 @@ function updateCheckboxState() {
     });
 }
 
-/*
-function removeContactArray(contact) {
-    let index = selectedInitialsArray.findIndex(c => c.avatarid === contact.avatarid);
-    if (index !== -1) {
-        selectedInitialsArray.splice(index, 1);
-    }
-    let contactDiv = document.querySelector(`#selectedContactsContainerEdit [data-avatarid="${contact.avatarid}"]`);
-    if (contactDiv) {
-        contactDiv.remove();
-    }
-    if (contact) {
-        let checkbox = document.querySelector(`.contact-checkbox[data-contact-id="${contact.avatarid}"]`);
-        if (checkbox) {
-            checkbox.checked = false;
-        }
-    }
-    removeContact(contact);
-    selectContactCardModal();
-    updateDropdownCheckbox(contact.avatarid);
-}
-*/
 function enableSubtasksEditing() {
     let subtaskContainers = document.querySelectorAll('.card-modal-subtask-maincontainer');
     let subtasksContainer = document.querySelector('.card-modal-subtasks-container-headline');
