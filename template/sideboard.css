@@ -36,6 +36,11 @@ body{
     flex-direction: row; 
     padding: 13px 61px;
     gap: 8px;
+    width: 108px;
+}
+
+.sidemenu_element:hover {
+    background-color: #09193171;
 }
 
 .menu_links, a{
@@ -116,6 +121,7 @@ body{
     background-color: #091931;
     color: white;
     width: 46%;
+    pointer-events: none;
 }
 
 .selected img{
