@@ -1482,10 +1482,9 @@ body {
   }
 
   .no-tasks-here {
-    border-radius: 10px;
-    position: absolute;
     overflow: hidden;
-    width: 43vh;
+    width: 38vh;
+    margin-left: 10px;
   }
 
   .board {
