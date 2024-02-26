@@ -1245,77 +1245,78 @@ function chooseCardModal(priority) {
 /**
  * This function creates a dropdown for the contacts in the edit modal
  */
-function createContactDropdown() {
+function createContactDropdown(taskId) {
     let contactDropdownEdit = document.querySelector('.card-modal-assigned-to-headline');
 
     let inputContainer = document.createElement('div');
     inputContainer.className = 'input-container';
     inputContainer.innerHTML = `
-        <input id="assignedTo" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
-        <img id="arrow_down_edit" onclick="showDropdownEdit(${currentTaskId})" class="arrow_down_edit" src="./img/arrow_down.svg" alt="">
-        <div id="contactDropdownEdit" class="dropdown-content"></div>
-        `;
+        <input id="assignedToEdit" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
+        <img id="arrow_down_edit" onclick="showDropdownEdit('${taskId}')" class="arrow_down_edit" src="./img/arrow_down.svg" alt="">
+        <div id="contactDropdownEdit" class="dropdown-content" data-task-id="${taskId}"></div>
+    `;
 
     contactDropdownEdit.appendChild(inputContainer);
     document.getElementById('arrow_down_edit').addEventListener('click', function () {
-        showDropdownEdit(currentTaskId);
+        showDropdownEdit(taskId);
     });
 }
 
-/**
- * This function get task by id from local storage
- * @param {*} taskId - The task id
- * @returns {object} task
- */
 function getTaskById(taskId) {
     let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     return tasks.find(task => task.id === taskId);
 }
 
-/**
- * This function show the dropdown for the contacts in the edit modal
- * @param {*} currentTaskId 
- */
-async function showDropdownEdit(currentTaskId) {
+async function showDropdownEdit(taskId) {
     let dropdownContent = document.getElementById("contactDropdownEdit");
     dropdownContent.innerHTML = "";
 
-    let currentEditData = getTaskById(currentTaskId);
+    let contacts = await getContacts();
 
-    if (currentEditData && currentEditData.content && currentEditData.content.selectedContacts) {
-        selectedInitialsArray = currentEditData.content.selectedContacts;
-        let contacts = await getContacts();
+    contacts.forEach(contact => {
+        let isInContainer = isContactInContainer(contact.id);
+        let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id) || isInContainer;
 
-        contacts.forEach(contact => {
-            let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id);
-            let contactDiv = createContactDivEdit(contact, isSelected);
-            dropdownContent.appendChild(contactDiv);
+        let isContactSelected = currentEditData.content.selectedContacts.some(selectedContact => selectedContact.id === contact.id);
+
+        if (isInContainer || isContactSelected) {
+            isSelected = true;
+        }
+
+        console.log(`Contact ${contact.name}: Is in Container: ${isInContainer}, Is Selected: ${isSelected}`);
+
+        let contactDiv = createContactDivEdit(contact, isSelected);
+        dropdownContent.appendChild(contactDiv);
+    });
+
+    updateCheckboxState();
+    dropdownContent.style.display = 'block';
+}
+
+function isContactInContainer(contactId) {
+    let containerContacts = document.querySelectorAll('.initial-container-open-card .contact-checkbox');
+    return Array.from(containerContacts).some(checkbox => checkbox.dataset.contactId === contactId && checkbox.checked);
+}
+
+function initializeContactDropdownEdit() {
+    if (window.location.pathname.endsWith("add-task.html") || window.location.pathname.endsWith("board.html")) {
+        document.addEventListener('click', function (event) {
+            let dropdown = document.getElementById('contactDropdownEdit');
+            let assignedToEdit = document.getElementById('assignedToEdit');
+            let arrowDownEdit = document.getElementById('arrow_down_edit');
+
+            if (dropdown && !dropdown.contains(event.target) && !assignedToEdit.contains(event.target) && !arrowDownEdit.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+
+            if (event.target === assignedToEdit || event.target === arrowDownEdit) {
+                showDropdownEdit();
+            }
         });
-
-        updateCheckboxState();
-        dropdownContent.style.display = 'block';
-    }
-    document.addEventListener("mousedown", closeDropdownOnClickOutside);
-}
-
-/**
- * This function closes the dropdown for the contacts in the edit modal
- * @param {*} event - The event
- */
-function closeDropdownOnClickOutside(event) {
-    let dropdown = document.getElementById("contactDropdownEdit");
-
-    if (dropdown && event.target !== dropdown && !dropdown.contains(event.target)) {
-        dropdown.style.display = 'none';
     }
 }
+initializeContactDropdownEdit();
 
-/**
- * This function creates a contact div for the edit modal
- * @param {*} contact 
- * @param {*} isSelected 
- * @returns {HTMLElement} contactDiv
- */
 function createContactDivEdit(contact, isSelected) {
     let contactDiv = document.createElement("div");
     contactDiv.innerHTML = `
@@ -1326,7 +1327,7 @@ function createContactDivEdit(contact, isSelected) {
             </div>
             <div class="dropdown-checkbox">
                 <div style="margin-left: 5px;">${contact.name}</div>
-                <input type="checkbox" class="contact-checkbox" ${isSelected ? 'checked' : ''}>
+                <input type="checkbox" class="contact-checkbox" data-contact-id="${contact.id}" ${isSelected ? 'checked' : ''}>
             </div>
         </label>
     `;
@@ -1337,11 +1338,6 @@ function createContactDivEdit(contact, isSelected) {
     return contactDiv;
 }
 
-/**
- * This function update and remove the selected contacts in the edit modal
- * @param {*} contact 
- * @param {*} action 
- */
 function updateSelectedContactsEdit(contact, action) {
     let index = selectedInitialsArray.findIndex(c => c.id === contact.id);
 
@@ -1354,78 +1350,37 @@ function updateSelectedContactsEdit(contact, action) {
     saveAndDisplaySelectedContactsEdit();
 }
 
-/**
- * This function saves and displays the selected contacts in the edit modal
- */
 function saveAndDisplaySelectedContactsEdit() {
     saveSelectedContacts();
     selectContactEdit();
 }
 
-/**
- * Creates and returns a new div element with a specific structure and content based on the provided contact object.
- * The div includes an avatar image and initials from the contact's name.
- * If the avatarid property is not defined in the contact object, the function returns null.
- *
- * @param {Object} contact - The contact object.
- * @param {string} contact.avatarid - The ID of the avatar.
- * @param {string} contact.name - The name of the contact.
- * @returns {HTMLElement|null} The created div element or null if avatarid is not defined.
- */
 function createSelectedContactDivEdit(contact) {
-    if (contact.avatarid !== undefined) {
-        let selectedContactDiv = document.createElement("div");
-        selectedContactDiv.classList.add("initial-container-open-card");
-        selectedContactDiv.id = "selectedContactEdit";
-        selectedContactDiv.innerHTML = `
-            <div data-avatarid="${contact.avatarid}">
-                <div class="avatar">
-                    <img src="img/Ellipse5-${contact.avatarid}.svg" alt="Avatar">
-                    <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
-                </div>
+    let selectedContactDiv = document.createElement("div");
+    selectedContactDiv.innerHTML = `
+        <div class="selected-contact" data-avatarid="${contact.avatarid}" data-id="${contact.id}">
+            <div class="contacts-img-initial">
+                <img id="${contact.id}" src="img/Ellipse5-${contact.avatarid}.svg">
+                <div class="initials-overlay">${contact.name.split(' ').map(n => n[0]).join('')}</div>
             </div>
-        `;
-        return selectedContactDiv;
-    }
-    return null;
+        </div>
+    `;
+    return selectedContactDiv;
 }
 
-/**
- * This function selects the contact in the edit modal
- */
 function selectContactEdit() {
     let selectedContactsContainer = document.getElementById("selectedContactsContainerEdit");
+    selectedContactsContainer.innerHTML = "";
 
     selectedInitialsArray.forEach(contact => {
-        if (!isContactInContainer(contact)) {
-            let selectedContactDiv = createSelectedContactDivEdit(contact);
-            if (selectedContactDiv) {
-                selectedContactsContainer.appendChild(selectedContactDiv);
-            }
-        }
+        let selectedContactDiv = createSelectedContactDivEdit(contact);
+        selectedContactsContainer.appendChild(selectedContactDiv);
     });
 }
 
-/**
- * Checks if a contact is present in the selected contacts container.
- *
- * @param {Object} contact - The contact object.
- * @param {string} contact.avatarid - The ID of the avatar.
- * @returns {boolean} Returns true if the contact is in the container, false otherwise.
- */
-function isContactInContainer(contact) {
-    let selectedContactsContainer = document.getElementById("selectedContactsContainerEdit");
-    return selectedContactsContainer.querySelector(`[data-avatarid="${contact.avatarid}"]`) !== null;
-}
-
-/**
- * Updates the state of contact checkboxes based on the selected contacts stored in localStorage.
- * It iterates over all contacts, checks if they are in the selected contacts array, and updates the checkbox state accordingly.
- */
 function updateCheckboxState() {
-    selectedInitialsArray = JSON.parse(localStorage.getItem('selectedContacts')) || [];
-
-    contacts.forEach(contact => {
+contacts.forEach(contact => {
+        let index = selectedInitialsArray.findIndex(c => c.id === contact.id);
         let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id);
         let checkbox = document.querySelector(`.contact-checkbox[data-contact-id="${contact.id}"]`);
         if (checkbox) {
@@ -1433,6 +1388,182 @@ function updateCheckboxState() {
         }
     });
 }
+
+
+///////////////////////////////////////////////////////////      Backup     //////////////////////////////////////////////////
+///**
+// * This function get task by id from local storage
+// * @param {*} taskId - The task id
+// * @returns {object} task
+// */
+//function getTaskById(taskId) {
+//    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+//    return tasks.find(task => task.id === taskId);
+//}
+//
+///**
+// * This function show the dropdown for the contacts in the edit modal
+// * @param {*} currentTaskId 
+// */
+//async function showDropdownEdit(currentTaskId) {
+//    let dropdownContent = document.getElementById("contactDropdownEdit");
+//    dropdownContent.innerHTML = "";
+//
+//    let currentEditData = getTaskById(currentTaskId);
+//
+//    if (currentEditData && currentEditData.content && currentEditData.content.selectedContacts) {
+//        selectedInitialsArray = currentEditData.content.selectedContacts;
+//        let contacts = await getContacts();
+//
+//        contacts.forEach(contact => {
+//            let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id);
+//            let contactDiv = createContactDivEdit(contact, isSelected);
+//            dropdownContent.appendChild(contactDiv);
+//        });
+//
+//        updateCheckboxState();
+//        dropdownContent.style.display = 'block';
+//    }
+//    document.addEventListener("mousedown", closeDropdownOnClickOutside);
+//}
+//
+///**
+// * This function closes the dropdown for the contacts in the edit modal
+// * @param {*} event - The event
+// */
+//function closeDropdownOnClickOutside(event) {
+//    let dropdown = document.getElementById("contactDropdownEdit");
+//
+//    if (dropdown && event.target !== dropdown && !dropdown.contains(event.target)) {
+//        dropdown.style.display = 'none';
+//    }
+//}
+//
+///**
+// * This function creates a contact div for the edit modal
+// * @param {*} contact 
+// * @param {*} isSelected 
+// * @returns {HTMLElement} contactDiv
+// */
+//function createContactDivEdit(contact, isSelected) {
+//    let contactDiv = document.createElement("div");
+//    contactDiv.innerHTML = `
+//        <label class="contacts">
+//            <div class="contacts-img-initial">
+//                <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
+//                <div class="initials-overlay">${contact.name.split(' ').map(n => n[0]).join('')}</div>
+//            </div>
+//            <div class="dropdown-checkbox">
+//                <div style="margin-left: 5px;">${contact.name}</div>
+//                <input type="checkbox" class="contact-checkbox" ${isSelected ? 'checked' : ''}>
+//            </div>
+//        </label>
+//    `;
+//    contactDiv.addEventListener("mousedown", (event) => {
+//        event.preventDefault();
+//        updateSelectedContactsEdit(contact, isSelected ? 'remove' : 'add');
+//    });
+//    return contactDiv;
+//}
+//
+///**
+// * This function update and remove the selected contacts in the edit modal
+// * @param {*} contact 
+// * @param {*} action 
+// */
+//function updateSelectedContactsEdit(contact, action) {
+//    let index = selectedInitialsArray.findIndex(c => c.id === contact.id);
+//
+//    if (action === 'add' && index === -1) {
+//        selectedInitialsArray.push(contact);
+//    } else if (action === 'remove' && index !== -1) {
+//        selectedInitialsArray.splice(index, 1);
+//    }
+//
+//    saveAndDisplaySelectedContactsEdit();
+//}
+//
+///**
+// * This function saves and displays the selected contacts in the edit modal
+// */
+//function saveAndDisplaySelectedContactsEdit() {
+//    saveSelectedContacts();
+//    selectContactEdit();
+//}
+//
+///**
+// * Creates and returns a new div element with a specific structure and content based on the provided contact object.
+// * The div includes an avatar image and initials from the contact's name.
+// * If the avatarid property is not defined in the contact object, the function returns null.
+// *
+// * @param {Object} contact - The contact object.
+// * @param {string} contact.avatarid - The ID of the avatar.
+// * @param {string} contact.name - The name of the contact.
+// * @returns {HTMLElement|null} The created div element or null if avatarid is not defined.
+// */
+//function createSelectedContactDivEdit(contact) {
+//    if (contact.avatarid !== undefined) {
+//        let selectedContactDiv = document.createElement("div");
+//        selectedContactDiv.classList.add("initial-container-open-card");
+//        selectedContactDiv.id = "selectedContactEdit";
+//        selectedContactDiv.innerHTML = `
+//            <div data-avatarid="${contact.avatarid}">
+//                <div class="avatar">
+//                    <img src="img/Ellipse5-${contact.avatarid}.svg" alt="Avatar">
+//                    <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
+//                </div>
+//            </div>
+//        `;
+//        return selectedContactDiv;
+//    }
+//    return null;
+//}
+//
+///**
+// * This function selects the contact in the edit modal
+// */
+//function selectContactEdit() {
+//    let selectedContactsContainer = document.getElementById("selectedContactsContainerEdit");
+//
+//    selectedInitialsArray.forEach(contact => {
+//        if (!isContactInContainer(contact)) {
+//            let selectedContactDiv = createSelectedContactDivEdit(contact);
+//            if (selectedContactDiv) {
+//                selectedContactsContainer.appendChild(selectedContactDiv);
+//            }
+//        }
+//    });
+//}
+//
+///**
+// * Checks if a contact is present in the selected contacts container.
+// *
+// * @param {Object} contact - The contact object.
+// * @param {string} contact.avatarid - The ID of the avatar.
+// * @returns {boolean} Returns true if the contact is in the container, false otherwise.
+// */
+//function isContactInContainer(contact) {
+//    let selectedContactsContainer = document.getElementById("selectedContactsContainerEdit");
+//    return selectedContactsContainer.querySelector(`[data-avatarid="${contact.avatarid}"]`) !== null;
+//}
+//
+///**
+// * Updates the state of contact checkboxes based on the selected contacts stored in localStorage.
+// * It iterates over all contacts, checks if they are in the selected contacts array, and updates the checkbox state accordingly.
+// */
+//function updateCheckboxState() {
+//    selectedInitialsArray = JSON.parse(localStorage.getItem('selectedContacts')) || [];
+//
+//    contacts.forEach(contact => {
+//        let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id);
+//        let checkbox = document.querySelector(`.contact-checkbox[data-contact-id="${contact.id}"]`);
+//        if (checkbox) {
+//            checkbox.checked = isSelected;
+//        }
+//    });
+//}
+///////////////////////////////////////////////////////////      Backup Ende     //////////////////////////////////////////////////
+
 
 /**
  * This function enables editing of subtasks in the card modal.
