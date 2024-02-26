@@ -276,6 +276,8 @@ function closeOpenCard() {
         $('.due-date-card-modal').removeClass('hide-button');
         $('.card-modal-priority-symbol').removeClass('hide-button');
         $('.priority-card-modal-text').removeClass('hide-button');
+        $('.subtask-checkbox').css('display', 'block');
+        $('.subtask-image').css('display', 'none');
     }, 100);
     clearSelectedContacts();
 }
@@ -788,6 +790,7 @@ async function openCard(data, subtasksData) {
                             <div class="card-modal-description-checkbox">
                                 <div class="card-modal-subtask-checked"> 
                                     <input type="checkbox" class="subtask-checkbox" id="subtaskCheckbox_${data.id}_${index + 1}" ${subtask.checked ? 'checked' : ''}>                     
+                                    <img src="./img/circle.svg" class="subtask-image" style="display: none;">
                                 </div>
                                 <div class="card-modal-subtask-description">${subtask.description}</div>
                             </div>
@@ -1022,6 +1025,8 @@ function edit() {
 
         $('.card-modal-assigned-to-headline').addClass('card-modal-assigned-to-headline_edit_mobile'); // added class for mobile view
         $('.card-modal-subtasks-container-headline').addClass('card-modal-subtasks-container-headline_edit_mobile'); // added class for mobile view
+        $('.subtask-checkbox').css('display', 'none');
+        $('.subtask-image').css('display', 'block');
 
         if (currentEditData) {
             //console.log('Task Data in Edit:', JSON.stringify(currentEditData));
@@ -1671,7 +1676,8 @@ function addSubtaskOpenCard() {
         subtaskContainer.innerHTML = `
         <div class="card-modal-description-checkbox">
             <div class="card-modal-subtask-checked"> 
-                <input type="checkbox" class="subtask-checkbox" id="${checkboxId}">                    
+                <input type="checkbox" class="subtask-checkbox" id="${checkboxId}" style="display: none;"> 
+                <img src="./img/circle.svg" class="subtask-image">                   
             </div>
             <div class="card-modal-subtask-description">${subtaskText}</div>
         </div>

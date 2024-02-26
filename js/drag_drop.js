@@ -46,6 +46,7 @@ function preventDragOver(ev) {
 function startDragging(ev) {
     currentDraggedElement = ev.target.id;
     ev.dataTransfer.setData("text", ev.target.id);
+    ev.target.classList.add('tilted');
 }
 
 /** stop dragging an element
@@ -55,6 +56,7 @@ function startDragging(ev) {
 
 function endDragging(ev) {
     currentDraggedElement = null;
+    ev.target.classList.remove('tilted');
 }
 
 /** allows an element to be dropped
