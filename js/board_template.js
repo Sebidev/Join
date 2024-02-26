@@ -1252,8 +1252,8 @@ function createContactDropdown(taskId) {
     inputContainer.className = 'input-container';
     inputContainer.innerHTML = `
         <input id="assignedToEdit" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
-        <img id="arrow_down_edit" onclick="showDropdownEdit('${taskId}')" class="arrow_down_edit" src="./img/arrow_down.svg" alt="">
-        <div id="contactDropdownEdit" class="dropdown-content" data-task-id="${taskId}"></div>
+        <img id="arrow_down_edit" onclick="showDropdownEdit('${currentTaskId}')" class="arrow_down_edit" src="./img/arrow_down.svg" alt="">
+        <div id="contactDropdownEdit_${currentTaskId}" class="dropdown-content" data-task-id="${currentTaskId}"></div>
     `;
 
     contactDropdownEdit.appendChild(inputContainer);
@@ -1267,8 +1267,8 @@ function getTaskById(taskId) {
     return tasks.find(task => task.id === taskId);
 }
 
-async function showDropdownEdit(taskId) {
-    let dropdownContent = document.getElementById("contactDropdownEdit");
+async function showDropdownEdit() {
+    let dropdownContent = document.getElementById(`contactDropdownEdit_${currentTaskId}`);
     dropdownContent.innerHTML = "";
 
     let contacts = await getContacts();
