@@ -1,3 +1,9 @@
+/**
+ * @file summary.js
+ * This file is used to handle the summary page of the application
+ * 
+ */
+
 let currentDate = new Date();
 let currentTime = new Date().getHours();
 

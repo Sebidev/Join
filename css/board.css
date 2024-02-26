@@ -1482,9 +1482,10 @@ body {
   }
 
   .no-tasks-here {
-    width: 93vw;
-    height: 48px;
-    overflow: visible !important;
+    border-radius: 10px;
+    position: absolute;
+    overflow: hidden;
+    width: 43vh;
   }
 
   .board {
@@ -1626,6 +1627,16 @@ body {
     gap: 10px;
     max-height: 500px;
     overflow: auto;
+  }
+
+  .board-column-content {
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none; 
+  }
+  
+  .board-column-content::-webkit-scrollbar {
+    width: 0px; 
   }
 
   .title-container-add-task input {

@@ -101,6 +101,7 @@ async function saveContact() {
         var name = document.querySelector('#addcontactForm input[name="name"]').value;
         var email = document.querySelector('#addcontactForm input[name="email"]').value;
         var phone = document.querySelector('#addcontactForm input[name="phone"]').value;
+
         var contact = {
             id: generateId(),
             avatarid: rollDice(),
@@ -262,13 +263,20 @@ async function editContact(contactid){
         document.body.appendChild(contactModal);
         contactModal.innerHTML += editcontact_innerHTML;
 
+        let avatarContainerDiv = document.createElement("div");
+        avatarContainerDiv.classList.add("avatar_container");
+        
         let avatarDiv = document.createElement("div");
+        avatarDiv.classList.add("avatar_contactModal");
+        
         let avatarHTML = `
         <img class="avatar_contactModal" src="img/Ellipse5-${contact.avatarid}.svg"></img>
         <div class="avatar_contactModal_initletter">${contact.name.charAt(0).toUpperCase()}</div>
         `;
-        contactModal.innerHTML += avatarHTML;
-        contactModal.appendChild(avatarDiv);
+        
+        avatarDiv.innerHTML += avatarHTML;
+        avatarContainerDiv.appendChild(avatarDiv);
+        contactModal.appendChild(avatarContainerDiv);
 
         let close_button1_DIV = document.createElement("div");
         let close_button1_DIV_HTML = `<img class="close_button1" onclick="closeContactModal()" src="img/close.svg"></img>`;

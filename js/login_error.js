@@ -1,4 +1,9 @@
 /**
+ * @file login_error.js
+ * This file is used to handle the login and register error messages
+ */
+
+/**
  * show login error if the email or password is incorrect
  */
 function loginError() {

@@ -1,3 +1,8 @@
+/**
+ * @file board.js
+ * This file contains the functionality for the board.html page, including the rendering of tasks, the search functionality, the add task modal, the edit task modal, and the delete task modal.
+ */
+
 let isPriorityOptionsOpen = false;
 let globalData;
 let isEditActive = false;
@@ -11,7 +16,6 @@ let searchInputMobile = document.getElementById('input-search-mobile');
 /**
  * initializes the board
  */
-
 async function initBoard() {
     addSearch(searchInputDesktop);
     addSearch(searchInputMobile);
@@ -54,9 +58,8 @@ function addSearch(searchInput) {
  * 
  * @param {string} column current column id (''todo-column, progress-column, etc.)
  */
-
 function addTask(column) {
-    if (window.innerWidth <= 800) {
+    if (window.innerWidth <= 926) {
         window.location.href = "add-task.html";
     } else {
         let modalHTML = /*html*/`
@@ -204,6 +207,10 @@ function addTask(column) {
     }
 }
 
+/**
+ * A function that clears all input and textarea fields in the 'Add-task' and 'Add-task-content' sections, 
+ * resets the task priority to 'medium', clears the selected category, subtasks, modal, and selected contacts.
+ */
 function clearFields() {
     let inputFields = document.querySelectorAll('.Add-task input, .Add-task textarea');
     let AllInputFields = document.querySelectorAll('.Add-task-content input, .Add-task-content textarea');
@@ -225,6 +232,9 @@ function clearFields() {
     clearSelectedContacts();
 }
 
+/**
+ * A function that closes the modal by moving it out of view and then removing it and the overlay after a delay.
+ */
 function closeModal() {
     let modal = document.getElementById('taskModal');
     let overlay = document.getElementById('overlay');
@@ -237,6 +247,9 @@ function closeModal() {
     }, 200);
 }
 
+/**
+ * A function that closes the currently open card by moving it out of view, removing it and the overlay after a delay, resetting the visibility of various elements, and clearing the selected contacts.
+ */
 function closeOpenCard() {
     let cardOverlay = document.getElementById('card-overlay');
     let taskId = currentTaskId;
@@ -267,6 +280,9 @@ function closeOpenCard() {
     clearSelectedContacts();
 }
 
+/**
+ * A function that returns the value of a specified DOM element, or an empty string if the element does not exist.
+ */
 function getValue(selector) {
     let element = document.querySelector(selector);
     return element ? element.value : '';
@@ -276,7 +292,6 @@ function getValue(selector) {
  * 
  * @param {string} columnId 
  */
-
 function addPlaceholderText(columnId) {
     let columnElement = document.getElementById(columnId);
     if (columnElement) {
@@ -313,7 +328,6 @@ function addPlaceholderText(columnId) {
  * 
  * @param {string} columnId 
  */
-
 function removePlaceholderText(columnId) {
     let placeholderText = document.getElementById(columnId + '-placeholder');
     if (placeholderText) {
@@ -321,6 +335,10 @@ function removePlaceholderText(columnId) {
     }
 }
 
+/**
+ * An asynchronous function that fetches and renders tasks based on user login status,
+ * adds placeholder text to columns, and renders each task as a card.
+ */
 async function checkAndRenderSharedData() {
     let tasks;
 
@@ -353,7 +371,6 @@ document.addEventListener('DOMContentLoaded', () => {
  * @param {string} selectedContacts 
  * @returns selected contacts
  */
-
 function createAvatarDivs(selectedContacts) {
     let avatarDivsHTML = '';
     let maxVisibleContacts = 3;
@@ -385,6 +402,11 @@ function createAvatarDivs(selectedContacts) {
     return avatarDivsHTML;
 }
 
+/**
+ * An asynchronous function that creates and appends a draggable task card to the appropriate board column based on the provided data, 
+ * with category, title, description, progress bar, subtasks count, selected contacts' avatars, and priority icon.
+ * @param {object} data
+ */
 async function renderCard(data) {
 
     if (data && data.content) {
@@ -439,6 +461,14 @@ async function renderCard(data) {
     }
 }
 
+/**
+ * This function counts the number of checked subtasks for a given task ID.
+ *
+ * @async
+ * @function countSubtasks
+ * @param {string} taskId - The ID of the task.
+ * @returns {Promise<number>} The number of checked subtasks.
+ */
 async function countSubtasks(taskId) {
     let tasks;
     if (isUserLoggedIn) {
@@ -457,6 +487,9 @@ async function countSubtasks(taskId) {
     return checkedSubtasks;
 }
 
+/**
+ * Updates the progress bar and subtasks info for the current task based on the number of checked subtasks.
+ */
 function updateProgressBar() {
     let taskId = currentTaskId;
     let progressFill = document.getElementById(`progressFill_${taskId}`);
@@ -477,6 +510,10 @@ function updateProgressBar() {
     saveCheckboxStatus(taskId);
 }
 
+/**
+ * Saves the status of checkboxes (subtasks) for a given task ID, either in the user's tasks if logged in or in local storage.
+ * @param {string} taskId - The ID of the task.
+ */
 async function saveCheckboxStatus(taskId) {
     let tasks;
 
@@ -509,6 +546,10 @@ async function saveCheckboxStatus(taskId) {
     }
 }
 
+/**
+ * Returns the path to the appropriate priority icon based on the given priority level.
+ * @param {string} priority - The priority level.
+ */
 function getPriorityIcon(priority) {
     switch (priority) {
         case 'urgent':
@@ -525,7 +566,6 @@ function getPriorityIcon(priority) {
 /**
  * This function deletes a task completely from our board aswell as remote or local storage
  */
-
 async function deleteTask() {
     let taskId = document.querySelector('.card-modal-delete-button').dataset.id;
 
@@ -569,7 +609,6 @@ function clearSelectedContacts() {
 /**
  * Save the selected task to local or remote storage and display the changes.
  */
-
 async function saveEditedTask() {
     let taskId = document.querySelector('.card-modal-save-button').dataset.id;
     let taskTitle = document.querySelector('.title-container-add-task input').value;
@@ -653,12 +692,17 @@ async function saveEditedTask() {
 
 /**
  * This function capitalizes the first letter (for the priority)
+ * @param {string} string
  */
-
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+/**
+ * This function opens the edit modal and fills it with the current task data
+ * @param {object} data - The task data
+ * @param {object} subtasksData - The subtasks data
+ */
 async function openCard(data, subtasksData) {
     let tasks;
     let taskId = data.id;
@@ -800,6 +844,14 @@ async function openCard(data, subtasksData) {
     //console.log('Task Data:', JSON.stringify(data));
 }
 
+/**
+ * This Function restores the status of checkboxes for a given task.
+ * If the user is logged in, it retrieves the tasks from the 'users' item in localStorage.
+ * If the user is not logged in, it retrieves the tasks directly from the 'tasks' item in localStorage.
+ * It then finds the task with the given ID and if it exists and has a 'checkboxStatus' property, it restores the checkbox status based on this property.
+ *
+ * @param {string} taskId - The ID of the task.
+ */
 async function restoreCheckboxStatus(taskId) {
     let checkboxStatus;
 
@@ -832,12 +884,22 @@ async function restoreCheckboxStatus(taskId) {
     }
 }
 
+/**
+ * Event listener for the 'change' event on the document.
+ * If the event target is a checkbox and it has the class 'subtask-checkbox', the progress bar is updated.
+ * The function `updateProgressBar` is called with `globalData` as its argument.
+ */
 document.addEventListener('change', function (event) {
     if (event.target.type === 'checkbox' && event.target.classList.contains('subtask-checkbox')) {
         updateProgressBar(globalData);
     }
 });
 
+/**
+ * This function enables editing of the title and content in the card modal.
+ * It makes the title and content elements editable, creates new containers for the title and content with input fields,
+ * populates the input fields with the current title and content, and replaces the original title and content elements with the new containers.
+ */
 function enableContentEditing() {
     let titleElement = document.querySelector('.card-modal-title');
     let contentElement = document.querySelector('.card-modal-content');
@@ -868,6 +930,8 @@ function enableContentEditing() {
     contentElement.replaceWith(contentContainer);
 
 }
+
+
 /*
 function setupDueDateInput() {
     let dueDateText = document.getElementById('dueDateText');
@@ -890,6 +954,9 @@ function setupDueDateInput() {
 }
 */
 
+/**
+ * This function sets up the due date input for the edit modal and fills it with the current task data
+ */
 function setupDueDateInput() {
     let dateElement = document.getElementById('dueDateText');
 
@@ -917,13 +984,19 @@ function setupDueDateInput() {
     });
 }
 
-
+/**
+ * This function sets up the due date input for the edit modal and fills it with the current task data
+ */
 function initializeContactDropdownOpenCard() {
     createContactDropdown(() => {
         updateCheckboxState();
     });
 }
 
+/**
+ * This function activates the edit mode for a card in the board, enabling various editing features and hiding non-editable elements.
+ * If no data is available for editing, an error is logged.
+ */
 function edit() {
     if (!isEditActive) {
         enableContentEditing();
@@ -959,6 +1032,9 @@ function edit() {
     clearSelectedContacts();
 }
 
+/**
+ * This function ends the edit mode for a card in the board, disabling various editing features and showing non-editable elements.
+ */
 function endEdit() {
     $('.avatar-name').show();
     $('#selectedContactsContainerEdit').css('display', 'block');
@@ -969,6 +1045,10 @@ function endEdit() {
     $('.card-modal-save-button').addClass('hide-button');
 }
 
+/**
+ * This function enables the priority editing mode for a card, replacing the current priority display with a set of buttons that allow the user to select 'Urgent', 'Medium', or 'Low' priority.
+ * The currently selected priority is highlighted and its corresponding button is styled accordingly.
+ */
 function enablePriorityEditing() {
     let priorityElement = document.querySelector('.card-modal-priority-letter');
     let currentPriority = priorityElement.textContent.toLowerCase();
@@ -1033,6 +1113,9 @@ function enablePriorityEditing() {
     priorityElement.replaceWith(priorityContainer);
 }
 
+/**
+ * This function creates a container with priority options (Urgent, Medium, Low) for a card modal in a task board.
+ */
 function createPriorityOptionsContainer() {
     let priorityOptionsContainer = document.createElement('div');
     priorityOptionsContainer.classList.add('card-modal-priority-options-container');
@@ -1055,6 +1138,10 @@ function createPriorityOptionsContainer() {
     return priorityOptionsContainer;
 }
 
+/**
+ * Adds event listeners to all buttons within the provided priority options container.
+ * When a button is clicked, the priority options container is removed and the flag indicating its open state is set to false.
+ */
 function addEventListenersToButtons(priorityOptionsContainer) {
     let buttons = priorityOptionsContainer.querySelectorAll('button');
     buttons.forEach(button => {
@@ -1065,6 +1152,11 @@ function addEventListenersToButtons(priorityOptionsContainer) {
     });
 }
 
+/**
+ * Opens the priority options container for a card modal in a task board.
+ * @param {*} event 
+ * @returns 
+ */
 function openPriorityOptions(event) {
     if (isPriorityOptionsOpen) {
         return;
@@ -1096,6 +1188,10 @@ function openPriorityOptions(event) {
     document.addEventListener('click', closePriorityOptions);
 }
 
+/**
+ * This function choose the priority level for the card modal
+ * @param {*} priority - The priority level.
+ */
 function chooseCardModal(priority) {
     let priorityTextElement = document.querySelector('.card-modal-priority-container .card-modal-priority-letter');
     let prioritySymbolElement = document.querySelector('.card-modal-priority-container .card-modal-priority-symbol img');
@@ -1146,6 +1242,9 @@ function chooseCardModal(priority) {
     }
 }
 
+/**
+ * This function creates a dropdown for the contacts in the edit modal
+ */
 function createContactDropdown() {
     let contactDropdownEdit = document.querySelector('.card-modal-assigned-to-headline');
 
@@ -1163,11 +1262,20 @@ function createContactDropdown() {
     });
 }
 
+/**
+ * This function get task by id from local storage
+ * @param {*} taskId - The task id
+ * @returns {object} task
+ */
 function getTaskById(taskId) {
     let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     return tasks.find(task => task.id === taskId);
 }
 
+/**
+ * This function show the dropdown for the contacts in the edit modal
+ * @param {*} currentTaskId 
+ */
 async function showDropdownEdit(currentTaskId) {
     let dropdownContent = document.getElementById("contactDropdownEdit");
     dropdownContent.innerHTML = "";
@@ -1189,6 +1297,11 @@ async function showDropdownEdit(currentTaskId) {
     }
     document.addEventListener("mousedown", closeDropdownOnClickOutside);
 }
+
+/**
+ * This function closes the dropdown for the contacts in the edit modal
+ * @param {*} event - The event
+ */
 function closeDropdownOnClickOutside(event) {
     let dropdown = document.getElementById("contactDropdownEdit");
 
@@ -1197,6 +1310,12 @@ function closeDropdownOnClickOutside(event) {
     }
 }
 
+/**
+ * This function creates a contact div for the edit modal
+ * @param {*} contact 
+ * @param {*} isSelected 
+ * @returns {HTMLElement} contactDiv
+ */
 function createContactDivEdit(contact, isSelected) {
     let contactDiv = document.createElement("div");
     contactDiv.innerHTML = `
@@ -1218,6 +1337,11 @@ function createContactDivEdit(contact, isSelected) {
     return contactDiv;
 }
 
+/**
+ * This function update and remove the selected contacts in the edit modal
+ * @param {*} contact 
+ * @param {*} action 
+ */
 function updateSelectedContactsEdit(contact, action) {
     let index = selectedInitialsArray.findIndex(c => c.id === contact.id);
 
@@ -1230,11 +1354,24 @@ function updateSelectedContactsEdit(contact, action) {
     saveAndDisplaySelectedContactsEdit();
 }
 
+/**
+ * This function saves and displays the selected contacts in the edit modal
+ */
 function saveAndDisplaySelectedContactsEdit() {
     saveSelectedContacts();
     selectContactEdit();
 }
 
+/**
+ * Creates and returns a new div element with a specific structure and content based on the provided contact object.
+ * The div includes an avatar image and initials from the contact's name.
+ * If the avatarid property is not defined in the contact object, the function returns null.
+ *
+ * @param {Object} contact - The contact object.
+ * @param {string} contact.avatarid - The ID of the avatar.
+ * @param {string} contact.name - The name of the contact.
+ * @returns {HTMLElement|null} The created div element or null if avatarid is not defined.
+ */
 function createSelectedContactDivEdit(contact) {
     if (contact.avatarid !== undefined) {
         let selectedContactDiv = document.createElement("div");
@@ -1253,6 +1390,9 @@ function createSelectedContactDivEdit(contact) {
     return null;
 }
 
+/**
+ * This function selects the contact in the edit modal
+ */
 function selectContactEdit() {
     let selectedContactsContainer = document.getElementById("selectedContactsContainerEdit");
 
@@ -1266,12 +1406,22 @@ function selectContactEdit() {
     });
 }
 
-// Hilfsfunktion zum Überprüfen, ob ein Kontakt bereits im Container vorhanden ist
+/**
+ * Checks if a contact is present in the selected contacts container.
+ *
+ * @param {Object} contact - The contact object.
+ * @param {string} contact.avatarid - The ID of the avatar.
+ * @returns {boolean} Returns true if the contact is in the container, false otherwise.
+ */
 function isContactInContainer(contact) {
     let selectedContactsContainer = document.getElementById("selectedContactsContainerEdit");
     return selectedContactsContainer.querySelector(`[data-avatarid="${contact.avatarid}"]`) !== null;
 }
 
+/**
+ * Updates the state of contact checkboxes based on the selected contacts stored in localStorage.
+ * It iterates over all contacts, checks if they are in the selected contacts array, and updates the checkbox state accordingly.
+ */
 function updateCheckboxState() {
     selectedInitialsArray = JSON.parse(localStorage.getItem('selectedContacts')) || [];
 
@@ -1284,6 +1434,12 @@ function updateCheckboxState() {
     });
 }
 
+/**
+ * This function enables editing of subtasks in the card modal.
+ * It creates an input field for adding new subtasks and adds event listeners to existing subtask containers.
+ * The event listeners handle mouseover, mouseout, and click events to show/hide subtask icons and allow editing of the subtask description.
+ * If a delete icon is present in a subtask container, an additional click event listener is added to handle subtask deletion.
+ */
 function enableSubtasksEditing() {
     let subtaskContainers = document.querySelectorAll('.card-modal-subtask-maincontainer');
     let subtasksContainer = document.querySelector('.card-modal-subtasks-container-headline');
@@ -1322,6 +1478,10 @@ function enableSubtasksEditing() {
     });
 }
 
+/**
+ * This function shows the subtask icons
+ * @param {*} subtaskContainer 
+ */
 function showSubtaskIcons(subtaskContainer) {
     let iconsContainer = subtaskContainer.querySelector('.subtasks-edit-icons-container');
 
@@ -1330,6 +1490,10 @@ function showSubtaskIcons(subtaskContainer) {
     }
 }
 
+/**
+ * This function hides the subtask icons
+ * @param {*} subtaskContainer 
+ */
 function hideSubtaskIcons(subtaskContainer) {
     let iconsContainer = subtaskContainer.querySelector('.subtasks-edit-icons-container');
 
@@ -1338,6 +1502,10 @@ function hideSubtaskIcons(subtaskContainer) {
     }
 }
 
+/**
+ * This function edits the subtask description
+ * @param {*} element 
+ */
 function editSubtaskDescription(element) {
     let subtaskContainer = element.closest('.card-modal-subtask-maincontainer');
     let descriptionElement = subtaskContainer.querySelector('.card-modal-subtask-description');
@@ -1346,10 +1514,17 @@ function editSubtaskDescription(element) {
     descriptionElement.focus();
 }
 
+/**
+ * This function deletes the subtask
+ * @param {*} subtaskContainer 
+ */
 function deleteSubtask(subtaskContainer) {
     subtaskContainer.remove();
 }
 
+/**
+ * This function adds a subtask in the open card
+ */
 function addSubtaskOpenCard() {
     let inputElement = document.getElementById('newSubtaskInput');
     let subtasksContainer = document.querySelector('.card-modal-subtasks');

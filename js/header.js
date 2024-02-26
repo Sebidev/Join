@@ -1,5 +1,10 @@
 /**
+ * 
+ * @file header.js
+ * This file is used to handle the header of the application
+ * 
  * Setting Users array
+ * 
  */
 users = [];
 

@@ -24,8 +24,10 @@ export const addContactTemplate = `
         <path d="M92 1.5L2 1.5" stroke="#29ABE2" stroke-width="3" stroke-linecap="round"/></svg>
     </div>
 </div>
-<div class="avatar_contactModal">
-    <img class="avatar_contactModal" src="img/avatar_newcontact.svg"></img>
+<div class="avatar_container">
+    <div class="avatar_contactModal">
+        <img class="avatar_contactModal" src="img/avatar_newcontact.svg"></img>
+    </div>
 </div>
 <div>
     <img class="close_button1" onclick="closeContactModal()" src="img/close.svg"></img>
@@ -37,7 +39,7 @@ export const addContactTemplate = `
             <img src="img/person.svg" class="textfield_image">
         </div>
         <div class="input_container">
-            <input type="email" class="textfield_newcontact" id="email" name="email" placeholder="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Bitte eine gültige E-Mail-Adresse eingeben." required>
+            <input type="email" class="textfield_newcontact" id="email" name="email" placeholder="Email" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$" title="Bitte eine gültige E-Mail-Adresse eingeben." required>
             <img src="img/mail.svg" class="textfield_image">
         </div>
         <div class="input_container">

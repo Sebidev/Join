@@ -1,3 +1,9 @@
+/**
+ * @file storage.js
+ * This file is used to handle the storage of the application
+ * 
+ */
+
 const STORAGE_TOKEN = 'CV9T56UB0XWKWYY7O74HW7GUV23ZA6Q9R73XAZIX';
 // kev token: ZJJPQ710DH6OYTO2XPNQOFS8GGEI04PVTR2IPBNR
 // CV9T56UB0XWKWYY7O74HW7GUV23ZA6Q9R73XAZIX

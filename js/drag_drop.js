@@ -1,3 +1,8 @@
+/**
+ * drag and drop functionality
+ * @file drag_drop.js
+ */
+
 let currentDraggedElement;
 
 /** add a class to highlight a column

@@ -4,6 +4,7 @@
  * 
  * This file contains the code to load the header and sideboard templates
  * into the current page. The header and sideboard templates are loaded
+ * handling the selection of the current page in the sideboard menu
  */
 
 document.addEventListener("DOMContentLoaded", function() {

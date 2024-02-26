@@ -1,3 +1,8 @@
+/**
+ * @file script.js
+ * This file handle current date
+ */
+
 /** 
  * Gets the current date.
  * @returns {string} current date as 'YYYY-MM-DD'.

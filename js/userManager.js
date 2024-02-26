@@ -1,3 +1,8 @@
+/**
+ * This file is responsible for managing the user data and the current user
+ * @file userManager.js
+ */
+
 let currentUser;
 let isUserLoggedIn = false;
 

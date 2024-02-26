@@ -1,5 +1,6 @@
 /**
  * returns the html for the sign up
+ * @file login_templates.js
  * @returns - string with html
  */
 function registerHTML() {

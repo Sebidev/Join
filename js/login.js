@@ -1,4 +1,10 @@
 /**
+ * @fiel login.js
+ * This file is used to handle the login and register functions
+ * 
+ */
+
+/**
  * @description This function generates a random id for a new contact.
  * @returns a random id
  */
