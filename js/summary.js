@@ -155,6 +155,7 @@ function renderContent() {
 
 /**
  * Formating the date
+ * @param {string} dateString - date string to be formatted
  */
 function formatDate(dateString) {
   const options = { year: "numeric", month: "long", day: "numeric" };

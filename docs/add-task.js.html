@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: add-task.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: add-task.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * This file contains the JavaScript code for the 'Add Task' page.
+ * @file add-task.js 
+ */
+
+let containerCount = 0;
+let selectedInitialsArray = [];
+let selectedPriority;
+
+/**
+ * This function asynchronously displays a dropdown menu with contacts.
+ * The function first clears the dropdown content, then fetches the contacts using the `getContacts` function.
+ * For each contact, it checks if the contact is selected by comparing its ID with the IDs in the `selectedInitialsArray`.
+ * It then creates a div for the contact using the `createContactDiv` function and appends it to the dropdown content.
+ * Finally, it makes the dropdown content visible by setting its display style to 'block'.
+ *
+ * @returns {Promise&lt;void>} A Promise that resolves when the dropdown has been displayed.
+ */
+async function showDropdown() {
+    let dropdownContent = document.getElementById("contactDropdown");
+    dropdownContent.innerHTML = "";
+
+    let contacts = await getContacts();
+
+    contacts.forEach(contact => {
+        let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id);
+
+        let contactDiv = createContactDiv(contact, isSelected);
+        dropdownContent.appendChild(contactDiv);
+    });
+
+    dropdownContent.style.display = 'block';
+}
+
+/**
+ * This function asynchronously retrieves the contacts.
+ * If the user is logged in, it retrieves the contacts using the `getUserContacts` function.
+ * If the user is not logged in, it retrieves the contacts from the 'contacts' item in localStorage using the `getLocalStorageContacts` function.
+ *
+ * @returns {Promise&lt;Array>} A Promise that resolves with an array of contacts.
+ */
+async function getContacts() {
+    return isUserLoggedIn ? getUserContacts() : getLocalStorageContacts();
+}
+
+/**
+ * This function Asynchronously retrieves the contacts of the current user.
+ * It fetches the 'users' item from localStorage, parses it into a JavaScript object, and returns the 'contacts' property of the current user.
+ * If the current user does not have any contacts, it returns an empty array.
+ *
+ * @returns {Promise&lt;Array>} A Promise that resolves with an array of the current user's contacts.
+ */
+async function getUserContacts() {
+    let users = await getItem('users');
+    return JSON.parse(users)[currentUser]?.contacts || [];
+}
+
+/**
+ * This function asynchronously fetches the contacts of the currently logged in user from the remote storage.
+ * @returns {Array} An array of contacts from the local storage.
+ */
+function getLocalStorageContacts() {
+    return JSON.parse(localStorage.getItem('contacts')) || [];
+}
+
+/**
+ * This function initializes the contact dropdown by adding an event listener to the document.
+ */
+function initializeContactDropdown() {
+    if (window.location.pathname.endsWith("add-task.html") || window.location.pathname.endsWith("board.html")) {
+        document.addEventListener('click', function (event) {
+            let dropdown = document.getElementById('contactDropdown');
+
+            if (dropdown) {
+                if (!event.target.matches('.arrow_down') &amp;&amp; !event.target.closest('.assigned-to-container')) {
+                    dropdown.style.display = 'none';
+                }
+
+                if (event.target.id === 'assignedTo') {
+                    showDropdown();
+                }
+            }
+        });
+    }
+}
+initializeContactDropdown();
+
+/**
+ * This function initializes the contact dropdown by adding an event listener to the document.
+ * @param {*} contact - The contact to be added to the selected contacts.
+ * @param {*} isSelected - A boolean indicating whether the contact is selected.
+ * @returns {HTMLDivElement} A div element representing the contact.
+ */
+function createContactDiv(contact, isSelected) {
+    let contactDiv = document.createElement("div");
+    contactDiv.innerHTML = `
+        &lt;label class="contacts">
+            &lt;div class="contacts-img-initial">
+                &lt;img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
+                &lt;div class="initials-overlay">${contact.name.split(' ').map(n => n[0]).join('')}&lt;/div>
+            &lt;/div>
+            &lt;div class="dropdown-checkbox">
+                &lt;div style="margin-left: 5px;">${contact.name}&lt;/div>
+                &lt;input type="checkbox" class="contact-checkbox" ${isSelected ? 'checked' : ''}>
+            &lt;/div>
+        &lt;/label>
+    `;
+    contactDiv.addEventListener("mousedown", (event) => {
+        event.preventDefault();
+        updateSelectedContacts(contact, isSelected ? 'remove' : 'add');
+    });
+    return contactDiv;
+}
+
+/**
+ * This function updates the array of selected contacts based on the provided contact and action.
+ * If the action is 'add' and the contact is not already in the array, it adds the contact to the array.
+ * If the action is 'remove' and the contact is in the array, it removes the contact from the array.
+ * After updating the array, it saves and displays the selected contacts using the `saveAndDisplaySelectedContacts` function.
+ *
+ * @param {Object} contact - The contact object.
+ * @param {string} action - The action to perform ('add' or 'remove').
+ */
+function updateSelectedContacts(contact, action) {
+    let index = selectedInitialsArray.findIndex(c => c.id === contact.id);
+
+    if (action === 'add' &amp;&amp; index === -1) {
+        selectedInitialsArray.push(contact);
+    } else if (action === 'remove' &amp;&amp; index !== -1) {
+        selectedInitialsArray.splice(index, 1);
+    }
+
+    saveAndDisplaySelectedContacts();
+}
+
+/**
+ * This function saves and displays the selected contacts.
+ * It first saves the selected contacts using the `saveSelectedContacts` function.
+ * Then it displays the selected contacts using the `selectContact` function.
+ */
+function saveAndDisplaySelectedContacts() {
+    saveSelectedContacts();
+    selectContact();
+}
+
+/**
+ * Creates a div element for a selected contact.
+ * The div includes the contact's avatar, name, and a delete button.
+ *
+ * @param {Object} contact - The contact to create a div for.
+ * @param {string} contact.avatarid - The ID of the contact's avatar.
+ * @param {string} contact.id - The ID of the contact.
+ * @param {string} contact.name - The name of the contact.
+ * @returns {HTMLDivElement} The created div element for the selected contact.
+ */
+function createSelectedContactDiv(contact) {
+    let selectedContactDiv = document.createElement("div");
+    selectedContactDiv.innerHTML = `
+        &lt;div class="selected-contact" data-avatarid="${contact.avatarid}" data-id="${contact.id}">
+            &lt;div class="contacts-img-initial">
+                &lt;img id="${contact.id}" src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
+                &lt;div class="initials-overlay">${contact.name.split(' ').map(n => n[0]).join('')}&lt;/div>
+            &lt;/div>
+            &lt;div class="contact-delete-container">
+                &lt;div>
+                    &lt;span>${contact.name}&lt;/span>
+                &lt;/div>
+                &lt;span class="remove-contact" onclick="removeContact(${contact.avatarid})">
+                    &lt;img src="./img/delete.svg">
+                &lt;/span>
+            &lt;/div>
+        &lt;/div>
+    `;
+    return selectedContactDiv;
+}
+
+/**
+ * Selects a contact and appends it to the selected contacts container.
+ * It first clears the container, then for each contact in the `selectedInitialsArray`,
+ * it creates a div for the contact using `createSelectedContactDiv` and appends it to the container.
+ */
+function selectContact() {
+    let selectedContactsContainer = document.getElementById("selectedContactsContainer");
+    selectedContactsContainer.innerHTML = "";
+
+    selectedInitialsArray.forEach(contact => {
+        let selectedContactDiv = createSelectedContactDiv(contact);
+        selectedContactsContainer.appendChild(selectedContactDiv);
+    });
+}
+
+/**
+ * Saves the currently selected contacts to local storage.
+ * The contacts are stored under the key 'selectedContacts'.
+ * Before saving, the contacts array is converted to a JSON string.
+ */
+function saveSelectedContacts() {
+    localStorage.setItem('selectedContacts', JSON.stringify(selectedInitialsArray));
+}
+
+/**
+ * Event listener for click events on the document.
+ * If the clicked element has the class 'arrow_down', the dropdown is shown by calling `showDropdown`.
+ *
+ * @param {Event} event - The click event.
+ */
+document.addEventListener('click', function (event) {
+    if (event.target.matches('.arrow_down')) {
+        showDropdown();
+    }
+});
+
+/**
+ * Removes a contact from the selected contacts array and updates the selected contacts container.
+ * It first finds the index of the contact with the given avatar ID in the `selectedInitialsArray`.
+ * If such a contact is found, it is removed from the array, and the selected contacts container is updated.
+ *
+ * @param {string} contactavatarId - The avatar ID of the contact to remove.
+ */
+function removeContact(contactavatarId) {
+    let index = selectedInitialsArray.findIndex(contact => contact.avatarid === contactavatarId);
+
+    if (index !== -1) {
+        selectedInitialsArray.splice(index, 1);
+        selectContact();
+
+        let selectedContactsContainer = document.getElementById("selectedContactsContainer");
+        let contactToRemove = selectedContactsContainer.querySelector(`[data-avatarid="${contactavatarId}"]`);
+    }
+}
+
+/**
+ * Clears the selected contacts from local storage.
+ * The contacts are removed from local storage by calling `localStorage.removeItem` with the key 'selectedContacts'.
+ */
+function clearSelectedContacts() {
+    localStorage.removeItem('selectedContacts');
+}
+
+async function addToBoard(column) {
+    let taskTitle = getFieldValueById('taskTitleInput');
+    let category = getFieldValueById('category');
+
+    if (!taskTitle || !category) {
+        alert('Please fill out the title and the category');
+        return;
+    }
+
+    let description = getFieldValueById('descriptionInput');
+    let date = getFieldValueById('date');
+    let subtasksList = document.getElementById('subtaskList').children;
+    let selectedContacts = getSelectedContacts();
+    console.log('Selected Contacts:', selectedContacts);
+    let selectedPriority = getSelectedPriority();
+
+    saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column);
+
+    clearSelectedContacts();
+    resetFormFields();
+
+    window.location.href = 'board.html'; // disabled for programming purposes
+}
+
+/**
+ * Retrieves the value of a DOM element by its ID.
+ *
+ * @param {string} id - The ID of the DOM element to retrieve the value from.
+ * @returns {string} The value of the DOM element.
+ */
+function getFieldValueById(id) {
+    return document.getElementById(id).value;
+}
+
+/**
+ * Retrieves the selected contacts from the selected contacts container.
+ * It iterates over the child nodes of the container, and for each div element,
+ * it retrieves the contact's image path, initials, name, and ID from the img element and its siblings,
+ * and adds an object with these properties to the `selectedContacts` array.
+ *
+ * @returns {Array} An array of objects representing the selected contacts. Each object has properties for the contact's image path, initials, name, and ID.
+ */
+function getSelectedContacts() {
+    let selectedContactsContainer = document.getElementById("selectedContactsContainer");
+    let selectedContacts = [];
+
+    selectedContactsContainer.childNodes.forEach(contactDiv => {
+        if (contactDiv.nodeType === 1) {
+            let imgElement = contactDiv.querySelector('img');
+            let initials = imgElement.nextElementSibling.textContent.trim();
+            let datasetName = imgElement.dataset.name;
+            let name = datasetName || imgElement.alt;
+            let id = imgElement.id;
+
+            selectedContacts.push({
+                imagePath: imgElement.src,
+                initials: initials,
+                name: name,
+                id: id
+            });
+        }
+    });
+
+    return selectedContacts;
+}
+
+/**
+ * Saves a task to local storage or remote storage depending on whether the user is logged in.
+ * The task is first created with the given parameters, then the contacts in the task are processed,
+ * and finally the task is saved to the appropriate storage.
+ *
+ * @param {string} taskTitle - The title of the task.
+ * @param {string} description - The description of the task.
+ * @param {string} date - The date of the task.
+ * @param {string} category - The category of the task.
+ * @param {Array} subtasksList - The list of subtasks of the task.
+ * @param {Array} selectedContacts - The list of selected contacts for the task.
+ * @param {string} selectedPriority - The selected priority of the task.
+ * @param {string} column - The column of the task on the board.
+ */
+async function saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column) {
+    let subtasksData = Array.from(subtasksList).map(subtask => {
+        return {
+            description: subtask.firstElementChild.innerText,
+            checked: false
+        };
+    });
+
+    let task = {
+        content: {
+            title: taskTitle,
+            description: description,
+            date: date,
+            category: category,
+            subtasks: subtasksList.length,
+            subtasksData: subtasksData,
+            selectedContacts: selectedContacts,
+            priority: selectedPriority,
+            boardColumn: column,
+        },
+        id: 'task' + (isUserLoggedIn ? users[currentUser].tasks.length : (JSON.parse(localStorage.getItem('tasks')) || []).length),
+        //dataId: selectedContacts[0].id
+    };
+
+    console.log('Task before processing contacts:', task);
+
+    task.content.selectedContacts.forEach(contact => {
+        let matchingContact = contacts.find(existingContact => existingContact.id === contact.id);
+        if (matchingContact) {
+            contact.name = matchingContact.name;
+        }
+    });
+
+    console.log('Task after processing contacts:', task);
+
+    if (isUserLoggedIn) {
+        // User is logged in, save the task to the remote storage
+        users[currentUser].tasks.push(task);
+        await setItem('users', JSON.stringify(users));
+    } else {
+        // User is a guest, save the task to the local storage
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks.push(task);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        localStorage.setItem('selectedContacts', JSON.stringify(selectedContacts));
+    }
+}
+
+/**
+ * Resets the values of the form fields.
+ * The IDs of the form fields are stored in an array, and for each ID, the value of the corresponding form field is set to an empty string.
+ */
+function resetFormFields() {
+    ['taskTitleInput', 'descriptionInput', 'assignedTo', 'date', 'category']
+        .forEach(id => document.getElementById(id).value = '');
+}
+
+/**
+ * Sets the priority of a task and changes the color of the priority button accordingly.
+ * The function first resets the styles of all priority buttons, then sets the styles of the selected priority button.
+ * The selected priority is also saved to local storage.
+ *
+ * @param {string} priority - The selected priority. Should be 'urgent', 'medium', or 'low'.
+ * @returns {string|null} The selected priority if it is valid, otherwise null.
+ */
+function choose(priority) {
+    let colorMap = { 'urgent': '#FF3D00', 'medium': '#FFA800', 'low': '#7AE229' };
+    let setStyles = (elements, styles) => elements.forEach(e => e &amp;&amp; Object.assign(e.style, styles));
+
+    setStyles(document.querySelectorAll('.button'), { backgroundColor: '#fff' });
+    setStyles(document.querySelectorAll('.button img'), { filter: 'brightness(1) invert(0)' });
+
+    let [priorityButton, priorityImg] = [document.querySelector(`.${priority}`), document.querySelector(`.${priority} img`)];
+
+    if (priorityButton &amp;&amp; priorityImg &amp;&amp; colorMap[priority]) {
+        setStyles([priorityButton], { backgroundColor: colorMap[priority] });
+        setStyles([priorityImg], { filter: 'brightness(0) invert(1)' });
+
+        localStorage.setItem('selectedPriority', priority);
+        return priority;
+    }
+    return null;
+}
+
+/**
+ * Retrieves the selected priority from local storage.
+ * The priority is stored under the key 'selectedPriority'.
+ *
+ * @returns {string|null} The selected priority if it exists, otherwise null.
+ */
+function getSelectedPriority() {
+    return localStorage.getItem('selectedPriority');
+}
+
+/**
+ * Event listener for the DOMContentLoaded event on the document.
+ * When the DOM is fully loaded, it sets the default task priority to 'medium' by calling `choose('medium')`.
+ */
+document.addEventListener('DOMContentLoaded', function () {
+   choose('medium');
+});
+
+/**
+ * Toggles the display of the category options.
+ * If the category options are currently displayed, they are hidden, and vice versa.
+ * The function also stops the propagation of the click event to prevent it from closing the options.
+ *
+ * @param {Event} event - The click event.
+ */
+function toggleCategoryOptions(event) {
+    event = event || window.event;
+    event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
+
+    let categoryOptions = document.getElementById("categoryOptions");
+    categoryOptions.style.display = (window.getComputedStyle(categoryOptions).display !== "none") ? "none" : "block";
+}
+
+/**
+ * Updates the selected category in the category dropdown.
+ * If the selected category is not the same as the given category, the selected category is updated to the given category.
+ * Otherwise, the selected category is cleared.
+ * The category options are also hidden.
+ *
+ * @param {string} category - The category to select.
+ */
+function updateSelectedCategory(category) {
+    let selectedCategoryInput = document.querySelector(".category-dropdown");
+    let categoryOptions = document.getElementById("categoryOptions");
+
+    if (selectedCategoryInput &amp;&amp; categoryOptions) {
+        selectedCategoryInput.value = selectedCategoryInput.value !== category ? category : "";
+
+        categoryOptions.style.display = "none";
+    }
+}
+
+/**
+ * Handles a click event outside of the sub-image container and the subtasks input field.
+ * If the click event's target is not within the sub-image container or the subtasks input field,
+ * the function calls `revertSubImg` to revert the sub-image.
+ *
+ * @param {Event} event - The click event.
+ */
+function handleOutsideClick(event) {
+    let subImgContainer = document.getElementById('subImgContainer');
+    let inputField = document.querySelector('.subtasks-input');
+
+    if (subImgContainer &amp;&amp; !subImgContainer.contains(event.target) &amp;&amp; inputField &amp;&amp; !inputField.contains(event.target)) {
+        revertSubImg();
+    }
+}
+
+/**
+ * Adds a new subtask to the subtask list.
+ * The function first retrieves the input element and the subtask list from the DOM.
+ * Then it gets the text of the new subtask from the input element.
+ * If the text is not empty, it creates a new subtask item with the text and adds it to the subtask list.
+ * Finally, it clears the input element.
+ */
+function addSubtask() {
+    let inputElement = document.getElementById('newSubtaskInput');
+    let subtaskList = document.getElementById('subtaskList');
+    let subtaskText = inputElement.value.trim();
+
+    if (subtaskText !== '') {
+        let subtaskHTML = `
+                    &lt;div class="subtask-item">
+                        &lt;div class="subtask-text">${subtaskText}&lt;/div>
+                        &lt;div class="delete-button" onclick="deleteSubtaskItem(this.parentNode)">
+                            &lt;img src="./img/iconoir_cancel.svg" alt="">
+                        &lt;/div>
+                    &lt;/div>
+                    `;
+        subtaskList.innerHTML += subtaskHTML;
+        inputElement.value = '';
+    }
+}
+
+/**
+ * Deletes a subtask item from the subtask list.
+ * The function removes the given subtask item from the DOM.
+ *
+ * @param {HTMLElement} subtaskItem - The subtask item to delete.
+ */
+function deleteSubtaskItem(subtaskItem) {
+    subtaskItem.remove();
+}
+
+/**
+ * Clears all input and textarea fields in the 'Add-task' and 'Add-task-content' sections.
+ * It also resets the task priority to 'medium', clears the selected category, clears the subtask list, and clears the selected contacts.
+ */
+function clearFields() {
+    let inputFields = document.querySelectorAll('.Add-task input, .Add-task textarea');
+    let AllInputFields = document.querySelectorAll('.Add-task-content input, .Add-task-content textarea');
+
+    inputFields.forEach(field => {
+        field.value = '';
+    });
+
+    AllInputFields.forEach(field => {
+        field.value = '';
+    });
+
+    choose('medium');
+    updateSelectedCategory('');
+
+    let subtaskList = document.getElementById('subtaskList');
+    subtaskList.innerHTML = '';
+    clearSelectedContacts();
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Events</h3><ul><li><a href="global.html#event:resizeThiseventisusedtohandletheresizeevent.ItchecksiftheviewismobileandcallsthehandleMobileViewfunction.ItalsoupdatestheisMobilevariable.">resizeThis event is used to handle the resize event.It checks if the view is mobile and calls the handleMobileView function.It also updates the isMobile variable.</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addContact">addContact</a></li><li><a href="global.html#addEventListenersToButtons">addEventListenersToButtons</a></li><li><a href="global.html#addPlaceholderText">addPlaceholderText</a></li><li><a href="global.html#addSearch">addSearch</a></li><li><a href="global.html#addSubtask">addSubtask</a></li><li><a href="global.html#addSubtaskOpenCard">addSubtaskOpenCard</a></li><li><a href="global.html#addTask">addTask</a></li><li><a href="global.html#addUserToArray">addUserToArray</a></li><li><a href="global.html#allowDrop">allowDrop</a></li><li><a href="global.html#backButtonHandlerThisfunctionisusedtohandletheclickeventonthebackbuttoninthemobileview.Ithidesthecontacttitleandfloatingcontactcontainerandshowsthecontactscontainer.Italsoremovesthecontact_selectedclassfromthecontactentry.">backButtonHandlerThis function is used to handle the click event on the back button in the mobile view.It hides the contact title and floating contact container and shows the contacts container.It also removes the contact_selected class from the contact entry.</a></li><li><a href="global.html#capitalizeFirstLetter">capitalizeFirstLetter</a></li><li><a href="global.html#checkAndRenderSharedData">checkAndRenderSharedData</a></li><li><a href="global.html#checkEmailExists">checkEmailExists</a></li><li><a href="global.html#checkPassword">checkPassword</a></li><li><a href="global.html#choose">choose</a></li><li><a href="global.html#chooseCardModal">chooseCardModal</a></li><li><a href="global.html#clearFields">clearFields</a></li><li><a href="global.html#clearSelectedContacts">clearSelectedContacts</a></li><li><a href="global.html#closeContactModal">closeContactModal</a></li><li><a href="global.html#closeDropdownOnClickOutside">closeDropdownOnClickOutside</a></li><li><a href="global.html#closeModal">closeModal</a></li><li><a href="global.html#closeOpenCard">closeOpenCard</a></li><li><a href="global.html#countSubtasks">countSubtasks</a></li><li><a href="global.html#createAvatarDivs">createAvatarDivs</a></li><li><a href="global.html#createContactDiv">createContactDiv</a></li><li><a href="global.html#createContactDivEdit">createContactDivEdit</a></li><li><a href="global.html#createContactDropdown">createContactDropdown</a></li><li><a href="global.html#createPriorityOptionsContainer">createPriorityOptionsContainer</a></li><li><a href="global.html#createSelectedContactDiv">createSelectedContactDiv</a></li><li><a href="global.html#createSelectedContactDivEdit">createSelectedContactDivEdit</a></li><li><a href="global.html#delContact">delContact</a></li><li><a href="global.html#deleteSubtask">deleteSubtask</a></li><li><a href="global.html#deleteSubtaskItem">deleteSubtaskItem</a></li><li><a href="global.html#deleteTask">deleteTask</a></li><li><a href="global.html#demoContacts">demoContacts</a></li><li><a href="global.html#doNotClose">doNotClose</a></li><li><a href="global.html#drop">drop</a></li><li><a href="global.html#edit">edit</a></li><li><a href="global.html#editContact">editContact</a></li><li><a href="global.html#editSubtaskDescription">editSubtaskDescription</a></li><li><a href="global.html#enableContentEditing">enableContentEditing</a></li><li><a href="global.html#enablePriorityEditing">enablePriorityEditing</a></li><li><a href="global.html#enableSubtasksEditing">enableSubtasksEditing</a></li><li><a href="global.html#endDragging">endDragging</a></li><li><a href="global.html#endEdit">endEdit</a></li><li><a href="global.html#errorCheckboxSignup">errorCheckboxSignup</a></li><li><a href="global.html#floatingContactRender">floatingContactRender</a></li><li><a href="global.html#generateDemoContacts">generateDemoContacts</a></li><li><a href="global.html#generateDemoTasks">generateDemoTasks</a></li><li><a href="global.html#generateId">generateId</a></li><li><a href="global.html#getContacts">getContacts</a></li><li><a href="global.html#getCurrentDateAsString">getCurrentDateAsString</a></li><li><a href="global.html#getFieldValueById">getFieldValueById</a></li><li><a href="global.html#getItem">getItem</a></li><li><a href="global.html#getLocalStorageContacts">getLocalStorageContacts</a></li><li><a href="global.html#getPriorityIcon">getPriorityIcon</a></li><li><a href="global.html#getSelectedContacts">getSelectedContacts</a></li><li><a href="global.html#getSelectedPriority">getSelectedPriority</a></li><li><a href="global.html#getTaskById">getTaskById</a></li><li><a href="global.html#getUserContacts">getUserContacts</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#guestLogin">guestLogin</a></li><li><a href="global.html#handleMobileViewThisfunctionisusedtohandlethemobileviewofthecontactspage.Itaddseventlistenerstothecontactentryandbackbuttoniftheviewismobile.Itremoveseventlistenersfromthecontactentryandbackbuttoniftheviewisnotmobile.">handleMobileViewThis function is used to handle the mobile view of the contacts page.It adds event listeners to the contact entry and back button if the view is mobile.It removes event listeners from the contact entry and back button if the view is not mobile.</a></li><li><a href="global.html#handleOutsideClick">handleOutsideClick</a></li><li><a href="global.html#hideLogout">hideLogout</a></li><li><a href="global.html#hideMenuOnClickOutside">hideMenuOnClickOutside</a></li><li><a href="global.html#hideSubtaskIcons">hideSubtaskIcons</a></li><li><a href="global.html#highlight">highlight</a></li><li><a href="global.html#initBoard">initBoard</a></li><li><a href="global.html#initHead">initHead</a></li><li><a href="global.html#initUser">initUser</a></li><li><a href="global.html#initUserID">initUserID</a></li><li><a href="global.html#initializeContactDropdown">initializeContactDropdown</a></li><li><a href="global.html#initializeContactDropdownOpenCard">initializeContactDropdownOpenCard</a></li><li><a href="global.html#isContactInContainer">isContactInContainer</a></li><li><a href="global.html#loadContacts">loadContacts</a></li><li><a href="global.html#loadData">loadData</a></li><li><a href="global.html#loadLoginData">loadLoginData</a></li><li><a href="global.html#loadUsers">loadUsers</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#loginError">loginError</a></li><li><a href="global.html#loginHTML">loginHTML</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#mobileClickHandlerThisfunctionisusedtohandletheclickeventonthecontactentryinthemobileview.Ithidesthecontactscontainerandshowsthecontacttitleandfloatingcontactcontainer.Italsoremovesthecontact_selectedclassfromthecontactentry.">mobileClickHandlerThis function is used to handle the click event on the contact entry in the mobile view.It hides the contacts container and shows the contact title and floating contact container.It also removes the contact_selected class from the contact entry.</a></li><li><a href="global.html#openCard">openCard</a></li><li><a href="global.html#openPriorityOptions">openPriorityOptions</a></li><li><a href="global.html#passwordInequal">passwordInequal</a></li><li><a href="global.html#passwordRedOutline">passwordRedOutline</a></li><li><a href="global.html#preventDragOver">preventDragOver</a></li><li><a href="global.html#rememberMe">rememberMe</a></li><li><a href="global.html#removeCheckboxError">removeCheckboxError</a></li><li><a href="global.html#removeContact">removeContact</a></li><li><a href="global.html#removeEmailError">removeEmailError</a></li><li><a href="global.html#removeHighlight">removeHighlight</a></li><li><a href="global.html#removeLoginError">removeLoginError</a></li><li><a href="global.html#removePasswordError">removePasswordError</a></li><li><a href="global.html#removePlaceholderText">removePlaceholderText</a></li><li><a href="global.html#renderCard">renderCard</a></li><li><a href="global.html#renderSection">renderSection</a></li><li><a href="global.html#replaceLockIcon">replaceLockIcon</a></li><li><a href="global.html#resetFormFields">resetFormFields</a></li><li><a href="global.html#resetLoginForm">resetLoginForm</a></li><li><a href="global.html#resetSignupForm">resetSignupForm</a></li><li><a href="global.html#restoreCheckboxStatus">restoreCheckboxStatus</a></li><li><a href="global.html#rollDice">rollDice</a></li><li><a href="global.html#saveAndDisplaySelectedContacts">saveAndDisplaySelectedContacts</a></li><li><a href="global.html#saveAndDisplaySelectedContactsEdit">saveAndDisplaySelectedContactsEdit</a></li><li><a href="global.html#saveCheckboxStatus">saveCheckboxStatus</a></li><li><a href="global.html#saveContact">saveContact</a></li><li><a href="global.html#saveEditedContact">saveEditedContact</a></li><li><a href="global.html#saveEditedTask">saveEditedTask</a></li><li><a href="global.html#saveSelectedContacts">saveSelectedContacts</a></li><li><a href="global.html#saveToLocalStorage">saveToLocalStorage</a></li><li><a href="global.html#selectContact">selectContact</a></li><li><a href="global.html#selectContactEdit">selectContactEdit</a></li><li><a href="global.html#setInitials">setInitials</a></li><li><a href="global.html#setItem">setItem</a></li><li><a href="global.html#setName">setName</a></li><li><a href="global.html#setUserColor">setUserColor</a></li><li><a href="global.html#setUserToTrue">setUserToTrue</a></li><li><a href="global.html#setupDueDateInput">setupDueDateInput</a></li><li><a href="global.html#showDropdown">showDropdown</a></li><li><a href="global.html#showDropdownEdit">showDropdownEdit</a></li><li><a href="global.html#showEmailError">showEmailError</a></li><li><a href="global.html#showLogout">showLogout</a></li><li><a href="global.html#showMoreMenu">showMoreMenu</a></li><li><a href="global.html#showSubtaskIcons">showSubtaskIcons</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#signUp">signUp</a></li><li><a href="global.html#signupButton">signupButton</a></li><li><a href="global.html#startDragging">startDragging</a></li><li><a href="global.html#successMsg">successMsg</a></li><li><a href="global.html#successSignUp">successSignUp</a></li><li><a href="global.html#toggleCategoryOptions">toggleCategoryOptions</a></li><li><a href="global.html#toggleCheckIcon">toggleCheckIcon</a></li><li><a href="global.html#togglePasswordVisibility">togglePasswordVisibility</a></li><li><a href="global.html#unrememberMe">unrememberMe</a></li><li><a href="global.html#updateCheckboxState">updateCheckboxState</a></li><li><a href="global.html#updatePlaceholderText">updatePlaceholderText</a></li><li><a href="global.html#updateProgressBar">updateProgressBar</a></li><li><a href="global.html#updateSelectedCategory">updateSelectedCategory</a></li><li><a href="global.html#updateSelectedContacts">updateSelectedContacts</a></li><li><a href="global.html#updateSelectedContactsEdit">updateSelectedContactsEdit</a></li><li><a href="global.html#updateTaskColumn">updateTaskColumn</a></li><li><a href="global.html#userInitials">userInitials</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Feb 26 2024 02:06:50 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

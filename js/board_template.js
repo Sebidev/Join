@@ -1155,7 +1155,7 @@ function addEventListenersToButtons(priorityOptionsContainer) {
 /**
  * Opens the priority options container for a card modal in a task board.
  * @param {*} event 
- * @returns 
+ * @returns {null} - If the priority options container is already open.
  */
 function openPriorityOptions(event) {
     if (isPriorityOptionsOpen) {

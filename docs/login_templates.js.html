@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: login_templates.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: login_templates.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * returns the html for the sign up
+ * @file login_templates.js
+ * @returns - string with html
+ */
+function registerHTML() {
+    return /*html*/`
+        &lt;div class="register-card-container">
+            &lt;div class="register-card">
+                &lt;div class="arrow-container">
+                    &lt;img class="arrow-icon" src="img/arrow-left.svg" alt="arrow left" onclick="renderSection('login')">
+                &lt;/div>
+                &lt;h1 class="register-heading">Sign Up&lt;/h1>
+                &lt;form class="register-form" onsubmit="signUp(); return false">
+                    &lt;div id="register-inputs">
+                        &lt;div class="register-input-container">
+                            &lt;div class="register-input-wrapper">
+                                &lt;input class="register-name-input" type="text" name="name" id="name-register" placeholder="Name" required
+                                minlength="2" autocomplete="off">
+                                &lt;img class="person-icon" src="img/person.svg" alt="Person Icon">
+                            &lt;/div>
+                        &lt;/div>
+                        &lt;div class="register-input-container">
+                            &lt;div class="register-input-wrapper">
+                                &lt;input class="register-email-input" type="email" name="email" id="email-register" placeholder="Email" required
+                                autocomplete="off">
+                                &lt;img class="email-icon" src="img/mail.svg" alt="Email Icon">
+                            &lt;/div>
+                        &lt;/div>
+                        &lt;div class="register-input-container">
+                            &lt;div class="register-input-wrapper" id="pw-wrapper">
+                                &lt;input class="register-pw-input" type="password" name="password-register" id="password-register" placeholder="Password"
+                                minlength="8" required autocomplete="new-password" onclick="replaceLockIcon('register')">
+                                &lt;img class="lock-icon" id="lock-icon-register" src="img/lock.svg" alt="Password Icon">
+                            &lt;/div>
+                        &lt;/div>
+                        &lt;div class="register-input-container">
+                            &lt;div class="register-input-wrapper" id="pw-wrapper">
+                                &lt;input class="register-pw-input" type="password" name="password-confirm" id="password-confirm" placeholder="Confirm Password"
+                                minlength="8" required autocomplete="new-password" onclick="replaceLockIcon('confirm')">
+                                &lt;img class="lock-icon" id="lock-icon-confirm" src="img/lock.svg" alt="Password Icon">
+                            &lt;/div>
+                        &lt;/div>
+                    &lt;/div>
+                    &lt;div id="register-policy-container">
+                        &lt;div class="register-policy">
+                            &lt;img class="checkbox-icon" src="img/unchecked.svg" alt="Checkbox" id="unchecked" onclick="toggleCheckIcon()">
+                            &lt;span class="register-policy-text">I accept the &lt;a href="privacy_policy.html" class="register-policy-text text-blue" target="_blank">Privacy Policy&lt;/a>&lt;/span>
+                        &lt;/div>
+                    &lt;/div>
+                    &lt;div class="register-button-container">
+                        &lt;button type="submit" id="signup-button" class="main-button">Sign Up&lt;/button>
+                    &lt;/div>
+                &lt;/form>
+            &lt;/div>
+            &lt;div class="signup-success-overlay" id="signup-success-overlay">
+                &lt;div class="signup-success">
+                    &lt;div class="signup-success-message" id="signup-success-message">You Signed Up successfully&lt;/div>
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    `;
+}
+
+
+/**
+ * returns the html for the login
+ * @returns - string with html
+ */
+function loginHTML() {
+    return /*html*/ `
+        &lt;div class="login-card-container">
+            &lt;div class="login-card">
+                &lt;h1 class="login-heading">Log in&lt;/h1>
+                &lt;form class="login-form" onsubmit="login(); return false">
+                    &lt;div class="login-inputs" id="login-inputs">
+                    &lt;div class="login-input-container">
+                        &lt;div class="login-input-wrapper">
+                            &lt;div class="login-email-input">
+                        &lt;input  type="email" name="email-login" id="email-login" placeholder="Email"
+                            required autocomplete="on" />
+                            &lt;/div>
+                            &lt;div>
+                        &lt;img class="email-icon" src="img/mail.svg" alt="Email Icon" />
+                            &lt;/div>
+                        &lt;/div>
+                    &lt;/div>
+                    &lt;div class="login-input-container">
+                        &lt;div class="login-input-wrapper" id="pw-wrapper">
+                        &lt;input class="login-pw-input" type="password" name="password-login" id="password-login"
+                            placeholder="Password" required autocomplete="current-password"
+                            onclick="replaceLockIcon('login')" />
+                        &lt;img class="lock-icon" id="lock-icon-login" src="img/lock.svg" alt="Password Icon" />
+                        &lt;/div>
+                    &lt;/div>
+                    &lt;/div>
+                    &lt;div class="login-remember">
+                    &lt;img class="checkbox-icon" src="img/unchecked.svg" alt="Checkbox" id="unchecked"
+                        onclick="toggleCheckIcon()" />
+                    &lt;span class="login-remember-text">Remember Me&lt;/span>
+                    &lt;/div>
+                    &lt;div class="login-button-container">
+                    &lt;button type="submit" class="main-button">Log in&lt;/button>
+                    &lt;button type="button" class="main-button main-button-white" onclick="guestLogin()">
+                        Guest Log in
+                    &lt;/button>
+                    &lt;/div>
+                &lt;/form>
+            &lt;/div>
+        &lt;/div>
+    `;
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Events</h3><ul><li><a href="global.html#event:resizeThiseventisusedtohandletheresizeevent.ItchecksiftheviewismobileandcallsthehandleMobileViewfunction.ItalsoupdatestheisMobilevariable.">resizeThis event is used to handle the resize event.It checks if the view is mobile and calls the handleMobileView function.It also updates the isMobile variable.</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addContact">addContact</a></li><li><a href="global.html#addEventListenersToButtons">addEventListenersToButtons</a></li><li><a href="global.html#addPlaceholderText">addPlaceholderText</a></li><li><a href="global.html#addSearch">addSearch</a></li><li><a href="global.html#addSubtask">addSubtask</a></li><li><a href="global.html#addSubtaskOpenCard">addSubtaskOpenCard</a></li><li><a href="global.html#addTask">addTask</a></li><li><a href="global.html#addUserToArray">addUserToArray</a></li><li><a href="global.html#allowDrop">allowDrop</a></li><li><a href="global.html#backButtonHandlerThisfunctionisusedtohandletheclickeventonthebackbuttoninthemobileview.Ithidesthecontacttitleandfloatingcontactcontainerandshowsthecontactscontainer.Italsoremovesthecontact_selectedclassfromthecontactentry.">backButtonHandlerThis function is used to handle the click event on the back button in the mobile view.It hides the contact title and floating contact container and shows the contacts container.It also removes the contact_selected class from the contact entry.</a></li><li><a href="global.html#capitalizeFirstLetter">capitalizeFirstLetter</a></li><li><a href="global.html#checkAndRenderSharedData">checkAndRenderSharedData</a></li><li><a href="global.html#checkEmailExists">checkEmailExists</a></li><li><a href="global.html#checkPassword">checkPassword</a></li><li><a href="global.html#choose">choose</a></li><li><a href="global.html#chooseCardModal">chooseCardModal</a></li><li><a href="global.html#clearFields">clearFields</a></li><li><a href="global.html#clearSelectedContacts">clearSelectedContacts</a></li><li><a href="global.html#closeContactModal">closeContactModal</a></li><li><a href="global.html#closeDropdownOnClickOutside">closeDropdownOnClickOutside</a></li><li><a href="global.html#closeModal">closeModal</a></li><li><a href="global.html#closeOpenCard">closeOpenCard</a></li><li><a href="global.html#countSubtasks">countSubtasks</a></li><li><a href="global.html#createAvatarDivs">createAvatarDivs</a></li><li><a href="global.html#createContactDiv">createContactDiv</a></li><li><a href="global.html#createContactDivEdit">createContactDivEdit</a></li><li><a href="global.html#createContactDropdown">createContactDropdown</a></li><li><a href="global.html#createPriorityOptionsContainer">createPriorityOptionsContainer</a></li><li><a href="global.html#createSelectedContactDiv">createSelectedContactDiv</a></li><li><a href="global.html#createSelectedContactDivEdit">createSelectedContactDivEdit</a></li><li><a href="global.html#delContact">delContact</a></li><li><a href="global.html#deleteSubtask">deleteSubtask</a></li><li><a href="global.html#deleteSubtaskItem">deleteSubtaskItem</a></li><li><a href="global.html#deleteTask">deleteTask</a></li><li><a href="global.html#demoContacts">demoContacts</a></li><li><a href="global.html#doNotClose">doNotClose</a></li><li><a href="global.html#drop">drop</a></li><li><a href="global.html#edit">edit</a></li><li><a href="global.html#editContact">editContact</a></li><li><a href="global.html#editSubtaskDescription">editSubtaskDescription</a></li><li><a href="global.html#enableContentEditing">enableContentEditing</a></li><li><a href="global.html#enablePriorityEditing">enablePriorityEditing</a></li><li><a href="global.html#enableSubtasksEditing">enableSubtasksEditing</a></li><li><a href="global.html#endDragging">endDragging</a></li><li><a href="global.html#endEdit">endEdit</a></li><li><a href="global.html#errorCheckboxSignup">errorCheckboxSignup</a></li><li><a href="global.html#floatingContactRender">floatingContactRender</a></li><li><a href="global.html#generateDemoContacts">generateDemoContacts</a></li><li><a href="global.html#generateDemoTasks">generateDemoTasks</a></li><li><a href="global.html#generateId">generateId</a></li><li><a href="global.html#getContacts">getContacts</a></li><li><a href="global.html#getCurrentDateAsString">getCurrentDateAsString</a></li><li><a href="global.html#getFieldValueById">getFieldValueById</a></li><li><a href="global.html#getItem">getItem</a></li><li><a href="global.html#getLocalStorageContacts">getLocalStorageContacts</a></li><li><a href="global.html#getPriorityIcon">getPriorityIcon</a></li><li><a href="global.html#getSelectedContacts">getSelectedContacts</a></li><li><a href="global.html#getSelectedPriority">getSelectedPriority</a></li><li><a href="global.html#getTaskById">getTaskById</a></li><li><a href="global.html#getUserContacts">getUserContacts</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#guestLogin">guestLogin</a></li><li><a href="global.html#handleMobileViewThisfunctionisusedtohandlethemobileviewofthecontactspage.Itaddseventlistenerstothecontactentryandbackbuttoniftheviewismobile.Itremoveseventlistenersfromthecontactentryandbackbuttoniftheviewisnotmobile.">handleMobileViewThis function is used to handle the mobile view of the contacts page.It adds event listeners to the contact entry and back button if the view is mobile.It removes event listeners from the contact entry and back button if the view is not mobile.</a></li><li><a href="global.html#handleOutsideClick">handleOutsideClick</a></li><li><a href="global.html#hideLogout">hideLogout</a></li><li><a href="global.html#hideMenuOnClickOutside">hideMenuOnClickOutside</a></li><li><a href="global.html#hideSubtaskIcons">hideSubtaskIcons</a></li><li><a href="global.html#highlight">highlight</a></li><li><a href="global.html#initBoard">initBoard</a></li><li><a href="global.html#initHead">initHead</a></li><li><a href="global.html#initUser">initUser</a></li><li><a href="global.html#initUserID">initUserID</a></li><li><a href="global.html#initializeContactDropdown">initializeContactDropdown</a></li><li><a href="global.html#initializeContactDropdownOpenCard">initializeContactDropdownOpenCard</a></li><li><a href="global.html#isContactInContainer">isContactInContainer</a></li><li><a href="global.html#loadContacts">loadContacts</a></li><li><a href="global.html#loadData">loadData</a></li><li><a href="global.html#loadLoginData">loadLoginData</a></li><li><a href="global.html#loadUsers">loadUsers</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#loginError">loginError</a></li><li><a href="global.html#loginHTML">loginHTML</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#mobileClickHandlerThisfunctionisusedtohandletheclickeventonthecontactentryinthemobileview.Ithidesthecontactscontainerandshowsthecontacttitleandfloatingcontactcontainer.Italsoremovesthecontact_selectedclassfromthecontactentry.">mobileClickHandlerThis function is used to handle the click event on the contact entry in the mobile view.It hides the contacts container and shows the contact title and floating contact container.It also removes the contact_selected class from the contact entry.</a></li><li><a href="global.html#openCard">openCard</a></li><li><a href="global.html#openPriorityOptions">openPriorityOptions</a></li><li><a href="global.html#passwordInequal">passwordInequal</a></li><li><a href="global.html#passwordRedOutline">passwordRedOutline</a></li><li><a href="global.html#preventDragOver">preventDragOver</a></li><li><a href="global.html#rememberMe">rememberMe</a></li><li><a href="global.html#removeCheckboxError">removeCheckboxError</a></li><li><a href="global.html#removeContact">removeContact</a></li><li><a href="global.html#removeEmailError">removeEmailError</a></li><li><a href="global.html#removeHighlight">removeHighlight</a></li><li><a href="global.html#removeLoginError">removeLoginError</a></li><li><a href="global.html#removePasswordError">removePasswordError</a></li><li><a href="global.html#removePlaceholderText">removePlaceholderText</a></li><li><a href="global.html#renderCard">renderCard</a></li><li><a href="global.html#renderSection">renderSection</a></li><li><a href="global.html#replaceLockIcon">replaceLockIcon</a></li><li><a href="global.html#resetFormFields">resetFormFields</a></li><li><a href="global.html#resetLoginForm">resetLoginForm</a></li><li><a href="global.html#resetSignupForm">resetSignupForm</a></li><li><a href="global.html#restoreCheckboxStatus">restoreCheckboxStatus</a></li><li><a href="global.html#rollDice">rollDice</a></li><li><a href="global.html#saveAndDisplaySelectedContacts">saveAndDisplaySelectedContacts</a></li><li><a href="global.html#saveAndDisplaySelectedContactsEdit">saveAndDisplaySelectedContactsEdit</a></li><li><a href="global.html#saveCheckboxStatus">saveCheckboxStatus</a></li><li><a href="global.html#saveContact">saveContact</a></li><li><a href="global.html#saveEditedContact">saveEditedContact</a></li><li><a href="global.html#saveEditedTask">saveEditedTask</a></li><li><a href="global.html#saveSelectedContacts">saveSelectedContacts</a></li><li><a href="global.html#saveToLocalStorage">saveToLocalStorage</a></li><li><a href="global.html#selectContact">selectContact</a></li><li><a href="global.html#selectContactEdit">selectContactEdit</a></li><li><a href="global.html#setInitials">setInitials</a></li><li><a href="global.html#setItem">setItem</a></li><li><a href="global.html#setName">setName</a></li><li><a href="global.html#setUserColor">setUserColor</a></li><li><a href="global.html#setUserToTrue">setUserToTrue</a></li><li><a href="global.html#setupDueDateInput">setupDueDateInput</a></li><li><a href="global.html#showDropdown">showDropdown</a></li><li><a href="global.html#showDropdownEdit">showDropdownEdit</a></li><li><a href="global.html#showEmailError">showEmailError</a></li><li><a href="global.html#showLogout">showLogout</a></li><li><a href="global.html#showMoreMenu">showMoreMenu</a></li><li><a href="global.html#showSubtaskIcons">showSubtaskIcons</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#signUp">signUp</a></li><li><a href="global.html#signupButton">signupButton</a></li><li><a href="global.html#startDragging">startDragging</a></li><li><a href="global.html#successMsg">successMsg</a></li><li><a href="global.html#successSignUp">successSignUp</a></li><li><a href="global.html#toggleCategoryOptions">toggleCategoryOptions</a></li><li><a href="global.html#toggleCheckIcon">toggleCheckIcon</a></li><li><a href="global.html#togglePasswordVisibility">togglePasswordVisibility</a></li><li><a href="global.html#unrememberMe">unrememberMe</a></li><li><a href="global.html#updateCheckboxState">updateCheckboxState</a></li><li><a href="global.html#updatePlaceholderText">updatePlaceholderText</a></li><li><a href="global.html#updateProgressBar">updateProgressBar</a></li><li><a href="global.html#updateSelectedCategory">updateSelectedCategory</a></li><li><a href="global.html#updateSelectedContacts">updateSelectedContacts</a></li><li><a href="global.html#updateSelectedContactsEdit">updateSelectedContactsEdit</a></li><li><a href="global.html#updateTaskColumn">updateTaskColumn</a></li><li><a href="global.html#userInitials">userInitials</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Feb 26 2024 02:06:50 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
