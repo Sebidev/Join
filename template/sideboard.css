@@ -129,6 +129,8 @@ body{
 }
 
 /* Media Query */
+
+
 @media only screen and (max-width: 926px) {
     .sideboard {
         display: flex;
@@ -137,7 +139,7 @@ body{
         top: auto;
         left: auto;
         right: auto;
-        width: 100vw;
+        width: 100%;
         height: 80px;
         padding: 16px 0px;
         flex-direction: row;
@@ -200,8 +202,14 @@ body{
     }
 }
 
-@media only screen and (max-width: 926px){
-    .sideboard{
-        width: 100%;
+@media only screen and (max-width: 400px){
+    .sidemenu_element{
+        padding: 0px;
+        transition: padding 0.5s ease-in-out;
+    }    
+
+    .selected{
+        width: 7vh;
+        height: 10vh;
     }
 }
