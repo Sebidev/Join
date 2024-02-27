@@ -1072,19 +1072,19 @@ function enablePriorityEditing() {
     urgentButton.type = 'button';
     urgentButton.className = 'button urgent';
     urgentButton.innerHTML = '<h3>Urgent</h3><img src="./img/Prio_up.svg" alt="" />';
-    urgentButton.onclick = function() { chooseCardModal('urgent'); };
+    urgentButton.onclick = function () { chooseCardModal('urgent'); };
 
     let mediumButton = document.createElement('button');
     mediumButton.type = 'button';
     mediumButton.className = 'button medium';
     mediumButton.innerHTML = '<h3>Medium</h3><img src="./img/Prio_neutral.svg" alt="" />';
-    mediumButton.onclick = function() { chooseCardModal('medium'); };
+    mediumButton.onclick = function () { chooseCardModal('medium'); };
 
     let lowButton = document.createElement('button');
     lowButton.type = 'button';
     lowButton.className = 'button low';
     lowButton.innerHTML = '<h3>Low</h3><img src="./img/Prio_down.svg" alt="" />';
-    lowButton.onclick = function() { chooseCardModal('low'); };
+    lowButton.onclick = function () { chooseCardModal('low'); };
 
     optionContainer.appendChild(urgentButton);
     optionContainer.appendChild(mediumButton);
@@ -1098,7 +1098,7 @@ function enablePriorityEditing() {
         if (button.classList.contains(currentPriority)) {
             button.classList.add('active');
             let imgElement = button.querySelector('img');
-            switch(currentPriority) {
+            switch (currentPriority) {
                 case 'low':
                     button.style.backgroundColor = 'rgb(122, 226, 41)';
                     break;
@@ -1205,7 +1205,7 @@ function chooseCardModal(priority) {
         let imgElement = button.querySelector('img');
         if (button.classList.contains(priority)) {
             button.classList.add('active');
-            switch(priority) {
+            switch (priority) {
                 case 'low':
                     button.style.backgroundColor = 'rgb(122, 226, 41)';
                     break;
@@ -1236,7 +1236,7 @@ function chooseCardModal(priority) {
 
     let selectedPriority = priorityMappings[priority] || {};
 
-    if(priorityTextElement && prioritySymbolElement) {
+    if (priorityTextElement && prioritySymbolElement) {
         priorityTextElement.textContent = (selectedPriority.text || '').toUpperCase();
         prioritySymbolElement.src = selectedPriority.symbolSrc || '';
     }
@@ -1247,6 +1247,8 @@ function chooseCardModal(priority) {
     }
 }
 
+
+///////////////////////////////////////////////////////////      Neuer Versuch    //////////////////////////////////////////////////
 /**
  * This function creates a dropdown for the contacts in the edit modal
  */
@@ -1280,15 +1282,13 @@ async function showDropdownEdit() {
 
     contacts.forEach(contact => {
         let isInContainer = isContactInContainer(contact.id);
-        let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id) || isInContainer;
-
         let isContactSelected = currentEditData.content.selectedContacts.some(selectedContact => selectedContact.id === contact.id);
+
+        let isSelected = false;
 
         if (isInContainer || isContactSelected) {
             isSelected = true;
         }
-
-        console.log(`Contact ${contact.name}: Is in Container: ${isInContainer}, Is Selected: ${isSelected}`);
 
         let contactDiv = createContactDivEdit(contact, isSelected);
         dropdownContent.appendChild(contactDiv);
@@ -1306,7 +1306,7 @@ function isContactInContainer(contactId) {
 function initializeContactDropdownEdit() {
     if (window.location.pathname.endsWith("add-task.html") || window.location.pathname.endsWith("board.html")) {
         document.addEventListener('click', function (event) {
-            let dropdown = document.getElementById('contactDropdownEdit');
+            let dropdown = document.getElementById(`contactDropdownEdit_${currentTaskId}`);
             let assignedToEdit = document.getElementById('assignedToEdit');
             let arrowDownEdit = document.getElementById('arrow_down_edit');
 
@@ -1326,9 +1326,9 @@ function createContactDivEdit(contact, isSelected) {
     let contactDiv = document.createElement("div");
     contactDiv.innerHTML = `
         <label class="contacts">
-            <div class="contacts-img-initial">
+            <div class="avatar">
                 <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
-                <div class="initials-overlay">${contact.name.split(' ').map(n => n[0]).join('')}</div>
+                <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
             </div>
             <div class="dropdown-checkbox">
                 <div style="margin-left: 5px;">${contact.name}</div>
@@ -1344,15 +1344,37 @@ function createContactDivEdit(contact, isSelected) {
 }
 
 function updateSelectedContactsEdit(contact, action) {
-    let index = selectedInitialsArray.findIndex(c => c.id === contact.id);
+    if (currentEditData.content && currentEditData.content.selectedContacts) {
+        let index = currentEditData.content.selectedContacts.findIndex(c => c.id === contact.id);
 
-    if (action === 'add' && index === -1) {
-        selectedInitialsArray.push(contact);
-    } else if (action === 'remove' && index !== -1) {
-        selectedInitialsArray.splice(index, 1);
+        if (action === 'add' && index === -1) {
+            currentEditData.content.selectedContacts.push(contact);
+        } else if (action === 'remove' && index !== -1) {
+            currentEditData.content.selectedContacts.splice(index, 1);
+            removeSelectedContactFromContainerEdit(contact);
+        }
     }
 
-    saveAndDisplaySelectedContactsEdit();
+    let indexInitialsArray = selectedInitialsArray.findIndex(c => c.id === contact.id);
+    if (action === 'add' && indexInitialsArray === -1) {
+        selectedInitialsArray.push(contact);
+    } else if (action === 'remove' && indexInitialsArray !== -1) {
+        selectedInitialsArray.splice(indexInitialsArray, 1);
+        removeSelectedContactFromContainerEdit(contact);
+    }
+
+    selectContactEdit();
+
+    saveSelectedContacts();
+}
+
+function removeSelectedContactFromContainerEdit(contact) {
+    let selectedContactsContainer = document.getElementById("selectedContactsContainerEdit");
+    let selectedContactDiv = selectedContactsContainer.querySelector(`.selected-contact[data-id="${contact.id}"]`);
+
+    if (selectedContactDiv) {
+        selectedContactDiv.remove();
+    }
 }
 
 function saveAndDisplaySelectedContactsEdit() {
@@ -1361,15 +1383,21 @@ function saveAndDisplaySelectedContactsEdit() {
 }
 
 function createSelectedContactDivEdit(contact) {
+
     let selectedContactDiv = document.createElement("div");
+    selectedContactDiv.classList.add("initial-container-open-card");
+    selectedContactDiv.dataset.id = contact.id;
+    selectedContactDiv.id = "selectedContactEdit";
+
     selectedContactDiv.innerHTML = `
-        <div class="selected-contact" data-avatarid="${contact.avatarid}" data-id="${contact.id}">
-            <div class="contacts-img-initial">
-                <img id="${contact.id}" src="img/Ellipse5-${contact.avatarid}.svg">
-                <div class="initials-overlay">${contact.name.split(' ').map(n => n[0]).join('')}</div>
+        <div data-avatarid="${contact.id}">
+            <div class="avatar">
+                <img src="${contact.imagePath}" alt="Avatar">
+                <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
             </div>
         </div>
     `;
+
     return selectedContactDiv;
 }
 
@@ -1377,14 +1405,14 @@ function selectContactEdit() {
     let selectedContactsContainer = document.getElementById("selectedContactsContainerEdit");
     selectedContactsContainer.innerHTML = "";
 
-    selectedInitialsArray.forEach(contact => {
+    currentEditData.content.selectedContacts.forEach(contact => {
         let selectedContactDiv = createSelectedContactDivEdit(contact);
         selectedContactsContainer.appendChild(selectedContactDiv);
     });
 }
 
 function updateCheckboxState() {
-contacts.forEach(contact => {
+    contacts.forEach(contact => {
         let index = selectedInitialsArray.findIndex(c => c.id === contact.id);
         let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id);
         let checkbox = document.querySelector(`.contact-checkbox[data-contact-id="${contact.id}"]`);
@@ -1393,7 +1421,7 @@ contacts.forEach(contact => {
         }
     });
 }
-
+///////////////////////////////////////////////////////////      Neuer Versuch Ende     //////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////      Backup     //////////////////////////////////////////////////
 ///**
