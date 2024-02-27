@@ -1326,9 +1326,9 @@ function createContactDivEdit(contact, isSelected) {
     let contactDiv = document.createElement("div");
     contactDiv.innerHTML = `
         <label class="contacts">
-            <div class="contacts-img-initial">
+            <div class="avatar">
                 <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
-                <div class="initials-overlay">${contact.name.split(' ').map(n => n[0]).join('')}</div>
+                <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
             </div>
             <div class="dropdown-checkbox">
                 <div style="margin-left: 5px;">${contact.name}</div>
