@@ -748,8 +748,186 @@ body {
 }
 
 /* Media Queries */
-@media only screen and (max-width: 926px) {
+@media only screen and (max-width: 1370px){
+    .contacts_container {
+        position: absolute;
+        top: 95px;
+        left: 230px;
+        width: 33%;
+        margin: 0;
+        margin-left: 0px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-bottom: 100px;
+        background-color: rgb(246, 247, 248);
+    }
 
+    .contact_title, .floating_contact_container{
+        display: none;
+    }
+
+    .add_new_conatct_btn_container{
+        display: contents;
+    }
+
+    .add_new_contact_btn, .more_button_mobile {
+        position: fixed;
+        bottom: 100px;
+        right: 16px;
+        padding: 12px;
+        height: 32px;
+        width: 32px;
+        gap: 10px;
+        border-radius: 46px;
+        border: 1px solid #2A3647;
+        background: #2A3647;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    }
+
+    .add_new_contact_btn span{
+        display: none;
+    }
+
+    .initial_letter{
+    }
+
+    .floating_contact_buttons{
+        display: none;
+    }
+
+    .more_button_mobile{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .contactentry{
+        background-color: rgb(246, 247, 248);
+    }
+
+    .contact_title, .floating_contact_container{
+        margin: 0;
+        margin-top: 48px;
+        margin-left: 260px;
+    }
+
+    .contact_title{
+        font-size: 47px;
+    }
+
+    .contact_title_text{
+        font-size: 20px;
+        text-align: left;
+    }
+
+    .verticalbar {
+        position: absolute;
+        top: 200px;
+        left: 45px;
+        transform: rotate(90deg);
+    }
+
+    .verticalbar img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .floating_contact{
+        gap: 20px
+    }
+
+    .floating_contact_name{
+        font-size: 36px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 120%;
+    }
+
+    .backArrow {
+        display: flex;
+        margin-top: -65px;
+        width: 30px;
+        height: 30px;
+    }
+    
+    .backArrow:hover {
+        transform: scale(1.05);
+    }
+
+    #contactModal{
+        top: 45%;
+        width: 95%;
+        height: 85%;
+    }
+
+    .bluebar_joinlogo{
+        display: none;
+    }
+
+    #bluebar{
+        height: 323px;
+        width: 100%;
+        gap: 12px;
+        border-top-left-radius: 30px;
+        border-top-right-radius: 30px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+
+    .bluebar_titel{
+        font-size: 47px;
+        margin-left: 24px;
+        margin-right: 0px;
+    }
+
+    .bluebar_text{
+        font-size: 20px;
+        margin-left: 24px;
+        margin-right: 0px;
+        margin-bottom: -8px;
+    }
+
+    .bluebar_line{
+        margin-left: 24px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+    }
+
+    .avatar_container{
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: -60px;
+    }
+
+    .form_container{
+        position: absolute;
+        top: 412px;
+        right: 22px;
+        gap: 10px;
+        width: 90%;
+    }
+
+    .close_button1 {
+        top: 24px;
+        right: 16px;
+        filter: brightness(0) invert(1);
+    }
+
+    .close_button2{
+        display: none;
+    }
+
+    .button_container{
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .textfield_newcontact{
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 926px) {
     .contacts_container {
         position: absolute;
         top: 95px;
@@ -921,47 +1099,5 @@ body {
 
     .textfield_newcontact{
         width: 100%;
-    }
-}
-
-@media only screen and (max-width: 1380px){
-    .contact_title{
-        margin-left: 10px;
-        transition: margin 0.5s ease-in-out;
-    }
-
-    .contact_title_text{
-        margin-left: 10px;
-        transition: margin 0.5s ease-in-out;
-    }
-
-    .floating_contact_container{
-        margin-left: 10px;
-        transition: margin 0.5s ease-in-out;
-    }
-
-    .floating_contact_avatar{
-        margin-left: 10px;
-        transition: margin 0.5s ease-in-out;
-    }
-
-    .floating_contact_name{
-        margin-left: 10px;
-        transition: margin 0.5s ease-in-out;
-    }
-
-    .floating_contact_info{
-        margin-left: 10px;
-        transition: margin 0.5s ease-in-out;
-    }
-
-    .floating_contact_email{
-        margin-left: 10px;
-        transition: margin 0.5s ease-in-out;
-    }
-
-    .floating_contact_phone{
-        margin-left: 10px;
-        transition: margin 0.5s ease-in-out;
     }
 }

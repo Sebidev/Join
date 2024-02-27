@@ -1647,7 +1647,7 @@ body {
     gap: 10px;
     max-height: 500px;
     padding-right: 35px;
-    overflow-y: auto;
+    overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none; 
   }
@@ -1772,7 +1772,7 @@ body {
     gap: 10px;
     max-height: 500px;
     padding-right: 35px;
-    overflow-y: auto;
+    overflow-x: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none; 
   }
@@ -1818,7 +1818,7 @@ body {
     gap: 10px;
     max-height: 500px;
     padding-right: 35px;
-    overflow-y: auto;
+    overflow-x: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none; 
   }
