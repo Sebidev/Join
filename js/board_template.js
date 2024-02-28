@@ -643,11 +643,7 @@ async function saveEditedTask() {
         let selectedContactsString = localStorage.getItem('selectedContacts');
         let newSelectedContacts = selectedContactsString ? JSON.parse(selectedContactsString) : [];
 
-        newSelectedContacts.forEach(newContact => {
-            if (!task.content.selectedContacts.some(contact => contact.id === newContact.id)) {
-                task.content.selectedContacts.push(newContact);
-            }
-        });
+        task.content.selectedContacts = newSelectedContacts;
 
         let subtasksData = Array.from(document.querySelectorAll(`#cardModal_${taskId} .card-modal-subtask-maincontainer`)).map((subtaskContainer) => {
             let description = subtaskContainer.querySelector('.card-modal-subtask-description').textContent;
@@ -1270,20 +1266,49 @@ function createContactDropdown(taskId) {
     });
 }
 
+/**
+ * Retrieves a task by its ID from the tasks stored in local storage.
+ *
+ * @param {string} taskId - The ID of the task to retrieve.
+ * @returns {Object} The task object if found, otherwise undefined.
+ */
 function getTaskById(taskId) {
     let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     return tasks.find(task => task.id === taskId);
 }
 
+/**
+ * Displays the dropdown for editing contacts.
+ * It first clears the dropdown, then fetches all contacts and the selected contacts from local storage.
+ * It adds the existing contacts in the task to the selected contacts if they are not already there.
+ * Then it creates a div for each contact and appends it to the dropdown.
+ * Finally, it updates the state of the checkboxes and displays the dropdown.
+ *
+ * @returns {Promise<void>} A Promise that resolves when the function has completed.
+ */
 async function showDropdownEdit() {
     let dropdownContent = document.getElementById(`contactDropdownEdit_${currentTaskId}`);
     dropdownContent.innerHTML = "";
 
     let contacts = await getContacts();
 
+    let selectedContacts = JSON.parse(localStorage.getItem('selectedContacts')) || [];
+    let task = getTaskById(currentTaskId);
+
+    task.content.selectedContacts.forEach(contact => {
+        if (!selectedContacts.some(selectedContact => selectedContact.id === contact.id)) {
+            let fullContact = contacts.find(c => c.id === contact.id);
+            if (fullContact) {
+                selectedContacts.push(fullContact);
+            }
+        }
+    });
+
+    localStorage.setItem('selectedContacts', JSON.stringify(selectedContacts));
+
     contacts.forEach(contact => {
         let isInContainer = isContactInContainer(contact.id);
-        let isContactSelected = currentEditData.content.selectedContacts.some(selectedContact => selectedContact.id === contact.id);
+        let isContactSelected = selectedContacts.some(selectedContact => selectedContact.id === contact.id);
 
         let isSelected = false;
 
@@ -1299,11 +1324,23 @@ async function showDropdownEdit() {
     dropdownContent.style.display = 'block';
 }
 
+/**
+ * Checks if a contact is in the container and is checked.
+ *
+ * @param {string} contactId - The ID of the contact to check.
+ * @returns {boolean} True if the contact is in the container and is checked, otherwise false.
+ */
 function isContactInContainer(contactId) {
     let containerContacts = document.querySelectorAll('.initial-container-open-card .contact-checkbox');
     return Array.from(containerContacts).some(checkbox => checkbox.dataset.contactId === contactId && checkbox.checked);
 }
 
+/**
+ * Initializes the contact dropdown for the edit mode.
+ * It adds a click event listener to the document that handles the display of the dropdown.
+ * If the click is outside the dropdown, the assignedToEdit element, or the arrowDownEdit element, the dropdown is hidden.
+ * If the click is on the assignedToEdit element or the arrowDownEdit element, the dropdown is shown.
+ */
 function initializeContactDropdownEdit() {
     if (window.location.pathname.endsWith("add-task.html") || window.location.pathname.endsWith("board.html")) {
         document.addEventListener('click', function (event) {
@@ -1323,6 +1360,13 @@ function initializeContactDropdownEdit() {
 }
 initializeContactDropdownEdit();
 
+/**
+ * Creates a div element for a contact in the edit mode.
+ *
+ * @param {Object} contact - The contact object.
+ * @param {boolean} isSelected - Indicates whether the contact is selected.
+ * @returns {HTMLDivElement} The created div element for the contact.
+ */
 function createContactDivEdit(contact, isSelected) {
     let contactDiv = document.createElement("div");
     contactDiv.innerHTML = `
@@ -1348,6 +1392,14 @@ function createContactDivEdit(contact, isSelected) {
     return contactDiv;
 }
 
+/**
+ * Toggles the selection of a contact in the edit mode.
+ * It updates the class and the image of the element based on the selection.
+ * It also updates the selected contacts in the local storage based on the selection.
+ *
+ * @param {HTMLElement} element - The element that was clicked.
+ * @param {string} contactId - The ID of the contact to toggle.
+ */
 function toggleContactSelectionEdit(element, contactId) {
     let isSelected = element.classList.toggle('checked');
 
@@ -1356,9 +1408,26 @@ function toggleContactSelectionEdit(element, contactId) {
         checkboxImg.src = isSelected ? '/img/checked_white.svg' : 'img/unchecked.svg';
     }
 
-    updateSelectedContactsEdit({ id: contactId }, isSelected ? 'add' : 'remove');
+    let selectedContacts = JSON.parse(localStorage.getItem('selectedContacts')) || [];
+    let index = selectedContacts.findIndex(c => c.id === contactId);
+
+    if (isSelected && index === -1) {
+        selectedContacts.push({ id: contactId });
+    } else if (!isSelected && index !== -1) {
+        selectedContacts.splice(index, 1);
+    }
+
+    localStorage.setItem('selectedContacts', JSON.stringify(selectedContacts));
 }
 
+/**
+ * Updates the selected contacts in the edit mode based on the action.
+ * It adds the contact to the selected contacts if the action is 'add' and the contact is not already selected.
+ * It removes the contact from the selected contacts if the action is 'remove' and the contact is selected.
+ *
+ * @param {Object} contact - The contact object.
+ * @param {string} action - The action to perform. It can be 'add' or 'remove'.
+ */
 function updateSelectedContactsEdit(contact, action) {
     if (currentEditData.content && currentEditData.content.selectedContacts) {
         let index = currentEditData.content.selectedContacts.findIndex(c => c.id === contact.id);
@@ -1384,6 +1453,11 @@ function updateSelectedContactsEdit(contact, action) {
     saveSelectedContacts();
 }
 
+/**
+ * Removes a selected contact from the container in the edit mode.
+ *
+ * @param {Object} contact - The contact object to remove.
+ */
 function removeSelectedContactFromContainerEdit(contact) {
     let selectedContactsContainer = document.getElementById("selectedContactsContainerEdit");
     let selectedContactDiv = selectedContactsContainer.querySelector(`.selected-contact[data-id="${contact.id}"]`);
@@ -1393,11 +1467,20 @@ function removeSelectedContactFromContainerEdit(contact) {
     }
 }
 
+/**
+ * Saves the selected contacts to the local storage and displays them in the edit mode.
+ */
 function saveAndDisplaySelectedContactsEdit() {
     saveSelectedContacts();
     selectContactEdit();
 }
 
+/**
+ * Creates a div element for a selected contact in the edit mode.
+ *
+ * @param {Object} contact - The contact object.
+ * @returns {HTMLDivElement} The created div element for the selected contact.
+ */
 function createSelectedContactDivEdit(contact) {
     let selectedContactDiv = document.createElement("div");
     selectedContactDiv.classList.add("initial-container-open-card");
@@ -1416,6 +1499,10 @@ function createSelectedContactDivEdit(contact) {
     return selectedContactDiv;
 }
 
+/**
+ * Displays the selected contacts in the edit mode.
+ * It first clears the selected contacts container, then creates a div for each selected contact and appends it to the container.
+ */
 function selectContactEdit() {
     let selectedContactsContainer = document.getElementById("selectedContactsContainerEdit");
     selectedContactsContainer.innerHTML = "";
@@ -1426,6 +1513,24 @@ function selectContactEdit() {
     });
 }
 
+/**
+ * Updates the state of the checkboxes for each contact based on the selected contacts in the local storage.
+ * It checks if each contact is in the selected contacts and updates the checkbox accordingly.
+ * If the contact is in the selected contacts, the checkbox is checked. Otherwise, it is unchecked.
+ */
+function updateCheckboxState() {
+    selectedInitialsArray = JSON.parse(localStorage.getItem('selectedContacts')) || [];
+
+    contacts.forEach(contact => {
+        let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id);
+        let checkbox = document.querySelector(`.contact-checkbox[data-contact-id="${contact.id}"]`);
+        if (checkbox) {
+            checkbox.checked = isSelected;
+        }
+    });
+}
+
+/*
 function updateCheckboxState() {
     contacts.forEach(contact => {
         let index = selectedInitialsArray.findIndex(c => c.id === contact.id);
@@ -1435,7 +1540,7 @@ function updateCheckboxState() {
             checkbox.checked = isSelected;
         }
     });
-}
+}*/
 ///////////////////////////////////////////////////////////      Neuer Versuch Ende     //////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////      Backup     //////////////////////////////////////////////////
@@ -1599,17 +1704,7 @@ function updateCheckboxState() {
 // * Updates the state of contact checkboxes based on the selected contacts stored in localStorage.
 // * It iterates over all contacts, checks if they are in the selected contacts array, and updates the checkbox state accordingly.
 // */
-//function updateCheckboxState() {
-//    selectedInitialsArray = JSON.parse(localStorage.getItem('selectedContacts')) || [];
-//
-//    contacts.forEach(contact => {
-//        let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id);
-//        let checkbox = document.querySelector(`.contact-checkbox[data-contact-id="${contact.id}"]`);
-//        if (checkbox) {
-//            checkbox.checked = isSelected;
-//        }
-//    });
-//}
+
 ///////////////////////////////////////////////////////////      Backup Ende     //////////////////////////////////////////////////
 
 
