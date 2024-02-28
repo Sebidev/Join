@@ -642,17 +642,32 @@ body {
   padding-bottom: 6px;
 }
 
+.subtask-icons-add-task {
+  display: flex;
+}
+
 .subtask-item {
+  gap: 10px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
+}
+
+.subtask-icon-edit {
+  display: flex;
+  margin-bottom: 0px;
+  margin-top: 0px;
 }
 
 .delete-button {
   display: flex;
+  margin-bottom: 0px;
+  margin-top: 0px;
 }
 
 .subtask-text {
+  width: 100%;
+  flex: 1;
   font-size: 18px;
   font-weight: 600;
 }

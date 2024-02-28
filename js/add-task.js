@@ -561,13 +561,16 @@ function addSubtask() {
 
     if (subtaskText !== '') {
         let subtaskHTML = `
-                    <div class="subtask-item">
-                        <div class="subtask-text">${subtaskText}</div>
-                        <div class="delete-button" onclick="deleteSubtaskItem(this.parentNode)">
-                            <img src="./img/iconoir_cancel.svg" alt="">
-                        </div>
-                    </div>
-                    `;
+            <div class="subtask-item">
+                <div class="subtask-text" contentEditable="false">${subtaskText}</div>
+                <p class="subtask-icon-edit" onclick="editSubtaskItem(this.parentNode)">
+                    <img src="./img/edit.svg" alt="Edit Subtask">
+                </p>
+                <p class="delete-button" onclick="deleteSubtaskItem(this.parentNode)">
+                    <img src="./img/delete.svg" alt="">
+                </p>
+            </div>
+        `;
         subtaskList.innerHTML += subtaskHTML;
         inputElement.value = '';
     }
@@ -588,6 +591,18 @@ document.getElementById('newSubtaskInput').addEventListener('keydown', function 
  */
 function deleteSubtaskItem(subtaskItem) {
     subtaskItem.remove();
+}
+
+function editSubtaskItem(subtaskItem) {
+    let subtaskTextElement = subtaskItem.querySelector('.subtask-text');
+    let isContentEditable = subtaskTextElement.getAttribute('contentEditable') === 'true';
+
+    if (!isContentEditable) {
+        subtaskTextElement.contentEditable = 'true';
+        subtaskTextElement.focus();
+    } else {
+        subtaskTextElement.contentEditable = 'false';
+    }
 }
 
 /**
