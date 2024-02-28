@@ -94,22 +94,37 @@ initializeContactDropdown();
 function createContactDiv(contact, isSelected) {
     let contactDiv = document.createElement("div");
     contactDiv.innerHTML = `
-        <label class="contacts">
-            <div class="contacts-img-initial">
-                <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
-                <div class="initials-overlay">${contact.name.split(' ').map(n => n[0]).join('')}</div>
-            </div>
-            <div class="dropdown-checkbox">
-                <div style="margin-left: 5px;">${contact.name}</div>
-                <input type="checkbox" class="contact-checkbox" ${isSelected ? 'checked' : ''}>
-            </div>
-        </label>
+    <label class="contacts ${isSelected ? 'checked' : ''}" onclick="toggleContactSelection(this, '${contact.id}')">
+    <div class="avatar">
+        <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
+        <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
+    </div>
+    <div class="contact-dropdown">
+        <div>${contact.name}</div>
+    </div>
+    <div class="custom-checkbox" data-contact-id="${contact.id}"></div>
+    <img class="checkbox-img" src="${isSelected ? 'img/checked_white.svg' : 'img/unchecked.svg'}" alt="Checkbox">
+</label>
     `;
     contactDiv.addEventListener("mousedown", (event) => {
         event.preventDefault();
         updateSelectedContacts(contact, isSelected ? 'remove' : 'add');
+        let checkboxImg = contactDiv.querySelector('.checkbox-img');
+        isSelected = !isSelected;
+        checkboxImg.src = isSelected ? 'img/checked_white.svg' : 'img/unchecked.svg';
     });
     return contactDiv;
+}
+
+function toggleContactSelection(element, contactId) {
+    let isSelected = element.classList.toggle('checked');
+
+    const checkboxImg = element.querySelector('.checkbox-img');
+    if (checkboxImg) {
+        checkboxImg.src = isSelected ? '/img/checked_white.svg' : 'img/unchecked.svg';
+    }
+
+    updateSelectedContacts({ id: contactId }, isSelected ? 'add' : 'remove');
 }
 
 /**

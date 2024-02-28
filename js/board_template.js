@@ -1310,11 +1310,11 @@ function initializeContactDropdownEdit() {
             let assignedToEdit = document.getElementById('assignedToEdit');
             let arrowDownEdit = document.getElementById('arrow_down_edit');
 
-            if (dropdown && !dropdown.contains(event.target) && !assignedToEdit.contains(event.target) && !arrowDownEdit.contains(event.target)) {
+            if (dropdown && dropdown.style.display !== 'none' && !dropdown.contains(event.target) && !assignedToEdit.contains(event.target) && !arrowDownEdit.contains(event.target)) {
                 dropdown.style.display = 'none';
             }
 
-            if (event.target === assignedToEdit || event.target === arrowDownEdit) {
+            if ((event.target === assignedToEdit || event.target === arrowDownEdit) && dropdown) {
                 showDropdownEdit();
             }
         });
@@ -1325,7 +1325,7 @@ initializeContactDropdownEdit();
 function createContactDivEdit(contact, isSelected) {
     let contactDiv = document.createElement("div");
     contactDiv.innerHTML = `
-    <label class="contacts-edit ${isSelected ? 'checked' : ''}" onclick="toggleContactSelection(this, '${contact.id}')">
+    <label class="contacts-edit ${isSelected ? 'checked' : ''}" onclick="toggleContactSelectionEdit(this, '${contact.id}')">
         <div class="avatar">
             <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
             <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
@@ -1347,7 +1347,7 @@ function createContactDivEdit(contact, isSelected) {
     return contactDiv;
 }
 
-function toggleContactSelection(element, contactId) {
+function toggleContactSelectionEdit(element, contactId) {
     let isSelected = element.classList.toggle('checked');
 
     const checkboxImg = element.querySelector('.checkbox-img');

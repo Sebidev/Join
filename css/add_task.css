@@ -193,6 +193,45 @@ body {
   z-index: 1;
 }
 
+.contact-dropdown {
+  flex: 1;
+}
+
+.checkbox-img {
+  padding-right: 10px;
+}
+
+.checkbox-img:hover {
+  filter: invert(1);
+}
+
+.checkbox-img.checked {
+  filter: white;
+}
+
+.contacts:hover {
+  background-color: rgb(211, 218, 228);
+}
+
+.contacts.checked {
+  background-color: rgba(42, 54, 71, 1);
+  color: rgba(255, 255, 255, 1);
+}
+
+.contacts.checked .checkbox {
+  filter: white;
+}
+
+.contacts.checked:hover {
+  background-color: rgba(9, 25, 49, 1);
+  color: rgba(255, 255, 255, 1);
+}
+
+.contact-dropdown {
+  flex: 1;
+}
+
+
 #selectedContactsContainer {
   width: 100%;
 }
@@ -206,10 +245,13 @@ body {
 }
 
 .contacts {
+  transition: background-color 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   position: relative;
-  display: flex;
-  align-items: center;
+  cursor: pointer;
 }
 
 .contacts-img-initial {
