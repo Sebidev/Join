@@ -87,7 +87,7 @@ function addTask(column) {
                             <div class="assigned-to">Assigned to</div>
                             <div class="input-container">
                                 <input id="assignedTo" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
-                                <img id="arrow_down" onclick="showDropdown()" class="arrow_down" src="./img/arrow_down.svg" alt="">
+                                <img id="arrow_img_contacts" onclick="toggleArrowContacts()" class="arrow_down" src="./img/arrow_down.svg" alt="">
                                 <div id="contactDropdown" class="dropdown-content"></div>
                             </div>
 
@@ -140,7 +140,7 @@ function addTask(column) {
                             <div class="category">Category</div>
                             <div class="input-container">
                                 <input id="category" class="category-dropdown" type="text" placeholder="Select task category">
-                                <img class="arrow_down" src="./img/arrow_down.svg" onclick="toggleCategoryOptions()" alt="">
+                                <img id="arrow_img_category" class="arrow_down_category" src="./img/arrow_down.svg" onclick="toggleArrowCategory()" alt="" />
                                 <div class="category-options" id="categoryOptions">
                                     <label onclick="updateSelectedCategory('Technical task')">
                                         Technical task
