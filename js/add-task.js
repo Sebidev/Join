@@ -573,6 +573,13 @@ function addSubtask() {
     }
 }
 
+document.getElementById('newSubtaskInput').addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+        addSubtask();
+        event.preventDefault();
+    }
+});
+
 /**
  * Deletes a subtask item from the subtask list.
  * The function removes the given subtask item from the DOM.

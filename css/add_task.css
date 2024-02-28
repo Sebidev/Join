@@ -184,6 +184,29 @@ body {
   height: 216px;
   width: 100%;
   top: 48px;
+  margin: 0;
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 1px solid var(--Style, #d1d1d1);
+  overflow-y: auto;
+  z-index: 1;
+  align-self: stretch;
+  color: var(--Version-2-main-color, #2a3647);
+  /* Version 2/t6 */
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%;
+  /* 24px */
+}
+/*
+.dropdown-content {
+  height: 216px;
+  width: 100%;
+  top: 48px;
   display: none;
   position: absolute;
   background-color: #fff;
@@ -192,7 +215,7 @@ body {
   overflow-y: auto;
   z-index: 1;
 }
-
+*/
 .contact-dropdown {
   flex: 1;
 }
@@ -228,6 +251,7 @@ body {
 }
 
 .contact-dropdown {
+  padding-left: 14px;
   flex: 1;
 }
 
@@ -244,6 +268,8 @@ body {
 }
 
 .contacts {
+  margin-top: 2px;
+  border-radius: 7px;
   transition: background-color 0.3s ease;
   display: flex;
   justify-content: space-between;
@@ -270,7 +296,12 @@ body {
 .contact-delete-container {
   width: 100%;
   display: flex;
+  align-items: center;
   justify-content: space-between;
+}
+
+.remove-contact {
+  display: flex;
 }
 
 .dropdown-checkbox {
@@ -527,7 +558,7 @@ body {
   border: 1px solid var(--Style, #d1d1d1);
   background: var(--white, #fff);
 
-  color: var(--Style, #d1d1d1);
+  color: var(--Style, #000000);
   font-family: Inter;
   font-size: 20px;
   font-style: normal;
@@ -538,7 +569,7 @@ body {
 .category-options {
   max-height: 100px;
   height: 100px;
-  width: 100%;
+  width: 440px;
   top: 48px;
   display: none;
   position: absolute;

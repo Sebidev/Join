@@ -1062,6 +1062,8 @@ body {
 }
 
 .contacts-edit {
+  margin-top: 2px;
+  border-radius: 7px;
   transition: background-color 0.3s ease;
   display: flex;
   justify-content: space-between;
