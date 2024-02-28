@@ -750,10 +750,7 @@ async function openCard(data, subtasksData) {
             <div class="card-modal-date">
                 <p class="due-date-card-modal">Due date: 
                     <p id="dueDateText">${data.content.date}</p>
-                </p>
-                <div class="card-modal-date-number">
-                    <p id="datePicker"></p>
-                </div>
+                </p> 
             </div>
 
             <div class="card-modal-priority">
@@ -968,14 +965,18 @@ function setupDueDateInput() {
     let dateHeadline = document.createElement('div');
     dateHeadline.textContent = 'Due Date';
     let dateInput = document.createElement('input');
-    dateInput.type = 'date';
+    dateInput.type = 'text';
     dateInput.className = 'due-date-input';
     dateInput.required = true;
 
-    // Extract the date from the date element's text content
     let dateText = dateElement.textContent;
     let dateValue = dateText.replace('Due date: ', '');
     dateInput.value = dateValue;
+
+    dateInput.style.backgroundImage = 'url("img/calendar.svg")';
+    dateInput.style.backgroundRepeat = 'no-repeat';
+    dateInput.style.backgroundPosition = 'right center';
+    dateInput.style.backgroundSize = '24px';
 
     dateContainer.appendChild(dateHeadline);
     dateContainer.appendChild(dateInput);
