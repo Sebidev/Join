@@ -1260,7 +1260,7 @@ function createContactDropdown(taskId) {
     inputContainer.innerHTML = `
         <input id="assignedToEdit" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
         <img id="arrow_down_edit" onclick="showDropdownEdit('${currentTaskId}')" class="arrow_down_edit" src="./img/arrow_down.svg" alt="">
-        <div id="contactDropdownEdit_${currentTaskId}" class="dropdown-content" data-task-id="${currentTaskId}"></div>
+        <div id="contactDropdownEdit_${currentTaskId}" class="dropdown-content-edit" data-task-id="${currentTaskId}"></div>
     `;
 
     contactDropdownEdit.appendChild(inputContainer);
@@ -1325,22 +1325,37 @@ initializeContactDropdownEdit();
 function createContactDivEdit(contact, isSelected) {
     let contactDiv = document.createElement("div");
     contactDiv.innerHTML = `
-        <label class="contacts">
-            <div class="avatar">
-                <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
-                <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
-            </div>
-            <div class="dropdown-checkbox">
-                <div style="margin-left: 5px;">${contact.name}</div>
-                <input type="checkbox" class="contact-checkbox" data-contact-id="${contact.id}" ${isSelected ? 'checked' : ''}>
-            </div>
-        </label>
+    <label class="contacts-edit ${isSelected ? 'checked' : ''}" onclick="toggleContactSelection(this, '${contact.id}')">
+        <div class="avatar">
+            <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
+            <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
+        </div>
+        <div class="contact-dropdown-edit">
+            <div>${contact.name}</div>
+        </div>
+        <div class="custom-checkbox" data-contact-id="${contact.id}"></div>
+        <img class="checkbox-img" src="${isSelected ? 'img/checked_white.svg' : 'img/unchecked.svg'}" alt="Checkbox">
+    </label>
     `;
     contactDiv.addEventListener("mousedown", (event) => {
         event.preventDefault();
         updateSelectedContactsEdit(contact, isSelected ? 'remove' : 'add');
+        let checkboxImg = contactDiv.querySelector('.checkbox-img');
+        isSelected = !isSelected;
+        checkboxImg.src = isSelected ? 'img/checked_white.svg' : 'img/unchecked.svg';
     });
     return contactDiv;
+}
+
+function toggleContactSelection(element, contactId) {
+    let isSelected = element.classList.toggle('checked');
+
+    const checkboxImg = element.querySelector('.checkbox-img');
+    if (checkboxImg) {
+        checkboxImg.src = isSelected ? '/img/checked_white.svg' : 'img/unchecked.svg';
+    }
+
+    updateSelectedContactsEdit({ id: contactId }, isSelected ? 'add' : 'remove');
 }
 
 function updateSelectedContactsEdit(contact, action) {
@@ -1383,7 +1398,6 @@ function saveAndDisplaySelectedContactsEdit() {
 }
 
 function createSelectedContactDivEdit(contact) {
-
     let selectedContactDiv = document.createElement("div");
     selectedContactDiv.classList.add("initial-container-open-card");
     selectedContactDiv.dataset.id = contact.id;

@@ -597,7 +597,7 @@ body {
   gap: 4px;
   border-radius: 10px;
   background: #2a3647;
-  border: #2A3647;
+  border: #2a3647;
   transition: 55ms ease-in-out;
 }
 
@@ -694,7 +694,7 @@ body {
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.16);
   z-index: 1000;
   /*word-break: break-word;*/
-  transition: transform 0.125s
+  transition: transform 0.125s;
 }
 
 .card-modal-userstory {
@@ -764,7 +764,7 @@ body {
   font-weight: 400;
   font-size: 20px;
   line-height: 24px;
-  width: 440px
+  width: 440px;
 }
 
 .title-container-add-task input {
@@ -929,7 +929,8 @@ body {
   align-self: stretch;
 }
 
-.due-date-card-modal, .priority-card-modal-text {
+.due-date-card-modal,
+.priority-card-modal-text {
   margin: 0;
   color: var(--Version-2-main-color, #2a3647);
   /* Version 2/t6 */
@@ -1009,7 +1010,8 @@ body {
   align-self: stretch;
 }
 
-.card-modal-assigned-to-headline, .card-modal-assigned-to-headline_edit_mobile {
+.card-modal-assigned-to-headline,
+.card-modal-assigned-to-headline_edit_mobile {
   margin: 0;
   align-self: stretch;
   color: var(--Version-2-main-color, #2a3647);
@@ -1030,6 +1032,75 @@ body {
   cursor: pointer;
   overflow: visible;
   border-radius: 50%;
+}
+
+.dropdown-content-edit {
+  height: 216px;
+  width: 440px;
+  top: 46px;
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 1px solid var(--Style, #d1d1d1);
+  overflow-y: auto;
+  z-index: 1;
+}
+
+/*
+*/
+.checkbox-img {
+  padding-right: 10px;
+}
+
+.checkbox-img:hover {
+  filter: invert(1);
+}
+
+.checkbox-img.checked {
+  filter: white;
+}
+
+.contacts-edit {
+  transition: background-color 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  cursor: pointer;
+}
+
+.contacts-edit:hover {
+  background-color: rgb(211, 218, 228);
+}
+
+.contacts-edit.checked {
+  background-color: rgba(42, 54, 71, 1);
+  color: rgba(255, 255, 255, 1);
+}
+
+.contacts-edit.checked .checkbox {
+  filter: white;
+}
+
+.contacts-edit.checked:hover {
+  background-color: rgba(9, 25, 49, 1);
+  color: rgba(255, 255, 255, 1);
+}
+
+.contact-dropdown-edit {
+  flex: 1;
+}
+
+.checkbox-img {
+  padding-right: 10px;
+}
+
+/*
+*/
+.contact-dropdown-edit {
+  flex: 1;
 }
 
 .card-modal-initial-container {
@@ -1144,7 +1215,8 @@ body {
   border: 2px solid #29abe2;
 }
 
-.card-modal-subtasks-container-headline, .card-modal-subtasks-container-headline_edit_mobile {
+.card-modal-subtasks-container-headline,
+.card-modal-subtasks-container-headline_edit_mobile {
   margin: 0;
   align-self: stretch;
   color: var(--Version-2-main-color, #2a3647);
@@ -1410,9 +1482,10 @@ body {
   background-color: #d3d3d3;
 }
 
-.avatar_initletter, .initials-overlay{
+.avatar_initletter,
+.initials-overlay {
   position: absolute;
-  color: #FFF;
+  color: #fff;
   font-family: Inter;
   font-size: 12px;
   font-style: normal;
@@ -1435,8 +1508,8 @@ body {
 
 /* Media Queries */
 @media only screen and (max-width: 690px) {
-
-  body, html {
+  body,
+  html {
     overflow-x: hidden;
   }
 
@@ -1493,7 +1566,7 @@ body {
     gap: 10px;
     flex-shrink: 0;
     border-radius: 10px;
-    background: #2A3647;
+    background: #2a3647;
     margin-right: -25%;
     border: none;
   }
@@ -1516,7 +1589,10 @@ body {
     padding-bottom: 100px;
   }
 
-  .done-section, .in-progress-section, .to-do-section, .await-section {
+  .done-section,
+  .in-progress-section,
+  .to-do-section,
+  .await-section {
     min-height: auto;
     flex: 0;
   }
@@ -1534,7 +1610,7 @@ body {
   .card-modal {
     top: 45vh;
     position: absolute;
-    width: 85%; 
+    width: 85%;
     height: auto;
     padding: 20px;
     z-index: 9999;
@@ -1544,7 +1620,8 @@ body {
     margin-top: 10px;
   }
 
-  .card-modal-userstory, .card-modal-technical {
+  .card-modal-userstory,
+  .card-modal-technical {
     width: 120px;
     height: 20px;
     padding: 2px 12px;
@@ -1561,15 +1638,20 @@ body {
     font-size: 40px;
   }
 
-  .card-modal-content, .due-date-card-modal, .card-modal-date-number, .card-modal-priority-letter, .card-modal-assigned-to-headline {
+  .card-modal-content,
+  .due-date-card-modal,
+  .card-modal-date-number,
+  .card-modal-priority-letter,
+  .card-modal-assigned-to-headline {
     font-size: 16px;
   }
 
-  .card-modal-priority-letter{
+  .card-modal-priority-letter {
     margin-left: 15px;
   }
 
-  .card-modal-date, .card-modal-priority {
+  .card-modal-date,
+  .card-modal-priority {
     height: 20px;
     gap: 12px;
   }
@@ -1583,7 +1665,8 @@ body {
     font-size: 16px;
   }
 
-  .due-date-card-modal, .priority-card-modal-text {
+  .due-date-card-modal,
+  .priority-card-modal-text {
     font-size: 16px;
   }
 
@@ -1592,7 +1675,8 @@ body {
     height: 24px;
   }
 
-  .card-modal-profile-badge, .card-modal-priority-symbol {
+  .card-modal-profile-badge,
+  .card-modal-priority-symbol {
     width: 24px;
     height: 24px;
   }
@@ -1619,11 +1703,13 @@ body {
     height: 14px;
   }
 
-  .card-modal-subtask, .card-modal-subtask-checked {
+  .card-modal-subtask,
+  .card-modal-subtask-checked {
     gap: 8px;
   }
 
-  .card-modal-subtask img, .card-modal-subtask-checked img {
+  .card-modal-subtask img,
+  .card-modal-subtask-checked img {
     width: 12px;
     height: 12px;
   }
@@ -1649,11 +1735,11 @@ body {
     padding-right: 35px;
     overflow-x: auto;
     scrollbar-width: none;
-    -ms-overflow-style: none; 
+    -ms-overflow-style: none;
   }
-  
+
   .board-column-content::-webkit-scrollbar {
-    width: 0px; 
+    width: 0px;
   }
 
   .title-container-add-task input {
@@ -1664,12 +1750,12 @@ body {
 
   .description-container {
     width: 80%;
-    font-size: 16px; 
+    font-size: 16px;
   }
 
   .description-container textarea {
     width: 83%;
-    font-size: 16px; 
+    font-size: 16px;
     padding: 10px 12px;
   }
 
@@ -1713,12 +1799,12 @@ body {
 }
 
 @media only screen and (max-width: 320px) {
-  .find-task-search{
+  .find-task-search {
     width: 80vw;
     transition: all 0.5s ease-in-out;
   }
 
-  .search-icon{
+  .search-icon {
     right: 15px;
   }
 
@@ -1726,14 +1812,14 @@ body {
     width: 77% !important;
   }
 
-  .description-container textarea{
+  .description-container textarea {
     width: 79% !important;
   }
-  
+
   .due-date-input {
     width: 90% !important;
   }
-  
+
   .prio-option-container h3 {
     font-size: 13px !important;
     text-wrap: nowrap;
@@ -1774,7 +1860,7 @@ body {
     padding-right: 35px;
     overflow-x: scroll;
     scrollbar-width: none;
-    -ms-overflow-style: none; 
+    -ms-overflow-style: none;
   }
 
   .no-tasks-here {
@@ -1782,13 +1868,16 @@ body {
     margin-left: 7px;
     overflow: hidden;
   }
-  
-  .done-section, .in-progress-section, .to-do-section, .await-section {
+
+  .done-section,
+  .in-progress-section,
+  .to-do-section,
+  .await-section {
     min-height: auto;
     flex: 0;
   }
 
-  .head-right{
+  .head-right {
     gap: 5px;
     transition: gap 0.5s ease-in-out;
   }
@@ -1820,7 +1909,7 @@ body {
     padding-right: 35px;
     overflow-x: scroll;
     scrollbar-width: none;
-    -ms-overflow-style: none; 
+    -ms-overflow-style: none;
   }
 
   .no-tasks-here {
@@ -1828,8 +1917,11 @@ body {
     margin-left: 7px;
     overflow: hidden;
   }
-  
-  .done-section, .in-progress-section, .to-do-section, .await-section {
+
+  .done-section,
+  .in-progress-section,
+  .to-do-section,
+  .await-section {
     min-height: auto;
     flex: 0;
   }
