@@ -231,7 +231,6 @@ body {
   flex: 1;
 }
 
-
 #selectedContactsContainer {
   width: 100%;
 }
@@ -314,6 +313,16 @@ body {
 }
 
 .arrow_down {
+  top: 6px;
+  right: 0px;
+  padding: 8px;
+  position: absolute;
+  cursor: pointer;
+  overflow: visible;
+  border-radius: 50%;
+}
+
+.arrow_down_category {
   top: 6px;
   right: 0px;
   padding: 8px;
@@ -752,11 +761,11 @@ body {
 
 /* Media queries */
 @media (max-width: 768px) {
-  .divider img{
+  .divider img {
     display: none;
   }
 
-  .Add-task-right{
+  .Add-task-right {
     display: contents;
   }
 
@@ -779,11 +788,13 @@ body {
     margin-left: 5px;
   }
 
-  .title-container-add-task, .description-container, .assigned-to-container {
+  .title-container-add-task,
+  .description-container,
+  .assigned-to-container {
     width: 95vw;
   }
 
-  .assigned-to-container{
+  .assigned-to-container {
     margin-top: 90px;
     margin-left: 5px;
   }
@@ -793,7 +804,9 @@ body {
     margin-top: 0px;
   }
 
-  .title-input, .description-input, .assigned-dropdown {
+  .title-input,
+  .description-input,
+  .assigned-dropdown {
     font-size: 16px;
   }
 
@@ -814,7 +827,7 @@ body {
     margin-bottom: 32px;
   }
 
-  #selectedContactsContainer .initials-overlay{
+  #selectedContactsContainer .initials-overlay {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -842,7 +855,12 @@ body {
     margin: 0 24px;
   }
 
-  .due-date, .prio, .description, .title, .assigned-to, .category {
+  .due-date,
+  .prio,
+  .description,
+  .title,
+  .assigned-to,
+  .category {
     font-size: 16px;
   }
 
@@ -880,7 +898,9 @@ body {
     height: 45px;
   }
 
-  .urgent, .medium, .low {
+  .urgent,
+  .medium,
+  .low {
     padding: 12px 8px;
   }
 
@@ -888,7 +908,8 @@ body {
     width: 95vw;
   }
 
-  .category, .category-dropdown {
+  .category,
+  .category-dropdown {
     font-size: 16px;
   }
 
@@ -900,7 +921,7 @@ body {
     font-size: 16px;
   }
 
-  .selected-contact span{
+  .selected-contact span {
     display: none;
   }
 
@@ -917,7 +938,7 @@ body {
     margin-top: 5px;
   }
 
-  .input-container-subtask input{
+  .input-container-subtask input {
     width: 84vw;
   }
 
@@ -982,18 +1003,18 @@ body {
   }
 }
 
-@media only screen and (max-width: 926px){
-  .header-add-task{
-    margin-left: 15px; 
+@media only screen and (max-width: 926px) {
+  .header-add-task {
+    margin-left: 15px;
     transition: margin 0.5s ease-in-out;
   }
 
-  .Add-task{
+  .Add-task {
     margin-left: -80px;
     transition: margin 0.5s ease-in-out;
   }
 
-  .clear-and-create-section{
+  .clear-and-create-section {
     right: 0;
     bottom: 80px;
     transition: bottom 0.5s ease-in-out;

@@ -6,6 +6,23 @@
 let containerCount = 0;
 let selectedInitialsArray = [];
 let selectedPriority;
+let isDropdownOpen = false;
+let isCategoryDropdownOpen = false;
+
+function toggleArrowContacts() {
+    let arrowImg = document.getElementById('arrow_img_contacts');
+    let dropdownContent = document.getElementById("contactDropdown");
+
+    arrowImg.classList.toggle('arrow_up');
+    arrowImg.src = arrowImg.classList.contains('arrow_up') ? 'img/arrow_up.svg' : 'img/arrow_down.svg';
+
+    if (arrowImg.classList.contains('arrow_up')) {
+        showDropdown();
+    } else {
+        dropdownContent.style.display = 'none';
+        isDropdownOpen = false;
+    }
+}
 
 /**
  * This function asynchronously displays a dropdown menu with contacts.
@@ -24,13 +41,40 @@ async function showDropdown() {
 
     contacts.forEach(contact => {
         let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id);
-
         let contactDiv = createContactDiv(contact, isSelected);
         dropdownContent.appendChild(contactDiv);
     });
 
     dropdownContent.style.display = 'block';
+    isDropdownOpen = true;
 }
+
+/**
+ * Event listener for click events on the document.
+ * If the clicked element has the class 'arrow_down', the dropdown is shown by calling `showDropdown`.
+ *
+ * @param {Event} event - The click event.
+ */
+document.addEventListener('click', function (event) {
+    let dropdown = document.getElementById('contactDropdown');
+    let arrowImg = document.getElementById('arrow_img_contacts');
+
+    if (dropdown) {
+        if (!event.target.matches('.arrow_down') && !event.target.matches('.arrow_up') && !event.target.closest('.assigned-to-container')) {
+            dropdown.style.display = 'none';
+            isDropdownOpen = false;
+
+            if (arrowImg) {
+                arrowImg.src = 'img/arrow_down.svg';
+                arrowImg.classList.remove('arrow_up');
+            }
+        }
+
+        if (event.target.id === 'assignedTo') {
+            showDropdown();
+        }
+    }
+});
 
 /**
  * This function asynchronously retrieves the contacts.
@@ -72,8 +116,16 @@ function initializeContactDropdown() {
             let dropdown = document.getElementById('contactDropdown');
 
             if (dropdown) {
-                if (!event.target.matches('.arrow_down') && !event.target.closest('.assigned-to-container')) {
+                let arrowImg = document.getElementById('arrow_img');
+
+                if (!event.target.matches('.arrow_down') && !event.target.matches('.arrow_up') && !event.target.closest('.assigned-to-container')) {
                     dropdown.style.display = 'none';
+                    isDropdownOpen = false;
+
+                    if (arrowImg) {
+                        arrowImg.src = 'img/arrow_down.svg';
+                        arrowImg.classList.remove('arrow_up');
+                    }
                 }
 
                 if (event.target.id === 'assignedTo') {
@@ -213,17 +265,7 @@ function saveSelectedContacts() {
     localStorage.setItem('selectedContacts', JSON.stringify(selectedInitialsArray));
 }
 
-/**
- * Event listener for click events on the document.
- * If the clicked element has the class 'arrow_down', the dropdown is shown by calling `showDropdown`.
- *
- * @param {Event} event - The click event.
- */
-document.addEventListener('click', function (event) {
-    if (event.target.matches('.arrow_down')) {
-        showDropdown();
-    }
-});
+
 
 /**
  * Removes a contact from the selected contacts array and updates the selected contacts container.
@@ -273,7 +315,7 @@ async function addToBoard(column) {
     clearSelectedContacts();
     resetFormFields();
 
-    window.location.href = 'board.html'; // disabled for programming purposes
+    window.location.href = 'board.html';
 }
 
 /**
@@ -356,7 +398,7 @@ async function saveToLocalStorage(taskTitle, description, date, category, subtas
         //dataId: selectedContacts[0].id
     };
 
-    console.log('Task before processing contacts:', task);
+    //console.log('Task before processing contacts:', task);
 
     task.content.selectedContacts.forEach(contact => {
         let matchingContact = contacts.find(existingContact => existingContact.id === contact.id);
@@ -365,7 +407,7 @@ async function saveToLocalStorage(taskTitle, description, date, category, subtas
         }
     });
 
-    console.log('Task after processing contacts:', task);
+    //console.log('Task after processing contacts:', task);
 
     if (isUserLoggedIn) {
         // User is logged in, save the task to the remote storage
@@ -441,13 +483,33 @@ document.addEventListener('DOMContentLoaded', function () {
  *
  * @param {Event} event - The click event.
  */
-function toggleCategoryOptions(event) {
-    event = event || window.event;
-    event.stopPropagation ? event.stopPropagation() : (event.cancelBubble = true);
+function toggleArrowCategory() {
+    let categoryDropdown = document.getElementById('categoryOptions');
+    let categoryArrowImg = document.getElementById('arrow_img_category');
 
-    let categoryOptions = document.getElementById("categoryOptions");
-    categoryOptions.style.display = (window.getComputedStyle(categoryOptions).display !== "none") ? "none" : "block";
+    categoryArrowImg.classList.toggle('arrow_up');
+    categoryArrowImg.src = categoryArrowImg.classList.contains('arrow_up') ? './img/arrow_up.svg' : './img/arrow_down.svg';
+
+    if (categoryDropdown) {
+        categoryDropdown.style.display = categoryArrowImg.classList.contains('arrow_up') ? 'block' : 'none';
+        isCategoryDropdownOpen = categoryArrowImg.classList.contains('arrow_up');
+    }
 }
+
+document.addEventListener('click', function (event) {
+    let categoryDropdown = document.getElementById('categoryOptions');
+    let categoryArrowImg = document.querySelector('.arrow_down_category');
+
+    if (categoryDropdown && !event.target.matches('.arrow_down_category') && !event.target.matches('.arrow_up') && !event.target.closest('.category-container')) {
+        categoryDropdown.style.display = 'none';
+        isCategoryDropdownOpen = false;
+
+        if (categoryArrowImg) {
+            categoryArrowImg.src = 'img/arrow_down.svg';
+            categoryArrowImg.classList.remove('arrow_up');
+        }
+    }
+});
 
 /**
  * Updates the selected category in the category dropdown.
@@ -475,6 +537,7 @@ function updateSelectedCategory(category) {
  *
  * @param {Event} event - The click event.
  */
+/*
 function handleOutsideClick(event) {
     let subImgContainer = document.getElementById('subImgContainer');
     let inputField = document.querySelector('.subtasks-input');
@@ -482,7 +545,7 @@ function handleOutsideClick(event) {
     if (subImgContainer && !subImgContainer.contains(event.target) && inputField && !inputField.contains(event.target)) {
         revertSubImg();
     }
-}
+}*/
 
 /**
  * Adds a new subtask to the subtask list.
