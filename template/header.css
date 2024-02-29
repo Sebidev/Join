@@ -129,6 +129,10 @@ body {
     height: 24px;
 }
 
+.help_icon img:hover {
+    transform: scale(1.1);
+}
+
 .avatar_icon {
     display: flex;
     align-items: center;
