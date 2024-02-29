@@ -659,6 +659,10 @@ body {
   margin-top: 0px;
 }
 
+#iconContainer {
+  display: flex;
+}
+
 .delete-button {
   display: flex;
   margin-bottom: 0px;

@@ -547,6 +547,46 @@ function handleOutsideClick(event) {
     }
 }*/
 
+document.getElementById('newSubtaskInput').addEventListener('focus', function() {
+    // Entfernt das Add-Icon
+    let addIcon = document.querySelector('.add-icon');
+    if (addIcon) {
+        addIcon.remove();
+    }
+
+    let iconContainer = document.getElementById('iconContainer');
+    if (!document.querySelector('#iconContainer img')) {
+        let imgClose = document.createElement('img');
+        imgClose.src = 'img/close.svg';
+        imgClose.onclick = function() {
+            deactivateInputField();
+        };
+
+        let imgSubmit = document.createElement('img');
+        imgSubmit.src = 'img/submit.svg';
+        imgSubmit.onclick = function() {
+            addSubtask();
+            deactivateInputField();
+        };
+
+        iconContainer.appendChild(imgClose);
+        iconContainer.appendChild(imgSubmit);
+    }
+});
+
+function deactivateInputField() {
+    document.getElementById('newSubtaskInput').value = '';
+    document.getElementById('iconContainer').innerHTML = '';
+
+    let iconContainer = document.getElementById('iconContainer');
+    let addIcon = document.createElement('img');
+    addIcon.src = '/img/Subtasks icons11.svg';
+    addIcon.classList.add('add-icon');
+    addIcon.alt = 'Add';
+    iconContainer.appendChild(addIcon);
+}
+
+
 /**
  * Adds a new subtask to the subtask list.
  * The function first retrieves the input element and the subtask list from the DOM.
