@@ -328,8 +328,7 @@ body {
 }
 
 .input-container-subtask img {
-  padding-right: 10px;
-  padding-left: 10px;
+  margin-right: 10px;
   cursor: pointer;
 }
 
@@ -343,10 +342,17 @@ body {
   border: none;
 }
 
+#arrow_img_contacts {
+  transition: filter 0.3s ease;
+}
+
+#arrow_img_contacts:hover {
+  filter: grayscale(5%) brightness(100%);
+  background-color: #f3eaea;
+}
+
 .arrow_down {
-  top: 6px;
-  right: 0px;
-  padding: 8px;
+  right: 10px;
   position: absolute;
   cursor: pointer;
   overflow: visible;
@@ -354,13 +360,20 @@ body {
 }
 
 .arrow_down_category {
-  top: 6px;
-  right: 0px;
-  padding: 8px;
+  right: 10px;
   position: absolute;
   cursor: pointer;
   overflow: visible;
   border-radius: 50%;
+}
+
+#arrow_img_category {
+  transition: filter 0.3s ease;
+}
+
+#arrow_img_category:hover {
+  filter: grayscale(5%) brightness(100%);
+  background-color: #f3eaea;
 }
 
 .divider {
@@ -663,6 +676,12 @@ body {
   display: flex;
 }
 
+#iconContainer img:hover {
+  border-radius: 50%;
+  filter: grayscale(5%) brightness(100%);
+  background-color: #f3eaea;
+}
+
 .delete-button {
   display: flex;
   margin-bottom: 0px;
@@ -677,9 +696,15 @@ body {
 }
 
 .add-icon {
-  padding: 8px;
   cursor: pointer;
   overflow: visible;
+  transition: filter 0.3s ease;
+}
+
+.add-icon:hover {
+  border-radius: 50%;
+  filter: grayscale(5%) brightness(100%);
+  background-color: #f3eaea;
 }
 
 .subtask-icon {

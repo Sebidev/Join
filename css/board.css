@@ -1034,6 +1034,33 @@ body {
   border-radius: 50%;
 }
 
+#arrow_img_contacts {
+  /*position: relative;*/
+  transition: filter 0.3s ease;
+}
+
+#arrow_img_contacts:hover {
+  filter: grayscale(100%) brightness(70%);
+}
+
+#arrow_img_contacts::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background-color: gray;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#arrow_img_contacts:hover::before {
+  opacity: 1;
+}
+
 .dropdown-content-edit {
   height: 216px;
   width: 440px;

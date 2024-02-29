@@ -96,9 +96,8 @@ function addTask(column) {
                             <div class="dropdown-content"></div>
                             <div class="arrow_down"></div>
                             </div>
-
-                            <div class="required-legend-modal">This field is required</div>
                         </div>
+                        <div class="required-legend-modal">This field is required</div>
                     </div>
 
                     <div class="divider">
