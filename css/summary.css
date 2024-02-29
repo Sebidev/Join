@@ -383,7 +383,6 @@ body {
     }
 
     .column_container{
-        width: 95%;
         margin: 0;
     }
 
@@ -521,5 +520,47 @@ body {
     
     .header{
         width: 100%;
+    }
+}
+
+/* Media queries */
+@media only screen and (max-width: 400px) {
+    .box_pencil, .box_check {
+        position: relative;
+        left: -5px;
+        width: 140px;
+        height: 50px;
+        gap: 0px;
+        padding: 37px 3px;
+    }
+
+    .box_urgency {
+        position: relative;
+        left: -4px;
+        width: 257px;
+        height: 81px;
+        padding: 25px 20px;
+        gap: 10px;
+    }
+
+    .box_small {
+        position: relative;
+        left: -8px;
+        width: 96px;
+        height: 58px;
+        padding: 25px 0px;
+        gap: 13px;
+    }
+
+    .box_small_text, .box_small_text2 {
+        font-size: 9px;
+    }
+
+    .boxs_down, .boxs_top {
+        gap: 10px;
+    }
+
+    .header_summary_text {
+        margin-left: 0;
     }
 }
