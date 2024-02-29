@@ -681,5 +681,11 @@ function clearFields() {
 
     let subtaskList = document.getElementById('subtaskList');
     subtaskList.innerHTML = '';
+    
+    let selectedContactsContainer = document.getElementById('selectedContactsContainer');
+    if (selectedContactsContainer) {
+        selectedContactsContainer.innerHTML = '';
+    }
+
     clearSelectedContacts();
 }
