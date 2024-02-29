@@ -55,6 +55,7 @@ async function showDropdown() {
  *
  * @param {Event} event - The click event.
  */
+
 document.addEventListener('click', function (event) {
     let dropdown = document.getElementById('contactDropdown');
     let arrowImg = document.getElementById('arrow_img_contacts');
@@ -110,6 +111,7 @@ function getLocalStorageContacts() {
 /**
  * This function initializes the contact dropdown by adding an event listener to the document.
  */
+/*
 function initializeContactDropdown() {
     if (window.location.pathname.endsWith("add-task.html") || window.location.pathname.endsWith("board.html")) {
         document.addEventListener('click', function (event) {
@@ -135,7 +137,7 @@ function initializeContactDropdown() {
         });
     }
 }
-initializeContactDropdown();
+initializeContactDropdown();*/
 
 /**
  * This function initializes the contact dropdown by adding an event listener to the document.
@@ -583,15 +585,20 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function deactivateInputField() {
-    document.getElementById('newSubtaskInput').value = '';
-    document.getElementById('iconContainer').innerHTML = '';
+    let newSubtaskInput = document.getElementById('newSubtaskInput');
+    if (newSubtaskInput) {
+        newSubtaskInput.value = '';
+    }
 
     let iconContainer = document.getElementById('iconContainer');
-    let addIcon = document.createElement('img');
-    addIcon.src = '/img/Subtasks icons11.svg';
-    addIcon.classList.add('add-icon');
-    addIcon.alt = 'Add';
-    iconContainer.appendChild(addIcon);
+    if (iconContainer) {
+        iconContainer.innerHTML = '';
+        let addIcon = document.createElement('img');
+        addIcon.src = '/img/Subtasks icons11.svg';
+        addIcon.classList.add('add-icon');
+        addIcon.alt = 'Add';
+        iconContainer.appendChild(addIcon);
+    }
 }
 
 
