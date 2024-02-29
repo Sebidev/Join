@@ -156,8 +156,8 @@ function addTask(column) {
                             <div class="subtasks-add-task">Subtasks</div>
                             <div class="input-container-subtask">
                                 <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask" id="subtask">
-                                <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" onclick="addSubtask()">
-                                <div class="subImgContainer">
+                                <div id="iconContainer">
+                                    <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" />
                                 </div>   
                             </div>
                             <div class="subtask-list" id="subtaskList"></div>

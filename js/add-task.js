@@ -547,31 +547,39 @@ function handleOutsideClick(event) {
     }
 }*/
 
-document.getElementById('newSubtaskInput').addEventListener('focus', function() {
-    // Entfernt das Add-Icon
-    let addIcon = document.querySelector('.add-icon');
-    if (addIcon) {
-        addIcon.remove();
-    }
+document.addEventListener('DOMContentLoaded', function () {
+    document.body.addEventListener('click', function (event) {
 
-    let iconContainer = document.getElementById('iconContainer');
-    if (!document.querySelector('#iconContainer img')) {
-        let imgClose = document.createElement('img');
-        imgClose.src = 'img/close.svg';
-        imgClose.onclick = function() {
+        if (event.target.id !== 'newSubtaskInput' && !event.target.closest('#newSubtaskInput')) {
             deactivateInputField();
-        };
+        }
 
-        let imgSubmit = document.createElement('img');
-        imgSubmit.src = 'img/submit.svg';
-        imgSubmit.onclick = function() {
-            addSubtask();
-            deactivateInputField();
-        };
+        if (event.target.id === 'newSubtaskInput') {
+            let addIcon = document.querySelector('.add-icon');
+            if (addIcon) {
+                addIcon.remove();
+            }
 
-        iconContainer.appendChild(imgClose);
-        iconContainer.appendChild(imgSubmit);
-    }
+            let iconContainer = document.getElementById('iconContainer');
+            if (!document.querySelector('#iconContainer img')) {
+                let imgClose = document.createElement('img');
+                imgClose.src = 'img/close.svg';
+                imgClose.onclick = function () {
+                    deactivateInputField();
+                };
+
+                let imgSubmit = document.createElement('img');
+                imgSubmit.src = 'img/submit.svg';
+                imgSubmit.onclick = function () {
+                    addSubtask();
+                    deactivateInputField();
+                };
+
+                iconContainer.appendChild(imgClose);
+                iconContainer.appendChild(imgSubmit);
+            }
+        }
+    });
 });
 
 function deactivateInputField() {
@@ -615,14 +623,14 @@ function addSubtask() {
         inputElement.value = '';
     }
 }
-
+/*
 document.getElementById('newSubtaskInput').addEventListener('keydown', function (event) {
     if (event.key === 'Enter') {
         addSubtask();
         event.preventDefault();
     }
 });
-
+*/
 /**
  * Deletes a subtask item from the subtask list.
  * The function removes the given subtask item from the DOM.
