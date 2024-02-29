@@ -7,10 +7,10 @@
  * show login error if the email or password is incorrect
  */
 function loginError() {
-    const inputsContainer = document.getElementById('login-inputs');
-    const emailLogin = document.getElementById('email-login');
-    const passwordLogin = document.getElementById('password-login');
-    const loginError = document.createElement('div');
+    let inputsContainer = document.getElementById('login-inputs');
+    let emailLogin = document.getElementById('email-login');
+    let passwordLogin = document.getElementById('password-login');
+    let loginError = document.createElement('div');
 
     loginError.textContent = 'Incorrect E-Mail or password';
     loginError.className = 'login-error-message';
@@ -27,7 +27,7 @@ function loginError() {
  * remove login error if existent
  */
 function removeLoginError() {
-    const loginError = document.getElementById('login-error-message');
+    let loginError = document.getElementById('login-error-message');
 
     if (loginError) {
         loginError.remove();
@@ -40,10 +40,10 @@ function removeLoginError() {
  * show error message if email input value already exists in dataset
  */
 function showEmailError() {
-    const emailSignup = document.getElementById('email-register');
-    const inputsContainer = document.getElementById('register-inputs');
+    let emailSignup = document.getElementById('email-register');
+    let inputsContainer = document.getElementById('register-inputs');
 
-    const errorEmail = document.createElement('div');
+    let errorEmail = document.createElement('div');
     errorEmail.className = 'register-email-error';
     errorEmail.id = 'register-email-error';
     errorEmail.textContent = 'This email address is already being used. Please choose another one.';
@@ -58,8 +58,8 @@ function showEmailError() {
  * remove error message for existent email adress
  */
 function removeEmailError() {
-    const errorEmail = document.getElementById('register-email-error');
-    const emailSignup = document.getElementById('email-register');
+    let errorEmail = document.getElementById('register-email-error');
+    let emailSignup = document.getElementById('email-register');
 
     if (errorEmail) {
         emailSignup.classList.remove('outline-red');
@@ -71,9 +71,9 @@ function removeEmailError() {
  * show error message when inequal passwords
  */
 function passwordInequal() {
-    const inputsContainer = document.getElementById('register-inputs');
+    let inputsContainer = document.getElementById('register-inputs');
     passwordRedOutline();
-    const errorPassword = document.createElement('div');
+    let errorPassword = document.createElement('div');
     errorPassword.className = 'register-password-error';
     errorPassword.id = 'register-password-error';
     errorPassword.textContent = 'Please make sure the passwords match';
@@ -87,8 +87,8 @@ function passwordInequal() {
  * if inequal passwords set outline color to red
  */
 function passwordRedOutline() {
-    const passwordSignup = document.getElementById('password-register');
-    const passwordConfirm = document.getElementById('password-confirm');
+    let passwordSignup = document.getElementById('password-register');
+    let passwordConfirm = document.getElementById('password-confirm');
     passwordSignup.classList.add('outline-red')
     passwordConfirm.classList.add('outline-red')
 }
@@ -97,9 +97,9 @@ function passwordRedOutline() {
  * show error message when checkbox not checked
  */
 function errorCheckboxSignup() {
-    const privacyPolicy = document.getElementById('register-policy-container');
+    let privacyPolicy = document.getElementById('register-policy-container');
 
-    const errorCheckboxText = document.createElement('div');
+    let errorCheckboxText = document.createElement('div');
     errorCheckboxText.className = 'register-checkbox-error';
     errorCheckboxText.id = 'register-checkbox-error';
     errorCheckboxText.textContent = 'Please confirm that you have read and understood the Privacy Policy';
@@ -113,9 +113,9 @@ function errorCheckboxSignup() {
  * remove error message for inequal password
  */
 function removePasswordError() {
-    const errorPassword = document.getElementById('register-password-error');
-    const passwordSignup = document.getElementById('password-register');
-    const passwordConfirm = document.getElementById('password-confirm');
+    let errorPassword = document.getElementById('register-password-error');
+    let passwordSignup = document.getElementById('password-register');
+    let passwordConfirm = document.getElementById('password-confirm');
 
     if (errorPassword) {
         errorPassword.remove();
@@ -128,7 +128,7 @@ function removePasswordError() {
  * remove error message for unchecked checkbox
  */
 function removeCheckboxError() {
-    const errorCheckbox = document.getElementById('register-checkbox-error');
+    let errorCheckbox = document.getElementById('register-checkbox-error');
 
     if (errorCheckbox) {
         errorCheckbox.remove();

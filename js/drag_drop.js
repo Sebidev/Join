@@ -75,8 +75,8 @@ function allowDrop(ev) {
 
 async function drop(ev) {
     ev.preventDefault();
-    var taskId = ev.dataTransfer.getData("text");
-    var newColumnId = ev.target.closest('.board-column-content').id;
+    let taskId = ev.dataTransfer.getData("text");
+    let newColumnId = ev.target.closest('.board-column-content').id;
 
     document.getElementById(newColumnId).appendChild(document.getElementById(taskId));
 

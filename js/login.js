@@ -12,8 +12,8 @@ function generateId() {
     return '_' + Math.random().toString(36).substr(2, 9);
 }
 
-var numbers = [0, 1, 2, 3, 4];
-var index = numbers.length;
+let numbers = [0, 1, 2, 3, 4];
+let index = numbers.length;
 
 /**
  * @description This function shuffles the elements of an array.
@@ -66,7 +66,7 @@ async function guestLogin() {
         localStorage.setItem('contacts', JSON.stringify(demoContacts));
     }
 
-    for (const user of users) {
+    for (let user of users) {
         user.isYou = false;
     }
     await setItem('users', JSON.stringify(users));
@@ -81,10 +81,10 @@ async function guestLogin() {
  * login after check if email and password exist in the user object of users array otherwise show error
  */
 async function login() {
-    const emailLogin = document.getElementById('email-login');
-    const passwordLogin = document.getElementById('password-login');
+    let emailLogin = document.getElementById('email-login');
+    let passwordLogin = document.getElementById('password-login');
 
-    const user = users.find(user => user.email === emailLogin.value && user.password === passwordLogin.value);
+    let user = users.find(user => user.email === emailLogin.value && user.password === passwordLogin.value);
     if (user) {
         await setUserToTrue(user);
         rememberMe();
@@ -100,7 +100,7 @@ async function login() {
  * @param {object} loggedInUser - stands for the logged in user
  */
 async function setUserToTrue(loggedInUser) {
-    for (const user of users) {
+    for (let user of users) {
         user.isYou = false;
     }
     loggedInUser.isYou = true;
@@ -120,10 +120,10 @@ function resetLoginForm() {
  * check all sign up fields for validity and show error messages if invalid
  */
 async function signUp() {
-    const emailSignup = document.getElementById('email-register');
-    const passwordSignup = document.getElementById('password-register');
-    const passwordConfirm = document.getElementById('password-confirm');
-    const checkedIcon = document.getElementById('checked');
+    let emailSignup = document.getElementById('email-register');
+    let passwordSignup = document.getElementById('password-register');
+    let passwordConfirm = document.getElementById('password-confirm');
+    let checkedIcon = document.getElementById('checked');
 
     if (checkEmailExists(emailSignup.value)) {
         showEmailError();
@@ -156,7 +156,7 @@ async function signUp() {
  * @returns - true/false
  */
 function checkEmailExists(email) {
-    for (const user of users) {
+    for (let user of users) {
         if (user.email === email) {
             return true;
         }
@@ -211,7 +211,7 @@ async function addUserToArray(emailSignup, passwordSignup) {
  * @param {string} action - stands for either 'disable' or 'enable'
  */
 function signupButton(action) {
-    const signupBtn = document.getElementById('signup-button');
+    let signupBtn = document.getElementById('signup-button');
 
     if (action === 'disable') {
         signupBtn.disabled = true;
@@ -240,8 +240,8 @@ function resetSignupForm() {
  * show success Message after signing up successfully
  */
 async function successSignUp() {
-    const successMessage = document.getElementById('signup-success-message');
-    const successOverlay = document.getElementById('signup-success-overlay');
+    let successMessage = document.getElementById('signup-success-message');
+    let successOverlay = document.getElementById('signup-success-overlay');
     successOverlay.classList.add('visible');
     successMessage.classList.add('success-message-visible');
     await new Promise(resolve => setTimeout(() => {
@@ -256,11 +256,11 @@ async function successSignUp() {
  * @returns - string with either first and last name, first name or null
  */
 function setName(name) {
-    const nameSignup = document.getElementById('name-register');
-    const nameTrim = nameSignup.value.trim();
+    let nameSignup = document.getElementById('name-register');
+    let nameTrim = nameSignup.value.trim();
 
     if (nameTrim.includes(' ')) {
-        const nameArray = nameTrim.split(' ');
+        let nameArray = nameTrim.split(' ');
         if (name === 'first') {
             return nameArray[0].charAt(0).toUpperCase() + nameArray[0].slice(1);
         } else if (name === 'last') {
@@ -280,15 +280,15 @@ function setName(name) {
  * @returns - string with initials of first and last name or first 2 characters
  */
 function setInitials() {
-    const nameSignup = document.getElementById('name-register');
-    const nameTrim = nameSignup.value.trim();
+    let nameSignup = document.getElementById('name-register');
+    let nameTrim = nameSignup.value.trim();
 
     if (nameTrim.includes(' ')) {
-        const nameArray = nameTrim.split(' ');
-        const initials = nameArray[0].charAt(0) + nameArray[1].charAt(0);
+        let nameArray = nameTrim.split(' ');
+        let initials = nameArray[0].charAt(0) + nameArray[1].charAt(0);
         return initials.toUpperCase();
     } else {
-        const initialsFirstName = nameTrim.charAt(0) + nameTrim.charAt(1);
+        let initialsFirstName = nameTrim.charAt(0) + nameTrim.charAt(1);
         return initialsFirstName.toUpperCase();
     }
 }
@@ -297,10 +297,10 @@ function setInitials() {
  * if user checked remember me his log in data will be inserted onload
  */
 function loadLoginData() {
-    const email = document.getElementById('email-login');
-    const password = document.getElementById('password-login');
-    const emailSaved = localStorage.getItem('email');
-    const passwordSaved = localStorage.getItem('password');
+    let email = document.getElementById('email-login');
+    let password = document.getElementById('password-login');
+    let emailSaved = localStorage.getItem('email');
+    let passwordSaved = localStorage.getItem('password');
 
     if (emailSaved && passwordSaved) {
         email.value = emailSaved;
@@ -313,8 +313,8 @@ function loadLoginData() {
  * @param {string} id - adds the the varying id
  */
 function checkPassword(id) {
-    const visibilityIcon = document.getElementById(`visibility-icon-${id}`);
-    const passwordField = document.getElementById(`password-${id}`);
+    let visibilityIcon = document.getElementById(`visibility-icon-${id}`);
+    let passwordField = document.getElementById(`password-${id}`);
 
     if (!passwordField.value) {
         if (visibilityIcon) {
@@ -333,8 +333,8 @@ function checkPassword(id) {
  * @param {string} id - adds the the varying id
  */
 function togglePasswordVisibility(id) {
-    const passwordField = document.getElementById(`password-${id}`);
-    const visibilityIcon = document.getElementById(`visibility-icon-${id}`);
+    let passwordField = document.getElementById(`password-${id}`);
+    let visibilityIcon = document.getElementById(`visibility-icon-${id}`);
 
     if (passwordField.type === 'password') {
         passwordField.type = 'text';
@@ -349,8 +349,8 @@ function togglePasswordVisibility(id) {
  * toggle between checked and unchecked checkbox icon
  */
 function toggleCheckIcon() {
-    const uncheckedIcon = document.getElementById('unchecked');
-    const checkedIcon = document.getElementById('checked');
+    let uncheckedIcon = document.getElementById('unchecked');
+    let checkedIcon = document.getElementById('checked');
 
     if (uncheckedIcon) {
         uncheckedIcon.src = 'img/checked.svg';
@@ -366,7 +366,7 @@ function toggleCheckIcon() {
  * @param {string} id - adds the the varying id
  */
 function replaceLockIcon(id) {
-    const lockIcon = document.getElementById(`lock-icon-${id}`);
+    let lockIcon = document.getElementById(`lock-icon-${id}`);
 
     if (lockIcon) {
         lockIcon.src = 'img/visibility_off.svg';
@@ -384,8 +384,8 @@ function replaceLockIcon(id) {
  * @param {string} site - either 'register' or 'login'
  */
 function renderSection(site) {
-    const container = document.getElementById('container');
-    const loginSignup = document.getElementById('login-signup');
+    let container = document.getElementById('container');
+    let loginSignup = document.getElementById('login-signup');
 
     if (site === 'register') {
         loginSignup.classList.add('d-none');

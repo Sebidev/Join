@@ -6,8 +6,8 @@
 
 let isMobile = window.matchMedia("only screen and (max-width: 1370px)").matches;
 
-const contactEntry = document.getElementById('contactentry');
-const backButton = document.querySelector('.backArrow');
+let contactEntry = document.getElementById('contactentry');
+let backButton = document.querySelector('.backArrow');
 
 /**
  * @function handleMobileView
@@ -15,7 +15,7 @@ const backButton = document.querySelector('.backArrow');
  * It adds event listeners to the contact entry and back button if the view is mobile.
  * It removes event listeners from the contact entry and back button if the view is not mobile.
  */
-const handleMobileView = () => {
+let handleMobileView = () => {
     if (isMobile) {
         contactEntry.addEventListener('click', mobileClickHandler);
         backButton.addEventListener('click', backButtonHandler);
@@ -31,12 +31,12 @@ const handleMobileView = () => {
  * It hides the contacts container and shows the contact title and floating contact container.
  * It also removes the contact_selected class from the contact entry.
  */
-const mobileClickHandler = () => {
-    const contactsContainer = document.querySelector('.contacts_container');
+let mobileClickHandler = () => {
+    let contactsContainer = document.querySelector('.contacts_container');
     contactsContainer.style.display = 'none';
 
-    const contactTitle = document.querySelector('.contact_title');
-    const floatingContactContainer = document.querySelector('.floating_contact_container');
+    let contactTitle = document.querySelector('.contact_title');
+    let floatingContactContainer = document.querySelector('.floating_contact_container');
     contactTitle.style.display = 'block';
     floatingContactContainer.style.display = 'block';
 }
@@ -47,18 +47,18 @@ const mobileClickHandler = () => {
  * It hides the contact title and floating contact container and shows the contacts container.
  * It also removes the contact_selected class from the contact entry.
  */
-const backButtonHandler = () => {
-    const contactTitle = document.querySelector('.contact_title');
-    const floatingContactContainer = document.querySelector('.floating_contact_container');
+let backButtonHandler = () => {
+    let contactTitle = document.querySelector('.contact_title');
+    let floatingContactContainer = document.querySelector('.floating_contact_container');
     contactTitle.style.display = 'none';
     floatingContactContainer.style.display = 'none';
 
-    const contactentries = document.querySelectorAll('.contactentry');
+    let contactentries = document.querySelectorAll('.contactentry');
     contactentries.forEach((contactentry) => {
         contactentry.classList.remove('contact_selected');
     });
 
-    const contactsContainer = document.querySelector('.contacts_container');
+    let contactsContainer = document.querySelector('.contacts_container');
     contactsContainer.style.display = 'block';
 }
 

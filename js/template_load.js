@@ -22,11 +22,11 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(data => {
             document.querySelector('#sideboard').innerHTML = data;
 
-            var menuItems = document.querySelectorAll('.sidemenu_element');
-            var currentUrl = new URL(window.location.href.trim().toLowerCase());
+            let menuItems = document.querySelectorAll('.sidemenu_element');
+            let currentUrl = new URL(window.location.href.trim().toLowerCase());
 
             menuItems.forEach(function(menuItem) {
-                var itemUrl = new URL(menuItem.getAttribute('href').trim().toLowerCase(), window.location.origin);
+                let itemUrl = new URL(menuItem.getAttribute('href').trim().toLowerCase(), window.location.origin);
 
                 if (currentUrl.href === itemUrl.href) {
                     menuItem.classList.add('selected');

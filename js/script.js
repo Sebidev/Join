@@ -3,8 +3,8 @@
  * delete users log in data from local storage
  */
 function unrememberMe() {
-  const emailSaved = localStorage.getItem('email');
-  const passwordSaved = localStorage.getItem('password');
+  let emailSaved = localStorage.getItem('email');
+  let passwordSaved = localStorage.getItem('password');
 
   if (emailSaved && passwordSaved) {
       localStorage.removeItem('email');
@@ -16,9 +16,9 @@ function unrememberMe() {
 * log in data will be remembered for the next session if opt in
 */
 function rememberMe() {
-  const checkedIcon = document.getElementById('checked');
-  const email = document.getElementById('email-login');
-  const password = document.getElementById('password-login');
+  let checkedIcon = document.getElementById('checked');
+  let email = document.getElementById('email-login');
+  let password = document.getElementById('password-login');
 
   if (checkedIcon) {
       if (email.value && password.value) {
@@ -33,7 +33,7 @@ function rememberMe() {
  * @returns - string of color hex code
  */
 function setUserColor() {
-  const letters = '0123456789ABCDEF';
+  let letters = '0123456789ABCDEF';
   let color = '#';
   for (let i = 0; i < 6; i++) {
       color += letters[Math.floor(Math.random() * 16)];
@@ -52,10 +52,10 @@ function setUserColor() {
  * @returns {string} current date as 'YYYY-MM-DD'.
  */
 function getCurrentDateAsString() {
-    const dateToday = new Date();
-    const month = (dateToday.getMonth() + 1).toString().padStart(2, '0');
-    const day = dateToday.getDate().toString().padStart(2, '0');
-    const year = dateToday.getFullYear();
+    let dateToday = new Date();
+    let month = (dateToday.getMonth() + 1).toString().padStart(2, '0');
+    let day = dateToday.getDate().toString().padStart(2, '0');
+    let year = dateToday.getFullYear();
   
     return `${year}-${month}-${day}`;
   }

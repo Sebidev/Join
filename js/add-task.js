@@ -173,7 +173,7 @@ function createContactDiv(contact, isSelected) {
 function toggleContactSelection(element, contactId) {
     let isSelected = element.classList.toggle('checked');
 
-    const checkboxImg = element.querySelector('.checkbox-img');
+    let checkboxImg = element.querySelector('.checkbox-img');
     if (checkboxImg) {
         checkboxImg.src = isSelected ? '/img/checked_white.svg' : 'img/unchecked.svg';
     }
@@ -681,7 +681,7 @@ function clearFields() {
 
     let subtaskList = document.getElementById('subtaskList');
     subtaskList.innerHTML = '';
-    
+
     let selectedContactsContainer = document.getElementById('selectedContactsContainer');
     if (selectedContactsContainer) {
         selectedContactsContainer.innerHTML = '';

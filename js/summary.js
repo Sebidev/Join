@@ -97,7 +97,7 @@ function findEarliestDeadline(tasks) {
  * @returns {string} The formatted date string, or 'No tasks' if no date is provided.
  */
 function formatDate(date) {
-  const options = { year: "numeric", month: "long", day: "numeric" };
+  let options = { year: "numeric", month: "long", day: "numeric" };
   return date ? date.toLocaleDateString("en-US", options) : 'No tasks';
 }
 
@@ -158,7 +158,7 @@ function renderContent() {
  * @param {string} dateString - date string to be formatted
  */
 function formatDate(dateString) {
-  const options = { year: "numeric", month: "long", day: "numeric" };
+  let options = { year: "numeric", month: "long", day: "numeric" };
   return new Date(dateString).toLocaleDateString("en-US", options);
 }
 
@@ -187,8 +187,8 @@ function greetingTimed() {
 document.addEventListener('DOMContentLoaded', function () {
   // Überprüfen Sie, ob die Fensterbreite weniger als 600px beträgt
   if (window.innerWidth <= 600) {
-    var rightTextbox = document.querySelector('.right_textbox');
-    var summary = document.querySelector('.summary');
+    let rightTextbox = document.querySelector('.right_textbox');
+    let summary = document.querySelector('.summary');
 
     // Stellen Sie sicher, dass rightTextbox zuerst sichtbar ist und summary versteckt ist
     if (rightTextbox) rightTextbox.classList.add('visible');

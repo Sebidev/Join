@@ -8,9 +8,9 @@ import { editContactTemplate, addContactTemplate } from './contacts_template.js'
 let editcontact_innerHTML = editContactTemplate;
 let addcontact_innerHTML = addContactTemplate;
 
-var overlay;
-var contactModal;
-var showMoreMenuButton;
+let overlay;
+let contactModal;
+let showMoreMenuButton;
 
 /**
  * This function is called when the user clicks on the "Add Contact" button. It creates a modal window with a form to add a new contact.
@@ -43,8 +43,8 @@ window.closeContactModal = closeContactModal;
  * This function is called when the user clicks on the "Close" button in the modal window. It removes the modal window from the DOM.
  */
 function closeContactModal() {
-    var overlay = document.getElementById('overlay');
-    var contactModal = document.getElementById('contactModal');
+    let overlay = document.getElementById('overlay');
+    let contactModal = document.getElementById('contactModal');
 
     if (overlay && contactModal) {
         contactModal.classList.remove('show');
@@ -63,8 +63,8 @@ function generateId() {
     return '_' + Math.random().toString(36).substr(2, 9);
 }
 
-var numbers = [0, 1, 2, 3, 4];
-var index = numbers.length;
+let numbers = [0, 1, 2, 3, 4];
+let index = numbers.length;
 
 /**
  * This function shuffles the elements of an array.
@@ -98,11 +98,11 @@ async function saveContact() {
     let form = document.getElementById('addcontactForm');
 
     if (form.checkValidity()) {
-        var name = document.querySelector('#addcontactForm input[name="name"]').value;
-        var email = document.querySelector('#addcontactForm input[name="email"]').value;
-        var phone = document.querySelector('#addcontactForm input[name="phone"]').value;
+        let name = document.querySelector('#addcontactForm input[name="name"]').value;
+        let email = document.querySelector('#addcontactForm input[name="email"]').value;
+        let phone = document.querySelector('#addcontactForm input[name="phone"]').value;
 
-        var contact = {
+        let contact = {
             id: generateId(),
             avatarid: rollDice(),
             name: name,
@@ -145,8 +145,8 @@ async function saveContact() {
  * This function displays a success message when a new contact has been added.
  */
 async function successMsg() {
-    const successMessage = document.getElementById('newcontact-message');
-    const successOverlay = document.getElementById('newcontact-overlay');
+    let successMessage = document.getElementById('newcontact-message');
+    let successOverlay = document.getElementById('newcontact-overlay');
     successOverlay.classList.add('visible');
     successMessage.classList.add('success-message-visible');
 
@@ -180,7 +180,7 @@ async function loadContacts() {
 
     function createContactHTML(contact) {
         let initialLetterHTML = '';
-        const currentInitial = contact.name.charAt(0).toUpperCase();
+        let currentInitial = contact.name.charAt(0).toUpperCase();
         if (currentInitial !== lastInitial) {
             initialLetterHTML = `<div class="initial_letter">${currentInitial}</div>
             <div class="line"><svg xmlns="http://www.w3.org/2000/svg" width="354" height="2" viewBox="0 0 354 2" fill="none"><path d="M1 1H353" stroke="#D1D1D1" stroke-linecap="round"/></svg></div>`;
@@ -415,10 +415,10 @@ window.showMoreMenu = showMoreMenu;
  * @param {*} event 
  */
 function showMoreMenu(event) {
-    var elements = document.querySelectorAll(".contact-editmenu_entriy_mobile, .contact-editmenu_mobile");
+    let elements = document.querySelectorAll(".contact-editmenu_entriy_mobile, .contact-editmenu_mobile");
 
     elements.forEach(function(element) {
-        var currentDisplay = window.getComputedStyle(element).display;
+        let currentDisplay = window.getComputedStyle(element).display;
         if (currentDisplay === "none") {
             element.style.display = "flex";
         } else {
@@ -437,14 +437,14 @@ function showMoreMenu(event) {
  * @param {*} event 
  */
 function hideMenuOnClickOutside(event) {
-    var elements = document.querySelectorAll(".contact-editmenu_entriy_mobile, .contact-editmenu_mobile");
+    let elements = document.querySelectorAll(".contact-editmenu_entriy_mobile, .contact-editmenu_mobile");
 
     if (event.target === showMoreMenuButton) {
         return;
     }
 
-    for (var i = 0; i < elements.length; i++) {
-        var element = elements[i];
+    for (let i = 0; i < elements.length; i++) {
+        let element = elements[i];
 
         if (element.contains(event.target)) {
             return;
@@ -485,7 +485,7 @@ async function floatingContactRender(contactid){
             }
         }
 
-        var floating_contactHTML = `
+        let floating_contactHTML = `
         <div class="floating_contact">
             <div class="floating_contact_avatar">
                 <img src="img/Ellipse5-${contact.avatarid}.svg"></img>
@@ -535,13 +535,13 @@ async function floatingContactRender(contactid){
         </div>
         `;
 
-        var floating_contactElement = document.getElementById("floating_contact");
+        let floating_contactElement = document.getElementById("floating_contact");
 
         while (floating_contactElement.firstChild) {
             floating_contactElement.removeChild(floating_contactElement.firstChild);
         }
 
-        var floating_contactDiv = document.createElement("div");
+        let floating_contactDiv = document.createElement("div");
         floating_contactDiv.innerHTML = floating_contactHTML;
         floating_contactElement.appendChild(floating_contactDiv);
     } else {

@@ -1402,7 +1402,7 @@ function createContactDivEdit(contact, isSelected) {
 function toggleContactSelectionEdit(element, contactId) {
     let isSelected = element.classList.toggle('checked');
 
-    const checkboxImg = element.querySelector('.checkbox-img');
+    let checkboxImg = element.querySelector('.checkbox-img');
     if (checkboxImg) {
         checkboxImg.src = isSelected ? '/img/checked_white.svg' : 'img/unchecked.svg';
     }

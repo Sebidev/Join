@@ -4,7 +4,7 @@
  * 
  */
 
-export const editContactTemplate = `
+export let editContactTemplate = `
 <div id="bluebar">
     <img class="bluebar_joinlogo" src="img/join_logo.svg"></img>
     <div class="bluebar_titel">Edit contact</div>
@@ -14,7 +14,7 @@ export const editContactTemplate = `
     </div>
 </div>`;
 
-export const addContactTemplate = `
+export let addContactTemplate = `
 <div id="bluebar">
 <img class="bluebar_joinlogo" src="img/join_logo.svg"></img>
 <div class="bluebar_titel">Add contact</div>
