@@ -1085,6 +1085,11 @@ body {
   .required-legend::before {
     font-size: 14px;
   }
+
+  .arrow_down{
+    top: unset !important;
+    right: 5px !important;
+  }
 }
 
 @media only screen and (max-width: 926px) {
@@ -1102,5 +1107,13 @@ body {
     right: 0;
     bottom: 80px;
     transition: bottom 0.5s ease-in-out;
+  }
+}
+
+@media only screen and (max-width: 400px){
+  .create-task-button{
+    margin: 0;
+    padding: 0px;
+    width: 154.2px;
   }
 }

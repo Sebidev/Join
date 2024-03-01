@@ -16,12 +16,26 @@ let backButton = document.querySelector('.backArrow');
  * It removes event listeners from the contact entry and back button if the view is not mobile.
  */
 let handleMobileView = () => {
+    let contactsContainer = document.querySelector('.contacts_container');
+    let contactTitle = document.querySelector('.contact_title');
+    let floatingContactContainer = document.querySelector('.floating_contact_container');
+
     if (isMobile) {
         contactEntry.addEventListener('click', mobileClickHandler);
         backButton.addEventListener('click', backButtonHandler);
     } else {
         contactEntry.removeEventListener('click', mobileClickHandler);
         backButton.removeEventListener('click', backButtonHandler);
+
+        // Reset the state of the elements
+        contactsContainer.style.display = 'flex';
+        contactTitle.style.display = 'none';
+        floatingContactContainer.style.display = 'none';
+
+        let contactentries = document.querySelectorAll('.contactentry');
+        contactentries.forEach((contactentry) => {
+            contactentry.classList.remove('contact_selected');
+        });
     }
 }
 

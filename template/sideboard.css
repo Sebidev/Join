@@ -212,4 +212,9 @@ body{
         width: 7vh;
         height: 10vh;
     }
+
+    .menu_links{
+        font-size: 12px;
+        transform: font-size 0.5s ease-in-out;
+    }
 }

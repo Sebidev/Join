@@ -831,8 +831,8 @@ body {
 
     .verticalbar {
         position: absolute;
-        top: 200px;
-        left: 45px;
+        top: 60px;
+        left: 32px;
         transform: rotate(90deg);
     }
 
