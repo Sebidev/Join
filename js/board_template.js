@@ -778,7 +778,7 @@ async function openCard(data, subtasksData) {
 
             <div class="card-modal-subtasks-container">
                 <p class="card-modal-subtasks-container-headline">Subtasks:</p>
-                <div class="card-modal-subtasks">
+                <div class="card-modal-subtasks" id="subtaskList">
                     ${(data.content.subtasksData || []).map((subtask, index) => `
                         <div class="card-modal-subtask-maincontainer">
                             <div class="card-modal-description-checkbox">
@@ -1755,9 +1755,9 @@ function enableSubtasksEditing() {
     inputContainer.className = 'input-container-subtask';
     inputContainer.innerHTML = `
         <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask" id="subtask">
-        <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" onclick="addSubtaskOpenCard()">
-        <div class="subImgContainer">
-        </div>
+        <div id="iconContainer">
+                                    <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" />
+                                </div>
     `;
 
     subtasksContainer.appendChild(inputContainer);
