@@ -59,6 +59,7 @@ function addSearch(searchInput) {
  * @param {string} column current column id (''todo-column, progress-column, etc.)
  */
 function addTask(column) {
+    selectedInitialsArray = [];
     if (window.innerWidth <= 926) {
         window.location.href = "add-task.html";
     } else {
