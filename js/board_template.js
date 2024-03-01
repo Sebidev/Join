@@ -108,7 +108,7 @@ function addTask(column) {
                     <div class="Add-task-right-modal">
                         <div class="due-date-container">
                             <div class="due-date">Due date</div>
-                            <input class="due-date-input" id="date" type="date" placeholder="dd/mm/yyyy">
+                            <input id="date" class="due-date-input" type="text" placeholder="dd/mm/yyyy" required />
                         </div>
 
                         <div class="prio-container">
@@ -195,15 +195,16 @@ function addTask(column) {
         document.body.insertAdjacentHTML('beforeend', modalHTML);
 
         choose('medium');
-
+        
         let overlay = document.getElementById('overlay');
         overlay.style.display = 'block';
         let modal = document.getElementById('taskModal');
         modal.style.transform = "translate(0%, -50%) translateX(100%)";
-
+        
         setTimeout(() => {
             modal.style.transform = "translate(-50%, -50%)";
         }, 100);
+        setupDueDateInputAddTaskModal();
     }
 }
 
@@ -963,6 +964,38 @@ function setupDueDateInput() {
     let dateInput = document.createElement('input');
     dateInput.type = 'text';
     dateInput.className = 'due-date-input';
+    dateInput.required = true;
+
+    let dateText = dateElement.textContent;
+    let dateValue = dateText.replace('Due date: ', '');
+    dateInput.value = dateValue;
+
+    dateInput.style.backgroundImage = 'url("img/calendar.svg")';
+    dateInput.style.backgroundRepeat = 'no-repeat';
+    dateInput.style.backgroundPosition = 'right center';
+    dateInput.style.backgroundSize = '24px';
+
+    dateContainer.appendChild(dateHeadline);
+    dateContainer.appendChild(dateInput);
+    dateElement.replaceWith(dateContainer);
+
+    $(dateInput).datepicker({
+        dateFormat: 'yy-mm-dd',
+        showButtonPanel: true,
+    });
+}
+
+function setupDueDateInputAddTaskModal() {
+    let dateElement = document.getElementById('date');
+
+    let dateContainer = document.createElement('div');
+    dateContainer.className = 'due-date-container';
+    let dateHeadline = document.createElement('div');
+    let dateInput = document.createElement('input');
+    dateInput.type = 'text';
+    dateInput.id = 'date';
+    dateInput.className = 'due-date-input';
+    dateInput.placeholder = 'dd/mm/yyyy';
     dateInput.required = true;
 
     let dateText = dateElement.textContent;

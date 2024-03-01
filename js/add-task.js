@@ -300,24 +300,22 @@ async function addToBoard(column) {
     let taskTitle = getFieldValueById('taskTitleInput');
     let category = getFieldValueById('category');
 
-    
+
     if (!taskTitle || !category) {
         /*alert('Please fill out the title and the category');*/
         return;
     }
-    
+
     let description = getFieldValueById('descriptionInput');
     let date = getFieldValueById('date');
     let subtasksList = document.getElementById('subtaskList').children;
     let selectedContacts = getSelectedContacts();
-    console.log('Selected Contacts:', selectedContacts);
     let selectedPriority = getSelectedPriority();
 
     saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column);
 
     clearSelectedContacts();
     resetFormFields();
-
     window.location.href = 'board.html';
 }
 
@@ -476,7 +474,7 @@ function getSelectedPriority() {
  * When the DOM is fully loaded, it sets the default task priority to 'medium' by calling `choose('medium')`.
  */
 document.addEventListener('DOMContentLoaded', function () {
-   choose('medium');
+    choose('medium');
 });
 
 /**
@@ -690,3 +688,42 @@ function clearFields() {
 
     clearSelectedContacts();
 }
+
+function setupDueDateInputAddTask() {
+    if (window.location.pathname.includes("add-task.html")) {
+        let dateElement = document.getElementById('date');
+        if (dateElement) {
+
+            let dateElement = document.getElementById('date');
+
+            let dateContainer = document.createElement('div');
+            dateContainer.className = 'due-date-container-2';
+            let dateHeadline = document.createElement('div');
+            let dateInput = document.createElement('input');
+            dateInput.type = 'text';
+            dateInput.id = 'date';
+            dateInput.className = 'due-date-input';
+            dateInput.placeholder = 'dd/mm/yyyy';
+            dateInput.required = true;
+
+            let dateValue = dateElement.value;
+            dateInput.value = dateValue;
+
+            dateInput.style.backgroundImage = 'url("img/calendar.svg")';
+            dateInput.style.backgroundRepeat = 'no-repeat';
+            dateInput.style.backgroundPosition = 'right center';
+            dateInput.style.backgroundSize = '24px';
+
+            dateContainer.appendChild(dateHeadline);
+            dateContainer.appendChild(dateInput);
+            dateElement.replaceWith(dateContainer);
+
+            $(dateInput).datepicker({
+                dateFormat: 'yy-mm-dd',
+                showButtonPanel: true,
+            });
+        }
+
+    }
+}
+    setupDueDateInputAddTask();
