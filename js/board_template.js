@@ -1060,6 +1060,7 @@ function edit() {
 
         if (currentEditData) {
             //console.log('Task Data in Edit:', JSON.stringify(currentEditData));
+            addContactsToSelectedContacts(currentEditData);
         } else {
             console.error('No data available for editing.');
         }
@@ -1311,6 +1312,33 @@ function getTaskById(taskId) {
 }
 
 /**
+ * This function adds contacts to the selected contacts list stored in the local storage.
+ * It first fetches all contacts, then gets the selected contacts from local storage.
+ * It then iterates over the contacts in the task's content, and if a contact is not already in the selected contacts,
+ * it finds the full contact information from the fetched contacts and adds it to the selected contacts.
+ * Finally, it updates the selected contacts in the local storage.
+ * @param {Object} task - The task object.
+ * @param {Object} task.content - The content of the task.
+ * @param {Array} task.content.selectedContacts - The array of selected contacts in the task's content.
+ * @returns {Promise<void>} A Promise that resolves when the function has completed.
+ */
+async function addContactsToSelectedContacts(task) {
+    let contacts = await getContacts();
+    let selectedContacts = JSON.parse(localStorage.getItem('selectedContacts')) || [];
+
+    task.content.selectedContacts.forEach(contact => {
+        if (!selectedContacts.some(selectedContact => selectedContact.id === contact.id)) {
+            let fullContact = contacts.find(c => c.id === contact.id);
+            if (fullContact) {
+                selectedContacts.push(fullContact);
+            }
+        }
+    });
+
+    localStorage.setItem('selectedContacts', JSON.stringify(selectedContacts));
+}
+
+/**
  * Displays the dropdown for editing contacts.
  * It first clears the dropdown, then fetches all contacts and the selected contacts from local storage.
  * It adds the existing contacts in the task to the selected contacts if they are not already there.
@@ -1326,18 +1354,6 @@ async function showDropdownEdit() {
     let contacts = await getContacts();
 
     let selectedContacts = JSON.parse(localStorage.getItem('selectedContacts')) || [];
-    let task = getTaskById(currentTaskId);
-
-    task.content.selectedContacts.forEach(contact => {
-        if (!selectedContacts.some(selectedContact => selectedContact.id === contact.id)) {
-            let fullContact = contacts.find(c => c.id === contact.id);
-            if (fullContact) {
-                selectedContacts.push(fullContact);
-            }
-        }
-    });
-
-    localStorage.setItem('selectedContacts', JSON.stringify(selectedContacts));
 
     contacts.forEach(contact => {
         let isInContainer = isContactInContainer(contact.id);
