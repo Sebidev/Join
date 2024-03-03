@@ -4,6 +4,52 @@ body {
   height: 100%;
 }
 
+/* Allgemeine Definitionen für Webkit-basierte Browser (Chrome, Safari, etc.) */
+::-webkit-scrollbar {
+  width: 12px; /* Breite des Scrollbalkens */
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent; /* Hintergrundfarbe des Track */
+}
+
+/* Handle (Griff des Scrollbalkens) */
+::-webkit-scrollbar-thumb {
+  background-color: #aaa; /* Farbe des Griffes */
+  border-radius: 10px; /* Abrundung des Griffes */
+}
+
+/* Abrundung am oberen Ende des Scrollbalkens */
+::-webkit-scrollbar-thumb:start {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+/* Abrundung am unteren Ende des Scrollbalkens */
+::-webkit-scrollbar-thumb:end {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #aaa transparent; /* Farbe des Griffes und transparenter Track */
+}
+
+/* Abrundung am oberen Ende des Firefox-Scrollbalkens */
+*::-moz-scrollbar-thumb:start {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+/* Abrundung am unteren Ende des Firefox-Scrollbalkens */
+*::-moz-scrollbar-thumb:end {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
 .hide {
   display: none;
 }

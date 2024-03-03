@@ -3,6 +3,40 @@ body {
     background-color: rgb(246, 247, 248);
 }
 
+/* Allgemeine Definitionen für Webkit-basierte Browser (Chrome, Safari, etc.) */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #aaa;
+    border-radius: 30px;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #aaa transparent;
+}
+
+*::-moz-scrollbar-thumb:vertical {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
 #overlay {
     display: none;
     position: fixed;
