@@ -180,6 +180,11 @@ body {
   line-height: 120%; /* 24px */
 }
 
+.assigned-dropdown:hover,
+.category-dropdown:hover {
+  cursor: pointer;
+}
+
 .dropdown-content {
   height: 216px;
   width: 100%;
@@ -451,6 +456,10 @@ body {
   border: 1px solid #ccc;
   padding: 10px;
   z-index: 1000;
+}
+
+.due-date-input.calendar-hover:hover {
+  cursor: pointer;
 }
 
 .prio-container {
@@ -841,6 +850,38 @@ body {
   font-weight: 400;
   line-height: 120%;
   letter-spacing: 0em;
+}
+
+.animated-icon {
+  position: fixed;
+  bottom: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: bottom 0.5s ease-out;
+}
+
+.animated-icon img {
+  width: 326px;
+  height: 74px;
+  border-radius: 20px;
+}
+
+.overlay-feedback {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+}
+
+.no-validate [required] {
+  box-shadow: none !important;
+}
+
+.no-validate:invalid {
+  outline: none !important;
 }
 
 /* Media queries */

@@ -226,9 +226,9 @@ function createSelectedContactDiv(contact) {
     let selectedContactDiv = document.createElement("div");
     selectedContactDiv.innerHTML = `
         <div class="selected-contact" data-avatarid="${contact.avatarid}" data-id="${contact.id}">
-            <div class="contacts-img-initial">
+            <div class="avatar">
                 <img id="${contact.id}" src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
-                <div class="initials-overlay">${contact.name.split(' ').map(n => n[0]).join('')}</div>
+                <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
             </div>
             <div class="contact-delete-container">
                 <div>
@@ -297,14 +297,14 @@ function clearSelectedContacts() {
 }
 
 async function addToBoard(column) {
+    let form = document.querySelector('form');
     let taskTitle = getFieldValueById('taskTitleInput');
     let category = getFieldValueById('category');
-
-
-    if (!taskTitle || !category) {
-        /*alert('Please fill out the title and the category');*/
-        return;
-    }
+    let overlay = document.getElementById('overlayFeedack');
+    let animatedIcon = document.getElementById('animatedIcon');
+    
+    overlay.style.display = 'block';
+    animatedIcon.style.bottom = '500px';
 
     let description = getFieldValueById('descriptionInput');
     let date = getFieldValueById('date');
@@ -316,6 +316,8 @@ async function addToBoard(column) {
 
     clearSelectedContacts();
     resetFormFields();
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
     window.location.href = 'board.html';
 }
 
@@ -485,11 +487,11 @@ document.addEventListener('DOMContentLoaded', function () {
  * @param {Event} event - The click event.
  */
 function toggleArrowCategory() {
-    let categoryDropdown = document.getElementById('categoryOptions');
     let categoryArrowImg = document.getElementById('arrow_img_category');
+    let categoryDropdown = document.getElementById('categoryOptions');
 
     categoryArrowImg.classList.toggle('arrow_up');
-    categoryArrowImg.src = categoryArrowImg.classList.contains('arrow_up') ? './img/arrow_up.svg' : './img/arrow_down.svg';
+    categoryArrowImg.src = `./img/arrow_${categoryArrowImg.classList.contains('arrow_up') ? 'up' : 'down'}.svg`;
 
     if (categoryDropdown) {
         categoryDropdown.style.display = categoryArrowImg.classList.contains('arrow_up') ? 'block' : 'none';
@@ -498,10 +500,34 @@ function toggleArrowCategory() {
 }
 
 document.addEventListener('click', function (event) {
-    let categoryDropdown = document.getElementById('categoryOptions');
     let categoryArrowImg = document.querySelector('.arrow_down_category');
+    let categoryInput = document.getElementById('category');
+    let categoryDropdown = document.getElementById('categoryOptions');
 
-    if (categoryDropdown && !event.target.matches('.arrow_down_category') && !event.target.matches('.arrow_up') && !event.target.closest('.category-container')) {
+    if (categoryInput && (event.target === categoryInput || event.target.closest('.input-container') === categoryInput)) {
+        openCategoryDropdown();
+    }
+
+    if (categoryDropdown && !event.target.matches('.arrow_down_category, .arrow_up') && !event.target.closest('.category-container')) {
+        closeCategoryDropdown(categoryArrowImg);
+    }
+});
+
+function openCategoryDropdown() {
+    let categoryArrowImg = document.getElementById('arrow_img_category');
+    categoryArrowImg.classList.add('arrow_up');
+    categoryArrowImg.src = './img/arrow_up.svg';
+
+    let categoryDropdown = document.getElementById('categoryOptions');
+    if (categoryDropdown) {
+        categoryDropdown.style.display = 'block';
+        isCategoryDropdownOpen = true;
+    }
+}
+
+function closeCategoryDropdown(categoryArrowImg) {
+    let categoryDropdown = document.getElementById('categoryOptions');
+    if (categoryDropdown) {
         categoryDropdown.style.display = 'none';
         isCategoryDropdownOpen = false;
 
@@ -510,7 +536,7 @@ document.addEventListener('click', function (event) {
             categoryArrowImg.classList.remove('arrow_up');
         }
     }
-});
+}
 
 /**
  * Updates the selected category in the category dropdown.
@@ -713,6 +739,7 @@ function setupDueDateInputAddTask() {
             dateInput.style.backgroundRepeat = 'no-repeat';
             dateInput.style.backgroundPosition = 'right center';
             dateInput.style.backgroundSize = '24px';
+            dateInput.classList.add('calendar-hover');
 
             dateContainer.appendChild(dateHeadline);
             dateContainer.appendChild(dateInput);
@@ -726,4 +753,4 @@ function setupDueDateInputAddTask() {
 
     }
 }
-    setupDueDateInputAddTask();
+setupDueDateInputAddTask();
