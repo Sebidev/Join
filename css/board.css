@@ -1356,6 +1356,7 @@ body {
 .subtasks-edit-icons-container-p {
   display: flex;
   gap: 0.3rem;
+  align-items: center;
 }
 
 .subtask-icon-edit img {
