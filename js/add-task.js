@@ -558,12 +558,17 @@ function updateSelectedCategory(category) {
  */
 document.addEventListener('DOMContentLoaded', function () {
     document.body.addEventListener('click', function (event) {
-        if (event.target.id !== 'newSubtaskInput' && !event.target.closest('#newSubtaskInput')) {
+        if (event.target.id !== 'newSubtaskInput' && !event.target.closest('#newSubtaskInput') &&
+            event.target.id !== 'newSubtaskInputEdit' && !event.target.closest('#newSubtaskInputEdit')) {
             deactivateInputField();
         }
 
         if (event.target.id === 'newSubtaskInput') {
-            handleNewSubtaskInputClick();
+            handleNewSubtaskInputClick('iconContainer');
+        }
+
+        if (event.target.id === 'newSubtaskInputEdit') {
+            handleNewSubtaskInputClick('iconContainerEdit');
         }
     });
 });
@@ -579,8 +584,14 @@ function handleNewSubtaskInputClick() {
     }
 
     let iconContainer = document.getElementById('iconContainer');
-    if (!document.querySelector('#iconContainer img')) {
+    let iconContainerEdit = document.getElementById('iconContainerEdit');
+
+    if (iconContainer && !document.querySelector('#iconContainer img')) {
         createAndAppendIcons(iconContainer);
+    }
+
+    if (iconContainerEdit && !document.querySelector('#iconContainerEdit img')) {
+        createAndAppendIcons(iconContainerEdit);
     }
 }
 
@@ -598,7 +609,11 @@ function createAndAppendIcons(container) {
     let imgSubmit = document.createElement('img');
     imgSubmit.src = 'img/submit.svg';
     imgSubmit.onclick = function () {
-        addSubtask();
+        if (container.id === 'iconContainer') {
+            addSubtask();
+        } else if (container.id === 'iconContainerEdit') {
+            addSubtaskOpenCard();
+        }
         deactivateInputField();
     };
 
@@ -612,13 +627,21 @@ function createAndAppendIcons(container) {
  */
 function deactivateInputField() {
     let newSubtaskInput = document.getElementById('newSubtaskInput');
+    let newSubtaskInputEdit = document.getElementById('newSubtaskInputEdit');
     if (newSubtaskInput) {
         newSubtaskInput.value = '';
     }
+    if (newSubtaskInputEdit) {
+        newSubtaskInputEdit.value = '';
+    }
 
     let iconContainer = document.getElementById('iconContainer');
+    let iconContainerEdit = document.getElementById('iconContainerEdit');
     if (iconContainer) {
         resetIconContainer(iconContainer);
+    }
+    if (iconContainerEdit) {
+        resetIconContainer(iconContainerEdit);
     }
 }
 

@@ -886,7 +886,7 @@ async function openCard(data, subtasksData) {
 
             <div class="card-modal-subtasks-container">
                 <p class="card-modal-subtasks-container-headline">Subtasks:</p>
-                <div class="card-modal-subtasks" id="subtaskList">
+                <div class="card-modal-subtasks">
                     ${(data.content.subtasksData || []).map((subtask, index) => `
                         <div class="card-modal-subtask-maincontainer">
                             <div class="card-modal-description-checkbox">
@@ -1680,10 +1680,10 @@ function createSubtasksInputContainer() {
     let inputContainer = document.createElement('div');
     inputContainer.className = 'input-container-subtask';
     inputContainer.innerHTML = `
-        <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask" id="subtask">
-        <div id="iconContainer">
-            <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" />
-        </div>
+        <input class="subtasks-input" type="text" id="newSubtaskInputEdit" placeholder="Add new subtask" id="subtask">
+        <div id="iconContainerEdit">
+        <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" />
+         </div>
     `;
     return inputContainer;
 }
@@ -1736,7 +1736,7 @@ function deleteSubtask(subtaskContainer) {
  * Adds a subtask in the open card.
  */
 function addSubtaskOpenCard() {
-    let inputElement = document.getElementById('newSubtaskInput');
+    let inputElement = document.getElementById('newSubtaskInputEdit');
     let subtasksContainer = document.querySelector('.card-modal-subtasks');
     let subtaskText = inputElement.value.trim();
     let taskId = currentTaskId;
