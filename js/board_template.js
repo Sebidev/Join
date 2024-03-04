@@ -23,36 +23,30 @@ async function initBoard() {
 
 
 /**
- * search functionality for the tasks in board.html
- * @param {HTMLElement} searchInput
+ * Adds search functionality for the tasks in board.html.
+ * @param {HTMLElement} searchInput - The input field for search.
  */
 function addSearch(searchInput) {
-    searchInput.addEventListener('input', async function () {
-        let searchValue = searchInput.value.toLowerCase();
-        let tasks;
-        if (isUserLoggedIn) {
-            tasks = users[currentUser].tasks;
-        } else {
-            tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        }
+    searchInput.addEventListener('input', async () => {
+        const searchValue = searchInput.value.toLowerCase();
+        const tasks = isUserLoggedIn ? users[currentUser].tasks : JSON.parse(localStorage.getItem('tasks')) || [];
 
-        let matchingTasks = tasks.filter(task =>
+        const matchingTasks = tasks.filter(task =>
             task.content.title.toLowerCase().includes(searchValue) ||
             task.content.description.toLowerCase().includes(searchValue)
         );
 
-        document.getElementById('todo-column').innerHTML = '';
-        document.getElementById('progress-column').innerHTML = '';
-        document.getElementById('await-column').innerHTML = '';
-        document.getElementById('done-column').innerHTML = '';
+        ['todo', 'progress', 'await', 'done'].forEach(columnId => {
+            document.getElementById(`${columnId}-column`).innerHTML = '';
+        });
 
-        for (let task of matchingTasks) {
+        for (const task of matchingTasks) {
             await renderCard(task);
         }
 
         updatePlaceholderText();
     });
-};
+}
 
 /** open add-task popup
  * 
@@ -65,7 +59,7 @@ function addTask(column) {
     } else {
         let modalHTML = /*html*/`
             <div id="overlay"></div>
-            <div id="taskModal" class="add-task-create-open">
+            <form id="taskModal" class="add-task-create-open">
                 <div class="modal-headline">Add task</div>
                 <div onclick="closeModal()">
                 <img class="close-modal" src="./img/close_modal.svg" alt="">
@@ -173,7 +167,7 @@ function addTask(column) {
                                 </svg>
                             </button>
 
-                            <button class="create-task-button-modal" onclick="addToBoard('${column}')">
+                            <button class="create-task-button-modal" onclick="addToBoardModal('${column}')">
                                 <h3>Create Task</h3>
                                 <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g id="check">
@@ -189,18 +183,22 @@ function addTask(column) {
                         </div>
                     </div>
                 </div>
+                <div class="overlay-feedback" id="overlayFeedack"></div>
+            </form>
+            <div class="animated-icon" id="animatedIcon">
+                <img src="./img/added_to_board.svg" alt="Added to Board">
             </div>
         `;
 
         document.body.insertAdjacentHTML('beforeend', modalHTML);
 
         choose('medium');
-        
+
         let overlay = document.getElementById('overlay');
         overlay.style.display = 'block';
         let modal = document.getElementById('taskModal');
         modal.style.transform = "translate(0%, -50%) translateX(100%)";
-        
+
         setTimeout(() => {
             modal.style.transform = "translate(-50%, -50%)";
         }, 100);
@@ -209,20 +207,46 @@ function addTask(column) {
 }
 
 /**
+ * Adds a new task to the board based on the provided form inputs and column.
+ * Redirects to the board page after successfully adding the task.
+ * Closes the modal and resets form fields regardless of success.
+ *
+ * @param {string} column - The column on the board where the task should be added.
+ */
+async function addToBoardModal(column) {
+    let form = document.getElementById('taskModal');
+    let taskTitle = getFieldValueById('taskTitleInput');
+    let category = getFieldValueById('category');
+
+    if (window.location.pathname.includes("board.html") && form.checkValidity() && taskTitle && category) {
+
+        let description = getFieldValueById('descriptionInput');
+        let date = getFieldValueById('date');
+        let subtasksList = document.getElementById('subtaskList').children;
+        let selectedContacts = getSelectedContacts();
+        let selectedPriority = getSelectedPriority();
+
+        if (form.checkValidity()) {
+            saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column);
+            window.location.href = 'board.html';
+        }
+    }
+    resetFormFields();
+    closeModal();
+}
+
+/**
  * A function that clears all input and textarea fields in the 'Add-task' and 'Add-task-content' sections, 
  * resets the task priority to 'medium', clears the selected category, subtasks, modal, and selected contacts.
  */
 function clearFields() {
+    let clearInputFields = fields => fields.forEach(field => field.value = '');
+
     let inputFields = document.querySelectorAll('.Add-task input, .Add-task textarea');
-    let AllInputFields = document.querySelectorAll('.Add-task-content input, .Add-task-content textarea');
+    let allInputFields = document.querySelectorAll('.Add-task-content input, .Add-task-content textarea');
 
-    inputFields.forEach(field => {
-        field.value = '';
-    });
-
-    AllInputFields.forEach(field => {
-        field.value = '';
-    });
+    clearInputFields(inputFields);
+    clearInputFields(allInputFields);
 
     choose('medium');
     updateSelectedCategory('');
@@ -249,37 +273,54 @@ function closeModal() {
 }
 
 /**
- * A function that closes the currently open card by moving it out of view, removing it and the overlay after a delay, resetting the visibility of various elements, and clearing the selected contacts.
+ * Resets the visibility of various elements in the card modal.
+ */
+function resetCardModalVisibility() {
+    let elementsToShow = [
+        '.card-modal-delete-button',
+        '.card-modal-edit-button',
+        '.card-modal-save-button',
+        '.card-modal-technical',
+        '.card-modal-userstory',
+        '.due-date-card-modal',
+        '.card-modal-priority-symbol',
+        '.priority-card-modal-text'
+    ];
+
+    elementsToShow.forEach(element => {
+        $(element).removeClass('hide-button');
+    });
+
+    $('.subtask-checkbox').css('display', 'block');
+    $('.subtask-image').css('display', 'none');
+}
+
+/**
+ * Closes the currently open card by moving it out of view, removing it, clearing the selected contacts, and resetting visibility of various elements after a delay.
  */
 function closeOpenCard() {
     let cardOverlay = document.getElementById('card-overlay');
     let taskId = currentTaskId;
-
     let cardEffect = document.getElementById(`cardModal_${taskId}`);
-    cardEffect.style.transform = "translate(100%, -50%) translateX(100%)";
 
-    setTimeout(() => {
-        if (cardOverlay) {
-            cardOverlay.remove();
+    if (cardEffect) {
+        cardEffect.style.transform = "translate(100%, -50%) translateX(100%)";
+
+        setTimeout(() => {
+            if (cardOverlay) {
+                cardOverlay.remove();
+            }
 
             let cardModal = document.getElementById(`cardModal_${taskId}`);
             if (cardModal) {
                 cardModal.remove();
                 endEdit();
             }
-        }
 
-        $('.card-modal-delete-button').removeClass('hide-button');
-        $('.card-modal-edit-button').removeClass('hide-button');
-        $('.card-modal-save-button').addClass('hide-button');
-        $('.card-modal-technical').removeClass('hide-button');
-        $('.card-modal-userstory').removeClass('hide-button');
-        $('.due-date-card-modal').removeClass('hide-button');
-        $('.card-modal-priority-symbol').removeClass('hide-button');
-        $('.priority-card-modal-text').removeClass('hide-button');
-        $('.subtask-checkbox').css('display', 'block');
-        $('.subtask-image').css('display', 'none');
-    }, 100);
+            resetCardModalVisibility();
+        }, 100);
+    }
+
     clearSelectedContacts();
 }
 
@@ -291,36 +332,29 @@ function getValue(selector) {
     return element ? element.value : '';
 }
 
-/** add the placeholder text depending on if there's a task on the board or not
- * 
- * @param {string} columnId 
+/**
+ * Adds placeholder text to a column based on its ID.
+ *
+ * @param {string} columnId - The ID of the column.
  */
 function addPlaceholderText(columnId) {
+    let texts = {
+        'todo-column': 'No tasks to do',
+        'progress-column': 'No tasks in progress',
+        'await-column': 'No tasks await feedback',
+        'done-column': 'No tasks done',
+        'default': 'Nothing here',
+    };
+
     let columnElement = document.getElementById(columnId);
+
     if (columnElement) {
         let placeholderDiv = document.createElement('div');
         placeholderDiv.id = columnId + '-placeholder';
         placeholderDiv.className = 'no-tasks-here';
 
         let placeholderText = document.createElement('p');
-
-        switch (columnId) {
-            case 'todo-column':
-                placeholderText.textContent = 'No tasks to do';
-                break;
-            case 'progress-column':
-                placeholderText.textContent = 'No tasks in progress';
-                break;
-            case 'await-column':
-                placeholderText.textContent = 'No tasks await feedback';
-                break;
-            case 'done-column':
-                placeholderText.textContent = 'No tasks done';
-                break;
-            default:
-                placeholderText.textContent = 'Nothing here';
-                break;
-        }
+        placeholderText.textContent = texts[columnId] || texts['default'];
 
         placeholderDiv.appendChild(placeholderText);
         columnElement.appendChild(placeholderDiv);
@@ -339,70 +373,126 @@ function removePlaceholderText(columnId) {
 }
 
 /**
- * An asynchronous function that fetches and renders tasks based on user login status,
- * adds placeholder text to columns, and renders each task as a card.
+ * Fetches tasks based on user login status, adds placeholder text to columns, and renders each task as a card.
+ * 
+ * @returns {Promise<void>} A promise resolved after tasks are fetched and rendered.
  */
 async function checkAndRenderSharedData() {
-    let tasks;
+    let tasks = isUserLoggedIn
+        ? (JSON.parse(await getItem('users'))[currentUser]?.tasks || [])
+        : JSON.parse(localStorage.getItem('tasks')) || [];
 
-    if (isUserLoggedIn) {
-        let usersString = await getItem('users');
-        let users = JSON.parse(usersString);
-        tasks = users[currentUser].tasks;
-    } else {
-        let tasksString = localStorage.getItem('tasks');
-        tasks = tasksString ? JSON.parse(tasksString) : [];
-    }
+    ['todo-column', 'progress-column', 'await-column', 'done-column'].forEach(columnId => addPlaceholderText(columnId));
 
-    addPlaceholderText('todo-column');
-    addPlaceholderText('progress-column');
-    addPlaceholderText('await-column');
-    addPlaceholderText('done-column');
-
-    for (let task of tasks) {
+    tasks.forEach(task => {
         removePlaceholderText(task.content.boardColumn);
-
         renderCard(task);
-    }
+    });
 }
+
+// Initialize user and check/render shared data on DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
     initUser().then(checkAndRenderSharedData);
 });
 
-/** this function creates the contact images with intitials in our board.html
- * 
- * @param {string} selectedContacts 
- * @returns selected contacts
+/**
+ * Creates contact images with initials for display in the board.html.
+ *
+ * @param {Array} selectedContacts - The list of selected contacts.
+ * @returns {string} The HTML code for the created contact images.
  */
 function createAvatarDivs(selectedContacts) {
-    let avatarDivsHTML = '';
     let maxVisibleContacts = 3;
+    let avatarDivsHTML = '';
 
-    for (let i = 0; i < selectedContacts.length; i++) {
+    for (let i = 0; i < Math.min(maxVisibleContacts, selectedContacts.length); i++) {
         let selectedContact = selectedContacts[i];
+        avatarDivsHTML += `
+            <div class="initial-container">
+                <div class="avatar" id="${selectedContact.id}">
+                    <img src="${selectedContact.imagePath}">
+                    <div class="avatar_initletter">${selectedContact.initials}</div>
+                </div>
+            </div>`;
+    }
 
-        if (i < maxVisibleContacts - 1 || selectedContacts.length <= maxVisibleContacts) {
-            avatarDivsHTML += `
-                <div class="initial-container">
-                    <div class="avatar" id="${selectedContact.id}">
-                        <img src="${selectedContact.imagePath}">
-                        <div class="avatar_initletter">${selectedContact.initials}</div>
-                    </div>
-                </div>`;
-        } else if (i === maxVisibleContacts - 1) {
-            let remainingContacts = selectedContacts.length - maxVisibleContacts + 1;
-            avatarDivsHTML += `
-                <div class="initial-container">
-                    <div class="avatar" id="${selectedContact.id}">
-                        <img src="${selectedContact.imagePath}">
-                        <div class="avatar_initletter">+${remainingContacts}</div>
-                    </div>
-                </div>`;
-            break;
-        }
+    if (selectedContacts.length > maxVisibleContacts) {
+        let remainingContacts = selectedContacts.length - maxVisibleContacts + 1;
+        avatarDivsHTML += `
+            <div class="initial-container">
+                <div class="avatar" id="${selectedContacts[maxVisibleContacts - 1].id}">
+                    <img src="${selectedContacts[maxVisibleContacts - 1].imagePath}">
+                    <div class="avatar_initletter">+${remainingContacts}</div>
+                </div>
+            </div>`;
     }
 
     return avatarDivsHTML;
+}
+
+/**
+ * Creates HTML for the content section of the task card based on the provided data.
+ *
+ * @param {object} data - The data for rendering the task card content.
+ * @param {number} progress - The progress value for the progress bar.
+ * @param {number} currentSubtasks - The current number of subtasks.
+ * @param {number} totalSubtasks - The total number of subtasks.
+ * @param {string} initialsHTML - The HTML code for the initials container.
+ * @param {string} categoryClass - The category class for styling.
+ * @param {string} priorityIconSrc - The source of the priority icon.
+ * @returns {string} The HTML code for the content section of the task card.
+ */
+function createCardContentHTML(data, progress, currentSubtasks, totalSubtasks, initialsHTML, categoryClass, priorityIconSrc) {
+    return `
+        <p class="${categoryClass}">${data.content.category}</p>
+        <div class="title-container">
+            <p class="card-title">${data.content.title}</p>
+            <p class="card-content">${data.content.description}</p>
+        </div>
+        <p style="display: none">${data.content.date}</p>
+        <div class="progress">
+            <div class="progress-bar" id="progressBar_${data.id}">
+                <div class="progress-fill" id="progressFill_${data.id}" style="width: ${progress}%;"></div>
+            </div>
+            <div class="subtasks" id="subtasks_${data.id}">${currentSubtasks}/${totalSubtasks} Subtasks</div>
+        </div>
+        <div class="to-do-bottom">
+            <div class="initials-cont">
+                ${initialsHTML}
+            </div>
+            <div class="priority-symbol">
+                <img src="${priorityIconSrc}" alt="">
+            </div>
+        </div>
+    `;
+}
+
+/**
+ * Retrieves and prepares the necessary data for rendering the task card.
+ *
+ * @param {object} data - The data for rendering the task card.
+ * @returns {object} An object containing the prepared data.
+ */
+function prepareCardData(data) {
+    let containerDiv = document.getElementById(data.content.boardColumn);
+    let categoryClass = data.content.category === 'Technical task' ? 'technical-task' : 'user-story';
+    let subtasksData = data.content.subtasksData || [];
+    let selectedPriority = data.content.priority;
+    let selectedContacts = data.content.selectedContacts || [];
+    let initialsHTML = createAvatarDivs(selectedContacts);
+    let priorityIconSrc = getPriorityIcon(selectedPriority);
+    let taskId = data.id;
+
+    return {
+        containerDiv,
+        categoryClass,
+        subtasksData,
+        selectedPriority,
+        selectedContacts,
+        initialsHTML,
+        priorityIconSrc,
+        taskId,
+    };
 }
 
 /**
@@ -411,53 +501,21 @@ function createAvatarDivs(selectedContacts) {
  * @param {object} data
  */
 async function renderCard(data) {
-
     if (data && data.content) {
-        let containerDiv = document.getElementById(data.content.boardColumn);
-        let categoryClass = data.content.category === 'Technical task' ? 'technical-task' : 'user-story';
-        let subtasksData = data.content.subtasksData || [];
-        let selectedPriority = data.content.priority;
-        let selectedContacts = data.content.selectedContacts || [];
-        let initialsHTML = createAvatarDivs(selectedContacts);
-        let priorityIconSrc = getPriorityIcon(selectedPriority);
-        let taskId = data.id;
+        let {
+            containerDiv,
+            subtasksData,
+            taskId,
+            categoryClass,
+            initialsHTML,
+            priorityIconSrc,
+        } = prepareCardData(data);
 
-        let renderCard = document.createElement('div');
-        renderCard.id = taskId;
-        renderCard.className = 'card-user-story';
-        renderCard.onclick = () => openCard(data, subtasksData);
+        let renderCard = createCardElement(taskId, subtasksData);
+        configureCardEvents(renderCard, data, subtasksData);
+        let { currentSubtasks, totalSubtasks, progress } = await updateCardInformation(taskId, data);
 
-        renderCard.draggable = true;
-        renderCard.ondragstart = (event) => startDragging(event);
-        renderCard.ondragend = (event) => endDragging(event);
-        renderCard.ondragover = (event) => preventDragOver(event);
-
-        let currentSubtasks = await countSubtasks(taskId);
-        let totalSubtasks = data.content.subtasksData.length;
-        let progress = totalSubtasks > 0 ? (currentSubtasks / totalSubtasks) * 100 : 0;
-
-        renderCard.innerHTML = `
-            <p class="${categoryClass}">${data.content.category}</p>
-            <div class="title-container">
-                <p class="card-title">${data.content.title}</p>
-                <p class="card-content">${data.content.description}</p>
-            </div>
-            <p style="display: none">${data.content.date}</p>
-            <div class="progress">
-                <div class="progress-bar" id="progressBar_${taskId}">
-                    <div class="progress-fill" id="progressFill_${taskId}" style="width: ${progress}%;"></div>
-                </div>
-                <div class="subtasks" id="subtasks_${taskId}">${currentSubtasks}/${totalSubtasks} Subtasks</div>
-            </div>
-            <div class="to-do-bottom">
-                <div class="initials-cont">
-                    ${initialsHTML}
-                </div>
-                <div class="priority-symbol">
-                    <img src="${priorityIconSrc}" alt="">
-                </div>
-            </div>
-        `;
+        renderCard.innerHTML = createCardContentHTML(data, progress, currentSubtasks, totalSubtasks, initialsHTML, categoryClass, priorityIconSrc);
 
         currentTaskId = taskId;
         containerDiv.appendChild(renderCard);
@@ -465,7 +523,58 @@ async function renderCard(data) {
 }
 
 /**
- * This function counts the number of checked subtasks for a given task ID.
+ * Creates the task card element.
+ *
+ * @param {string} taskId - The ID of the task.
+ * @param {array} subtasksData - The array of subtasks data.
+ * @returns {HTMLElement} The task card element.
+ */
+function createCardElement(taskId, subtasksData) {
+    const renderCard = document.createElement('div');
+    renderCard.id = taskId;
+    renderCard.className = 'card-user-story';
+    renderCard.onclick = () => openCard(data, subtasksData);
+
+    renderCard.draggable = true;
+    renderCard.ondragstart = (event) => startDragging(event);
+    renderCard.ondragend = (event) => endDragging(event);
+    renderCard.ondragover = (event) => preventDragOver(event);
+
+    return renderCard;
+}
+
+/**
+ * Configures events for the task card.
+ *
+ * @param {HTMLElement} renderCard - The task card element.
+ * @param {object} data - The data for rendering the task card.
+ * @param {array} subtasksData - The array of subtasks data.
+ */
+function configureCardEvents(renderCard, data, subtasksData) {
+    renderCard.onclick = () => openCard(data, subtasksData);
+    renderCard.draggable = true;
+    renderCard.ondragstart = (event) => startDragging(event);
+    renderCard.ondragend = (event) => endDragging(event);
+    renderCard.ondragover = (event) => preventDragOver(event);
+}
+
+/**
+ * Updates information on the task card.
+ *
+ * @param {string} taskId - The ID of the task.
+ * @param {object} data - The data for rendering the task card.
+ * @returns {Promise<{currentSubtasks: number, totalSubtasks: number, progress: number}>} Information on the task card.
+ */
+async function updateCardInformation(taskId, data) {
+    let currentSubtasks = await countSubtasks(taskId);
+    let totalSubtasks = data.content.subtasksData.length;
+    let progress = totalSubtasks > 0 ? (currentSubtasks / totalSubtasks) * 100 : 0;
+
+    return { currentSubtasks, totalSubtasks, progress };
+}
+
+/**
+ * Counts the number of checked subtasks for a given task ID.
  *
  * @async
  * @function countSubtasks
@@ -473,21 +582,28 @@ async function renderCard(data) {
  * @returns {Promise<number>} The number of checked subtasks.
  */
 async function countSubtasks(taskId) {
-    let tasks;
+    let tasks = await getTasksData();
+    let task = tasks.find(task => task.id === taskId);
+    let subtasksData = task.content.subtasksData || [];
+    return subtasksData.filter(subtask => subtask.checked).length;
+}
+
+/**
+ * Retrieves tasks data based on the user login status.
+ *
+ * @async
+ * @function getTasksData
+ * @returns {Promise<Array>} An array of tasks data.
+ */
+async function getTasksData() {
     if (isUserLoggedIn) {
         let usersString = await getItem('users');
         let users = JSON.parse(usersString);
-        tasks = users[currentUser].tasks;
+        return users[currentUser].tasks;
     } else {
         let tasksString = localStorage.getItem('tasks');
-        tasks = tasksString ? JSON.parse(tasksString) : [];
+        return tasksString ? JSON.parse(tasksString) : [];
     }
-
-    let task = tasks.find(task => task.id === taskId);
-    let subtasksData = task.content.subtasksData || [];
-    let checkedSubtasks = subtasksData.filter(subtask => subtask.checked).length;
-
-    return checkedSubtasks;
 }
 
 /**
@@ -518,29 +634,18 @@ function updateProgressBar() {
  * @param {string} taskId - The ID of the task.
  */
 async function saveCheckboxStatus(taskId) {
-    let tasks;
-
-    if (isUserLoggedIn) {
-        let usersString = await getItem('users');
-        let users = JSON.parse(usersString);
-        tasks = users[currentUser].tasks;
-    } else {
-        let tasksString = localStorage.getItem('tasks');
-        tasks = tasksString ? JSON.parse(tasksString) : [];
-    }
-
+    let tasks = isUserLoggedIn ? JSON.parse(await getItem('users'))[currentUser]?.tasks : JSON.parse(localStorage.getItem('tasks')) || [];
     let task = tasks.find(task => task.id === taskId);
 
     if (task) {
-        let subtasksData = Array.from(document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox`)).map((checkbox, index) => {
-            return {
-                description: task.content.subtasksData[index].description,
-                checked: checkbox.checked
-            };
-        });
+        let subtasksData = Array.from(document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox`)).map((checkbox, index) => ({
+            description: task.content.subtasksData[index].description,
+            checked: checkbox.checked
+        }));
         task.content.subtasksData = subtasksData;
 
         if (isUserLoggedIn) {
+            let users = JSON.parse(await getItem('users'));
             users[currentUser].tasks = tasks;
             await setItem('users', JSON.stringify(users));
         } else {
@@ -548,6 +653,17 @@ async function saveCheckboxStatus(taskId) {
         }
     }
 }
+
+/**
+ * Event listener for the 'change' event on the document.
+ * If the event target is a checkbox and it has the class 'subtask-checkbox', the progress bar is updated.
+ * The function `updateProgressBar` is called with `globalData` as its argument.
+ */
+document.addEventListener('change', function (event) {
+    if (event.target.type === 'checkbox' && event.target.classList.contains('subtask-checkbox')) {
+        updateProgressBar(globalData);
+    }
+});
 
 /**
  * Returns the path to the appropriate priority icon based on the given priority level.
@@ -567,40 +683,32 @@ function getPriorityIcon(priority) {
 }
 
 /**
- * This function deletes a task completely from our board aswell as remote or local storage
+ * Deletes a task from the board and storage.
  */
 async function deleteTask() {
     let taskId = document.querySelector('.card-modal-delete-button').dataset.id;
-
     document.getElementById(taskId).remove();
 
-    let tasks;
-
-    if (isUserLoggedIn) {
-        let usersString = await getItem('users');
-        let users = JSON.parse(usersString);
-        tasks = users[currentUser].tasks;
-    } else {
-        let tasksString = localStorage.getItem('tasks');
-        tasks = tasksString ? JSON.parse(tasksString) : [];
-    }
-
+    let tasks = isUserLoggedIn ? JSON.parse(await getItem('users'))[currentUser]?.tasks : JSON.parse(localStorage.getItem('tasks')) || [];
     let taskIndex = tasks.findIndex(task => task.id === taskId);
 
     if (taskIndex !== -1) {
         tasks.splice(taskIndex, 1);
 
         if (isUserLoggedIn) {
+            let users = JSON.parse(await getItem('users'));
             users[currentUser].tasks = tasks;
             await setItem('users', JSON.stringify(users));
         } else {
             localStorage.setItem('tasks', JSON.stringify(tasks));
         }
     }
+
     clearSelectedContacts();
     updatePlaceholderText();
     closeOpenCard();
 }
+
 /**
  * clears the selectedContacts cache
  */
@@ -838,64 +946,35 @@ async function openCard(data, subtasksData) {
         cardEffect.style.transform = "translate(-50%, -50%)";
     }, 100);
     currentEditData = data;
-    //console.log('Task Data:', JSON.stringify(data));
 }
 
 /**
- * This Function restores the status of checkboxes for a given task.
- * If the user is logged in, it retrieves the tasks from the 'users' item in localStorage.
- * If the user is not logged in, it retrieves the tasks directly from the 'tasks' item in localStorage.
- * It then finds the task with the given ID and if it exists and has a 'checkboxStatus' property, it restores the checkbox status based on this property.
- *
- * @param {string} taskId - The ID of the task.
+ * Replaces the given element with an input field inside a container.
+ * @param {HTMLElement} element - The element to replace.
+ * @param {string} containerClass - The class for the container.
+ * @param {string} inputType - The type of input field ('input' or 'textarea').
  */
-async function restoreCheckboxStatus(taskId) {
-    let checkboxStatus;
+const replaceElementWithInput = (element, containerClass, inputType) => {
+    let titleElement = document.querySelector('.card-modal-title');
+    let container = document.createElement('div');
+    container.className = containerClass;
+    
+    let headline = document.createElement('div');
+    headline.textContent = element === titleElement ? 'Title' : 'Description';
+    
+    let input = document.createElement(inputType);
+    input.type = 'text';
+    input.value = element.textContent;
 
-    if (isUserLoggedIn) {
-        let usersString = await getItem('users');
-        let users = JSON.parse(usersString);
-        let tasks = users[currentUser].tasks;
-        let task = tasks.find(task => task.id === taskId);
-
-        if (task && task.content.checkboxStatus) {
-            checkboxStatus = task.content.checkboxStatus;
-        }
-    } else {
-        let tasksString = localStorage.getItem('tasks');
-        let tasks = tasksString ? JSON.parse(tasksString) : [];
-        let task = tasks.find(task => task.id === taskId);
-
-        if (task && task.content.checkboxStatus) {
-            checkboxStatus = task.content.checkboxStatus;
-        }
-    }
-
-    if (checkboxStatus) {
-        Object.entries(checkboxStatus).forEach(([index, checked]) => {
-            let checkbox = document.querySelector(`#cardModal_${taskId} .subtask-checkbox:nth-child(${parseInt(index) + 1})`);
-            if (checkbox) {
-                checkbox.checked = checked;
-            }
-        });
-    }
-}
+    container.appendChild(headline);
+    container.appendChild(input);
+    element.replaceWith(container);
+};
 
 /**
- * Event listener for the 'change' event on the document.
- * If the event target is a checkbox and it has the class 'subtask-checkbox', the progress bar is updated.
- * The function `updateProgressBar` is called with `globalData` as its argument.
- */
-document.addEventListener('change', function (event) {
-    if (event.target.type === 'checkbox' && event.target.classList.contains('subtask-checkbox')) {
-        updateProgressBar(globalData);
-    }
-});
-
-/**
- * This function enables editing of the title and content in the card modal.
- * It makes the title and content elements editable, creates new containers for the title and content with input fields,
- * populates the input fields with the current title and content, and replaces the original title and content elements with the new containers.
+ * Enables editing of the title and content in the card modal.
+ * It makes the title and content elements editable, creates new containers with input fields,
+ * populates the input fields with the current title and content, and replaces the original elements with the new containers.
  */
 function enableContentEditing() {
     let titleElement = document.querySelector('.card-modal-title');
@@ -904,35 +983,16 @@ function enableContentEditing() {
     contentElement.contentEditable = true;
     titleElement.contentEditable = true;
 
-    let titleContainer = document.createElement('div');
-    titleContainer.className = 'title-container-add-task';
-    let titleHeadline = document.createElement('div');
-    titleHeadline.textContent = 'Title';
-    let titleInput = document.createElement('input');
-    titleInput.type = 'text';
-    titleInput.value = titleElement.textContent;
-    titleContainer.appendChild(titleHeadline);
-    titleContainer.appendChild(titleInput);
-    titleElement.replaceWith(titleContainer);
-
-    let contentContainer = document.createElement('div');
-    contentContainer.className = 'description-container';
-    let contentHeadline = document.createElement('div');
-    contentHeadline.textContent = 'Description';
-    let contentInput = document.createElement('textarea');
-    contentInput.type = 'text';
-    contentInput.value = contentElement.textContent;
-    contentContainer.appendChild(contentHeadline);
-    contentContainer.appendChild(contentInput);
-    contentElement.replaceWith(contentContainer);
-
+    replaceElementWithInput(titleElement, 'title-container-add-task', 'input');
+    replaceElementWithInput(contentElement, 'description-container', 'textarea');
 }
 
-
-
-
 /**
- * This function sets up the due date input for the edit modal and fills it with the current task data
+ * Sets up the due date input for the edit modal and fills it with the current task data.
+ * 
+ * @function
+ * @name setupDueDateInput
+ * @returns {void}
  */
 function setupDueDateInput() {
     let dateElement = document.getElementById('dueDateText');
@@ -965,6 +1025,13 @@ function setupDueDateInput() {
     });
 }
 
+/**
+ * Sets up the due date input for the add task modal and fills it with the current task data.
+ * 
+ * @function
+ * @name setupDueDateInputAddTaskModal
+ * @returns {void}
+ */
 function setupDueDateInputAddTaskModal() {
     let dateElement = document.getElementById('date');
 
@@ -1039,7 +1106,6 @@ function edit() {
         $('.subtask-image').css('display', 'block');
 
         if (currentEditData) {
-            //console.log('Task Data in Edit:', JSON.stringify(currentEditData));
             addContactsToSelectedContacts(currentEditData);
         } else {
             console.error('No data available for editing.');
@@ -1068,90 +1134,108 @@ function endEdit() {
 function enablePriorityEditing() {
     let priorityElement = document.querySelector('.card-modal-priority-letter');
     let currentPriority = priorityElement.textContent.toLowerCase();
-    let priorityContainer = document.createElement('div');
-    priorityContainer.className = 'prio-container';
+    let priorityContainer = createPriorityOptionsContainer();
 
-    let priorityHeadline = document.createElement('div');
-    priorityHeadline.className = 'prio';
-    priorityHeadline.textContent = 'Priority';
-    priorityContainer.appendChild(priorityHeadline);
-
-    let optionContainer = document.createElement('div');
-    optionContainer.className = 'prio-option-container';
-
-    let urgentButton = document.createElement('button');
-    urgentButton.type = 'button';
-    urgentButton.className = 'button urgent';
-    urgentButton.innerHTML = '<h3>Urgent</h3><img src="./img/Prio_up.svg" alt="" />';
-    urgentButton.onclick = function () { chooseCardModal('urgent'); };
-
-    let mediumButton = document.createElement('button');
-    mediumButton.type = 'button';
-    mediumButton.className = 'button medium';
-    mediumButton.innerHTML = '<h3>Medium</h3><img src="./img/Prio_neutral.svg" alt="" />';
-    mediumButton.onclick = function () { chooseCardModal('medium'); };
-
-    let lowButton = document.createElement('button');
-    lowButton.type = 'button';
-    lowButton.className = 'button low';
-    lowButton.innerHTML = '<h3>Low</h3><img src="./img/Prio_down.svg" alt="" />';
-    lowButton.onclick = function () { chooseCardModal('low'); };
-
-    optionContainer.appendChild(urgentButton);
-    optionContainer.appendChild(mediumButton);
-    optionContainer.appendChild(lowButton);
-
-    priorityContainer.appendChild(optionContainer);
-    priorityElement.replaceWith(priorityContainer);
-
-    let buttons = priorityContainer.querySelectorAll('.button');
-    buttons.forEach(button => {
-        if (button.classList.contains(currentPriority)) {
-            button.classList.add('active');
-            let imgElement = button.querySelector('img');
-            switch (currentPriority) {
-                case 'low':
-                    button.style.backgroundColor = 'rgb(122, 226, 41)';
-                    break;
-                case 'medium':
-                    button.style.backgroundColor = 'rgb(255, 168, 0)';
-                    break;
-                case 'urgent':
-                    button.style.backgroundColor = 'rgb(255, 61, 0)';
-                    break;
-            }
-            if (imgElement) {
-                imgElement.style.filter = 'brightness(0) invert(1)';
-            }
-        }
-    });
-
-    priorityElement.replaceWith(priorityContainer);
+    highlightCurrentPriority(priorityContainer, currentPriority);
+    replacePriorityElement(priorityContainer, priorityElement);
 }
 
 /**
  * This function creates a container with priority options (Urgent, Medium, Low) for a card modal in a task board.
  */
 function createPriorityOptionsContainer() {
-    let priorityOptionsContainer = document.createElement('div');
-    priorityOptionsContainer.classList.add('card-modal-priority-options-container');
+    let priorityContainer = document.createElement('div');
+    priorityContainer.className = 'prio-container';
 
-    priorityOptionsContainer.innerHTML = `
-        <button onclick="chooseCardModal('urgent')" class="button urgent">
-            <h3>Urgent</h3>
-            <img src="./img/Prio_up.svg" alt="" />
-        </button>
-        <button onclick="chooseCardModal('medium')" class="button medium">
-            <h3>Medium</h3>
-            <img src="./img/Prio_neutral.svg" alt="" />
-        </button>
-        <button onclick="chooseCardModal('low')" class="button low">
-            <h3>Low</h3>
-            <img src="./img/Prio_down.svg" alt="" />
-        </button>
-    `;
+    let priorityHeadline = document.createElement('div');
+    priorityHeadline.className = 'prio';
+    priorityHeadline.textContent = 'Priority';
 
-    return priorityOptionsContainer;
+    let optionContainer = document.createElement('div');
+    optionContainer.className = 'prio-option-container';
+
+    createPriorityButton(optionContainer, 'Urgent', 'urgent', './img/Prio_up.svg');
+    createPriorityButton(optionContainer, 'Medium', 'medium', './img/Prio_neutral.svg');
+    createPriorityButton(optionContainer, 'Low', 'low', './img/Prio_down.svg');
+
+    priorityContainer.appendChild(priorityHeadline);
+    priorityContainer.appendChild(optionContainer);
+
+    return priorityContainer;
+}
+
+/**
+ * Creates a priority button with the specified properties and appends it to the given container.
+ *
+ * @param {HTMLElement} container - The container to which the button will be appended.
+ * @param {string} text - The text content of the button.
+ * @param {string} priority - The priority level associated with the button ('low', 'medium', or 'urgent').
+ * @param {string} imgSrc - The source URL for the button's image.
+ * @returns {void}
+ */
+function createPriorityButton(container, text, priority, imgSrc) {
+    let button = document.createElement('button');
+    button.type = 'button';
+    button.className = `button ${priority}`;
+    button.innerHTML = `<h3>${text}</h3><img src="${imgSrc}" alt="" />`;
+    button.onclick = () => chooseCardModal(priority);
+    container.appendChild(button);
+}
+
+/**
+ * Highlights the button corresponding to the current priority within the specified container.
+ *
+ * @param {HTMLElement} container - The container containing the priority buttons.
+ * @param {string} currentPriority - The current priority level to be highlighted.
+ * @returns {void}
+ */
+function highlightCurrentPriority(container, currentPriority) {
+    let buttons = container.querySelectorAll('.button');
+    
+    buttons.forEach(button => {
+        let imgElement = button.querySelector('img');
+
+        if (button.classList.contains(currentPriority)) {
+            button.classList.add('active');
+            setButtonStyles(button, currentPriority);
+
+            if (imgElement) {
+                imgElement.style.filter = 'brightness(0) invert(1)';
+            }
+        }
+    });
+}
+
+/**
+ * Sets the visual styles (background color) for the specified button based on its priority level.
+ *
+ * @param {HTMLElement} button - The button for which styles will be set.
+ * @param {string} priority - The priority level associated with the button.
+ * @returns {void}
+ */
+function setButtonStyles(button, priority) {
+    switch (priority) {
+        case 'low':
+            button.style.backgroundColor = 'rgb(122, 226, 41)';
+            break;
+        case 'medium':
+            button.style.backgroundColor = 'rgb(255, 168, 0)';
+            break;
+        case 'urgent':
+            button.style.backgroundColor = 'rgb(255, 61, 0)';
+            break;
+    }
+}
+
+/**
+ * Replaces an old HTML element with a new one in the DOM.
+ *
+ * @param {HTMLElement} newElement - The new element to replace the old one.
+ * @param {HTMLElement} oldElement - The old element to be replaced.
+ * @returns {void}
+ */
+function replacePriorityElement(newElement, oldElement) {
+    oldElement.replaceWith(newElement);
 }
 
 /**
@@ -1169,95 +1253,96 @@ function addEventListenersToButtons(priorityOptionsContainer) {
 }
 
 /**
- * Opens the priority options container for a card modal in a task board.
- * @param {*} event 
- * @returns {null} - If the priority options container is already open.
+ * Chooses the priority level for the card modal and updates the UI accordingly.
+ *
+ * @param {string} priority - The priority level ('low', 'medium', or 'urgent').
+ * @returns {void}
  */
-function openPriorityOptions(event) {
-    if (isPriorityOptionsOpen) {
-        return;
-    }
+function chooseCardModal(priority) {
+    let container = document.querySelector('.card-modal-priority-container');
+    let letterElement = container.querySelector('.card-modal-priority-letter');
+    let symbolElement = container.querySelector('.card-modal-priority-symbol img');
+    let buttons = document.querySelectorAll('.prio-option-container .button');
 
-    isPriorityOptionsOpen = true;
+    updateButtonsState(buttons, priority);
+    updateSelectedPriorityStyles(buttons, priority);
+    updatePriorityTextAndSymbol(letterElement, symbolElement, priority);
 
-    let priorityOptionsContainer = createPriorityOptionsContainer();
-
-    let prioritySymbolContainer = event.currentTarget;
-
-    prioritySymbolContainer.style.position = 'relative';
-    priorityOptionsContainer.style.position = 'absolute';
-    priorityOptionsContainer.style.width = '100%';
-
-    addEventListenersToButtons(priorityOptionsContainer);
-
-    prioritySymbolContainer.appendChild(priorityOptionsContainer);
-
-    function closePriorityOptions(event) {
-        if (!priorityOptionsContainer.contains(event.target) && event.target !== prioritySymbolContainer) {
-            priorityOptionsContainer.remove();
-            document.removeEventListener('click', closePriorityOptions);
-
-            isPriorityOptionsOpen = false;
-        }
-    }
-
-    document.addEventListener('click', closePriorityOptions);
+    const optionsContainer = document.querySelector('.card-modal-priority-options-container');
+    optionsContainer && optionsContainer.remove();
 }
 
 /**
- * This function choose the priority level for the card modal
- * @param {*} priority - The priority level.
+ * Updates the state (active/inactive) of the priority buttons.
+ *
+ * @param {NodeList} buttons - The NodeList of priority buttons.
+ * @param {string} selectedPriority - The selected priority level.
+ * @returns {void}
  */
-function chooseCardModal(priority) {
-    let priorityTextElement = document.querySelector('.card-modal-priority-container .card-modal-priority-letter');
-    let prioritySymbolElement = document.querySelector('.card-modal-priority-container .card-modal-priority-symbol img');
-    let buttons = document.querySelectorAll('.prio-option-container .button');
+function updateButtonsState(buttons, selectedPriority) {
+    buttons.forEach(button => {
+        let isActive = button.classList.contains(selectedPriority);
+        button.classList.toggle('active', isActive);
+    });
+}
+
+/**
+ * Updates the visual styles of the selected priority button.
+ *
+ * @param {NodeList} buttons - The NodeList of priority buttons.
+ * @param {string} selectedPriority - The selected priority level.
+ * @returns {void}
+ */
+function updateSelectedPriorityStyles(buttons, selectedPriority) {
     buttons.forEach(button => {
         let imgElement = button.querySelector('img');
-        if (button.classList.contains(priority)) {
-            button.classList.add('active');
-            switch (priority) {
-                case 'low':
-                    button.style.backgroundColor = 'rgb(122, 226, 41)';
-                    break;
-                case 'medium':
-                    button.style.backgroundColor = 'rgb(255, 168, 0)';
-                    break;
-                case 'urgent':
-                    button.style.backgroundColor = 'rgb(255, 61, 0)';
-                    break;
-            }
-            if (imgElement) {
-                imgElement.style.filter = 'brightness(0) invert(1)';
-            }
-        } else {
-            button.classList.remove('active');
-            button.style.backgroundColor = '';
-            if (imgElement) {
-                imgElement.style.filter = 'brightness(1) invert(0)';
-            }
+        let isActive = button.classList.contains(selectedPriority);
+
+        button.style.backgroundColor = isActive ? getPriorityColor(selectedPriority) : '';
+        
+        if (imgElement) {
+            imgElement.style.filter = isActive ? 'brightness(0) invert(1)' : 'brightness(1) invert(0)';
         }
     });
+}
 
+/**
+ * Updates the priority text and symbol elements.
+ *
+ * @param {HTMLElement} letterElement - The element displaying the priority letter.
+ * @param {HTMLElement} symbolElement - The element displaying the priority symbol.
+ * @param {string} selectedPriority - The selected priority level.
+ * @returns {void}
+ */
+function updatePriorityTextAndSymbol(letterElement, symbolElement, selectedPriority) {
     let priorityMappings = {
         'urgent': { text: 'Urgent', symbolSrc: './img/Prio_up.svg' },
         'medium': { text: 'Medium', symbolSrc: './img/Prio_neutral.svg' },
         'low': { text: 'Low', symbolSrc: './img/Prio_down.svg' }
     };
 
-    let selectedPriority = priorityMappings[priority] || {};
+    let selectedPriorityInfo = priorityMappings[selectedPriority] || {};
 
-    if (priorityTextElement && prioritySymbolElement) {
-        priorityTextElement.textContent = (selectedPriority.text || '').toUpperCase();
-        prioritySymbolElement.src = selectedPriority.symbolSrc || '';
-    }
-
-    let priorityOptionsContainer = document.querySelector('.card-modal-priority-options-container');
-    if (priorityOptionsContainer) {
-        priorityOptionsContainer.remove();
+    if (letterElement && symbolElement) {
+        letterElement.textContent = (selectedPriorityInfo.text || '').toUpperCase();
+        symbolElement.src = selectedPriorityInfo.symbolSrc || '';
     }
 }
 
+/**
+ * Gets the background color for a given priority level.
+ *
+ * @param {string} priority - The priority level.
+ * @returns {string} - The background color for the priority level.
+ */
+function getPriorityColor(priority) {
+    let colorMap = {
+        'low': 'rgb(122, 226, 41)',
+        'medium': 'rgb(255, 168, 0)',
+        'urgent': 'rgb(255, 61, 0)'
+    };
+    return colorMap[priority] || '';
+}
 
 /**
  * This function creates a dropdown for the contacts in the edit modal
@@ -1269,7 +1354,7 @@ function createContactDropdown(taskId) {
     inputContainer.className = 'input-container';
     inputContainer.innerHTML = `
         <input id="assignedToEdit" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
-        <img id="arrow_down_edit" onclick="showDropdownEdit('${currentTaskId}')" class="arrow_down_edit" src="./img/arrow_down.svg" alt="">
+            <img id="arrow_down_edit" onclick="showDropdownEdit('${currentTaskId}')" class="arrow_down_edit" src="./img/arrow_down.svg" alt="">
         <div id="contactDropdownEdit_${currentTaskId}" class="dropdown-content-edit" data-task-id="${currentTaskId}"></div>
     `;
 
@@ -1329,9 +1414,7 @@ async function addContactsToSelectedContacts(task) {
 async function showDropdownEdit() {
     let dropdownContent = document.getElementById(`contactDropdownEdit_${currentTaskId}`);
     dropdownContent.innerHTML = "";
-
     let contacts = await getContacts();
-
     let selectedContacts = JSON.parse(localStorage.getItem('selectedContacts')) || [];
 
     contacts.forEach(contact => {
@@ -1397,19 +1480,8 @@ initializeContactDropdownEdit();
  */
 function createContactDivEdit(contact, isSelected) {
     let contactDiv = document.createElement("div");
-    contactDiv.innerHTML = `
-    <label class="contacts-edit ${isSelected ? 'checked' : ''}" onclick="toggleContactSelectionEdit(this, '${contact.id}')">
-        <div class="avatar">
-            <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
-            <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
-        </div>
-        <div class="contact-dropdown-edit">
-            <div>${contact.name}</div>
-        </div>
-        <div class="custom-checkbox" data-contact-id="${contact.id}"></div>
-        <img class="checkbox-img" src="${isSelected ? 'img/checked_white.svg' : 'img/unchecked.svg'}" alt="Checkbox">
-    </label>
-    `;
+    contactDiv.innerHTML = generateContactHTMLEdit(contact, isSelected);
+    
     contactDiv.addEventListener("mousedown", (event) => {
         event.preventDefault();
         updateSelectedContactsEdit(contact, isSelected ? 'remove' : 'add');
@@ -1417,35 +1489,52 @@ function createContactDivEdit(contact, isSelected) {
         isSelected = !isSelected;
         checkboxImg.src = isSelected ? 'img/checked_white.svg' : 'img/unchecked.svg';
     });
+
     return contactDiv;
 }
 
 /**
- * Toggles the selection of a contact in the edit mode.
- * It updates the class and the image of the element based on the selection.
- * It also updates the selected contacts in the local storage based on the selection.
+ * Generates the HTML content for a contact in edit mode.
  *
- * @param {HTMLElement} element - The element that was clicked.
+ * @param {Object} contact - The contact object.
+ * @param {boolean} isSelected - Indicates whether the contact is selected.
+ * @returns {string} The HTML content for the contact.
+ */
+function generateContactHTMLEdit(contact, isSelected) {
+    return `
+        <label class="contacts-edit ${isSelected ? 'checked' : ''}" onclick="toggleContactSelectionEdit(this, '${contact.id}')">
+            <div class="avatar">
+                <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
+                <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
+            </div>
+            <div class="contact-dropdown-edit">
+                <div>${contact.name}</div>
+            </div>
+            <div class="custom-checkbox" data-contact-id="${contact.id}"></div>
+            <img class="checkbox-img" src="${isSelected ? 'img/checked_white.svg' : 'img/unchecked.svg'}" alt="Checkbox">
+        </label>
+    `;
+}
+
+/**
+ * Toggles the selection of a contact in the edit mode.
+ * Updates the class, image, and local storage based on the selection.
+ *
+ * @param {HTMLElement} element - The clicked element.
  * @param {string} contactId - The ID of the contact to toggle.
  */
 function toggleContactSelectionEdit(element, contactId) {
     let isSelected = element.classList.toggle('checked');
-
     let checkboxImg = element.querySelector('.checkbox-img');
-    if (checkboxImg) {
-        checkboxImg.src = isSelected ? '/img/checked_white.svg' : 'img/unchecked.svg';
-    }
+    checkboxImg && (checkboxImg.src = isSelected ? '/img/checked_white.svg' : 'img/unchecked.svg');
 
     let selectedContacts = JSON.parse(localStorage.getItem('selectedContacts')) || [];
     let index = selectedContacts.findIndex(c => c.id === contactId);
 
-    if (isSelected && index === -1) {
-        selectedContacts.push({ id: contactId });
-    } else if (!isSelected && index !== -1) {
-        selectedContacts.splice(index, 1);
+    if ((isSelected && index === -1) || (!isSelected && index !== -1)) {
+        isSelected ? selectedContacts.push({ id: contactId }) : selectedContacts.splice(index, 1);
+        localStorage.setItem('selectedContacts', JSON.stringify(selectedContacts));
     }
-
-    localStorage.setItem('selectedContacts', JSON.stringify(selectedContacts));
 }
 
 /**
@@ -1558,51 +1647,45 @@ function updateCheckboxState() {
     });
 }
 
-
-
-
 /**
- * This function enables editing of subtasks in the card modal.
- * It creates an input field for adding new subtasks and adds event listeners to existing subtask containers.
- * The event listeners handle mouseover, mouseout, and click events to show/hide subtask icons and allow editing of the subtask description.
- * If a delete icon is present in a subtask container, an additional click event listener is added to handle subtask deletion.
+ * Enables editing of subtasks in the card modal.
+ * Adds an input field for adding new subtasks and event listeners to existing subtask containers.
+ * Handles mouseover, mouseout, and click events to show/hide subtask icons and allow editing.
+ * Additionally, adds a click event listener to handle subtask deletion if a delete icon is present.
  */
 function enableSubtasksEditing() {
-    let subtaskContainers = document.querySelectorAll('.card-modal-subtask-maincontainer');
     let subtasksContainer = document.querySelector('.card-modal-subtasks-container-headline');
+    let inputContainer = createSubtasksInputContainer();
+    subtasksContainer.appendChild(inputContainer);
 
+    document.querySelectorAll('.card-modal-subtask-maincontainer').forEach(subtaskContainer => {
+        subtaskContainer.addEventListener('mouseover', () => showSubtaskIcons(subtaskContainer));
+        subtaskContainer.addEventListener('mouseout', () => hideSubtaskIcons(subtaskContainer));
+        subtaskContainer.addEventListener('click', () => editSubtaskDescription(subtaskContainer));
+
+        const deleteIcon = subtaskContainer.querySelector('.subtask-icon-delete img');
+        deleteIcon && deleteIcon.addEventListener('click', (event) => {
+            event.stopPropagation();
+            deleteSubtask(subtaskContainer);
+        });
+    });
+}
+
+/**
+ * Creates the input container for adding new subtasks.
+ *
+ * @returns {HTMLDivElement} The created input container.
+ */
+function createSubtasksInputContainer() {
     let inputContainer = document.createElement('div');
     inputContainer.className = 'input-container-subtask';
     inputContainer.innerHTML = `
         <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask" id="subtask">
         <div id="iconContainer">
-                                    <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" />
-                                </div>
+            <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" />
+        </div>
     `;
-
-    subtasksContainer.appendChild(inputContainer);
-
-    subtaskContainers.forEach(subtaskContainer => {
-        subtaskContainer.addEventListener('mouseover', function () {
-            showSubtaskIcons(subtaskContainer);
-        });
-
-        subtaskContainer.addEventListener('mouseout', function () {
-            hideSubtaskIcons(subtaskContainer);
-        });
-
-        subtaskContainer.addEventListener('click', function () {
-            editSubtaskDescription(subtaskContainer);
-        });
-
-        let deleteIcon = subtaskContainer.querySelector('.subtask-icon-delete img');
-        if (deleteIcon) {
-            deleteIcon.addEventListener('click', function (event) {
-                event.stopPropagation();
-                deleteSubtask(subtaskContainer);
-            });
-        }
-    });
+    return inputContainer;
 }
 
 /**
@@ -1650,21 +1733,48 @@ function deleteSubtask(subtaskContainer) {
 }
 
 /**
- * This function adds a subtask in the open card
+ * Adds a subtask in the open card.
  */
 function addSubtaskOpenCard() {
-    let inputElement = document.getElementById('newSubtaskInput');
-    let subtasksContainer = document.querySelector('.card-modal-subtasks');
-    let subtaskText = inputElement.value.trim();
-    let taskId = currentTaskId;
+    const inputElement = document.getElementById('newSubtaskInput');
+    const subtasksContainer = document.querySelector('.card-modal-subtasks');
+    const subtaskText = inputElement.value.trim();
+    const taskId = currentTaskId;
 
     if (subtaskText !== '') {
-        let subtaskContainer = document.createElement('div');
-        subtaskContainer.className = 'card-modal-subtask-maincontainer';
+        const subtaskContainer = createSubtaskContainer(taskId, subtasksContainer.children.length + 1, subtaskText);
 
-        let checkboxId = `subtaskCheckbox_${taskId}_${subtasksContainer.children.length + 1}`;
+        subtasksContainer.appendChild(subtaskContainer);
 
-        subtaskContainer.innerHTML = `
+        subtaskContainer.addEventListener('mouseover', () => showSubtaskIcons(subtaskContainer));
+        subtaskContainer.addEventListener('mouseout', () => hideSubtaskIcons(subtaskContainer));
+        subtaskContainer.addEventListener('click', () => editSubtaskDescription(subtaskContainer));
+
+        const deleteIcon = subtaskContainer.querySelector('.subtask-icon-delete img');
+        deleteIcon && deleteIcon.addEventListener('click', (event) => {
+            event.stopPropagation();
+            deleteSubtask(subtaskContainer);
+        });
+
+        inputElement.value = '';
+    }
+}
+
+/**
+ * Creates a subtask container with the specified properties.
+ *
+ * @param {string} taskId - The ID of the task.
+ * @param {number} subtaskIndex - The index of the subtask.
+ * @param {string} subtaskText - The text of the subtask.
+ * @returns {HTMLDivElement} The created subtask container.
+ */
+function createSubtaskContainer(taskId, subtaskIndex, subtaskText) {
+    const subtaskContainer = document.createElement('div');
+    subtaskContainer.className = 'card-modal-subtask-maincontainer';
+
+    const checkboxId = `subtaskCheckbox_${taskId}_${subtaskIndex}`;
+
+    subtaskContainer.innerHTML = `
         <div class="card-modal-description-checkbox">
             <div class="card-modal-subtask-checked"> 
                 <input type="checkbox" class="subtask-checkbox" id="${checkboxId}" style="display: none;"> 
@@ -1672,36 +1782,13 @@ function addSubtaskOpenCard() {
             </div>
             <div class="card-modal-subtask-description">${subtaskText}</div>
         </div>
-            <div class="subtasks-edit-icons-container d-none">
-                <div class="subtasks-edit-icons-container-p">
-                    <p class="subtask-icon-edit"><img src="./img/edit.svg" alt="Edit Subtask"></p>
-                    <p class="subtask-icon-delete"><img src="./img/delete.svg" alt="Delete Subtask"></p>
-                </div>
+        <div class="subtasks-edit-icons-container d-none">
+            <div class="subtasks-edit-icons-container-p">
+                <p class="subtask-icon-edit"><img src="./img/edit.svg" alt="Edit Subtask"></p>
+                <p class="subtask-icon-delete"><img src="./img/delete.svg" alt="Delete Subtask"></p>
             </div>
-        `;
+        </div>
+    `;
 
-        subtasksContainer.appendChild(subtaskContainer);
-
-        subtaskContainer.addEventListener('mouseover', function () {
-            showSubtaskIcons(subtaskContainer);
-        });
-
-        subtaskContainer.addEventListener('mouseout', function () {
-            hideSubtaskIcons(subtaskContainer);
-        });
-
-        subtaskContainer.addEventListener('click', function () {
-            editSubtaskDescription(subtaskContainer);
-        });
-
-        let deleteIcon = subtaskContainer.querySelector('.subtask-icon-delete img');
-        if (deleteIcon) {
-            deleteIcon.addEventListener('click', function (event) {
-                event.stopPropagation();
-                deleteSubtask(subtaskContainer);
-            });
-        }
-
-        inputElement.value = '';
-    }
+    return subtaskContainer;
 }

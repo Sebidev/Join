@@ -295,6 +295,7 @@ function clearSelectedContacts() {
  * @returns {Promise<void>} A Promise that resolves after the task is added and redirected to the board.
  */
 async function addToBoard(column) {
+    event.preventDefault();
     let form = document.querySelector('form');
     let taskTitle = getFieldValueById('taskTitleInput');
     let category = getFieldValueById('category');
