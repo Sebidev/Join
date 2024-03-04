@@ -28,10 +28,10 @@ async function initBoard() {
  */
 function addSearch(searchInput) {
     searchInput.addEventListener('input', async () => {
-        const searchValue = searchInput.value.toLowerCase();
-        const tasks = isUserLoggedIn ? users[currentUser].tasks : JSON.parse(localStorage.getItem('tasks')) || [];
+        let searchValue = searchInput.value.toLowerCase();
+        let tasks = isUserLoggedIn ? users[currentUser].tasks : JSON.parse(localStorage.getItem('tasks')) || [];
 
-        const matchingTasks = tasks.filter(task =>
+        let matchingTasks = tasks.filter(task =>
             task.content.title.toLowerCase().includes(searchValue) ||
             task.content.description.toLowerCase().includes(searchValue)
         );
@@ -40,7 +40,7 @@ function addSearch(searchInput) {
             document.getElementById(`${columnId}-column`).innerHTML = '';
         });
 
-        for (const task of matchingTasks) {
+        for (let task of matchingTasks) {
             await renderCard(task);
         }
 
@@ -530,7 +530,7 @@ async function renderCard(data) {
  * @returns {HTMLElement} The task card element.
  */
 function createCardElement(taskId, subtasksData) {
-    const renderCard = document.createElement('div');
+    let renderCard = document.createElement('div');
     renderCard.id = taskId;
     renderCard.className = 'card-user-story';
     renderCard.onclick = () => openCard(data, subtasksData);
@@ -954,7 +954,7 @@ async function openCard(data, subtasksData) {
  * @param {string} containerClass - The class for the container.
  * @param {string} inputType - The type of input field ('input' or 'textarea').
  */
-const replaceElementWithInput = (element, containerClass, inputType) => {
+let replaceElementWithInput = (element, containerClass, inputType) => {
     let titleElement = document.querySelector('.card-modal-title');
     let container = document.createElement('div');
     container.className = containerClass;
@@ -1268,7 +1268,7 @@ function chooseCardModal(priority) {
     updateSelectedPriorityStyles(buttons, priority);
     updatePriorityTextAndSymbol(letterElement, symbolElement, priority);
 
-    const optionsContainer = document.querySelector('.card-modal-priority-options-container');
+    let optionsContainer = document.querySelector('.card-modal-priority-options-container');
     optionsContainer && optionsContainer.remove();
 }
 
@@ -1663,7 +1663,7 @@ function enableSubtasksEditing() {
         subtaskContainer.addEventListener('mouseout', () => hideSubtaskIcons(subtaskContainer));
         subtaskContainer.addEventListener('click', () => editSubtaskDescription(subtaskContainer));
 
-        const deleteIcon = subtaskContainer.querySelector('.subtask-icon-delete img');
+        let deleteIcon = subtaskContainer.querySelector('.subtask-icon-delete img');
         deleteIcon && deleteIcon.addEventListener('click', (event) => {
             event.stopPropagation();
             deleteSubtask(subtaskContainer);
@@ -1736,13 +1736,13 @@ function deleteSubtask(subtaskContainer) {
  * Adds a subtask in the open card.
  */
 function addSubtaskOpenCard() {
-    const inputElement = document.getElementById('newSubtaskInput');
-    const subtasksContainer = document.querySelector('.card-modal-subtasks');
-    const subtaskText = inputElement.value.trim();
-    const taskId = currentTaskId;
+    let inputElement = document.getElementById('newSubtaskInput');
+    let subtasksContainer = document.querySelector('.card-modal-subtasks');
+    let subtaskText = inputElement.value.trim();
+    let taskId = currentTaskId;
 
     if (subtaskText !== '') {
-        const subtaskContainer = createSubtaskContainer(taskId, subtasksContainer.children.length + 1, subtaskText);
+        let subtaskContainer = createSubtaskContainer(taskId, subtasksContainer.children.length + 1, subtaskText);
 
         subtasksContainer.appendChild(subtaskContainer);
 
@@ -1750,7 +1750,7 @@ function addSubtaskOpenCard() {
         subtaskContainer.addEventListener('mouseout', () => hideSubtaskIcons(subtaskContainer));
         subtaskContainer.addEventListener('click', () => editSubtaskDescription(subtaskContainer));
 
-        const deleteIcon = subtaskContainer.querySelector('.subtask-icon-delete img');
+        let deleteIcon = subtaskContainer.querySelector('.subtask-icon-delete img');
         deleteIcon && deleteIcon.addEventListener('click', (event) => {
             event.stopPropagation();
             deleteSubtask(subtaskContainer);
@@ -1769,10 +1769,10 @@ function addSubtaskOpenCard() {
  * @returns {HTMLDivElement} The created subtask container.
  */
 function createSubtaskContainer(taskId, subtaskIndex, subtaskText) {
-    const subtaskContainer = document.createElement('div');
+    let subtaskContainer = document.createElement('div');
     subtaskContainer.className = 'card-modal-subtask-maincontainer';
 
-    const checkboxId = `subtaskCheckbox_${taskId}_${subtaskIndex}`;
+    let checkboxId = `subtaskCheckbox_${taskId}_${subtaskIndex}`;
 
     subtaskContainer.innerHTML = `
         <div class="card-modal-description-checkbox">
