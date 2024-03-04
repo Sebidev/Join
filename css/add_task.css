@@ -886,7 +886,58 @@ body {
 }
 
 /* Media queries */
-@media (max-width: 768px) {
+
+@media screen and (max-width: 1330px){
+  .header-add-task {
+    margin-left: 250px;
+    transition: margin 0.5s ease-in-out;	
+  }
+
+  .Add-task {
+    margin-left: 160px;
+    transition: margin 0.5s ease-in-out;
+  }
+
+  .Add-task-left{
+    width: 33vw;
+    transition: margin 0.5s ease-in-out;
+  }
+
+  .divider {
+    margin: 0 16px;
+    transition: margin 0.5s ease-in-out;
+  }
+
+  .title-input{
+    width: 29.2vw;
+  }
+
+  .description-input{
+    width: 30vw;
+  }
+
+  .assigned-dropdown{
+    width: 30vw;
+  }
+
+  .due-date-input {
+    width: 29.7vw;
+  }
+
+  .prio-option-container{
+    width: clamp(320px, 32.5vw, 100%);
+  }
+
+  .category-dropdown{
+    width: 30vw;
+  }
+
+  .input-container-subtask {
+    width: 32.5vw;
+  }
+}
+
+@media only screen and (max-width: 768px) {
   .divider img {
     display: none;
   }
@@ -910,14 +961,14 @@ body {
 
   .Add-task-left {
     height: 188px;
-    width: 95vw;
+    width: 95vw !important;
     margin-left: 5px;
   }
 
   .title-container-add-task,
   .description-container,
   .assigned-to-container {
-    width: 95vw;
+    width: 95vw !important;
   }
 
   .assigned-to-container {
@@ -934,6 +985,10 @@ body {
   .description-input,
   .assigned-dropdown {
     font-size: 16px;
+  }
+
+  .title-input,  .description-input, .assigned-dropdown, .due-date-input, .prio-option-container, .category-dropdown, .input-container-subtask {
+    width: unset;
   }
 
   .description-input {
@@ -968,7 +1023,9 @@ body {
   }
 
   .input-container-subtask img {
-    padding: 5px;
+    position: absolute;
+    right: 5px;
+    margin-top: -33px;
   }
 
   .arrow_down {
@@ -1065,7 +1122,7 @@ body {
   }
 
   .input-container-subtask input {
-    width: 84vw;
+    width: 88vw;
   }
 
   .subtasks-input {
@@ -1077,12 +1134,6 @@ body {
 
   .subtask-text {
     font-size: 16px;
-  }
-
-  .input-container-subtask img {
-    position: absolute;
-    right: 10px;
-    margin-top: 4.5px;
   }
 
   .clear-and-create-section {
