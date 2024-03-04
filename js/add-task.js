@@ -9,6 +9,24 @@ let selectedPriority;
 let isDropdownOpen = false;
 let isCategoryDropdownOpen = false;
 
+/**
+ * Toggles the visibility of a dropdown menu for selecting contacts.
+ * This function is specifically designed for handling the arrow icon toggle
+ * and dropdown display for contact selection.
+ *
+ * @function
+ * @name toggleArrowContacts
+ *
+ * @example
+ * // HTML structure
+ * // <img id="arrow_img_contacts" class="arrow_down" src="./img/arrow_down.svg" onclick="toggleArrowContacts()" alt="" />
+ * // <div id="contactDropdown" class="dropdown-content"></div>
+ *
+ * // JavaScript usage
+ * toggleArrowContacts();
+ *
+ * @returns {void}
+ */
 function toggleArrowContacts() {
     let arrowImg = document.getElementById('arrow_img_contacts');
     let dropdownContent = document.getElementById("contactDropdown");
@@ -59,20 +77,21 @@ async function showDropdown() {
 document.addEventListener('click', function (event) {
     let dropdown = document.getElementById('contactDropdown');
     let arrowImg = document.getElementById('arrow_img_contacts');
+    let assignedToInput = document.getElementById('assignedTo');
 
     if (dropdown) {
-        if (!event.target.matches('.arrow_down') && !event.target.matches('.arrow_up') && !event.target.closest('.assigned-to-container')) {
+        let isArrowClick = event.target.matches('.arrow_down, .arrow_up');
+        let isAssignedToClick = event.target.id === 'assignedTo';
+
+        if ((!isArrowClick && !isAssignedToClick) || !event.target.closest('.assigned-to-container')) {
             dropdown.style.display = 'none';
             isDropdownOpen = false;
-
-            if (arrowImg) {
-                arrowImg.src = 'img/arrow_down.svg';
-                arrowImg.classList.remove('arrow_up');
-            }
+            arrowImg?.setAttribute('src', 'img/arrow_down.svg')?.classList.remove('arrow_up');
         }
 
-        if (event.target.id === 'assignedTo') {
+        if (isAssignedToClick || (assignedToInput && event.target === assignedToInput)) {
             showDropdown();
+            arrowImg?.setAttribute('src', 'img/arrow_up.svg')?.classList.add('arrow_up');
         }
     }
 });
@@ -110,37 +129,6 @@ function getLocalStorageContacts() {
 
 /**
  * This function initializes the contact dropdown by adding an event listener to the document.
- */
-/*
-function initializeContactDropdown() {
-    if (window.location.pathname.endsWith("add-task.html") || window.location.pathname.endsWith("board.html")) {
-        document.addEventListener('click', function (event) {
-            let dropdown = document.getElementById('contactDropdown');
-
-            if (dropdown) {
-                let arrowImg = document.getElementById('arrow_img');
-
-                if (!event.target.matches('.arrow_down') && !event.target.matches('.arrow_up') && !event.target.closest('.assigned-to-container')) {
-                    dropdown.style.display = 'none';
-                    isDropdownOpen = false;
-
-                    if (arrowImg) {
-                        arrowImg.src = 'img/arrow_down.svg';
-                        arrowImg.classList.remove('arrow_up');
-                    }
-                }
-
-                if (event.target.id === 'assignedTo') {
-                    showDropdown();
-                }
-            }
-        });
-    }
-}
-initializeContactDropdown();*/
-
-/**
- * This function initializes the contact dropdown by adding an event listener to the document.
  * @param {*} contact - The contact to be added to the selected contacts.
  * @param {*} isSelected - A boolean indicating whether the contact is selected.
  * @returns {HTMLDivElement} A div element representing the contact.
@@ -149,16 +137,16 @@ function createContactDiv(contact, isSelected) {
     let contactDiv = document.createElement("div");
     contactDiv.innerHTML = `
     <label class="contacts ${isSelected ? 'checked' : ''}" onclick="toggleContactSelection(this, '${contact.id}')">
-    <div class="avatar">
-        <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
-        <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
-    </div>
-    <div class="contact-dropdown">
-        <div>${contact.name}</div>
-    </div>
-    <div class="custom-checkbox" data-contact-id="${contact.id}"></div>
-    <img class="checkbox-img" src="${isSelected ? 'img/checked_white.svg' : 'img/unchecked.svg'}" alt="Checkbox">
-</label>
+        <div class="avatar">
+            <img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
+            <div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}</div>
+        </div>
+        <div class="contact-dropdown">
+            <div>${contact.name}</div>
+        </div>
+        <div class="custom-checkbox" data-contact-id="${contact.id}"></div>
+        <img class="checkbox-img" src="${isSelected ? 'img/checked_white.svg' : 'img/unchecked.svg'}" alt="Checkbox">
+    </label>
     `;
     contactDiv.addEventListener("mousedown", (event) => {
         event.preventDefault();
@@ -170,6 +158,12 @@ function createContactDiv(contact, isSelected) {
     return contactDiv;
 }
 
+/**
+ * Toggles the selection state of a contact element.
+ *
+ * @param {HTMLElement} element - The HTML element representing the contact.
+ * @param {string} contactId - The unique identifier of the contact.
+ */
 function toggleContactSelection(element, contactId) {
     let isSelected = element.classList.toggle('checked');
 
@@ -267,8 +261,6 @@ function saveSelectedContacts() {
     localStorage.setItem('selectedContacts', JSON.stringify(selectedInitialsArray));
 }
 
-
-
 /**
  * Removes a contact from the selected contacts array and updates the selected contacts container.
  * It first finds the index of the contact with the given avatar ID in the `selectedInitialsArray`.
@@ -296,29 +288,38 @@ function clearSelectedContacts() {
     localStorage.removeItem('selectedContacts');
 }
 
+/**
+ * Adds a new task to the specified column on the board.
+ *
+ * @param {string} column - The target column for the new task.
+ * @returns {Promise<void>} A Promise that resolves after the task is added and redirected to the board.
+ */
 async function addToBoard(column) {
     let form = document.querySelector('form');
     let taskTitle = getFieldValueById('taskTitleInput');
     let category = getFieldValueById('category');
     let overlay = document.getElementById('overlayFeedack');
     let animatedIcon = document.getElementById('animatedIcon');
+
+    if (form.checkValidity() && taskTitle && category) {
+        overlay.style.display = 'block';
+        animatedIcon.style.bottom = '500px';
     
-    overlay.style.display = 'block';
-    animatedIcon.style.bottom = '500px';
-
-    let description = getFieldValueById('descriptionInput');
-    let date = getFieldValueById('date');
-    let subtasksList = document.getElementById('subtaskList').children;
-    let selectedContacts = getSelectedContacts();
-    let selectedPriority = getSelectedPriority();
-
-    saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column);
-
-    clearSelectedContacts();
+        let description = getFieldValueById('descriptionInput');
+        let date = getFieldValueById('date');
+        let subtasksList = document.getElementById('subtaskList').children;
+        let selectedContacts = getSelectedContacts();
+        let selectedPriority = getSelectedPriority();
+    
+        if (form.checkValidity()) {
+            saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column);
+    
+            setTimeout(() => {
+                window.location.href = 'board.html';
+            }, 1000);
+        }
+    }
     resetFormFields();
-
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    window.location.href = 'board.html';
 }
 
 /**
@@ -364,9 +365,7 @@ function getSelectedContacts() {
 }
 
 /**
- * Saves a task to local storage or remote storage depending on whether the user is logged in.
- * The task is first created with the given parameters, then the contacts in the task are processed,
- * and finally the task is saved to the appropriate storage.
+ * Saves a task to local storage or remote storage based on user login status.
  *
  * @param {string} taskTitle - The title of the task.
  * @param {string} description - The description of the task.
@@ -376,48 +375,25 @@ function getSelectedContacts() {
  * @param {Array} selectedContacts - The list of selected contacts for the task.
  * @param {string} selectedPriority - The selected priority of the task.
  * @param {string} column - The column of the task on the board.
+ * @returns {Promise<void>} A promise indicating the completion of the task saving process.
  */
 async function saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column) {
-    let subtasksData = Array.from(subtasksList).map(subtask => {
-        return {
-            description: subtask.firstElementChild.innerText,
-            checked: false
-        };
-    });
+    let subtasksData = Array.from(subtasksList).map(subtask => ({ description: subtask.firstElementChild.innerText, checked: false }));
 
     let task = {
-        content: {
-            title: taskTitle,
-            description: description,
-            date: date,
-            category: category,
-            subtasks: subtasksList.length,
-            subtasksData: subtasksData,
-            selectedContacts: selectedContacts,
-            priority: selectedPriority,
-            boardColumn: column,
-        },
-        id: 'task' + (isUserLoggedIn ? users[currentUser].tasks.length : (JSON.parse(localStorage.getItem('tasks')) || []).length),
-        //dataId: selectedContacts[0].id
+        content: { title: taskTitle, description, date, category, subtasks: subtasksList.length, subtasksData, selectedContacts, priority: selectedPriority, boardColumn: column },
+        id: `task${isUserLoggedIn ? users[currentUser].tasks.length : (JSON.parse(localStorage.getItem('tasks')) || []).length}`,
     };
-
-    //console.log('Task before processing contacts:', task);
 
     task.content.selectedContacts.forEach(contact => {
         let matchingContact = contacts.find(existingContact => existingContact.id === contact.id);
-        if (matchingContact) {
-            contact.name = matchingContact.name;
-        }
+        if (matchingContact) contact.name = matchingContact.name;
     });
 
-    //console.log('Task after processing contacts:', task);
-
     if (isUserLoggedIn) {
-        // User is logged in, save the task to the remote storage
         users[currentUser].tasks.push(task);
         await setItem('users', JSON.stringify(users));
     } else {
-        // User is a guest, save the task to the local storage
         let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
         tasks.push(task);
         localStorage.setItem('tasks', JSON.stringify(tasks));
@@ -499,6 +475,13 @@ function toggleArrowCategory() {
     }
 }
 
+/**
+ * Handles the click event on the document. If the clicked element is the category input or its container,
+ * it opens the category dropdown. If the clicked element is outside the category dropdown or its related elements,
+ * it closes the category dropdown.
+ *
+ * @param {Event} event - The click event.
+ */
 document.addEventListener('click', function (event) {
     let categoryArrowImg = document.querySelector('.arrow_down_category');
     let categoryInput = document.getElementById('category');
@@ -513,6 +496,10 @@ document.addEventListener('click', function (event) {
     }
 });
 
+/**
+ * Opens the category dropdown by adding the 'arrow_up' class to the category arrow image,
+ * changing its source, displaying the category options, and updating the dropdown status.
+ */
 function openCategoryDropdown() {
     let categoryArrowImg = document.getElementById('arrow_img_category');
     categoryArrowImg.classList.add('arrow_up');
@@ -525,6 +512,12 @@ function openCategoryDropdown() {
     }
 }
 
+/**
+ * Closes the category dropdown by hiding it, updating the dropdown status,
+ * and resetting the category arrow image to its default state.
+ *
+ * @param {HTMLElement} categoryArrowImg - The category arrow image element.
+ */
 function closeCategoryDropdown(categoryArrowImg) {
     let categoryDropdown = document.getElementById('categoryOptions');
     if (categoryDropdown) {
@@ -558,57 +551,64 @@ function updateSelectedCategory(category) {
 }
 
 /**
- * Handles a click event outside of the sub-image container and the subtasks input field.
- * If the click event's target is not within the sub-image container or the subtasks input field,
- * the function calls `revertSubImg` to revert the sub-image.
- *
- * @param {Event} event - The click event.
+ * Handles the DOMContentLoaded event and sets up a click event listener on the document body.
+ * It deactivates the input field if the clicked element is not related to the new subtask input.
+ * If the new subtask input is clicked, it toggles the visibility of icons (close and submit).
  */
-/*
-function handleOutsideClick(event) {
-    let subImgContainer = document.getElementById('subImgContainer');
-    let inputField = document.querySelector('.subtasks-input');
-
-    if (subImgContainer && !subImgContainer.contains(event.target) && inputField && !inputField.contains(event.target)) {
-        revertSubImg();
-    }
-}*/
-
 document.addEventListener('DOMContentLoaded', function () {
     document.body.addEventListener('click', function (event) {
-
         if (event.target.id !== 'newSubtaskInput' && !event.target.closest('#newSubtaskInput')) {
             deactivateInputField();
         }
 
         if (event.target.id === 'newSubtaskInput') {
-            let addIcon = document.querySelector('.add-icon');
-            if (addIcon) {
-                addIcon.remove();
-            }
-
-            let iconContainer = document.getElementById('iconContainer');
-            if (!document.querySelector('#iconContainer img')) {
-                let imgClose = document.createElement('img');
-                imgClose.src = 'img/close.svg';
-                imgClose.onclick = function () {
-                    deactivateInputField();
-                };
-
-                let imgSubmit = document.createElement('img');
-                imgSubmit.src = 'img/submit.svg';
-                imgSubmit.onclick = function () {
-                    addSubtask();
-                    deactivateInputField();
-                };
-
-                iconContainer.appendChild(imgClose);
-                iconContainer.appendChild(imgSubmit);
-            }
+            handleNewSubtaskInputClick();
         }
     });
 });
 
+/**
+ * Toggles the visibility of icons (close and submit) in the icon container associated with the new subtask input.
+ * It removes the existing add-icon and creates and appends close and submit icons if not present.
+ */
+function handleNewSubtaskInputClick() {
+    let addIcon = document.querySelector('.add-icon');
+    if (addIcon) {
+        addIcon.remove();
+    }
+
+    let iconContainer = document.getElementById('iconContainer');
+    if (!document.querySelector('#iconContainer img')) {
+        createAndAppendIcons(iconContainer);
+    }
+}
+
+/**
+ * Creates and appends close and submit icons to the specified container.
+ * @param {HTMLElement} container - The container element to which icons will be appended.
+ */
+function createAndAppendIcons(container) {
+    let imgClose = document.createElement('img');
+    imgClose.src = 'img/close.svg';
+    imgClose.onclick = function () {
+        deactivateInputField();
+    };
+
+    let imgSubmit = document.createElement('img');
+    imgSubmit.src = 'img/submit.svg';
+    imgSubmit.onclick = function () {
+        addSubtask();
+        deactivateInputField();
+    };
+
+    container.appendChild(imgClose);
+    container.appendChild(imgSubmit);
+}
+
+/**
+ * Deactivates the new subtask input field by clearing its value and resetting the icon container.
+ * It sets the icon container to display the default add icon.
+ */
 function deactivateInputField() {
     let newSubtaskInput = document.getElementById('newSubtaskInput');
     if (newSubtaskInput) {
@@ -617,15 +617,22 @@ function deactivateInputField() {
 
     let iconContainer = document.getElementById('iconContainer');
     if (iconContainer) {
-        iconContainer.innerHTML = '';
-        let addIcon = document.createElement('img');
-        addIcon.src = '/img/Subtasks icons11.svg';
-        addIcon.classList.add('add-icon');
-        addIcon.alt = 'Add';
-        iconContainer.appendChild(addIcon);
+        resetIconContainer(iconContainer);
     }
 }
 
+/**
+ * Resets the icon container to display the default add icon.
+ * @param {HTMLElement} container - The container element to be reset.
+ */
+function resetIconContainer(container) {
+    container.innerHTML = '';
+    let addIcon = document.createElement('img');
+    addIcon.src = 'img/Subtasks icons11.svg';
+    addIcon.classList.add('add-icon');
+    addIcon.alt = 'Add';
+    container.appendChild(addIcon);
+}
 
 /**
  * Adds a new subtask to the subtask list.
@@ -655,14 +662,7 @@ function addSubtask() {
         inputElement.value = '';
     }
 }
-/*
-document.getElementById('newSubtaskInput').addEventListener('keydown', function (event) {
-    if (event.key === 'Enter') {
-        addSubtask();
-        event.preventDefault();
-    }
-});
-*/
+
 /**
  * Deletes a subtask item from the subtask list.
  * The function removes the given subtask item from the DOM.
@@ -673,6 +673,12 @@ function deleteSubtaskItem(subtaskItem) {
     subtaskItem.remove();
 }
 
+/**
+ * Toggles the contentEditable attribute of a subtask item's text element to enable or disable editing.
+ * If the element is not currently editable, it sets it to editable and focuses on it.
+ * If it is editable, it sets it to non-editable.
+ * @param {HTMLElement} subtaskItem - The subtask item element containing the text to be edited.
+ */
 function editSubtaskItem(subtaskItem) {
     let subtaskTextElement = subtaskItem.querySelector('.subtask-text');
     let isContentEditable = subtaskTextElement.getAttribute('contentEditable') === 'true';
@@ -691,15 +697,10 @@ function editSubtaskItem(subtaskItem) {
  */
 function clearFields() {
     let inputFields = document.querySelectorAll('.Add-task input, .Add-task textarea');
-    let AllInputFields = document.querySelectorAll('.Add-task-content input, .Add-task-content textarea');
+    let allInputFields = document.querySelectorAll('.Add-task-content input, .Add-task-content textarea');
 
-    inputFields.forEach(field => {
-        field.value = '';
-    });
-
-    AllInputFields.forEach(field => {
-        field.value = '';
-    });
+    inputFields.forEach(field => field.value = '');
+    allInputFields.forEach(field => field.value = '');
 
     choose('medium');
     updateSelectedCategory('');
@@ -715,42 +716,58 @@ function clearFields() {
     clearSelectedContacts();
 }
 
+/**
+ * Sets up the due date input by replacing it with a datepicker on the "Add Task" page.
+ */
 function setupDueDateInputAddTask() {
     if (window.location.pathname.includes("add-task.html")) {
         let dateElement = document.getElementById('date');
+
         if (dateElement) {
+            let dateInput = createAndConfigureDateInput(dateElement);
 
-            let dateElement = document.getElementById('date');
+            // Replace the existing date input with the new container
+            dateElement.replaceWith(createDateContainer(dateInput));
 
-            let dateContainer = document.createElement('div');
-            dateContainer.className = 'due-date-container-2';
-            let dateHeadline = document.createElement('div');
-            let dateInput = document.createElement('input');
-            dateInput.type = 'text';
-            dateInput.id = 'date';
-            dateInput.className = 'due-date-input';
-            dateInput.placeholder = 'dd/mm/yyyy';
-            dateInput.required = true;
-
-            let dateValue = dateElement.value;
-            dateInput.value = dateValue;
-
-            dateInput.style.backgroundImage = 'url("img/calendar.svg")';
-            dateInput.style.backgroundRepeat = 'no-repeat';
-            dateInput.style.backgroundPosition = 'right center';
-            dateInput.style.backgroundSize = '24px';
-            dateInput.classList.add('calendar-hover');
-
-            dateContainer.appendChild(dateHeadline);
-            dateContainer.appendChild(dateInput);
-            dateElement.replaceWith(dateContainer);
-
+            // Initialize the datepicker
             $(dateInput).datepicker({
                 dateFormat: 'yy-mm-dd',
                 showButtonPanel: true,
             });
         }
-
     }
 }
 setupDueDateInputAddTask();
+
+/**
+ * Creates a new date input container and configures the date input element.
+ * @param {HTMLElement} dateElement - The existing date input element.
+ * @returns {HTMLElement} The configured date input element.
+ */
+function createAndConfigureDateInput(dateElement) {
+    let dateInput = document.createElement('input');
+    dateInput.type = 'text';
+    dateInput.id = 'date';
+    dateInput.className = 'due-date-input';
+    dateInput.placeholder = 'dd/mm/yyyy';
+    dateInput.required = true;
+    dateInput.value = dateElement.value;
+    dateInput.style.backgroundImage = 'url("img/calendar.svg")';
+    dateInput.style.backgroundRepeat = 'no-repeat';
+    dateInput.style.backgroundPosition = 'right center';
+    dateInput.style.backgroundSize = '24px';
+    dateInput.classList.add('calendar-hover');
+    return dateInput;
+}
+
+/**
+ * Creates a new date input container.
+ * @param {HTMLElement} dateInput - The configured date input element.
+ * @returns {HTMLDivElement} The date input container.
+ */
+function createDateContainer(dateInput) {
+    let dateContainer = document.createElement('div');
+    dateContainer.className = 'due-date-container-2';
+    dateContainer.appendChild(dateInput);
+    return dateContainer;
+}
