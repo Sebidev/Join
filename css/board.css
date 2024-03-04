@@ -1422,6 +1422,7 @@ body {
 
 .card-modal-subtask-description {
   color: #000;
+  padding-top: 4px;
   padding-left: 8px;
 
   /* Version 2/body */
