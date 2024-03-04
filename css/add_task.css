@@ -690,11 +690,21 @@ body {
   margin-top: 0px;
 }
 
-#iconContainer, #iconContainerEdit {
+#iconContainer {
   display: flex;
 }
 
-#iconContainer, #iconContainerEdit img:hover {
+#iconContainerEdit {
+  display: flex;
+}
+
+#iconContainer img:hover {
+  border-radius: 50%;
+  filter: grayscale(5%) brightness(100%);
+  background-color: #f3eaea;
+}
+
+#iconContainerEdit img:hover {
   border-radius: 50%;
   filter: grayscale(5%) brightness(100%);
   background-color: #f3eaea;
