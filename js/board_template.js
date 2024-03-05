@@ -149,7 +149,7 @@ function addTaskModalHTML() {
  * @param {Object} selectedContacts - Selected contacts for the task.
  * @returns {string} - HTML code for the opened task card modal.
  */
-function openTaskHTML(data, taskId, categoryClass, priority, priorityIconSrc, selectedContacts) {
+function openTaskHTML(data, taskId, categoryClass, priority, priorityIconSrc, selectedContacts, isSelected) {
     return  /*html*/`
     <div id="card-overlay"></div>
     <div id="cardModal_${taskId}" class="card-modal">
@@ -199,31 +199,34 @@ function openTaskHTML(data, taskId, categoryClass, priority, priorityIconSrc, se
         </div>
 
         <div class="card-modal-subtasks-container">
-            <p class="card-modal-subtasks-container-headline">Subtasks:</p>
-            <div class="card-modal-subtasks">
-                ${(data.content.subtasksData || []).map((subtask, index) => `
-                    <div class="card-modal-subtask-maincontainer">
-                        <div class="card-modal-description-checkbox">
-                            <div class="card-modal-subtask-checked"> 
-                                <input type="checkbox" class="subtask-checkbox" id="subtaskCheckbox_${data.id}_${index + 1}" ${subtask.checked ? 'checked' : ''}>                     
-                                <img src="./img/circle.svg" class="subtask-image" style="display: none;">
-                            </div>
-                            <div class="card-modal-subtask-description">${subtask.description}</div>
+        <p class="card-modal-subtasks-container-headline">Subtasks:</p>
+        <div class="card-modal-subtasks">
+            ${(data.content.subtasksData || []).map((subtask, index) => `
+                <div class="card-modal-subtask-maincontainer">
+                    <div class="card-modal-description-checkbox">
+                        <div class="card-modal-subtask-checked"> 
+                            <img src="${subtask.checked ? 'img/checked.svg' : 'img/unchecked.svg'}" 
+                                 class="subtask-checkbox" 
+                                 id="subtaskCheckbox_${data.id}_${index + 1}" 
+                                 onclick="handleCheckboxClick(this)" 
+                                 ${subtask.checked ? 'checked' : ''}>
+                            <img src="./img/circle.svg" class="subtask-image" style="display: none;">
                         </div>
-                        <div class="subtasks-edit-icons-container d-none">
-                            <div class="subtasks-edit-icons-container-p">
-                                <p class="subtask-icon-edit">
+                        <div class="card-modal-subtask-description">${subtask.description}</div>
+                    </div>
+                    <div class="subtasks-edit-icons-container d-none">
+                        <div class="subtasks-edit-icons-container-p">
+                            <p class="subtask-icon-edit">
                                 <img src="./img/edit.svg" alt="Edit Subtask">
-                                </p>
-                                <p class="subtask-icon-delete">
+                            </p>
+                            <p class="subtask-icon-delete">
                                 <img src="./img/delete.svg" alt="Delete Subtask">
-                                </p>
-                            </div>
+                            </p>
                         </div>
-                    </div>`).join('')}
-            </div>
+                    </div>
+                </div>`).join('')}
         </div>
-        </div>
+    </div>
 
         <div class="card-modal-edit-and-delete-container">
             <button onclick="deleteTask()" data-id="${data.id}" class="card-modal-delete-button">

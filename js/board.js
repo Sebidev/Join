@@ -291,25 +291,41 @@ function createAvatarDivs(selectedContacts) {
 
 /**
  * Updates the progress bar and subtasks info for the current task based on the number of checked subtasks.
+ * @param {string} taskId - The ID of the task.
+ * @param {boolean} isCheckedNow - The current checked status.
  */
-function updateProgressBar() {
-    let taskId = currentTaskId;
-    let progressFill = document.getElementById(`progressFill_${taskId}`);
-    let subtasksInfo = document.querySelector(`#subtasks_${taskId}`);
+function updateProgressBar(taskId, isCheckedNow) {
+    let checkExist = setInterval(function () {
+        let progressFill = document.getElementById(`progressFill_${taskId}`);
+        let subtasksInfo = document.querySelector(`#subtasks_${taskId}`);
 
-    if (progressFill && subtasksInfo) {
-        let totalSubtasks = document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox`).length;
-        let checkedSubtasks = document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox:checked`).length;
-        let percentage = totalSubtasks > 0 ? (checkedSubtasks / totalSubtasks) * 100 : 0;
+        if (progressFill && subtasksInfo) {
+            clearInterval(checkExist);
 
-        percentage = Math.round(percentage * 100) / 100;
+            console.log('progressFill:', progressFill);
+            console.log('subtasksInfo:', subtasksInfo);
 
-        progressFill.style.width = `${percentage}%`;
+            let totalSubtasks = document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox`).length;
+            let checkedSubtasks = document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox[checked]`).length;
 
-        subtasksInfo.textContent = `${checkedSubtasks}/${totalSubtasks} Subtasks`;
-    }
+            console.log('totalSubtasks:', totalSubtasks);
+            console.log('checkedSubtasks:', checkedSubtasks);
 
-    saveCheckboxStatus(taskId);
+            let percentage = totalSubtasks > 0 ? (checkedSubtasks / totalSubtasks) * 100 : 0;
+
+            console.log('percentage:', percentage);
+
+            percentage = Math.round(percentage * 100) / 100;
+
+            console.log('rounded percentage:', percentage);
+
+            progressFill.style.width = `${percentage}%`;
+
+            subtasksInfo.textContent = `${checkedSubtasks}/${totalSubtasks} Subtasks`;
+
+            saveCheckboxStatus(taskId, isCheckedNow);
+        }
+    }, 100);
 }
 
 /**

@@ -51,6 +51,34 @@ function resetCardModalVisibility() {
 }
 
 /**
+ * Handles the click event on a subtask checkbox.
+ * @param {HTMLImageElement} clickedCheckbox - The clicked checkbox.
+ */
+function handleCheckboxClick(clickedCheckbox) {
+    let isCheckedNow = !clickedCheckbox.parentElement.hasAttribute('checked');
+    
+    if (isCheckedNow) {
+        clickedCheckbox.parentElement.setAttribute('checked', 'true');
+    } else {
+        clickedCheckbox.parentElement.removeAttribute('checked');
+    }
+
+    clickedCheckbox.src = isCheckedNow ? 'img/checked.svg' : 'img/unchecked.svg';
+
+    let taskId = clickedCheckbox.id.split('_')[1];
+    updateProgressBar(taskId, isCheckedNow);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    let subtaskCheckboxes = document.querySelectorAll('.subtask-checkbox img');
+    subtaskCheckboxes.forEach(checkboxImage => {
+        checkboxImage.addEventListener('click', function () {
+            handleCheckboxClick(checkboxImage);
+        });
+    });
+});
+
+/**
  * Saves the status of checkboxes (subtasks) for a given task ID, either in the user's tasks if logged in or in local storage.
  * @param {string} taskId - The ID of the task.
  */
