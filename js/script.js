@@ -1,3 +1,89 @@
+function createPopupContent() {
+  return `
+      <div id="popupMobileColumns">
+          <div class="button-group">
+              <img src="img/close.svg" id="closeButtonMobilePopup">
+          </div>
+          <div class="column-group">
+              <div class="columnMobilePopup">Todo</div>
+              <div class="columnMobilePopup">In Progress</div>
+              <div class="columnMobilePopup">Await Feedback</div>
+              <div class="columnMobilePopup">Done</div>
+          </div>
+      </div>
+  `;
+}
+
+function createPopup(taskId) {
+  let popupContent = createPopupContent();
+
+  let popup = document.createElement('div');
+  popup.innerHTML = popupContent;
+
+  let closeButton = popup.querySelector('#closeButtonMobilePopup');
+  closeButton.addEventListener('click', function() {
+      document.body.removeChild(popup);
+  });
+
+  return popup;
+}
+
+async function handleColumnButtonClick(index, popup) {
+  let tasks = isUserLoggedIn ? await getUserTasks() : getLocalStorageTasks();
+  let currentTask;
+  tasks.forEach(task => {
+      if (task.id === currentTaskId) {
+          currentTask = task;
+          switch (index) {
+              case 0:
+                  task.content.boardColumn = 'todo-column';
+                  break;
+              case 1:
+                  task.content.boardColumn = 'progress-column';
+                  break;
+              case 2:
+                  task.content.boardColumn = 'await-column';
+                  break;
+              case 3:
+                  task.content.boardColumn = 'done-column';
+                  break;
+          }
+      }
+  });
+
+  if (isUserLoggedIn) {
+      let users = JSON.parse(await getItem('users'));
+      users[currentUser].tasks = tasks;
+      await setItem('users', JSON.stringify(users));
+  } else {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+  }
+  let oldCard = document.getElementById(currentTaskId);
+  oldCard.parentNode.removeChild(oldCard);
+  let newColumn = document.getElementById(currentTask.content.boardColumn);
+  await renderCard(currentTask);
+  document.body.removeChild(popup);
+  updatePlaceholderText();
+}
+
+function addColumnButtonListeners(popup) {
+  let columnButtons = popup.querySelectorAll('.columnMobilePopup');
+  columnButtons.forEach((button, index) => {
+      button.addEventListener('click', function() {
+          handleColumnButtonClick(index, popup);
+      });
+  });
+}
+
+function popupMobile(event, taskId) {
+  event.stopPropagation();
+  currentTaskId = taskId;
+
+  let popup = createPopup(taskId);
+  addColumnButtonListeners(popup);
+
+  document.body.appendChild(popup);
+}
 
 /**
  * delete users log in data from local storage

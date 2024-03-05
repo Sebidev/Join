@@ -92,7 +92,10 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 function createCardContentHTML(data, progress, currentSubtasks, totalSubtasks, initialsHTML, categoryClass, priorityIconSrc) {
     return `
+    <div class="top-mobile">
         <p class="${categoryClass}">${data.content.category}</p>
+        <?xml version="1.0" ?><svg onclick="popupMobile(event, '${data.id}')" id="mobilePopupOpen_${data.id}" class="hide" fill="none" height="28" viewBox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg"><path d="M18.9641 7H10.9641V9H18.9641V7Z" fill="currentColor"/><path d="M6 8.82864V15.1714L9.9642 12L6 8.82864Z" fill="currentColor"/><path d="M18.9641 11H10.9641V13H18.9641V11Z" fill="currentColor"/><path d="M10.9641 15H18.9641V17H10.9641V15Z" fill="currentColor"/></svg>
+    </div>
         <div class="title-container">
             <p class="card-title">${data.content.title}</p>
             <p class="card-content">${data.content.description}</p>
