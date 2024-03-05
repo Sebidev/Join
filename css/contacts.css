@@ -734,6 +734,12 @@ body {
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
+.more_button_mobile:hover {
+    cursor: pointer;
+    color: #29abe2;
+    border: 1px solid #29abe2;
+}
+
 .contact-editmenu_mobile{
     display: none;
     position: absolute;
@@ -761,6 +767,10 @@ body {
     line-height: 120%; /* 19.2px */
 }
 
+.contact-editmenu_entriy_mobile, .contact-editmenu_entriy_mobile:hover {
+    cursor: pointer;
+}
+
 .contact-editmenu_entriy_mobile img{
     width: 24px;
     height: 24px;
@@ -768,8 +778,8 @@ body {
 
 .backArrow {
     display: none;
-    position: absolute;
-    right: 10px;
+    position: fixed;
+    right: 15px;
     width: 37px;
     height: 37px;
     border-radius: 50%;
@@ -821,7 +831,7 @@ body {
 
     .contact-editmenu_mobile{
         position: fixed;
-        bottom: 0px;
+        bottom: 12px;
     }
 
     .add_new_contact_btn span{

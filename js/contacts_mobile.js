@@ -26,16 +26,10 @@ let handleMobileView = () => {
     } else {
         contactEntry.removeEventListener('click', mobileClickHandler);
         backButton.removeEventListener('click', backButtonHandler);
-
-        // Reset the state of the elements
-        contactsContainer.style.display = 'flex';
-        contactTitle.style.display = 'none';
-        floatingContactContainer.style.display = 'none';
-
-        let contactentries = document.querySelectorAll('.contactentry');
-        contactentries.forEach((contactentry) => {
-            contactentry.classList.remove('contact_selected');
-        });
+        
+        contactsContainer.style.display = '';
+        contactTitle.style.display = '';
+        floatingContactContainer.style.display = '';
     }
 }
 
@@ -73,7 +67,7 @@ let backButtonHandler = () => {
     });
 
     let contactsContainer = document.querySelector('.contacts_container');
-    contactsContainer.style.display = 'block';
+    contactsContainer.style.display = 'flex';
 }
 
 
