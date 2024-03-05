@@ -358,12 +358,11 @@ body {
 
 .initial_letter{
     display: flex;
-    padding: 17px 90px;
-    flex-direction: column;
-    justify-content: center;
+    width: 300px;
+    padding: 15px 24px;
     align-items: flex-start;
-    gap: 8px;
-    align-self: stretch;
+    gap: 35px;
+    margin-left: 30px;
     color: #000;
     font-family: Inter;
     font-size: 20px;
@@ -797,7 +796,6 @@ body {
         position: absolute;
         top: 95px;
         left: 230px;
-        width: 33%;
         height: auto;
         margin: 0;
         margin-left: 0px;
@@ -850,10 +848,6 @@ body {
 
     .contactentry{
         background-color: rgb(246, 247, 248);
-    }
-
-    .initial_letter{
-        padding: 17px 50px;
     }
 
     .contact_title, .floating_contact_container{
@@ -1052,8 +1046,8 @@ body {
 
     .verticalbar {
         position: absolute;
-        top: 200px;
-        left: 45px;
+        top: 60px;
+        left: 31px;
         transform: rotate(90deg);
     }
 
@@ -1158,10 +1152,28 @@ body {
         position: fixed;
         bottom: 95px;
     }
+
+    .floating_contact_phone{
+        min-height: 30vh;
+    }
 }
 
 @media only screen and (max-width: 400px){
+    #contactModal{
+        top: 48%;
+        width: 95%;
+        height: 91%;
+    }
+
     .floating_contact_name {
         font-size: 30px;
+    }
+
+    .bluebar_line{
+        margin-top: -20px;
+    }
+
+    .bluebar_titel{
+        font-size: 42px;
     }
 }
