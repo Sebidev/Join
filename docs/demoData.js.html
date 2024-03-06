@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: add-task_mobile.js</title>
+    <title>JSDoc: Source: demoData.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: add-task_mobile.js</h1>
+    <h1 class="page-title">Source: demoData.js</h1>
 
     
 
@@ -27,76 +27,105 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file add-task-mobile.js
- * @summary JavaScript file for the Add Task page on mobile devices.
- * This file contains the JavaScript code for the Add Task page on mobile devices.
- * It contains the code for rearranging the elements on the page when the screen size changes.
+ * @description Demo Contacts for the user
+ */
+let demoContacts = [
+    { id: generateId(), avatarid: rollDice(), name: 'Anton Mayer', email: 'antom@gmail.com', phone: '+49123456789', imagePath: "img/Ellipse5-0.svg", initials: "AM"},
+    { id: generateId(), avatarid: rollDice(), name: 'Anja Schulz', email: 'schulz@hotmail.com', phone: '+49123456789', imagePath:"img/Ellipse5-3.svg", initials: "AS"},
+    { id: generateId(), avatarid: rollDice(), name: 'Benedikt Ziegler', email: 'benedikt@gmail.com', phone: '+49123456789', imagePath: "img/Ellipse5-4.svg", initials: "BZ"},
+    { id: generateId(), avatarid: rollDice(), name: 'David Eisenberg', email: 'davidberg@gmail.com', phone: '+49123456789', imagePath: "img/Ellipse5-1.svg", initials: "DE",},
+    { id: generateId(), avatarid: rollDice(), name: 'Eva Fischer', email: 'eva@gmail.com', phone: '+49123456789', imagePath: "img/Ellipse5-2.svg", initials: "EF"},
+    { id: generateId(), avatarid: rollDice(), name: 'Emmanuel Mauer', email: 'emmanuelma@gmail.com', phone: '+49123456789', imagePath: "img/Ellipse5-1.svg", initials: "EM"},
+    { id: generateId(), avatarid: rollDice(), name: 'Marcel Bauer', email: 'bauer@gmail.com', phone: '+49123456789', imagePath: "img/Ellipse5-3.svg", initials: "MB"},
+    { id: generateId(), avatarid: rollDice(), name: 'Tatjana Wolf', email: 'wolf@gmail.com', phone: '+49123456789', imagePath: "img/Ellipse5-2.svg", initials: "TW"},
+];
+
+/** generate the demo contacts for a user when you sign up
+ * 
+ * @returns demo contacts in a json
  */
 
-let hasMovedElements = false;
-let originalOrder = [];
-
-function rearrangeElements() {
-    try {
-        if (window.innerWidth &lt; 768 &amp;&amp; !hasMovedElements) {
-            let element = document.querySelector('.prio-container');
-            let target = document.querySelector('.assigned-to-container');
-            if (element &amp;&amp; target &amp;&amp; target.parentNode) {
-                originalOrder.push({element: element, nextSibling: element.nextSibling, parent: element.parentNode});
-                target.parentNode.insertBefore(element, target);
-            }
-
-            let element1 = document.querySelector('.due-date-container');
-            let target1 = document.querySelector('.assigned-to-container');
-            if (element1 &amp;&amp; target1 &amp;&amp; target1.parentNode) {
-                originalOrder.push({element: element1, nextSibling: element1.nextSibling, parent: element1.parentNode});
-                target1.parentNode.insertBefore(element1, target1);
-            }
-
-            let element2 = document.querySelector('.category-container');
-            let target2 = document.querySelector('.assigned-to-container');
-            if (element2 &amp;&amp; target2 &amp;&amp; target2.parentNode) {
-                originalOrder.push({element: element2, nextSibling: element2.nextSibling, parent: element2.parentNode});
-                target2.parentNode.insertBefore(element2, target2);
-            }
-            
-            let element3 = document.querySelector('.assigned-to-container');
-            let target3 = document.querySelector('.subtasks-container');
-            if (element3 &amp;&amp; target3 &amp;&amp; target3.parentNode) {
-                originalOrder.push({element: element3, nextSibling: element3.nextSibling, parent: element3.parentNode});
-                target3.parentNode.insertBefore(element3, target3);
-            }
-
-            hasMovedElements = true;
-        } else if (window.innerWidth >= 768 &amp;&amp; hasMovedElements) {
-            originalOrder.reverse().forEach(item => {
-                if (item.nextSibling) {
-                    item.parent.insertBefore(item.element, item.nextSibling);
-                } else {
-                    item.parent.appendChild(item.element);
-                }
-            });
-
-            hasMovedElements = false;
-            originalOrder = [];
-        }
-    } catch (error) {
-        console.error('An error occurred:', error);
-    }
+function generateDemoTasks() {
+    return [
+        {
+            content: {
+                title: 'Kochwelt Page &amp; Recipe Recommender',
+                description: 'Build start page with recipe recommendation...',
+                date: '2024-12-31',
+                category: 'User Story',
+                subtasks: 2,
+                subtasksData: [
+                    { description: 'Implement Recipe Recommendation', checked: true },
+                    { description: 'Start Page Layout', checked: false }
+                ],
+                selectedContacts: [
+                    { id: demoContacts[0].id, imagePath: "img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer"  },
+                    { id: demoContacts[5].id, imagePath: "img/Ellipse5-1.svg", initials: "EM", name: "Emmanuel Mauer"},
+                    { id: demoContacts[6].id, imagePath: "img/Ellipse5-3.svg", initials: "MB", name: "Marcel Bauer" }
+                ],
+                priority: 'medium',
+                boardColumn: 'progress-column',
+            },
+            id: 'task0',
+        },
+        {
+            content: {
+                title: 'HTML Base Template Creation',
+                description: 'Create reusable HTML base templates...',
+                date: '2024-12-31',
+                category: 'Technical task',
+                subtasks: 0,
+                subtasksData: [],
+                selectedContacts: [
+                    { id: demoContacts[3].id, imagePath: "img/Ellipse5-1.svg", initials: "DE", name: "David Eisenberg" },
+                    { id: demoContacts[2].id, imagePath: "img/Ellipse5-4.svg", initials: "BZ", name: "Benedikt Ziegler" },
+                    { id: demoContacts[1].id, imagePath: "img/Ellipse5-3.svg", initials: "AS", name: "Anja Schulz" }
+                ],
+                priority: 'low',
+                boardColumn: 'await-column',
+            },
+            id: 'task1',
+        },
+        {
+            content: {
+                title: 'Daily Kochwelt Recipe',
+                description: 'Implement daily recipe and portion calculator....',
+                date: '2024-08-05',
+                category: 'User Story',
+                subtasks: 0,
+                subtasksData: [],
+                selectedContacts: [
+                    { id: demoContacts[4].id, imagePath: "img/Ellipse5-2.svg", initials: "EF", name: "Eva Fischer" },
+                    { id: demoContacts[1].id, imagePath: "img/Ellipse5-3.svg", initials: "AS", name: "Anja Schulz" },
+                    { id: demoContacts[7].id, imagePath: "img/Ellipse5-2.svg", initials: "TW", name: "Tatjana Wolf" }
+                ],
+                priority: 'medium',
+                boardColumn: 'await-column',
+            },
+            id: 'task2',
+        },
+        {
+            content: {
+                title: 'CSS Architecture Planning',
+                description: 'Define CSS naming conventions and structure...',
+                date: '2024-12-31',
+                category: 'Technical task',
+                subtasks: 2,
+                subtasksData: [
+                    { description: 'Establish CSS Methodology', checked: true },
+                    { description: 'Setup Base Styles', checked: true }
+                ],
+                selectedContacts: [
+                    { id: demoContacts[0].id, imagePath: "img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer" },
+                    { id: demoContacts[2].id, imagePath: "img/Ellipse5-4.svg", initials: "BZ", name: "Benedikt Ziegler" }
+                ],
+                priority: 'urgent',
+                boardColumn: 'done-column',
+            },
+            id: 'task3',
+        },
+    ]
 }
-
-function addTaskMobile() {
-    if ('onorientationchange' in window) {
-        window.addEventListener('orientationchange', rearrangeElements);
-    } else {
-        window.addEventListener('resize', rearrangeElements);
-    }
-}
-
-window.addEventListener('load', function() {
-    addTaskMobile();
-    rearrangeElements();
-});
 </code></pre>
         </article>
     </section>

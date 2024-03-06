@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: board_open_task_dropdowns.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: board_open_task_dropdowns.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * This function creates a dropdown for the contacts in the edit modal
+ */
+function createContactDropdown(taskId) {
+    let contactDropdownEdit = document.querySelector('.card-modal-assigned-to-headline');
+
+    let inputContainer = document.createElement('div');
+    inputContainer.className = 'input-container';
+    inputContainer.innerHTML = `
+        &lt;input id="assignedToEdit" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
+            &lt;img id="arrow_down_edit" onclick="showDropdownEdit('${currentTaskId}')" class="arrow_down_edit" src="img/arrow_down.svg" alt="">
+        &lt;div id="contactDropdownEdit_${currentTaskId}" class="dropdown-content-edit" data-task-id="${currentTaskId}">&lt;/div>
+    `;
+
+    contactDropdownEdit.appendChild(inputContainer);
+    document.getElementById('arrow_down_edit').addEventListener('click', function () {
+        showDropdownEdit(taskId);
+    });
+}
+
+/**
+ * Retrieves a task by its ID from the tasks stored in local storage.
+ *
+ * @param {string} taskId - The ID of the task to retrieve.
+ * @returns {Object} The task object if found, otherwise undefined.
+ */
+function getTaskById(taskId) {
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    return tasks.find(task => task.id === taskId);
+}
+
+/**
+ * Displays the dropdown for editing contacts.
+ * It first clears the dropdown, then fetches all contacts and the selected contacts from local storage.
+ * It adds the existing contacts in the task to the selected contacts if they are not already there.
+ * Then it creates a div for each contact and appends it to the dropdown.
+ * Finally, it updates the state of the checkboxes and displays the dropdown.
+ *
+ * @returns {Promise&lt;void>} A Promise that resolves when the function has completed.
+ */
+async function showDropdownEdit() {
+    let dropdownContent = document.getElementById(`contactDropdownEdit_${currentTaskId}`);
+    dropdownContent.innerHTML = "";
+    let contacts = await getContacts();
+    let selectedContacts = JSON.parse(localStorage.getItem('selectedContacts')) || [];
+
+    contacts.forEach(contact => {
+        let isInContainer = isContactInContainer(contact.id);
+        let isContactSelected = selectedContacts.some(selectedContact => selectedContact.id === contact.id);
+
+        let isSelected = false;
+
+        if (isInContainer || isContactSelected) {
+            isSelected = true;
+        }
+
+        let contactDiv = createContactDivEdit(contact, isSelected);
+        dropdownContent.appendChild(contactDiv);
+    });
+
+    updateCheckboxState();
+    dropdownContent.style.display = 'block';
+}
+
+/**
+ * Checks if a contact is in the container and is checked.
+ *
+ * @param {string} contactId - The ID of the contact to check.
+ * @returns {boolean} True if the contact is in the container and is checked, otherwise false.
+ */
+function isContactInContainer(contactId) {
+    let containerContacts = document.querySelectorAll('.initial-container-open-card .contact-checkbox');
+    return Array.from(containerContacts).some(checkbox => checkbox.dataset.contactId === contactId &amp;&amp; checkbox.checked);
+}
+
+/**
+ * Initializes the contact dropdown for the edit mode.
+ * It adds a click event listener to the document that handles the display of the dropdown.
+ * If the click is outside the dropdown, the assignedToEdit element, or the arrowDownEdit element, the dropdown is hidden.
+ * If the click is on the assignedToEdit element or the arrowDownEdit element, the dropdown is shown.
+ */
+function initializeContactDropdownEdit() {
+    if (window.location.pathname.endsWith("add-task.html") || window.location.pathname.endsWith("board.html")) {
+        document.addEventListener('click', function (event) {
+            let dropdown = document.getElementById(`contactDropdownEdit_${currentTaskId}`);
+            let assignedToEdit = document.getElementById('assignedToEdit');
+            let arrowDownEdit = document.getElementById('arrow_down_edit');
+
+            if (dropdown &amp;&amp; dropdown.style.display !== 'none' &amp;&amp; !dropdown.contains(event.target) &amp;&amp; !assignedToEdit.contains(event.target) &amp;&amp; !arrowDownEdit.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+
+            if ((event.target === assignedToEdit || event.target === arrowDownEdit) &amp;&amp; dropdown) {
+                showDropdownEdit();
+            }
+        });
+    }
+}
+initializeContactDropdownEdit();
+
+/**
+ * Creates a div element for a contact in the edit mode.
+ *
+ * @param {Object} contact - The contact object.
+ * @param {boolean} isSelected - Indicates whether the contact is selected.
+ * @returns {HTMLDivElement} The created div element for the contact.
+ */
+function createContactDivEdit(contact, isSelected) {
+    let contactDiv = document.createElement("div");
+    contactDiv.innerHTML = generateContactHTMLEdit(contact, isSelected);
+    
+    contactDiv.addEventListener("mousedown", (event) => {
+        event.preventDefault();
+        updateSelectedContactsEdit(contact, isSelected ? 'remove' : 'add');
+        let checkboxImg = contactDiv.querySelector('.checkbox-img');
+        isSelected = !isSelected;
+        checkboxImg.src = isSelected ? 'img/checked_white.svg' : 'img/unchecked.svg';
+    });
+
+    return contactDiv;
+}
+
+/**
+ * Generates the HTML content for a contact in edit mode.
+ *
+ * @param {Object} contact - The contact object.
+ * @param {boolean} isSelected - Indicates whether the contact is selected.
+ * @returns {string} The HTML content for the contact.
+ */
+function generateContactHTMLEdit(contact, isSelected) {
+    return `
+        &lt;label class="contacts-edit ${isSelected ? 'checked' : ''}" onclick="toggleContactSelectionEdit(this, '${contact.id}')">
+            &lt;div class="avatar">
+                &lt;img src="img/Ellipse5-${contact.avatarid}.svg" alt="${contact.name}">
+                &lt;div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}&lt;/div>
+            &lt;/div>
+            &lt;div class="contact-dropdown-edit">
+                &lt;div>${contact.name}&lt;/div>
+            &lt;/div>
+            &lt;div class="custom-checkbox" data-contact-id="${contact.id}">&lt;/div>
+            &lt;img class="checkbox-img" src="${isSelected ? 'img/checked_white.svg' : 'img/unchecked.svg'}" alt="Checkbox">
+        &lt;/label>
+    `;
+}
+
+/**
+ * Toggles the selection of a contact in the edit mode.
+ * Updates the class, image, and local storage based on the selection.
+ *
+ * @param {HTMLElement} element - The clicked element.
+ * @param {string} contactId - The ID of the contact to toggle.
+ */
+function toggleContactSelectionEdit(element, contactId) {
+    let isSelected = element.classList.toggle('checked');
+    let checkboxImg = element.querySelector('.checkbox-img');
+    checkboxImg &amp;&amp; (checkboxImg.src = isSelected ? 'img/checked_white.svg' : 'img/unchecked.svg');
+
+    let selectedContacts = JSON.parse(localStorage.getItem('selectedContacts')) || [];
+    let index = selectedContacts.findIndex(c => c.id === contactId);
+
+    if ((isSelected &amp;&amp; index === -1) || (!isSelected &amp;&amp; index !== -1)) {
+        isSelected ? selectedContacts.push({ id: contactId }) : selectedContacts.splice(index, 1);
+        localStorage.setItem('selectedContacts', JSON.stringify(selectedContacts));
+    }
+}
+
+/**
+ * Updates the selected contacts in the edit mode based on the action.
+ * It adds the contact to the selected contacts if the action is 'add' and the contact is not already selected.
+ * It removes the contact from the selected contacts if the action is 'remove' and the contact is selected.
+ *
+ * @param {Object} contact - The contact object.
+ * @param {string} action - The action to perform. It can be 'add' or 'remove'.
+ */
+function updateSelectedContactsEdit(contact, action) {
+    if (currentEditData.content &amp;&amp; currentEditData.content.selectedContacts) {
+        let index = currentEditData.content.selectedContacts.findIndex(c => c.id === contact.id);
+
+        if (action === 'add' &amp;&amp; index === -1) {
+            currentEditData.content.selectedContacts.push(contact);
+        } else if (action === 'remove' &amp;&amp; index !== -1) {
+            currentEditData.content.selectedContacts.splice(index, 1);
+            removeSelectedContactFromContainerEdit(contact);
+        }
+    }
+
+    let indexInitialsArray = selectedInitialsArray.findIndex(c => c.id === contact.id);
+    if (action === 'add' &amp;&amp; indexInitialsArray === -1) {
+        selectedInitialsArray.push(contact);
+    } else if (action === 'remove' &amp;&amp; indexInitialsArray !== -1) {
+        selectedInitialsArray.splice(indexInitialsArray, 1);
+        removeSelectedContactFromContainerEdit(contact);
+    }
+
+    selectContactEdit();
+
+    saveSelectedContacts();
+}
+
+/**
+ * Removes a selected contact from the container in the edit mode.
+ *
+ * @param {Object} contact - The contact object to remove.
+ */
+function removeSelectedContactFromContainerEdit(contact) {
+    let selectedContactsContainer = document.getElementById("selectedContactsContainerEdit");
+    let selectedContactDiv = selectedContactsContainer.querySelector(`.selected-contact[data-id="${contact.id}"]`);
+
+    if (selectedContactDiv) {
+        selectedContactDiv.remove();
+    }
+}
+
+/**
+ * Saves the selected contacts to the local storage and displays them in the edit mode.
+ */
+function saveAndDisplaySelectedContactsEdit() {
+    saveSelectedContacts();
+    selectContactEdit();
+}
+
+/**
+ * Creates a div element for a selected contact in the edit mode.
+ *
+ * @param {Object} contact - The contact object.
+ * @returns {HTMLDivElement} The created div element for the selected contact.
+ */
+function createSelectedContactDivEdit(contact) {
+    let selectedContactDiv = document.createElement("div");
+    selectedContactDiv.classList.add("initial-container-open-card");
+    selectedContactDiv.dataset.id = contact.id;
+    selectedContactDiv.id = "selectedContactEdit";
+
+    selectedContactDiv.innerHTML = `
+        &lt;div data-avatarid="${contact.id}">
+            &lt;div class="avatar">
+                &lt;img src="${contact.imagePath}" alt="Avatar">
+                &lt;div class="avatar_initletter">${contact.name.split(' ').map(n => n[0]).join('')}&lt;/div>
+            &lt;/div>
+        &lt;/div>
+    `;
+
+    return selectedContactDiv;
+}
+
+/**
+ * Displays the selected contacts in the edit mode.
+ * It first clears the selected contacts container, then creates a div for each selected contact and appends it to the container.
+ */
+function selectContactEdit() {
+    let selectedContactsContainer = document.getElementById("selectedContactsContainerEdit");
+    selectedContactsContainer.innerHTML = "";
+
+    currentEditData.content.selectedContacts.forEach(contact => {
+        let selectedContactDiv = createSelectedContactDivEdit(contact);
+        selectedContactsContainer.appendChild(selectedContactDiv);
+    });
+}
+
+/**
+ * Updates the state of the checkboxes for each contact based on the selected contacts in the local storage.
+ * It checks if each contact is in the selected contacts and updates the checkbox accordingly.
+ * If the contact is in the selected contacts, the checkbox is checked. Otherwise, it is unchecked.
+ */
+function updateCheckboxState() {
+    selectedInitialsArray = JSON.parse(localStorage.getItem('selectedContacts')) || [];
+
+    contacts.forEach(contact => {
+        let isSelected = selectedInitialsArray.some(selectedContact => selectedContact.id === contact.id);
+        let checkbox = document.querySelector(`.contact-checkbox[data-contact-id="${contact.id}"]`);
+        if (checkbox) {
+            checkbox.checked = isSelected;
+        }
+    });
+}
+
+/**
+ * Sets up the due date input for the add task modal and fills it with the current task data.
+ * 
+ * @function
+ * @name setupDueDateInputAddTaskModal
+ * @returns {void}
+ */
+function setupDueDateInputAddTaskModal() {
+    let dateElement = document.getElementById('date');
+
+    let dateContainer = document.createElement('div');
+    dateContainer.className = 'due-date-container';
+    let dateHeadline = document.createElement('div');
+    let dateInput = document.createElement('input');
+    dateInput.type = 'text';
+    dateInput.id = 'date';
+    dateInput.className = 'due-date-input';
+    dateInput.placeholder = 'dd/mm/yyyy';
+    dateInput.required = true;
+
+    let dateText = dateElement.textContent;
+    let dateValue = dateText.replace('Due date: ', '');
+    dateInput.value = dateValue;
+
+    dateInput.style.backgroundImage = 'url("img/calendar.svg")';
+    dateInput.style.backgroundRepeat = 'no-repeat';
+    dateInput.style.backgroundPosition = 'right center';
+    dateInput.style.backgroundSize = '24px';
+
+    dateContainer.appendChild(dateHeadline);
+    dateContainer.appendChild(dateInput);
+    dateElement.replaceWith(dateContainer);
+
+    $(dateInput).datepicker({
+        dateFormat: 'yy-mm-dd',
+        showButtonPanel: true,
+    });
+}
+
+/**
+ * This function creates a container with priority options (Urgent, Medium, Low) for a card modal in a task board.
+ */
+function createPriorityOptionsContainer() {
+    let priorityContainer = document.createElement('div');
+    priorityContainer.className = 'prio-container';
+
+    let priorityHeadline = document.createElement('div');
+    priorityHeadline.className = 'prio';
+    priorityHeadline.textContent = 'Priority';
+
+    let optionContainer = document.createElement('div');
+    optionContainer.className = 'prio-option-container';
+
+    createPriorityButton(optionContainer, 'Urgent', 'urgent', 'img/Prio_up.svg');
+    createPriorityButton(optionContainer, 'Medium', 'medium', 'img/Prio_neutral.svg');
+    createPriorityButton(optionContainer, 'Low', 'low', 'img/Prio_down.svg');
+
+    priorityContainer.appendChild(priorityHeadline);
+    priorityContainer.appendChild(optionContainer);
+
+    return priorityContainer;
+}
+
+/**
+ * Creates a priority button with the specified properties and appends it to the given container.
+ *
+ * @param {HTMLElement} container - The container to which the button will be appended.
+ * @param {string} text - The text content of the button.
+ * @param {string} priority - The priority level associated with the button ('low', 'medium', or 'urgent').
+ * @param {string} imgSrc - The source URL for the button's image.
+ * @returns {void}
+ */
+function createPriorityButton(container, text, priority, imgSrc) {
+    let button = document.createElement('button');
+    button.type = 'button';
+    button.className = `button ${priority}`;
+    button.innerHTML = `&lt;h3>${text}&lt;/h3>&lt;img src="${imgSrc}" alt="" />`;
+    button.onclick = () => chooseCardModal(priority);
+    container.appendChild(button);
+}
+
+/**
+ * Highlights the button corresponding to the current priority within the specified container.
+ *
+ * @param {HTMLElement} container - The container containing the priority buttons.
+ * @param {string} currentPriority - The current priority level to be highlighted.
+ * @returns {void}
+ */
+function highlightCurrentPriority(container, currentPriority) {
+    let buttons = container.querySelectorAll('.button');
+    
+    buttons.forEach(button => {
+        let imgElement = button.querySelector('img');
+
+        if (button.classList.contains(currentPriority)) {
+            button.classList.add('active');
+            setButtonStyles(button, currentPriority);
+
+            if (imgElement) {
+                imgElement.style.filter = 'brightness(0) invert(1)';
+            }
+        }
+    });
+}
+
+/**
+ * Sets the visual styles (background color) for the specified button based on its priority level.
+ *
+ * @param {HTMLElement} button - The button for which styles will be set.
+ * @param {string} priority - The priority level associated with the button.
+ * @returns {void}
+ */
+function setButtonStyles(button, priority) {
+    switch (priority) {
+        case 'low':
+            button.style.backgroundColor = 'rgb(122, 226, 41)';
+            break;
+        case 'medium':
+            button.style.backgroundColor = 'rgb(255, 168, 0)';
+            break;
+        case 'urgent':
+            button.style.backgroundColor = 'rgb(255, 61, 0)';
+            break;
+    }
+}
+
+/**
+ * Replaces an old HTML element with a new one in the DOM.
+ *
+ * @param {HTMLElement} newElement - The new element to replace the old one.
+ * @param {HTMLElement} oldElement - The old element to be replaced.
+ * @returns {void}
+ */
+function replacePriorityElement(newElement, oldElement) {
+    oldElement.replaceWith(newElement);
+}
+
+/**
+ * Adds event listeners to all buttons within the provided priority options container.
+ * When a button is clicked, the priority options container is removed and the flag indicating its open state is set to false.
+ */
+function addEventListenersToButtons(priorityOptionsContainer) {
+    let buttons = priorityOptionsContainer.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            priorityOptionsContainer.remove();
+            isPriorityOptionsOpen = false;
+        });
+    });
+}
+
+/**
+ * Chooses the priority level for the card modal and updates the UI accordingly.
+ *
+ * @param {string} priority - The priority level ('low', 'medium', or 'urgent').
+ * @returns {void}
+ */
+function chooseCardModal(priority) {
+    let container = document.querySelector('.card-modal-priority-container');
+    let letterElement = container.querySelector('.card-modal-priority-letter');
+    let symbolElement = container.querySelector('.card-modal-priority-symbol img');
+    let buttons = document.querySelectorAll('.prio-option-container .button');
+
+    updateButtonsState(buttons, priority);
+    updateSelectedPriorityStyles(buttons, priority);
+    updatePriorityTextAndSymbol(letterElement, symbolElement, priority);
+
+    let optionsContainer = document.querySelector('.card-modal-priority-options-container');
+    optionsContainer &amp;&amp; optionsContainer.remove();
+}
+
+/**
+ * Updates the state (active/inactive) of the priority buttons.
+ *
+ * @param {NodeList} buttons - The NodeList of priority buttons.
+ * @param {string} selectedPriority - The selected priority level.
+ * @returns {void}
+ */
+function updateButtonsState(buttons, selectedPriority) {
+    buttons.forEach(button => {
+        let isActive = button.classList.contains(selectedPriority);
+        button.classList.toggle('active', isActive);
+    });
+}
+
+/**
+ * Updates the visual styles of the selected priority button.
+ *
+ * @param {NodeList} buttons - The NodeList of priority buttons.
+ * @param {string} selectedPriority - The selected priority level.
+ * @returns {void}
+ */
+function updateSelectedPriorityStyles(buttons, selectedPriority) {
+    buttons.forEach(button => {
+        let imgElement = button.querySelector('img');
+        let isActive = button.classList.contains(selectedPriority);
+
+        button.style.backgroundColor = isActive ? getPriorityColor(selectedPriority) : '';
+        
+        if (imgElement) {
+            imgElement.style.filter = isActive ? 'brightness(0) invert(1)' : 'brightness(1) invert(0)';
+        }
+    });
+}
+
+/**
+ * Updates the priority text and symbol elements.
+ *
+ * @param {HTMLElement} letterElement - The element displaying the priority letter.
+ * @param {HTMLElement} symbolElement - The element displaying the priority symbol.
+ * @param {string} selectedPriority - The selected priority level.
+ * @returns {void}
+ */
+function updatePriorityTextAndSymbol(letterElement, symbolElement, selectedPriority) {
+    let priorityMappings = {
+        'urgent': { text: 'Urgent', symbolSrc: 'img/Prio_up.svg' },
+        'medium': { text: 'Medium', symbolSrc: 'img/Prio_neutral.svg' },
+        'low': { text: 'Low', symbolSrc: 'img/Prio_down.svg' }
+    };
+
+    let selectedPriorityInfo = priorityMappings[selectedPriority] || {};
+
+    if (letterElement &amp;&amp; symbolElement) {
+        letterElement.textContent = (selectedPriorityInfo.text || '').toUpperCase();
+        symbolElement.src = selectedPriorityInfo.symbolSrc || '';
+    }
+}
+
+/**
+ * Gets the background color for a given priority level.
+ *
+ * @param {string} priority - The priority level.
+ * @returns {string} - The background color for the priority level.
+ */
+function getPriorityColor(priority) {
+    let colorMap = {
+        'low': 'rgb(122, 226, 41)',
+        'medium': 'rgb(255, 168, 0)',
+        'urgent': 'rgb(255, 61, 0)'
+    };
+    return colorMap[priority] || '';
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Events</h3><ul><li><a href="global.html#event:resizeThiseventisusedtohandletheresizeevent.ItchecksiftheviewismobileandcallsthehandleMobileViewfunction.ItalsoupdatestheisMobilevariable.">resizeThis event is used to handle the resize event.It checks if the view is mobile and calls the handleMobileView function.It also updates the isMobile variable.</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addContact">addContact</a></li><li><a href="global.html#addContactsToSelectedContacts">addContactsToSelectedContacts</a></li><li><a href="global.html#addEventListenersToButtons">addEventListenersToButtons</a></li><li><a href="global.html#addPlaceholderText">addPlaceholderText</a></li><li><a href="global.html#addSearch">addSearch</a></li><li><a href="global.html#addSubtask">addSubtask</a></li><li><a href="global.html#addSubtaskOpenCard">addSubtaskOpenCard</a></li><li><a href="global.html#addTask">addTask</a></li><li><a href="global.html#addTaskModalHTML">addTaskModalHTML</a></li><li><a href="global.html#addToBoard">addToBoard</a></li><li><a href="global.html#addToBoardModal">addToBoardModal</a></li><li><a href="global.html#addUserToArray">addUserToArray</a></li><li><a href="global.html#allowDrop">allowDrop</a></li><li><a href="global.html#animateCardEffect">animateCardEffect</a></li><li><a href="global.html#backButtonHandlerThisfunctionisusedtohandletheclickeventonthebackbuttoninthemobileview.Ithidesthecontacttitleandfloatingcontactcontainerandshowsthecontactscontainer.Italsoremovesthecontact_selectedclassfromthecontactentry.">backButtonHandlerThis function is used to handle the click event on the back button in the mobile view.It hides the contact title and floating contact container and shows the contacts container.It also removes the contact_selected class from the contact entry.</a></li><li><a href="global.html#capitalizeFirstLetter">capitalizeFirstLetter</a></li><li><a href="global.html#checkAndRenderSharedData">checkAndRenderSharedData</a></li><li><a href="global.html#checkEmailExists">checkEmailExists</a></li><li><a href="global.html#checkPassword">checkPassword</a></li><li><a href="global.html#choose">choose</a></li><li><a href="global.html#chooseCardModal">chooseCardModal</a></li><li><a href="global.html#clearFields">clearFields</a></li><li><a href="global.html#clearSelectedContacts">clearSelectedContacts</a></li><li><a href="global.html#closeCategoryDropdown">closeCategoryDropdown</a></li><li><a href="global.html#closeContactModal">closeContactModal</a></li><li><a href="global.html#closeModal">closeModal</a></li><li><a href="global.html#closeOpenCard">closeOpenCard</a></li><li><a href="global.html#configureCardEvents">configureCardEvents</a></li><li><a href="global.html#containerCount">containerCount</a></li><li><a href="global.html#countSubtasks">countSubtasks</a></li><li><a href="global.html#createAndAppendIcons">createAndAppendIcons</a></li><li><a href="global.html#createAndConfigureDateInput">createAndConfigureDateInput</a></li><li><a href="global.html#createAvatarDivs">createAvatarDivs</a></li><li><a href="global.html#createCardContentHTML">createCardContentHTML</a></li><li><a href="global.html#createCardElement">createCardElement</a></li><li><a href="global.html#createContactDiv">createContactDiv</a></li><li><a href="global.html#createContactDivEdit">createContactDivEdit</a></li><li><a href="global.html#createContactDropdown">createContactDropdown</a></li><li><a href="global.html#createDateContainer">createDateContainer</a></li><li><a href="global.html#createIcon">createIcon</a></li><li><a href="global.html#createPriorityButton">createPriorityButton</a></li><li><a href="global.html#createPriorityOptionsContainer">createPriorityOptionsContainer</a></li><li><a href="global.html#createSelectedContactDiv">createSelectedContactDiv</a></li><li><a href="global.html#createSelectedContactDivEdit">createSelectedContactDivEdit</a></li><li><a href="global.html#createSubtaskContainer">createSubtaskContainer</a></li><li><a href="global.html#createSubtasksInputContainer">createSubtasksInputContainer</a></li><li><a href="global.html#deactivateInputField">deactivateInputField</a></li><li><a href="global.html#delContact">delContact</a></li><li><a href="global.html#deleteSubtask">deleteSubtask</a></li><li><a href="global.html#deleteSubtaskItem">deleteSubtaskItem</a></li><li><a href="global.html#deleteTask">deleteTask</a></li><li><a href="global.html#demoContacts">demoContacts</a></li><li><a href="global.html#doNotClose">doNotClose</a></li><li><a href="global.html#drop">drop</a></li><li><a href="global.html#edit">edit</a></li><li><a href="global.html#editContact">editContact</a></li><li><a href="global.html#editSubtaskDescription">editSubtaskDescription</a></li><li><a href="global.html#editSubtaskItem">editSubtaskItem</a></li><li><a href="global.html#enableContentEditing">enableContentEditing</a></li><li><a href="global.html#enablePriorityEditing">enablePriorityEditing</a></li><li><a href="global.html#enableSubtasksEditing">enableSubtasksEditing</a></li><li><a href="global.html#endDragging">endDragging</a></li><li><a href="global.html#endEdit">endEdit</a></li><li><a href="global.html#errorCheckboxSignup">errorCheckboxSignup</a></li><li><a href="global.html#floatingContactRender">floatingContactRender</a></li><li><a href="global.html#generateContactHTMLEdit">generateContactHTMLEdit</a></li><li><a href="global.html#generateDemoContacts">generateDemoContacts</a></li><li><a href="global.html#generateDemoTasks">generateDemoTasks</a></li><li><a href="global.html#generateId">generateId</a></li><li><a href="global.html#generateOpenCardHTML">generateOpenCardHTML</a></li><li><a href="global.html#getCardDetails">getCardDetails</a></li><li><a href="global.html#getContacts">getContacts</a></li><li><a href="global.html#getCurrentDateAsString">getCurrentDateAsString</a></li><li><a href="global.html#getFieldValueById">getFieldValueById</a></li><li><a href="global.html#getItem">getItem</a></li><li><a href="global.html#getLocalStorageContacts">getLocalStorageContacts</a></li><li><a href="global.html#getLocalStorageTasks">getLocalStorageTasks</a></li><li><a href="global.html#getPriorityColor">getPriorityColor</a></li><li><a href="global.html#getPriorityIcon">getPriorityIcon</a></li><li><a href="global.html#getSelectedContacts">getSelectedContacts</a></li><li><a href="global.html#getSelectedPriority">getSelectedPriority</a></li><li><a href="global.html#getTaskById">getTaskById</a></li><li><a href="global.html#getTasks">getTasks</a></li><li><a href="global.html#getTasksData">getTasksData</a></li><li><a href="global.html#getUserContacts">getUserContacts</a></li><li><a href="global.html#getUserTasks">getUserTasks</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#guestLogin">guestLogin</a></li><li><a href="global.html#handleCheckboxClick">handleCheckboxClick</a></li><li><a href="global.html#handleMobileViewThisfunctionisusedtohandlethemobileviewofthecontactspage.Itaddseventlistenerstothecontactentryandbackbuttoniftheviewismobile.Itremoveseventlistenersfromthecontactentryandbackbuttoniftheviewisnotmobile.">handleMobileViewThis function is used to handle the mobile view of the contacts page.It adds event listeners to the contact entry and back button if the view is mobile.It removes event listeners from the contact entry and back button if the view is not mobile.</a></li><li><a href="global.html#handleNewSubtaskInputClick">handleNewSubtaskInputClick</a></li><li><a href="global.html#hideLogout">hideLogout</a></li><li><a href="global.html#hideMenuOnClickOutside">hideMenuOnClickOutside</a></li><li><a href="global.html#hideSubtaskIcons">hideSubtaskIcons</a></li><li><a href="global.html#highlight">highlight</a></li><li><a href="global.html#highlightCurrentPriority">highlightCurrentPriority</a></li><li><a href="global.html#initBoard">initBoard</a></li><li><a href="global.html#initHead">initHead</a></li><li><a href="global.html#initUser">initUser</a></li><li><a href="global.html#initUserID">initUserID</a></li><li><a href="global.html#initializeContactDropdownEdit">initializeContactDropdownEdit</a></li><li><a href="global.html#initializeContactDropdownOpenCard">initializeContactDropdownOpenCard</a></li><li><a href="global.html#isCategoryDropdownOpen">isCategoryDropdownOpen</a></li><li><a href="global.html#isContactInContainer">isContactInContainer</a></li><li><a href="global.html#isDropdownOpen">isDropdownOpen</a></li><li><a href="global.html#loadContacts">loadContacts</a></li><li><a href="global.html#loadData">loadData</a></li><li><a href="global.html#loadLoginData">loadLoginData</a></li><li><a href="global.html#loadUsers">loadUsers</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#loginError">loginError</a></li><li><a href="global.html#loginHTML">loginHTML</a></li><li><a href="global.html#logout">logout</a></li><li><a href="global.html#mobileClickHandlerThisfunctionisusedtohandletheclickeventonthecontactentryinthemobileview.Ithidesthecontactscontainerandshowsthecontacttitleandfloatingcontactcontainer.Italsoremovesthecontact_selectedclassfromthecontactentry.">mobileClickHandlerThis function is used to handle the click event on the contact entry in the mobile view.It hides the contacts container and shows the contact title and floating contact container.It also removes the contact_selected class from the contact entry.</a></li><li><a href="global.html#openCard">openCard</a></li><li><a href="global.html#openCategoryDropdown">openCategoryDropdown</a></li><li><a href="global.html#openTaskHTML">openTaskHTML</a></li><li><a href="global.html#passwordInequal">passwordInequal</a></li><li><a href="global.html#passwordRedOutline">passwordRedOutline</a></li><li><a href="global.html#prepareCardData">prepareCardData</a></li><li><a href="global.html#preventDragOver">preventDragOver</a></li><li><a href="global.html#rememberMe">rememberMe</a></li><li><a href="global.html#removeCheckboxError">removeCheckboxError</a></li><li><a href="global.html#removeContact">removeContact</a></li><li><a href="global.html#removeEmailError">removeEmailError</a></li><li><a href="global.html#removeHighlight">removeHighlight</a></li><li><a href="global.html#removeLoginError">removeLoginError</a></li><li><a href="global.html#removePasswordError">removePasswordError</a></li><li><a href="global.html#removePlaceholderText">removePlaceholderText</a></li><li><a href="global.html#removeSelectedContactFromContainerEdit">removeSelectedContactFromContainerEdit</a></li><li><a href="global.html#renderCard">renderCard</a></li><li><a href="global.html#renderSection">renderSection</a></li><li><a href="global.html#replaceElementWithInput">replaceElementWithInput</a></li><li><a href="global.html#replaceLockIcon">replaceLockIcon</a></li><li><a href="global.html#replacePriorityElement">replacePriorityElement</a></li><li><a href="global.html#resetCardModalVisibility">resetCardModalVisibility</a></li><li><a href="global.html#resetFormFields">resetFormFields</a></li><li><a href="global.html#resetIconContainer">resetIconContainer</a></li><li><a href="global.html#resetLoginForm">resetLoginForm</a></li><li><a href="global.html#resetSignupForm">resetSignupForm</a></li><li><a href="global.html#rollDice">rollDice</a></li><li><a href="global.html#saveAndDisplaySelectedContacts">saveAndDisplaySelectedContacts</a></li><li><a href="global.html#saveAndDisplaySelectedContactsEdit">saveAndDisplaySelectedContactsEdit</a></li><li><a href="global.html#saveCheckboxStatus">saveCheckboxStatus</a></li><li><a href="global.html#saveContact">saveContact</a></li><li><a href="global.html#saveEditedContact">saveEditedContact</a></li><li><a href="global.html#saveEditedTask">saveEditedTask</a></li><li><a href="global.html#saveSelectedContacts">saveSelectedContacts</a></li><li><a href="global.html#saveToLocalStorage">saveToLocalStorage</a></li><li><a href="global.html#selectContact">selectContact</a></li><li><a href="global.html#selectContactEdit">selectContactEdit</a></li><li><a href="global.html#selectedInitialsArray">selectedInitialsArray</a></li><li><a href="global.html#selectedPriority">selectedPriority</a></li><li><a href="global.html#setButtonStyles">setButtonStyles</a></li><li><a href="global.html#setInitials">setInitials</a></li><li><a href="global.html#setItem">setItem</a></li><li><a href="global.html#setName">setName</a></li><li><a href="global.html#setUserColor">setUserColor</a></li><li><a href="global.html#setUserToTrue">setUserToTrue</a></li><li><a href="global.html#setupDueDateInput">setupDueDateInput</a></li><li><a href="global.html#setupDueDateInputAddTask">setupDueDateInputAddTask</a></li><li><a href="global.html#setupDueDateInputAddTaskModal">setupDueDateInputAddTaskModal</a></li><li><a href="global.html#showCardOverlay">showCardOverlay</a></li><li><a href="global.html#showDropdown">showDropdown</a></li><li><a href="global.html#showDropdownEdit">showDropdownEdit</a></li><li><a href="global.html#showEmailError">showEmailError</a></li><li><a href="global.html#showLogout">showLogout</a></li><li><a href="global.html#showMoreMenu">showMoreMenu</a></li><li><a href="global.html#showRequiredInfo">showRequiredInfo</a></li><li><a href="global.html#showSubtaskIcons">showSubtaskIcons</a></li><li><a href="global.html#shuffleArray">shuffleArray</a></li><li><a href="global.html#signUp">signUp</a></li><li><a href="global.html#signupButton">signupButton</a></li><li><a href="global.html#startDragging">startDragging</a></li><li><a href="global.html#successMsg">successMsg</a></li><li><a href="global.html#successSignUp">successSignUp</a></li><li><a href="global.html#toggleArrowCategory">toggleArrowCategory</a></li><li><a href="global.html#toggleArrowContacts">toggleArrowContacts</a></li><li><a href="global.html#toggleCheckIcon">toggleCheckIcon</a></li><li><a href="global.html#toggleContactSelection">toggleContactSelection</a></li><li><a href="global.html#toggleContactSelectionEdit">toggleContactSelectionEdit</a></li><li><a href="global.html#togglePasswordVisibility">togglePasswordVisibility</a></li><li><a href="global.html#unrememberMe">unrememberMe</a></li><li><a href="global.html#updateButtonsState">updateButtonsState</a></li><li><a href="global.html#updateCardInformation">updateCardInformation</a></li><li><a href="global.html#updateCardProgressAndSubtasks">updateCardProgressAndSubtasks</a></li><li><a href="global.html#updateCheckboxState">updateCheckboxState</a></li><li><a href="global.html#updatePlaceholderText">updatePlaceholderText</a></li><li><a href="global.html#updatePriorityTextAndSymbol">updatePriorityTextAndSymbol</a></li><li><a href="global.html#updateProgressBar">updateProgressBar</a></li><li><a href="global.html#updateSelectedCategory">updateSelectedCategory</a></li><li><a href="global.html#updateSelectedContacts">updateSelectedContacts</a></li><li><a href="global.html#updateSelectedContactsEdit">updateSelectedContactsEdit</a></li><li><a href="global.html#updateSelectedPriorityStyles">updateSelectedPriorityStyles</a></li><li><a href="global.html#updateSubtaskCheckboxes">updateSubtaskCheckboxes</a></li><li><a href="global.html#updateTaskColumn">updateTaskColumn</a></li><li><a href="global.html#userInitials">userInitials</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Mar 06 2024 23:20:19 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

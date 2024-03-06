@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: add-task_mobile.js</title>
+    <title>JSDoc: Source: add-task_date_prio.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: add-task_mobile.js</h1>
+    <h1 class="page-title">Source: add-task_date_prio.js</h1>
 
     
 
@@ -27,77 +27,117 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file add-task-mobile.js
- * @summary JavaScript file for the Add Task page on mobile devices.
- * This file contains the JavaScript code for the Add Task page on mobile devices.
- * It contains the code for rearranging the elements on the page when the screen size changes.
+ * Represents the selected priority for a task.
+ *
+ * @type {string | undefined}
+ * @description This variable holds the priority ('low', 'medium', 'urgent') selected for a task.
+ * It is used to keep track of the priority chosen by the user on the 'Add Task' page.
+ * The value can be 'low', 'medium', 'urgent', or undefined if no priority is selected.
+ * @name selectedPriority
+ * @global
  */
+let selectedPriority;
 
-let hasMovedElements = false;
-let originalOrder = [];
+/**
+ * Sets the priority of a task and changes the color of the priority button accordingly.
+ * The function first resets the styles of all priority buttons, then sets the styles of the selected priority button.
+ * The selected priority is also saved to local storage.
+ *
+ * @param {string} priority - The selected priority. Should be 'urgent', 'medium', or 'low'.
+ * @returns {string|null} The selected priority if it is valid, otherwise null.
+ */
+function choose(priority) {
+    let colorMap = { 'urgent': '#FF3D00', 'medium': '#FFA800', 'low': '#7AE229' };
+    let setStyles = (elements, styles) => elements.forEach(e => e &amp;&amp; Object.assign(e.style, styles));
 
-function rearrangeElements() {
-    try {
-        if (window.innerWidth &lt; 768 &amp;&amp; !hasMovedElements) {
-            let element = document.querySelector('.prio-container');
-            let target = document.querySelector('.assigned-to-container');
-            if (element &amp;&amp; target &amp;&amp; target.parentNode) {
-                originalOrder.push({element: element, nextSibling: element.nextSibling, parent: element.parentNode});
-                target.parentNode.insertBefore(element, target);
-            }
+    setStyles(document.querySelectorAll('.button'), { backgroundColor: '#fff' });
+    setStyles(document.querySelectorAll('.button img'), { filter: 'brightness(1) invert(0)' });
 
-            let element1 = document.querySelector('.due-date-container');
-            let target1 = document.querySelector('.assigned-to-container');
-            if (element1 &amp;&amp; target1 &amp;&amp; target1.parentNode) {
-                originalOrder.push({element: element1, nextSibling: element1.nextSibling, parent: element1.parentNode});
-                target1.parentNode.insertBefore(element1, target1);
-            }
+    let [priorityButton, priorityImg] = [document.querySelector(`.${priority}`), document.querySelector(`.${priority} img`)];
 
-            let element2 = document.querySelector('.category-container');
-            let target2 = document.querySelector('.assigned-to-container');
-            if (element2 &amp;&amp; target2 &amp;&amp; target2.parentNode) {
-                originalOrder.push({element: element2, nextSibling: element2.nextSibling, parent: element2.parentNode});
-                target2.parentNode.insertBefore(element2, target2);
-            }
-            
-            let element3 = document.querySelector('.assigned-to-container');
-            let target3 = document.querySelector('.subtasks-container');
-            if (element3 &amp;&amp; target3 &amp;&amp; target3.parentNode) {
-                originalOrder.push({element: element3, nextSibling: element3.nextSibling, parent: element3.parentNode});
-                target3.parentNode.insertBefore(element3, target3);
-            }
+    if (priorityButton &amp;&amp; priorityImg &amp;&amp; colorMap[priority]) {
+        setStyles([priorityButton], { backgroundColor: colorMap[priority] });
+        setStyles([priorityImg], { filter: 'brightness(0) invert(1)' });
 
-            hasMovedElements = true;
-        } else if (window.innerWidth >= 768 &amp;&amp; hasMovedElements) {
-            originalOrder.reverse().forEach(item => {
-                if (item.nextSibling) {
-                    item.parent.insertBefore(item.element, item.nextSibling);
-                } else {
-                    item.parent.appendChild(item.element);
-                }
-            });
-
-            hasMovedElements = false;
-            originalOrder = [];
-        }
-    } catch (error) {
-        console.error('An error occurred:', error);
+        localStorage.setItem('selectedPriority', priority);
+        return priority;
     }
+    return null;
 }
 
-function addTaskMobile() {
-    if ('onorientationchange' in window) {
-        window.addEventListener('orientationchange', rearrangeElements);
-    } else {
-        window.addEventListener('resize', rearrangeElements);
-    }
+/**
+ * Retrieves the selected priority from local storage.
+ * The priority is stored under the key 'selectedPriority'.
+ *
+ * @returns {string|null} The selected priority if it exists, otherwise null.
+ */
+function getSelectedPriority() {
+    return localStorage.getItem('selectedPriority');
 }
 
-window.addEventListener('load', function() {
-    addTaskMobile();
-    rearrangeElements();
+/**
+ * Event listener for the DOMContentLoaded event on the document.
+ * When the DOM is fully loaded, it sets the default task priority to 'medium' by calling `choose('medium')`.
+ */
+document.addEventListener('DOMContentLoaded', function () {
+    choose('medium');
 });
-</code></pre>
+
+/**
+ * Sets up the due date input by replacing it with a datepicker on the "Add Task" page.
+ */
+function setupDueDateInputAddTask() {
+    if (window.location.pathname.includes("add-task.html")) {
+        let dateElement = document.getElementById('date');
+
+        if (dateElement) {
+            let dateInput = createAndConfigureDateInput(dateElement);
+
+            // Replace the existing date input with the new container
+            dateElement.replaceWith(createDateContainer(dateInput));
+
+            // Initialize the datepicker
+            $(dateInput).datepicker({
+                dateFormat: 'yy-mm-dd',
+                showButtonPanel: true,
+            });
+        }
+    }
+}
+setupDueDateInputAddTask();
+
+/**
+ * Creates a new date input container and configures the date input element.
+ * @param {HTMLElement} dateElement - The existing date input element.
+ * @returns {HTMLElement} The configured date input element.
+ */
+function createAndConfigureDateInput(dateElement) {
+    let dateInput = document.createElement('input');
+    dateInput.type = 'text';
+    dateInput.id = 'date';
+    dateInput.className = 'due-date-input';
+    dateInput.placeholder = 'dd/mm/yyyy';
+    dateInput.required = true;
+    dateInput.value = dateElement.value;
+    dateInput.style.backgroundImage = 'url("img/calendar.svg")';
+    dateInput.style.backgroundRepeat = 'no-repeat';
+    dateInput.style.backgroundPosition = 'right center';
+    dateInput.style.backgroundSize = '24px';
+    dateInput.classList.add('calendar-hover');
+    return dateInput;
+}
+
+/**
+ * Creates a new date input container.
+ * @param {HTMLElement} dateInput - The configured date input element.
+ * @returns {HTMLDivElement} The date input container.
+ */
+function createDateContainer(dateInput) {
+    let dateContainer = document.createElement('div');
+    dateContainer.className = 'due-date-container-2';
+    dateContainer.appendChild(dateInput);
+    return dateContainer;
+}</code></pre>
         </article>
     </section>
 

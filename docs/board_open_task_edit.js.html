@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: add-task.js</title>
+    <title>JSDoc: Source: board_open_task_edit.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: add-task.js</h1>
+    <h1 class="page-title">Source: board_open_task_edit.js</h1>
 
     
 
@@ -27,397 +27,426 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Represents the count of containers on the 'Add Task' page.
- *
- * @type {number}
- * @description This variable keeps track of the number of containers on the page used for adding tasks.
- * It is primarily utilized to assign unique identifiers to the task containers dynamically.
- * @name containerCount
- * @global
+ * This function activates the edit mode for a card in the board, enabling various editing features and hiding non-editable elements.
+ * If no data is available for editing, an error is logged.
  */
-let containerCount = 0;
+function edit() {
+    if (!isEditActive) {
+        enableContentEditing();
+        setupDueDateInput();
+        enablePriorityEditing();
+        initializeContactDropdownOpenCard();
+        $('.avatar-name').hide();
+        $('#selectedContactsContainerEdit').css('display', 'flex');
+        enableSubtasksEditing();
+        isEditActive = true;
 
-/**
- * This function asynchronously retrieves the contacts.
- * If the user is logged in, it retrieves the contacts using the `getUserContacts` function.
- * If the user is not logged in, it retrieves the contacts from the 'contacts' item in localStorage using the `getLocalStorageContacts` function.
- *
- * @returns {Promise&lt;Array>} A Promise that resolves with an array of contacts.
- */
-async function getContacts() {
-    return isUserLoggedIn ? getUserContacts() : getLocalStorageContacts();
-}
+        $('.card-modal-delete-button').addClass('hide-button');
+        $('.card-modal-edit-button').addClass('hide-button');
+        $('.card-modal-contacts').addClass('height-contacts');
+        $('.card-modal-save-button').removeClass('hide-button');
+        $('.card-modal-devider').addClass('hide-button');
+        $('.card-modal-technical').addClass('hide-button');
+        $('.card-modal-userstory').addClass('hide-button');
+        $('.due-date-card-modal').addClass('hide-button');
+        $('.priority-card-modal-text').addClass('hide-button');
+        $('.card-modal-priority-symbol').addClass('hide-button');
+        $('.task-categorie ').addClass('justify-end');
 
-/**
- * This function Asynchronously retrieves the contacts of the current user.
- * It fetches the 'users' item from localStorage, parses it into a JavaScript object, and returns the 'contacts' property of the current user.
- * If the current user does not have any contacts, it returns an empty array.
- *
- * @returns {Promise&lt;Array>} A Promise that resolves with an array of the current user's contacts.
- */
-async function getUserContacts() {
-    let users = await getItem('users');
-    return JSON.parse(users)[currentUser]?.contacts || [];
-}
+        $('.card-modal-assigned-to-headline').addClass('card-modal-assigned-to-headline_edit_mobile'); // added class for mobile view
+        $('.card-modal-subtasks-container-headline').addClass('card-modal-subtasks-container-headline_edit_mobile'); // added class for mobile view
+        $('.subtask-checkbox').css('display', 'none');
+        $('.subtask-image').css('display', 'block');
 
-/**
- * This function asynchronously fetches the contacts of the currently logged in user from the remote storage.
- * @returns {Array} An array of contacts from the local storage.
- */
-function getLocalStorageContacts() {
-    return JSON.parse(localStorage.getItem('contacts')) || [];
-}
-
-/**
- * Saves the currently selected contacts to local storage.
- * The contacts are stored under the key 'selectedContacts'.
- * Before saving, the contacts array is converted to a JSON string.
- */
-function saveSelectedContacts() {
-    localStorage.setItem('selectedContacts', JSON.stringify(selectedInitialsArray));
-}
-
-/**
- * Clears the selected contacts from local storage.
- * The contacts are removed from local storage by calling `localStorage.removeItem` with the key 'selectedContacts'.
- */
-function clearSelectedContacts() {
-    localStorage.removeItem('selectedContacts');
-}
-
-/**
- * Adds a new task to the specified column on the board.
- *
- * @param {string} column - The target column for the new task.
- * @returns {Promise&lt;void>} A Promise that resolves after the task is added and redirected to the board.
- */
-async function addToBoard(column) {
-    event.preventDefault();
-    let form = document.querySelector('form');
-    let taskTitle = getFieldValueById('taskTitleInput');
-    let category = getFieldValueById('category');
-    let overlay = document.getElementById('overlayFeedack');
-    let animatedIcon = document.getElementById('animatedIcon');
-
-    if (form.checkValidity() &amp;&amp; taskTitle &amp;&amp; category) {
-        overlay.style.display = 'block';
-        animatedIcon.style.bottom = '500px';
-
-        let description = getFieldValueById('descriptionInput');
-        let date = getFieldValueById('date');
-        let subtasksList = document.getElementById('subtaskList').children;
-        let selectedContacts = getSelectedContacts();
-        let selectedPriority = getSelectedPriority();
-
-        if (form.checkValidity()) {
-            saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column);
-
-            setTimeout(() => {
-                window.location.href = 'board.html';
-            }, 1000);
+        if (currentEditData) {
+            addContactsToSelectedContacts(currentEditData);
+        } else {
+            console.error('No data available for editing.');
         }
     }
-    resetFormFields();
+    clearSelectedContacts();
 }
 
 /**
- * Retrieves the value of a DOM element by its ID.
- *
- * @param {string} id - The ID of the DOM element to retrieve the value from.
- * @returns {string} The value of the DOM element.
+ * Enables editing of the title and content in the card modal.
+ * It makes the title and content elements editable, creates new containers with input fields,
+ * populates the input fields with the current title and content, and replaces the original elements with the new containers.
  */
-function getFieldValueById(id) {
-    return document.getElementById(id).value;
+function enableContentEditing() {
+    let titleElement = document.querySelector('.card-modal-title');
+    let contentElement = document.querySelector('.card-modal-content');
+
+    contentElement.contentEditable = true;
+    titleElement.contentEditable = true;
+
+    replaceElementWithInput(titleElement, 'title-container-add-task', 'input');
+    replaceElementWithInput(contentElement, 'description-container', 'textarea');
 }
 
 /**
- * Retrieves the selected contacts from the selected contacts container.
- * It iterates over the child nodes of the container, and for each div element,
- * it retrieves the contact's image path, initials, name, and ID from the img element and its siblings,
- * and adds an object with these properties to the `selectedContacts` array.
- *
- * @returns {Array} An array of objects representing the selected contacts. Each object has properties for the contact's image path, initials, name, and ID.
+ * Replaces the given element with an input field inside a container.
+ * @param {HTMLElement} element - The element to replace.
+ * @param {string} containerClass - The class for the container.
+ * @param {string} inputType - The type of input field ('input' or 'textarea').
  */
-function getSelectedContacts() {
-    let selectedContactsContainer = document.getElementById("selectedContactsContainer");
-    let selectedContacts = [];
+let replaceElementWithInput = (element, containerClass, inputType) => {
+    let titleElement = document.querySelector('.card-modal-title');
+    let container = document.createElement('div');
+    container.className = containerClass;
+    
+    let headline = document.createElement('div');
+    headline.textContent = element === titleElement ? 'Title' : 'Description';
+    
+    let input = document.createElement(inputType);
+    input.type = 'text';
+    input.value = element.textContent;
 
-    selectedContactsContainer.childNodes.forEach(contactDiv => {
-        if (contactDiv.nodeType === 1) {
-            let imgElement = contactDiv.querySelector('img');
-            let initials = imgElement.nextElementSibling.textContent.trim();
-            let datasetName = imgElement.dataset.name;
-            let name = datasetName || imgElement.alt;
-            let id = imgElement.id;
+    container.appendChild(headline);
+    container.appendChild(input);
+    element.replaceWith(container);
+};
 
-            selectedContacts.push({
-                imagePath: imgElement.src,
-                initials: initials,
-                name: name,
-                id: id
-            });
-        }
+/**
+ * Sets up the due date input for the edit modal and fills it with the current task data.
+ * 
+ * @function
+ * @name setupDueDateInput
+ * @returns {void}
+ */
+function setupDueDateInput() {
+    let dateElement = document.getElementById('dueDateText');
+
+    let dateContainer = document.createElement('div');
+    dateContainer.className = 'due-date-container';
+    let dateHeadline = document.createElement('div');
+    dateHeadline.textContent = 'Due Date';
+    let dateInput = document.createElement('input');
+    dateInput.type = 'text';
+    dateInput.className = 'due-date-input';
+    dateInput.required = true;
+
+    let dateText = dateElement.textContent;
+    let dateValue = dateText.replace('Due date: ', '');
+    dateInput.value = dateValue;
+
+    dateInput.style.backgroundImage = 'url("img/calendar.svg")';
+    dateInput.style.backgroundRepeat = 'no-repeat';
+    dateInput.style.backgroundPosition = 'right center';
+    dateInput.style.backgroundSize = '24px';
+
+    dateContainer.appendChild(dateHeadline);
+    dateContainer.appendChild(dateInput);
+    dateElement.replaceWith(dateContainer);
+
+    $(dateInput).datepicker({
+        dateFormat: 'yy-mm-dd',
+        showButtonPanel: true,
     });
-
-    return selectedContacts;
 }
 
 /**
- * Saves a task to local storage or remote storage based on user login status.
- *
- * @param {string} taskTitle - The title of the task.
- * @param {string} description - The description of the task.
- * @param {string} date - The date of the task.
- * @param {string} category - The category of the task.
- * @param {Array} subtasksList - The list of subtasks of the task.
- * @param {Array} selectedContacts - The list of selected contacts for the task.
- * @param {string} selectedPriority - The selected priority of the task.
- * @param {string} column - The column of the task on the board.
- * @returns {Promise&lt;void>} A promise indicating the completion of the task saving process.
+ * This function enables the priority editing mode for a card, replacing the current priority display with a set of buttons that allow the user to select 'Urgent', 'Medium', or 'Low' priority.
+ * The currently selected priority is highlighted and its corresponding button is styled accordingly.
  */
-async function saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column) {
-    let subtasksData = Array.from(subtasksList).map(subtask => ({ description: subtask.firstElementChild.innerText, checked: false }));
+function enablePriorityEditing() {
+    let priorityElement = document.querySelector('.card-modal-priority-letter');
+    let currentPriority = priorityElement.textContent.toLowerCase();
+    let priorityContainer = createPriorityOptionsContainer();
 
-    let task = {
-        content: { title: taskTitle, description, date, category, subtasks: subtasksList.length, subtasksData, selectedContacts, priority: selectedPriority, boardColumn: column },
-        id: `task${isUserLoggedIn ? users[currentUser].tasks.length : (JSON.parse(localStorage.getItem('tasks')) || []).length}`,
-    };
+    highlightCurrentPriority(priorityContainer, currentPriority);
+    replacePriorityElement(priorityContainer, priorityElement);
+}
+
+/**
+ * This function sets up the due date input for the edit modal and fills it with the current task data
+ */
+function initializeContactDropdownOpenCard() {
+    createContactDropdown(() => {
+        updateCheckboxState();
+    });
+}
+
+/**
+ * Enables editing of subtasks in the card modal.
+ * Adds an input field for adding new subtasks and event listeners to existing subtask containers.
+ * Handles mouseover, mouseout, and click events to show/hide subtask icons and allow editing.
+ * Additionally, adds a click event listener to handle subtask deletion if a delete icon is present.
+ */
+function enableSubtasksEditing() {
+    let subtasksContainer = document.querySelector('.card-modal-subtasks-container-headline');
+    let inputContainer = createSubtasksInputContainer();
+    subtasksContainer.appendChild(inputContainer);
+
+    document.querySelectorAll('.card-modal-subtask-maincontainer').forEach(subtaskContainer => {
+        subtaskContainer.addEventListener('mouseover', () => showSubtaskIcons(subtaskContainer));
+        subtaskContainer.addEventListener('mouseout', () => hideSubtaskIcons(subtaskContainer));
+        subtaskContainer.addEventListener('click', () => editSubtaskDescription(subtaskContainer));
+
+        let deleteIcon = subtaskContainer.querySelector('.subtask-icon-delete img');
+        deleteIcon &amp;&amp; deleteIcon.addEventListener('click', (event) => {
+            event.stopPropagation();
+            deleteSubtask(subtaskContainer);
+        });
+    });
+}
+
+/**
+ * This function adds contacts to the selected contacts list stored in the local storage.
+ * It first fetches all contacts, then gets the selected contacts from local storage.
+ * It then iterates over the contacts in the task's content, and if a contact is not already in the selected contacts,
+ * it finds the full contact information from the fetched contacts and adds it to the selected contacts.
+ * Finally, it updates the selected contacts in the local storage.
+ * @param {Object} task - The task object.
+ * @param {Object} task.content - The content of the task.
+ * @param {Array} task.content.selectedContacts - The array of selected contacts in the task's content.
+ * @returns {Promise&lt;void>} A Promise that resolves when the function has completed.
+ */
+async function addContactsToSelectedContacts(task) {
+    let contacts = await getContacts();
+    let selectedContacts = JSON.parse(localStorage.getItem('selectedContacts')) || [];
 
     task.content.selectedContacts.forEach(contact => {
-        let matchingContact = contacts.find(existingContact => existingContact.id === contact.id);
-        if (matchingContact) contact.name = matchingContact.name;
+        if (!selectedContacts.some(selectedContact => selectedContact.id === contact.id)) {
+            let fullContact = contacts.find(c => c.id === contact.id);
+            if (fullContact) {
+                selectedContacts.push(fullContact);
+            }
+        }
     });
+
+    localStorage.setItem('selectedContacts', JSON.stringify(selectedContacts));
+}
+
+/**
+ * Save the selected task to local or remote storage and display the changes.
+ */
+async function saveEditedTask() {
+    let taskId = document.querySelector('.card-modal-save-button').dataset.id;
+    let taskTitle = document.querySelector('.title-container-add-task input').value;
+    let description = document.querySelector('.description-container textarea').value;
+    let date = document.querySelector('.due-date-input').value;
+    let category = document.querySelector('.task-categorie p').textContent;
+    let priorityElement = document.querySelector('.prio-option-container .button.active');
+    let priority = priorityElement ? priorityElement.textContent.toLowerCase().trim() : '';
+
+    let tasks;
 
     if (isUserLoggedIn) {
-        users[currentUser].tasks.push(task);
-        await setItem('users', JSON.stringify(users));
+        let usersString = await getItem('users');
+        let users = JSON.parse(usersString);
+        tasks = users[currentUser].tasks;
     } else {
-        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        tasks.push(task);
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-        localStorage.setItem('selectedContacts', JSON.stringify(selectedContacts));
-    }
-}
-
-/**
- * Resets the values of the form fields.
- * The IDs of the form fields are stored in an array, and for each ID, the value of the corresponding form field is set to an empty string.
- */
-function resetFormFields() {
-    ['taskTitleInput', 'descriptionInput', 'assignedTo', 'date', 'category']
-        .forEach(id => document.getElementById(id).value = '');
-}
-
-/**
- * Handles the DOMContentLoaded event and sets up a click event listener on the document body.
- * It deactivates the input field if the clicked element is not related to the new subtask input.
- * If the new subtask input is clicked, it toggles the visibility of icons (close and submit).
- */
-document.addEventListener('DOMContentLoaded', function () {
-    document.body.addEventListener('click', function (event) {
-        if (event.target.id !== 'newSubtaskInput' &amp;&amp; !event.target.closest('#newSubtaskInput') &amp;&amp;
-            event.target.id !== 'newSubtaskInputEdit' &amp;&amp; !event.target.closest('#newSubtaskInputEdit')) {
-            deactivateInputField();
-        }
-
-        if (event.target.id === 'newSubtaskInput') {
-            handleNewSubtaskInputClick('iconContainer');
-        }
-
-        if (event.target.id === 'newSubtaskInputEdit') {
-            handleNewSubtaskInputClick('iconContainerEdit');
-        }
-    });
-});
-
-/**
- * Toggles the visibility of icons (close and submit) in the icon container associated with the new subtask input.
- * It removes the existing add-icon and creates and appends close and submit icons if not present.
- */
-function handleNewSubtaskInputClick(containerId) {
-    let addIcon = document.querySelector('.add-icon');
-    if (addIcon) {
-        addIcon.remove();
+        let tasksString = localStorage.getItem('tasks');
+        tasks = tasksString ? JSON.parse(tasksString) : [];
     }
 
-    let iconContainer = document.getElementById(containerId);
+    let task = tasks.find(task => task.id === taskId);
 
-    if (iconContainer &amp;&amp; !document.querySelector(`#${containerId} img`)) {
-        createAndAppendIcons(iconContainer, containerId);
-    }
-}
+    if (task) {
+        task.content.title = taskTitle;
+        task.content.description = description;
+        task.content.date = date;
+        task.content.category = category;
+        task.content.priority = priority;
 
-/**
- * Creates and appends close and submit icons to the specified container.
- * @param {HTMLElement} container - The container element to which icons will be appended.
- */
-function createAndAppendIcons(container) {
-    let imgClose = createIcon('img/close.svg', deactivateInputField);
-    let imgSubmit = createIcon('img/submit.svg', function () {
-        let actionContainer = (container.id === 'iconContainer') ? 'iconContainer' : 'iconContainerEdit';
-        if (actionContainer === 'iconContainerEdit') {
-            addSubtaskOpenCard();
+        let selectedContactsString = localStorage.getItem('selectedContacts');
+        let newSelectedContacts = selectedContactsString ? JSON.parse(selectedContactsString) : [];
+
+        task.content.selectedContacts = newSelectedContacts;
+
+        let subtasksData = Array.from(document.querySelectorAll(`#cardModal_${taskId} .card-modal-subtask-maincontainer`)).map((subtaskContainer) => {
+            let description = subtaskContainer.querySelector('.card-modal-subtask-description').textContent;
+            let checkbox = subtaskContainer.querySelector('.subtask-checkbox');
+            return {
+                description: description,
+                checked: checkbox.checked
+            };
+        });
+        task.content.subtasksData = subtasksData;
+        task.content.subtasks = subtasksData.length;
+
+        data = task;
+
+        if (isUserLoggedIn) {
+            users[currentUser].tasks = tasks;
+            await setItem('users', JSON.stringify(users));
         } else {
-            addSubtask(actionContainer);
+            localStorage.setItem('tasks', JSON.stringify(tasks));
         }
-    });
 
-    let newSubtaskInput = document.getElementById('newSubtaskInput');
-
-    if (newSubtaskInput) {
-        newSubtaskInput.addEventListener('keypress', function (event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                addSubtask('iconContainer');
-            }
-        });
+        let oldCard = document.getElementById(taskId);
+        oldCard.parentNode.removeChild(oldCard);
+        await renderCard(task);
     }
 
-    let newSubtaskInputEdit = document.getElementById('newSubtaskInputEdit');
-
-    if (newSubtaskInputEdit) {
-        newSubtaskInputEdit.addEventListener('keypress', function (event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                addSubtaskOpenCard();
-            }
-        });
+    let taskElement = document.getElementById(taskId);
+    taskElement.querySelector('.card-title').textContent = taskTitle;
+    taskElement.querySelector('.card-content').textContent = description;
+    let dateElement = taskElement.querySelector('.due-date-card-modal');
+    if (dateElement) {
+        dateElement.textContent = `Due date: ${date}`;
     }
 
-    container.appendChild(imgClose);
-    container.appendChild(imgSubmit);
+    let priorityIconElement = taskElement.querySelector('.priority-symbol img');
+    let newPriorityIconSrc = getPriorityIcon(priority);
+    priorityIconElement.src = newPriorityIconSrc;
+
+    clearSelectedContacts();
+    updateProgressBar();
+    closeOpenCard();
+    endEdit();
 }
 
 /**
- * Creates an image element with the specified source and click handler.
- * @param {string} src - The source URL of the image.
- * @param {Function} clickHandler - The click handler function for the image.
- * @returns {HTMLImageElement} - The created image element.
+ * This function ends the edit mode for a card in the board, disabling various editing features and showing non-editable elements.
  */
-function createIcon(src, clickHandler) {
-    let img = document.createElement('img');
-    img.src = src;
-    img.onclick = clickHandler;
-    return img;
+function endEdit() {
+    $('.avatar-name').show();
+    $('#selectedContactsContainerEdit').css('display', 'block');
+    isEditActive = false;
+
+    $('.card-modal-delete-button').removeClass('hide-button');
+    $('.card-modal-edit-button').removeClass('hide-button');
+    $('.card-modal-save-button').addClass('hide-button');
 }
 
 /**
- * Deactivates the new subtask input field by clearing its value and resetting the icon container.
- * It sets the icon container to display the default add icon.
+ * Creates the input container for adding new subtasks.
+ *
+ * @returns {HTMLDivElement} The created input container.
  */
-function deactivateInputField() {
-    let newSubtaskInput = document.getElementById('newSubtaskInput');
-    let newSubtaskInputEdit = document.getElementById('newSubtaskInputEdit');
-    if (newSubtaskInput) {
-        newSubtaskInput.value = '';
-    }
-    if (newSubtaskInputEdit) {
-        newSubtaskInputEdit.value = '';
-    }
+function createSubtasksInputContainer() {
+    let inputContainer = document.createElement('div');
+    inputContainer.className = 'input-container-subtask';
+    inputContainer.innerHTML = `
+        &lt;input class="subtasks-input" type="text" id="newSubtaskInputEdit" placeholder="Add new subtask" id="subtask">
+        &lt;div id="iconContainerEdit">
+        &lt;img class="add-icon" src="img/Subtasks icons11.svg" alt="" />
+         &lt;/div>
+    `;
+    return inputContainer;
+}
 
-    let iconContainer = document.getElementById('iconContainer');
-    let iconContainerEdit = document.getElementById('iconContainerEdit');
-    if (iconContainer) {
-        resetIconContainer(iconContainer);
-    }
-    if (iconContainerEdit) {
-        resetIconContainer(iconContainerEdit);
+/**
+ * This function shows the subtask icons
+ * @param {*} subtaskContainer 
+ */
+function showSubtaskIcons(subtaskContainer) {
+    let iconsContainer = subtaskContainer.querySelector('.subtasks-edit-icons-container');
+
+    if (iconsContainer) {
+        iconsContainer.classList.remove('d-none');
     }
 }
 
 /**
- * Resets the icon container to display the default add icon.
- * @param {HTMLElement} container - The container element to be reset.
+ * This function hides the subtask icons
+ * @param {*} subtaskContainer 
  */
-function resetIconContainer(container) {
-    container.innerHTML = '';
-    let addIcon = document.createElement('img');
-    addIcon.src = 'img/Subtasks icons11.svg';
-    addIcon.classList.add('add-icon');
-    addIcon.alt = 'Add';
-    container.appendChild(addIcon);
+function hideSubtaskIcons(subtaskContainer) {
+    let iconsContainer = subtaskContainer.querySelector('.subtasks-edit-icons-container');
+
+    if (iconsContainer) {
+        iconsContainer.classList.add('d-none');
+    }
 }
 
 /**
- * Adds a new subtask to the subtask list.
- * The function first retrieves the input element and the subtask list from the DOM.
- * Then it gets the text of the new subtask from the input element.
- * If the text is not empty, it creates a new subtask item with the text and adds it to the subtask list.
- * Finally, it clears the input element.
+ * This function edits the subtask description
+ * @param {*} element 
  */
-function addSubtask() {
-    let inputElement = document.getElementById('newSubtaskInput');
-    let subtaskList = document.getElementById('subtaskList');
+function editSubtaskDescription(element) {
+    let subtaskContainer = element.closest('.card-modal-subtask-maincontainer');
+    let descriptionElement = subtaskContainer.querySelector('.card-modal-subtask-description');
+
+    descriptionElement.contentEditable = true;
+    descriptionElement.focus();
+}
+
+/**
+ * This function deletes the subtask
+ * @param {*} subtaskContainer 
+ */
+function deleteSubtask(subtaskContainer) {
+    subtaskContainer.remove();
+}
+
+/**
+ * Adds a subtask in the open card.
+ */
+function addSubtaskOpenCard() {
+    let inputElement = document.getElementById('newSubtaskInputEdit');
+    let subtasksContainer = document.querySelector('.card-modal-subtasks');
     let subtaskText = inputElement.value.trim();
+    let taskId = currentTaskId;
 
     if (subtaskText !== '') {
-        let subtaskHTML = `
-            &lt;div class="subtask-item">
-                &lt;div class="subtask-text" contentEditable="false">${subtaskText}&lt;/div>
-                &lt;p class="subtask-icon-edit" onclick="editSubtaskItem(this.parentNode)">
-                    &lt;img src="img/edit.svg" alt="Edit Subtask">
-                &lt;/p>
-                &lt;p class="delete-button" onclick="deleteSubtaskItem(this.parentNode)">
-                    &lt;img src="img/delete.svg" alt="">
-                &lt;/p>
-            &lt;/div>
-        `;
-        subtaskList.innerHTML += subtaskHTML;
+        let subtaskContainer = createSubtaskContainer(taskId, subtasksContainer.children.length + 1, subtaskText);
+
+        subtasksContainer.appendChild(subtaskContainer);
+
+        subtaskContainer.addEventListener('mouseover', () => showSubtaskIcons(subtaskContainer));
+        subtaskContainer.addEventListener('mouseout', () => hideSubtaskIcons(subtaskContainer));
+        subtaskContainer.addEventListener('click', () => editSubtaskDescription(subtaskContainer));
+
+        let deleteIcon = subtaskContainer.querySelector('.subtask-icon-delete img');
+        deleteIcon &amp;&amp; deleteIcon.addEventListener('click', (event) => {
+            event.stopPropagation();
+            deleteSubtask(subtaskContainer);
+        });
+
         inputElement.value = '';
     }
 }
 
 /**
- * Deletes a subtask item from the subtask list.
- * The function removes the given subtask item from the DOM.
+ * Creates a subtask container with the specified properties.
  *
- * @param {HTMLElement} subtaskItem - The subtask item to delete.
+ * @param {string} taskId - The ID of the task.
+ * @param {number} subtaskIndex - The index of the subtask.
+ * @param {string} subtaskText - The text of the subtask.
+ * @returns {HTMLDivElement} The created subtask container.
  */
-function deleteSubtaskItem(subtaskItem) {
-    subtaskItem.remove();
+function createSubtaskContainer(taskId, subtaskIndex, subtaskText) {
+    let subtaskContainer = document.createElement('div');
+    subtaskContainer.className = 'card-modal-subtask-maincontainer';
+
+    let checkboxId = `subtaskCheckbox_${taskId}_${subtaskIndex}`;
+
+    subtaskContainer.innerHTML = `
+        &lt;div class="card-modal-description-checkbox">
+            &lt;div class="card-modal-subtask-checked"> 
+                &lt;input type="checkbox" class="subtask-checkbox" id="${checkboxId}" style="display: none;"> 
+                &lt;img src="img/circle.svg" class="subtask-image">                   
+            &lt;/div>
+            &lt;div class="card-modal-subtask-description">${subtaskText}&lt;/div>
+        &lt;/div>
+        &lt;div class="subtasks-edit-icons-container d-none">
+            &lt;div class="subtasks-edit-icons-container-p">
+                &lt;p class="subtask-icon-edit">&lt;img src="img/edit.svg" alt="Edit Subtask">&lt;/p>
+                &lt;p class="subtask-icon-delete">&lt;img src="img/delete.svg" alt="Delete Subtask">&lt;/p>
+            &lt;/div>
+        &lt;/div>
+    `;
+
+    return subtaskContainer;
 }
 
 /**
- * Toggles the contentEditable attribute of a subtask item's text element to enable or disable editing.
- * If the element is not currently editable, it sets it to editable and focuses on it.
- * If it is editable, it sets it to non-editable.
- * @param {HTMLElement} subtaskItem - The subtask item element containing the text to be edited.
+ * Returns the path to the appropriate priority icon based on the given priority level.
+ * @param {string} priority - The priority level.
  */
-function editSubtaskItem(subtaskItem) {
-    let subtaskTextElement = subtaskItem.querySelector('.subtask-text');
-    let isContentEditable = subtaskTextElement.getAttribute('contentEditable') === 'true';
-
-    if (!isContentEditable) {
-        subtaskTextElement.contentEditable = 'true';
-        subtaskTextElement.focus();
-    } else {
-        subtaskTextElement.contentEditable = 'false';
+function getPriorityIcon(priority) {
+    switch (priority) {
+        case 'urgent':
+            return 'img/Prio_up.svg';
+        case 'medium':
+            return 'img/Prio_neutral.svg';
+        case 'low':
+            return 'img/Prio_down.svg';
+        default:
+            return '';
     }
-}
-
-/**
- * Clears all input and textarea fields in the 'Add-task' and 'Add-task-content' sections.
- * It also resets the task priority to 'medium', clears the selected category, clears the subtask list, and clears the selected contacts.
- */
-function clearFields() {
-    let inputFields = document.querySelectorAll('.Add-task input, .Add-task textarea');
-    let allInputFields = document.querySelectorAll('.Add-task-content input, .Add-task-content textarea');
-
-    inputFields.forEach(field => field.value = '');
-    allInputFields.forEach(field => field.value = '');
-
-    choose('medium');
-    updateSelectedCategory('');
-
-    let subtaskList = document.getElementById('subtaskList');
-    subtaskList.innerHTML = '';
-
-    let selectedContactsContainer = document.getElementById('selectedContactsContainer');
-    if (selectedContactsContainer) {
-        selectedContactsContainer.innerHTML = '';
-    }
-
-    clearSelectedContacts();
 }</code></pre>
         </article>
     </section>

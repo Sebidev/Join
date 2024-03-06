@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: add-task_mobile.js</title>
+    <title>JSDoc: Source: board_add_task_modal.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: add-task_mobile.js</h1>
+    <h1 class="page-title">Source: board_add_task_modal.js</h1>
 
     
 
@@ -26,78 +26,132 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @file add-task-mobile.js
- * @summary JavaScript file for the Add Task page on mobile devices.
- * This file contains the JavaScript code for the Add Task page on mobile devices.
- * It contains the code for rearranging the elements on the page when the screen size changes.
+            <pre class="prettyprint source linenums"><code>/** open add-task popup
+ * 
+ * @param {string} column current column id (''todo-column, progress-column, etc.)
+ */
+function addTask(column) {
+    selectedInitialsArray = [];
+    let modalHTML = document.createElement('div');
+    if (window.innerWidth &lt;= 926) {
+        window.location.href = "add-task.html";
+    } else {
+        modalHTML.innerHTML = addTaskModalHTML(column);
+
+        document.body.insertAdjacentHTML('beforeend', modalHTML.innerHTML);
+
+        choose('medium');
+
+        let overlay = document.getElementById('overlay');
+        overlay.style.display = 'block';
+        let modal = document.getElementById('taskModal');
+        modal.style.transform = "translate(0%, -50%) translateX(100%)";
+
+        setTimeout(() => {
+            modal.style.transform = "translate(-50%, -50%)";
+        }, 100);
+        setupDueDateInputAddTaskModal();
+    }
+}
+
+/**
+ * Adds a new task to the board based on the provided form inputs and column.
+ * Redirects to the board page after successfully adding the task.
+ * Closes the modal and resets form fields regardless of success.
+ *
+ * @param {string} column - The column on the board where the task should be added.
+ */
+async function addToBoardModal(column) {
+    let form = document.getElementById('taskModal');
+    let taskTitle = getFieldValueById('taskTitleInput');
+    let category = getFieldValueById('category');
+
+    if (!taskTitle) {
+        showRequiredInfo('taskTitleInput');
+        return;
+    }
+
+    if (!category) {
+        showRequiredInfo('category');
+        return;
+    }
+
+    if (window.location.pathname.includes("board.html") &amp;&amp; form.checkValidity() &amp;&amp; taskTitle &amp;&amp; category) {
+        let description = getFieldValueById('descriptionInput');
+        let date = getFieldValueById('date');
+        let subtasksList = document.getElementById('subtaskList').children;
+        let selectedContacts = getSelectedContacts();
+        let selectedPriority = getSelectedPriority();
+
+        if (form.checkValidity()) {
+            saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column);
+            window.location.href = 'board.html';
+        }
+    }
+
+    resetFormFields();
+    closeModal();
+}
+
+/**
+ * Displays required information for a specific form field.
+ *
+ * @param {string} fieldId - The ID of the form field for which the required information should be displayed.
+ * @returns {void}
+ *
+ * @example
+ * // Displays the required information for the form field with the ID 'taskTitleInput'.
+ * showRequiredInfo('taskTitleInput');
+ */
+function showRequiredInfo(fieldId) {
+    let requiredInfoElement = document.querySelector(`#${fieldId} + .required-info`);
+    requiredInfoElement.style.display = 'block';
+}
+
+/**
+ * A function that clears all input and textarea fields in the 'Add-task' and 'Add-task-content' sections, 
+ * resets the task priority to 'medium', clears the selected category, subtasks, modal, and selected contacts.
+ */
+function clearFields() {
+    let clearInputFields = fields => fields.forEach(field => field.value = '');
+
+    let inputFields = document.querySelectorAll('.Add-task input, .Add-task textarea');
+    let allInputFields = document.querySelectorAll('.Add-task-content input, .Add-task-content textarea');
+
+    clearInputFields(inputFields);
+    clearInputFields(allInputFields);
+
+    choose('medium');
+    updateSelectedCategory('');
+
+    let subtaskList = document.getElementById('subtaskList');
+    subtaskList.innerHTML = '';
+    closeModal();
+    clearSelectedContacts();
+}
+
+/**
+ * clears the selectedContacts cache
  */
 
-let hasMovedElements = false;
-let originalOrder = [];
-
-function rearrangeElements() {
-    try {
-        if (window.innerWidth &lt; 768 &amp;&amp; !hasMovedElements) {
-            let element = document.querySelector('.prio-container');
-            let target = document.querySelector('.assigned-to-container');
-            if (element &amp;&amp; target &amp;&amp; target.parentNode) {
-                originalOrder.push({element: element, nextSibling: element.nextSibling, parent: element.parentNode});
-                target.parentNode.insertBefore(element, target);
-            }
-
-            let element1 = document.querySelector('.due-date-container');
-            let target1 = document.querySelector('.assigned-to-container');
-            if (element1 &amp;&amp; target1 &amp;&amp; target1.parentNode) {
-                originalOrder.push({element: element1, nextSibling: element1.nextSibling, parent: element1.parentNode});
-                target1.parentNode.insertBefore(element1, target1);
-            }
-
-            let element2 = document.querySelector('.category-container');
-            let target2 = document.querySelector('.assigned-to-container');
-            if (element2 &amp;&amp; target2 &amp;&amp; target2.parentNode) {
-                originalOrder.push({element: element2, nextSibling: element2.nextSibling, parent: element2.parentNode});
-                target2.parentNode.insertBefore(element2, target2);
-            }
-            
-            let element3 = document.querySelector('.assigned-to-container');
-            let target3 = document.querySelector('.subtasks-container');
-            if (element3 &amp;&amp; target3 &amp;&amp; target3.parentNode) {
-                originalOrder.push({element: element3, nextSibling: element3.nextSibling, parent: element3.parentNode});
-                target3.parentNode.insertBefore(element3, target3);
-            }
-
-            hasMovedElements = true;
-        } else if (window.innerWidth >= 768 &amp;&amp; hasMovedElements) {
-            originalOrder.reverse().forEach(item => {
-                if (item.nextSibling) {
-                    item.parent.insertBefore(item.element, item.nextSibling);
-                } else {
-                    item.parent.appendChild(item.element);
-                }
-            });
-
-            hasMovedElements = false;
-            originalOrder = [];
-        }
-    } catch (error) {
-        console.error('An error occurred:', error);
-    }
+function clearSelectedContacts() {
+    localStorage.removeItem('selectedContacts');
 }
 
-function addTaskMobile() {
-    if ('onorientationchange' in window) {
-        window.addEventListener('orientationchange', rearrangeElements);
-    } else {
-        window.addEventListener('resize', rearrangeElements);
-    }
-}
+/**
+ * A function that closes the modal by moving it out of view and then removing it and the overlay after a delay.
+ */
+function closeModal() {
+    let modal = document.getElementById('taskModal');
+    let overlay = document.getElementById('overlay');
 
-window.addEventListener('load', function() {
-    addTaskMobile();
-    rearrangeElements();
-});
-</code></pre>
+    modal.style.transform = "translate(0%, -50%) translateX(100%)";
+
+    setTimeout(() => {
+        modal.remove();
+        overlay.remove();
+    }, 200);
+}</code></pre>
         </article>
     </section>
 
