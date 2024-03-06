@@ -55,18 +55,18 @@ function resetCardModalVisibility() {
  * @param {HTMLImageElement} clickedCheckbox - The clicked checkbox.
  */
 function handleCheckboxClick(clickedCheckbox) {
-    let isCheckedNow = !clickedCheckbox.parentElement.hasAttribute('checked');
-    
+    let isCheckedNow = clickedCheckbox.classList.contains('checked');
+
     if (isCheckedNow) {
-        clickedCheckbox.parentElement.setAttribute('checked', 'true');
+        clickedCheckbox.classList.remove('checked');
+        clickedCheckbox.src = 'img/unchecked.svg';
     } else {
-        clickedCheckbox.parentElement.removeAttribute('checked');
+        clickedCheckbox.classList.add('checked');
+        clickedCheckbox.src = 'img/checked.svg';
     }
 
-    clickedCheckbox.src = isCheckedNow ? 'img/checked.svg' : 'img/unchecked.svg';
-
     let taskId = clickedCheckbox.id.split('_')[1];
-    updateProgressBar(taskId, isCheckedNow);
+    updateProgressBar(taskId);
 }
 
 document.addEventListener('DOMContentLoaded', function () {
