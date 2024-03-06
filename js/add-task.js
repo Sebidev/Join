@@ -227,16 +227,23 @@ function createAndAppendIcons(container) {
     let imgClose = createIcon('img/close.svg', deactivateInputField);
     let imgSubmit = createIcon('img/submit.svg', function () {
         let actionContainer = (container.id === 'iconContainer') ? 'iconContainer' : 'iconContainerEdit';
-        addSubtask(actionContainer);
+        if (actionContainer === 'iconContainerEdit') {
+            addSubtaskOpenCard();
+        } else {
+            addSubtask(actionContainer);
+        }
     });
 
     let newSubtaskInput = document.getElementById('newSubtaskInput');
-    newSubtaskInput.addEventListener('keypress', function (event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            addSubtask('iconContainer');
-        }
-    });
+
+    if (newSubtaskInput) {
+        newSubtaskInput.addEventListener('keypress', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                addSubtask('iconContainer');
+            }
+        });
+    }
 
     container.appendChild(imgClose);
     container.appendChild(imgSubmit);
