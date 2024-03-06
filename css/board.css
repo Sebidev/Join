@@ -1311,7 +1311,7 @@ body {
 }
 
 .card-modal-subtasks {
-  height: 96px;
+  /*height: 96px;*/
   display: flex;
   align-items: normal;
   flex-direction: column;
