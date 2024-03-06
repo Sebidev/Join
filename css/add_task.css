@@ -141,7 +141,7 @@ body {
   margin-top: 16px;
   display: flex;
   width: 440px;
-  height: 80px;
+  height: 327px;
   flex-direction: column;
   align-items: flex-start;
 }
@@ -261,7 +261,10 @@ body {
 }
 
 #selectedContactsContainer {
+  margin-top: 2px;
   width: 100%;
+  height: 200px;
+  overflow-y: auto;
 }
 
 .selected-contact {
@@ -405,7 +408,7 @@ body {
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
-  margin-bottom: 24px
+  margin-bottom: 16px;
 }
 
 .due-date {
@@ -833,7 +836,9 @@ body {
 }
 
 .required-legend {
-  margin-top: 223px;
+  position: fixed;
+  bottom: 5px;
+  left: 350px;
   width: 170px;
   height: 27px;
   flex-shrink: 0;
@@ -897,10 +902,10 @@ body {
 
 /* Media queries */
 
-@media screen and (max-width: 1330px){
+@media screen and (max-width: 1330px) {
   .header-add-task {
     margin-left: 250px;
-    transition: margin 0.5s ease-in-out;	
+    transition: margin 0.5s ease-in-out;
   }
 
   .Add-task {
@@ -908,7 +913,7 @@ body {
     transition: margin 0.5s ease-in-out;
   }
 
-  .Add-task-left{
+  .Add-task-left {
     width: 33vw;
     transition: margin 0.5s ease-in-out;
   }
@@ -918,15 +923,15 @@ body {
     transition: margin 0.5s ease-in-out;
   }
 
-  .title-input{
+  .title-input {
     width: 29.2vw;
   }
 
-  .description-input{
+  .description-input {
     width: 30vw;
   }
 
-  .assigned-dropdown{
+  .assigned-dropdown {
     width: 30vw;
   }
 
@@ -934,11 +939,11 @@ body {
     width: 29.7vw;
   }
 
-  .prio-option-container{
+  .prio-option-container {
     width: clamp(320px, 32.5vw, 100%);
   }
 
-  .category-dropdown{
+  .category-dropdown {
     width: 30vw;
   }
 
@@ -997,7 +1002,13 @@ body {
     font-size: 16px;
   }
 
-  .title-input,  .description-input, .assigned-dropdown, .due-date-input, .prio-option-container, .category-dropdown, .input-container-subtask {
+  .title-input,
+  .description-input,
+  .assigned-dropdown,
+  .due-date-input,
+  .prio-option-container,
+  .category-dropdown,
+  .input-container-subtask {
     width: unset;
   }
 
@@ -1189,7 +1200,7 @@ body {
     font-size: 14px;
   }
 
-  .arrow_down{
+  .arrow_down {
     top: unset !important;
     right: 5px !important;
   }
@@ -1213,8 +1224,8 @@ body {
   }
 }
 
-@media only screen and (max-width: 400px){
-  .create-task-button{
+@media only screen and (max-width: 400px) {
+  .create-task-button {
     margin: 0;
     padding: 0px;
     width: 154.2px;

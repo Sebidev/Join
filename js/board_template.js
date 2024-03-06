@@ -22,7 +22,7 @@ function addTaskModalHTML() {
 
                 <div class="description-container">
                     <div class="description">Description</div>
-                    <input id="descriptionInput" type="text" class="description-input" placeholder="Enter a Description" required>
+                    <input id="descriptionInput" type="text" class="description-input" placeholder="Enter a Description">
                     <div class="required-info">This field is required</div>
                 </div>
 

@@ -38,8 +38,17 @@ async function addToBoardModal(column) {
     let taskTitle = getFieldValueById('taskTitleInput');
     let category = getFieldValueById('category');
 
-    if (window.location.pathname.includes("board.html") && form.checkValidity() && taskTitle && category) {
+    if (!taskTitle) {
+        showRequiredInfo('taskTitleInput');
+        return;
+    }
 
+    if (!category) {
+        showRequiredInfo('category');
+        return;
+    }
+
+    if (window.location.pathname.includes("board.html") && form.checkValidity() && taskTitle && category) {
         let description = getFieldValueById('descriptionInput');
         let date = getFieldValueById('date');
         let subtasksList = document.getElementById('subtaskList').children;
@@ -51,8 +60,24 @@ async function addToBoardModal(column) {
             window.location.href = 'board.html';
         }
     }
+
     resetFormFields();
     closeModal();
+}
+
+/**
+ * Displays required information for a specific form field.
+ *
+ * @param {string} fieldId - The ID of the form field for which the required information should be displayed.
+ * @returns {void}
+ *
+ * @example
+ * // Displays the required information for the form field with the ID 'taskTitleInput'.
+ * showRequiredInfo('taskTitleInput');
+ */
+function showRequiredInfo(fieldId) {
+    let requiredInfoElement = document.querySelector(`#${fieldId} + .required-info`);
+    requiredInfoElement.style.display = 'block';
 }
 
 /**

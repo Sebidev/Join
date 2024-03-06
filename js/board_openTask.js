@@ -69,6 +69,10 @@ function handleCheckboxClick(clickedCheckbox) {
     updateProgressBar(taskId);
 }
 
+/**
+ * Event listener that waits for the DOM content to be fully loaded before attaching click event handlers to subtask checkboxes.
+ * When a subtask checkbox image is clicked, the handleCheckboxClick function is called to toggle the 'checked' status and update the progress bar.
+ */
 document.addEventListener('DOMContentLoaded', function () {
     let subtaskCheckboxes = document.querySelectorAll('.subtask-checkbox img');
     subtaskCheckboxes.forEach(checkboxImage => {

@@ -74,16 +74,16 @@ async function addToBoard(column) {
     if (form.checkValidity() && taskTitle && category) {
         overlay.style.display = 'block';
         animatedIcon.style.bottom = '500px';
-    
+
         let description = getFieldValueById('descriptionInput');
         let date = getFieldValueById('date');
         let subtasksList = document.getElementById('subtaskList').children;
         let selectedContacts = getSelectedContacts();
         let selectedPriority = getSelectedPriority();
-    
+
         if (form.checkValidity()) {
             saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column);
-    
+
             setTimeout(() => {
                 window.location.href = 'board.html';
             }, 1000);
@@ -206,21 +206,16 @@ document.addEventListener('DOMContentLoaded', function () {
  * Toggles the visibility of icons (close and submit) in the icon container associated with the new subtask input.
  * It removes the existing add-icon and creates and appends close and submit icons if not present.
  */
-function handleNewSubtaskInputClick() {
+function handleNewSubtaskInputClick(containerId) {
     let addIcon = document.querySelector('.add-icon');
     if (addIcon) {
         addIcon.remove();
     }
 
-    let iconContainer = document.getElementById('iconContainer');
-    let iconContainerEdit = document.getElementById('iconContainerEdit');
+    let iconContainer = document.getElementById(containerId);
 
-    if (iconContainer && !document.querySelector('#iconContainer img')) {
-        createAndAppendIcons(iconContainer);
-    }
-
-    if (iconContainerEdit && !document.querySelector('#iconContainerEdit img')) {
-        createAndAppendIcons(iconContainerEdit);
+    if (iconContainer && !document.querySelector(`#${containerId} img`)) {
+        createAndAppendIcons(iconContainer, containerId);
     }
 }
 
@@ -229,25 +224,35 @@ function handleNewSubtaskInputClick() {
  * @param {HTMLElement} container - The container element to which icons will be appended.
  */
 function createAndAppendIcons(container) {
-    let imgClose = document.createElement('img');
-    imgClose.src = 'img/close.svg';
-    imgClose.onclick = function () {
-        deactivateInputField();
-    };
+    let imgClose = createIcon('img/close.svg', deactivateInputField);
+    let imgSubmit = createIcon('img/submit.svg', function () {
+        let actionContainer = (container.id === 'iconContainer') ? 'iconContainer' : 'iconContainerEdit';
+        addSubtask(actionContainer);
+    });
 
-    let imgSubmit = document.createElement('img');
-    imgSubmit.src = 'img/submit.svg';
-    imgSubmit.onclick = function () {
-        if (container.id === 'iconContainer') {
-            addSubtask();
-        } else if (container.id === 'iconContainerEdit') {
-            addSubtaskOpenCard();
+    let newSubtaskInput = document.getElementById('newSubtaskInput');
+    newSubtaskInput.addEventListener('keypress', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            addSubtask('iconContainer');
         }
-        deactivateInputField();
-    };
+    });
 
     container.appendChild(imgClose);
     container.appendChild(imgSubmit);
+}
+
+/**
+ * Creates an image element with the specified source and click handler.
+ * @param {string} src - The source URL of the image.
+ * @param {Function} clickHandler - The click handler function for the image.
+ * @returns {HTMLImageElement} - The created image element.
+ */
+function createIcon(src, clickHandler) {
+    let img = document.createElement('img');
+    img.src = src;
+    img.onclick = clickHandler;
+    return img;
 }
 
 /**

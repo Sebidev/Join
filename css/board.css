@@ -103,6 +103,7 @@ body {
 }
 
 .search-icon {
+  cursor: pointer;
   right: 10px;
   position: absolute;
   top: 50%;
@@ -668,7 +669,6 @@ body {
 }
 
 .required-legend-modal {
-  margin-top: 229px;
   margin-right: 270px;
   width: 170px;
   height: 27px;
@@ -722,7 +722,6 @@ body {
   overflow-x: hidden;
   scrollbar-width: thin;
   -ms-overflow-style: none;
-
 
   /* Hide scrollbar for Chrome, Safari and Opera */
   ::-webkit-scrollbar {
@@ -1015,6 +1014,9 @@ body {
 }
 
 #dueDateText {
+  font-family: inter;
+  font-size: 20px;
+  font-weight: 400;
   margin: 0;
 }
 
@@ -1100,7 +1102,7 @@ body {
 }
 
 #arrow_img_contacts::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -1322,20 +1324,20 @@ body {
 }
 
 .columnMobilePopup {
- align-items: center;
- justify-content: center;
- display: flex;
- height: 15%;
- width: 100vw;
- border-radius: 10px;
- cursor: pointer;
- background-color: rgba(0, 0, 0, 0.075);
- color: var(--menu-color, #42526e);
- font-family: Inter;
- font-size: 20px;
- font-style: normal;
- font-weight: 700;
- line-height: 120%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  height: 15%;
+  width: 100vw;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.075);
+  color: var(--menu-color, #42526e);
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 120%;
 }
 
 .button-group {
