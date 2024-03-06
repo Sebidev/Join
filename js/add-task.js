@@ -245,6 +245,17 @@ function createAndAppendIcons(container) {
         });
     }
 
+    let newSubtaskInputEdit = document.getElementById('newSubtaskInputEdit');
+
+    if (newSubtaskInputEdit) {
+        newSubtaskInputEdit.addEventListener('keypress', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                addSubtaskOpenCard();
+            }
+        });
+    }
+
     container.appendChild(imgClose);
     container.appendChild(imgSubmit);
 }
