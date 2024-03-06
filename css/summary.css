@@ -355,7 +355,7 @@ body {
 }
 
 /* Media queries */
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 665px) {
     .right_textbox {
         opacity: 0;
         animation: fadeIn 2s linear 0s 1 normal forwards, fadeOut 2s linear 3s 1 normal forwards;
@@ -478,6 +478,23 @@ body {
 
     .box_small_text, .box_small_text2 {
         font-size: 11px;
+    }
+}
+
+@media only screen and (max-width:1020px){
+    .summary{
+        margin-left: 130px;
+        transition: margin 0.5s ease-in-out;
+    }
+
+    .header_summary{
+        margin-left: 130px;
+        transition: margin 0.5s ease-in-out;
+    }
+
+    .boxs_box{
+        margin-left: 130px;
+        transition: margin 0.5s ease-in-out;
     }
 }
 
