@@ -144,7 +144,7 @@ body {
 }
 
 /* Media Query */
-@media (max-width: 600px) {
+@media (max-width: 926px) {
     .join_logo1, .join_logo1 img {
         display: flex;
         width: 32px;
