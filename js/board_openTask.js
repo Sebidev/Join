@@ -154,7 +154,7 @@ async function openCard(data, subtasksData) {
     let taskId = data.id;
     currentTaskId = taskId;
 
-    let tasks = isUserLoggedIn ? getUserTasks() : getLocalStorageTasks();
+    let tasks = isUserLoggedIn ? await getUserTasks() : await getLocalStorageTasks();
     let task = tasks.find(task => task.id === taskId) || data;
 
     let { categoryClass, priorityIconSrc, selectedContacts, priority } = getCardDetails(task);
