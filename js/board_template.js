@@ -4,7 +4,7 @@
  * Generates HTML for the Add Task modal.
  * @returns {string} - HTML code for the Add Task modal.
  */
-function addTaskModalHTML() {
+function addTaskModalHTML(column) {
     return /*html*/ `
     <div id="overlay"></div>
     <form id="taskModal" class="add-task-create-open">
@@ -115,7 +115,7 @@ function addTaskModalHTML() {
                         </svg>
                     </button>
 
-                    <button class="create-task-button-modal" onclick="addToBoardModal('todo-column')">
+                    <button class="create-task-button-modal" onclick="addToBoardModal('${column}')">
                         <h3>Create Task</h3>
                         <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g id="check">
