@@ -1017,14 +1017,13 @@ body {
   }
 
   .assigned-dropdown {
-    width: 87vw;
+    width: 88vw;
   }
 
   #selectedContactsContainer {
     display: flex;
     flex-direction: row;
-    min-height: 32px;
-    height: 32px;
+    height: 42px;
     margin-top: 10px;
     margin-bottom: 32px;
   }
@@ -1041,12 +1040,6 @@ body {
   .input-container-subtask {
     flex-direction: column;
     align-items: stretch;
-  }
-
-  .input-container-subtask img {
-    position: absolute;
-    right: 5px;
-    margin-top: -33px;
   }
 
   .arrow_down {
@@ -1075,7 +1068,7 @@ body {
 
   .due-date-input {
     padding: 8px 21px;
-    width: 84vw;
+    width: 85vw;
   }
 
   .prio-container {
@@ -1118,7 +1111,7 @@ body {
   }
 
   .category-dropdown {
-    width: 87vw;
+    width: 88vw;
   }
 
   .category-options label {
@@ -1129,10 +1122,22 @@ body {
     display: none;
   }
 
+  #iconContainer {
+    position: relative;
+    justify-content: end;
+    margin-top: -33px;
+    width: 50px;
+    left: 88%;
+  }
+
+  .subImgContainer{
+    margin-top: 9px;
+  }
+
   .subtasks-container {
     width: 95vw;
     min-height: 35vh;
-    margin-top: 38px;
+    margin-top: -65px;
     margin-left: 5px;
     gap: 4px;
   }
