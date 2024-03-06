@@ -425,6 +425,7 @@ body {
 
 .subtasks {
   color: #000;
+  width: 76px;
 
   /* Version 2/t7 */
   font-family: Inter;
@@ -712,6 +713,7 @@ body {
 }
 
 .card-modal-cont {
+  height: 100%;
   margin-right: -15px;
   gap: 1.5rem;
   display: flex;
@@ -1316,7 +1318,6 @@ body {
   gap: 4px;
   align-self: stretch;
   padding-top: 13px;
-  overflow-y: scroll;
 }
 
 #closeButtonMobilePopup {
