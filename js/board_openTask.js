@@ -1,7 +1,7 @@
 /**
  * Closes the currently open card by moving it out of view, removing it, clearing the selected contacts, and resetting visibility of various elements after a delay.
  */
-function closeOpenCard() {
+async function closeOpenCard() {
     let cardOverlay = document.getElementById('card-overlay');
     let taskId = currentTaskId;
     let cardEffect = document.getElementById(`cardModal_${taskId}`);
@@ -9,7 +9,7 @@ function closeOpenCard() {
     if (cardEffect) {
         cardEffect.style.transform = "translate(100%, -50%) translateX(100%)";
 
-        setTimeout(() => {
+        setTimeout(async () => {
             if (cardOverlay) {
                 cardOverlay.remove();
             }
@@ -21,6 +21,16 @@ function closeOpenCard() {
             }
 
             resetCardModalVisibility();
+
+            let tasks = isUserLoggedIn ? await getUserTasks() : await getLocalStorageTasks();
+            if (isUserLoggedIn) {
+                let users = JSON.parse(await getItem('users'));
+                users[currentUser].tasks = tasks;
+                await setItem('users', JSON.stringify(users));
+            } else {
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+            }
+
         }, 100);
     }
 
@@ -54,7 +64,10 @@ function resetCardModalVisibility() {
  * Handles the click event on a subtask checkbox.
  * @param {HTMLImageElement} clickedCheckbox - The clicked checkbox.
  */
-function handleCheckboxClick(clickedCheckbox) {
+async function handleCheckboxClick(clickedCheckbox) {
+    let taskId = clickedCheckbox.id.split('_')[1];
+    let subtaskIndex = parseInt(clickedCheckbox.id.split('_')[2]) - 1;
+
     let isCheckedNow = clickedCheckbox.classList.contains('checked');
 
     if (isCheckedNow) {
@@ -64,9 +77,17 @@ function handleCheckboxClick(clickedCheckbox) {
         clickedCheckbox.classList.add('checked');
         clickedCheckbox.src = 'img/checked.svg';
     }
+    
+    updateProgressBar(taskId, subtaskIndex);
 
-    let taskId = clickedCheckbox.id.split('_')[1];
-    updateProgressBar(taskId);
+    if (typeof subtaskIndex !== 'undefined') {
+        try {
+            await saveCheckboxStatus(taskId, subtaskIndex, !isCheckedNow);
+            updateSubtaskCount(taskId);
+        } catch (error) {
+        }
+    } else {
+    }
 }
 
 /**
@@ -86,24 +107,31 @@ document.addEventListener('DOMContentLoaded', function () {
  * Saves the status of checkboxes (subtasks) for a given task ID, either in the user's tasks if logged in or in local storage.
  * @param {string} taskId - The ID of the task.
  */
-async function saveCheckboxStatus(taskId) {
-    let tasks = isUserLoggedIn ? JSON.parse(await getItem('users'))[currentUser]?.tasks : JSON.parse(localStorage.getItem('tasks')) || [];
-    let task = tasks.find(task => task.id === taskId);
+async function saveCheckboxStatus(taskId, subtaskIndex, isChecked) {
+    try {
+        let tasks = isUserLoggedIn ? await getUserTasks() : await getLocalStorageTasks();
 
-    if (task) {
-        let subtasksData = Array.from(document.querySelectorAll(`#cardModal_${taskId} .subtask-checkbox`)).map((checkbox, index) => ({
-            description: task.content.subtasksData[index].description,
-            checked: checkbox.checked
-        }));
-        task.content.subtasksData = subtasksData;
+        let task = tasks.find(task => task.id === taskId);
 
-        if (isUserLoggedIn) {
-            let users = JSON.parse(await getItem('users'));
-            users[currentUser].tasks = tasks;
-            await setItem('users', JSON.stringify(users));
-        } else {
-            localStorage.setItem('tasks', JSON.stringify(tasks));
+        if (task && task.content && task.content.subtasksData && subtaskIndex < task.content.subtasksData.length) {
+            task.content.subtasksData[subtaskIndex].checked = isChecked;
+
+            if (isUserLoggedIn) {
+                let users = JSON.parse(await getItem('users'));
+                users[currentUser].tasks = tasks;
+                await setItem('users', JSON.stringify(users));
+            } else {
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+            }
         }
+        
+        let checkbox = document.getElementById(`subtaskCheckbox_${taskId}_${subtaskIndex}`);
+        if (isChecked) {
+            checkbox.classList.add('checked');
+        } else {
+            checkbox.classList.remove('checked');
+        }
+    } catch (error) {
     }
 }
 
@@ -145,6 +173,11 @@ async function deleteTask() {
     closeOpenCard();
 }
 
+async function getUpdatedTask(taskId) {
+    let tasks = isUserLoggedIn ? await getUserTasks() : await getLocalStorageTasks();
+    return tasks.find(task => task.id === taskId);
+}
+
 /**
  * Opens the card with the specified data.
  * @param {Object} data - Card data.
@@ -154,18 +187,81 @@ async function openCard(data, subtasksData) {
     let taskId = data.id;
     currentTaskId = taskId;
 
-    let tasks = isUserLoggedIn ? await getUserTasks() : await getLocalStorageTasks();
+    let tasks = await getTasks();
     let task = tasks.find(task => task.id === taskId) || data;
 
-    let { categoryClass, priorityIconSrc, selectedContacts, priority } = getCardDetails(task);
-
-    let openCardHTML = openTaskHTML(data, taskId, categoryClass, priority, priorityIconSrc, selectedContacts);
+    let cardDetails = getCardDetails(task);
+    let openCardHTML = generateOpenCardHTML(data, taskId, cardDetails);
 
     document.body.insertAdjacentHTML('beforeend', openCardHTML);
-    updateProgressBar(taskId);
+
+    await updateSubtaskCheckboxes(taskId);
+    await updateCardProgressAndSubtasks(taskId, task);
+
     showCardOverlay(taskId);
     animateCardEffect(taskId);
     currentEditData = data;
+}
+
+/**
+ * Fetches tasks based on the user's login status.
+ * If the user is logged in, it fetches the user's tasks.
+ * Otherwise, it fetches the tasks from local storage.
+ * 
+ * @returns {Promise<Array>} The tasks.
+ */
+async function getTasks() {
+    return isUserLoggedIn ? await getUserTasks() : await getLocalStorageTasks();
+}
+
+/**
+ * Generates the HTML for the open card.
+ * 
+ * @param {Object} data - The task data.
+ * @param {string} taskId - The ID of the task.
+ * @param {Object} details - The details of the card.
+ * @param {string} details.categoryClass - The category class of the card.
+ * @param {string} details.priorityIconSrc - The source of the priority icon.
+ * @param {Array} details.selectedContacts - The selected contacts.
+ * @param {string} details.priority - The priority of the card.
+ * @returns {string} The HTML for the open card.
+ */
+function generateOpenCardHTML(data, taskId, { categoryClass, priorityIconSrc, selectedContacts, priority }) {
+    return openTaskHTML(data, taskId, categoryClass, priority, priorityIconSrc, selectedContacts);
+}
+
+/**
+ * Updates the checkboxes for the subtasks of a task.
+ * 
+ * @param {string} taskId - The ID of the task.
+ */
+async function updateSubtaskCheckboxes(taskId) {
+    let updatedTask = await getUpdatedTask(taskId);
+
+    updatedTask.content.subtasksData.forEach((subtask, index) => {
+        let checkbox = document.getElementById(`subtaskCheckbox_${taskId}_${index + 1}`);
+        if (checkbox) {
+            checkbox.checked = subtask.checked;
+            checkbox.src = subtask.checked ? 'img/checked.svg' : 'img/unchecked.svg';
+            if (subtask.checked) {
+                checkbox.classList.add('checked');
+            } else {
+                checkbox.classList.remove('checked');
+            }
+        }
+    });
+}
+
+/**
+ * Updates the progress bar and subtasks counter for a card.
+ * 
+ * @param {string} taskId - The ID of the task.
+ * @param {Object} task - The task data.
+ */
+async function updateCardProgressAndSubtasks(taskId, task) {
+    let { currentSubtasks, totalSubtasks, progress } = await updateCardInformation(taskId, task);
+    document.getElementById(`progressFill_${taskId}`).style.width = `${progress}%`;
+    document.getElementById(`subtasks_${taskId}`).textContent = `${currentSubtasks}/${totalSubtasks} Subtasks`;
 }
 
 /**
