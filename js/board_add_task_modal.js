@@ -8,7 +8,7 @@ function addTask(column) {
     if (window.innerWidth <= 926) {
         window.location.href = "add-task.html";
     } else {
-        modalHTML.innerHTML = addTaskModalHTML();
+        modalHTML.innerHTML = addTaskModalHTML(column);
 
         document.body.insertAdjacentHTML('beforeend', modalHTML.innerHTML);
 
