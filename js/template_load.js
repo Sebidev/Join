@@ -21,19 +21,7 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(response => response.text())
         .then(data => {
             document.querySelector('#sideboard').innerHTML = data;
-
-            let menuItems = document.querySelectorAll('.sidemenu_element');
-            let currentUrl = new URL(window.location.href.trim().toLowerCase());
-
-            menuItems.forEach(function(menuItem) {
-                let itemUrl = new URL(menuItem.getAttribute('href').trim().toLowerCase(), window.location.origin);
-
-                if (currentUrl.href === itemUrl.href) {
-                    menuItem.classList.add('selected');
-                } else {
-                    menuItem.classList.remove('selected');
-                }
-            });
+            handleSideboard();
         })
         .catch(error => {
             console.error('Error:', error);
@@ -49,3 +37,18 @@ document.addEventListener("DOMContentLoaded", function() {
     sideboardcss.href = 'template/sideboard.css';
     document.head.appendChild(sideboardcss);
 });
+
+function handleSideboard() {
+    let menuItems = document.querySelectorAll('.sidemenu_element');
+    let currentUrl = window.location.href.trim().toLowerCase();
+
+    menuItems.forEach(function(menuItem) {
+        let itemUrl = menuItem.href.trim().toLowerCase();
+
+        if (currentUrl === itemUrl) {
+            menuItem.classList.add('selected');
+        } else {
+            menuItem.classList.remove('selected');
+        }
+    });
+}
