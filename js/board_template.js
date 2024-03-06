@@ -10,7 +10,7 @@ function addTaskModalHTML(column) {
     <form id="taskModal" class="add-task-create-open">
         <div class="modal-headline">Add task</div>
         <div onclick="closeModal()">
-        <img class="close-modal" src="./img/close_modal.svg" alt="">
+        <img class="close-modal" src="img/close_modal.svg" alt="">
         </div>
         <div class="Add-task-content">
             <div class="Add-task-left-modal">
@@ -30,7 +30,7 @@ function addTaskModalHTML(column) {
                     <div class="assigned-to">Assigned to</div>
                     <div class="input-container">
                         <input id="assignedTo" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
-                        <img id="arrow_img_contacts" onclick="toggleArrowContacts()" class="arrow_down" src="./img/arrow_down.svg" alt="">
+                        <img id="arrow_img_contacts" onclick="toggleArrowContacts()" class="arrow_down" src="img/arrow_down.svg" alt="">
                         <div id="contactDropdown" class="dropdown-content"></div>
                     </div>
 
@@ -44,7 +44,7 @@ function addTaskModalHTML(column) {
             </div>
 
             <div class="divider">
-                <img src="./img/divider.svg" alt="">
+                <img src="img/divider.svg" alt="">
             </div>
 
             <div class="Add-task-right-modal">
@@ -62,18 +62,18 @@ function addTaskModalHTML(column) {
                         onclick="choose('urgent')"
                         class="button urgent">
                         <h3>Urgent</h3>
-                        <img src="./img/Prio_up.svg" alt="" />
+                        <img src="img/Prio_up.svg" alt="" />
                     </button>
                     <button
                         type="button"
                         onclick="choose('medium')"
                         class="button medium">
                         <h3>Medium</h3>
-                        <img src="./img/Prio_neutral.svg" alt="" />
+                        <img src="img/Prio_neutral.svg" alt="" />
                     </button>
                     <button type="button" onclick="choose('low')" class="button low">
                         <h3>Low</h3>
-                        <img src="./img/Prio_down.svg" alt="" />
+                        <img src="img/Prio_down.svg" alt="" />
                     </button>
                     </div>
                 </div>
@@ -82,7 +82,7 @@ function addTaskModalHTML(column) {
                     <div class="category">Category</div>
                     <div class="input-container">
                         <input id="category" class="category-dropdown" type="text" placeholder="Select task category">
-                        <img id="arrow_img_category" class="arrow_down_category" src="./img/arrow_down.svg" onclick="toggleArrowCategory()" alt="" />
+                        <img id="arrow_img_category" class="arrow_down_category" src="img/arrow_down.svg" onclick="toggleArrowCategory()" alt="" />
                         <div class="category-options" id="categoryOptions">
                             <label onclick="updateSelectedCategory('Technical task')">
                                 Technical task
@@ -99,7 +99,7 @@ function addTaskModalHTML(column) {
                     <div class="input-container-subtask">
                         <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask" id="subtask">
                         <div id="iconContainer">
-                            <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" />
+                            <img class="add-icon" src="img/Subtasks icons11.svg" alt="" />
                         </div>   
                     </div>
                     <div class="subtask-list" id="subtaskList"></div>
@@ -134,7 +134,7 @@ function addTaskModalHTML(column) {
         <div class="overlay-feedback" id="overlayFeedack"></div>
     </form>
     <div class="animated-icon" id="animatedIcon">
-        <img src="./img/added_to_board.svg" alt="Added to Board">
+        <img src="img/added_to_board.svg" alt="Added to Board">
     </div>
     `;
 }
@@ -157,7 +157,7 @@ function openTaskHTML(data, taskId, categoryClass, priority, priorityIconSrc, se
         <div class="task-categorie">
             <p class=${categoryClass}>${data.content.category}</p>
             <div class="close-card-modal" onclick="closeOpenCard()">
-                <img src="./img/close_modal.svg" alt="">
+                <img src="img/close_modal.svg" alt="">
             </div>
         </div>
         <div class="card-modal-cont">
@@ -210,17 +210,17 @@ function openTaskHTML(data, taskId, categoryClass, priority, priorityIconSrc, se
                                  id="subtaskCheckbox_${data.id}_${index + 1}" 
                                  onclick="handleCheckboxClick(this)" 
                                  ${subtask.checked ? 'checked' : ''}>
-                            <img src="./img/circle.svg" class="subtask-image" style="display: none;">
+                            <img src="img/circle.svg" class="subtask-image" style="display: none;">
                         </div>
                         <div class="card-modal-subtask-description">${subtask.description}</div>
                     </div>
                     <div class="subtasks-edit-icons-container d-none">
                         <div class="subtasks-edit-icons-container-p">
                             <p class="subtask-icon-edit">
-                                <img src="./img/edit.svg" alt="Edit Subtask">
+                                <img src="img/edit.svg" alt="Edit Subtask">
                             </p>
                             <p class="subtask-icon-delete">
-                                <img src="./img/delete.svg" alt="Delete Subtask">
+                                <img src="img/delete.svg" alt="Delete Subtask">
                             </p>
                         </div>
                     </div>

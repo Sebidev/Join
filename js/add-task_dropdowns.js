@@ -159,7 +159,7 @@ function toggleContactSelection(element, contactId) {
 
     let checkboxImg = element.querySelector('.checkbox-img');
     if (checkboxImg) {
-        checkboxImg.src = isSelected ? '/img/checked_white.svg' : 'img/unchecked.svg';
+        checkboxImg.src = isSelected ? 'img/checked_white.svg' : 'img/unchecked.svg';
     }
 
     updateSelectedContacts({ id: contactId }, isSelected ? 'add' : 'remove');
@@ -219,7 +219,7 @@ function createSelectedContactDiv(contact) {
                     <span>${contact.name}</span>
                 </div>
                 <span class="remove-contact" onclick="removeContact(${contact.avatarid})">
-                    <img src="./img/delete.svg">
+                    <img src="img/delete.svg">
                 </span>
             </div>
         </div>
@@ -271,7 +271,7 @@ function toggleArrowCategory() {
     let categoryDropdown = document.getElementById('categoryOptions');
 
     categoryArrowImg.classList.toggle('arrow_up');
-    categoryArrowImg.src = `./img/arrow_${categoryArrowImg.classList.contains('arrow_up') ? 'up' : 'down'}.svg`;
+    categoryArrowImg.src = `img/arrow_${categoryArrowImg.classList.contains('arrow_up') ? 'up' : 'down'}.svg`;
 
     if (categoryDropdown) {
         categoryDropdown.style.display = categoryArrowImg.classList.contains('arrow_up') ? 'block' : 'none';
@@ -307,7 +307,7 @@ document.addEventListener('click', function (event) {
 function openCategoryDropdown() {
     let categoryArrowImg = document.getElementById('arrow_img_category');
     categoryArrowImg.classList.add('arrow_up');
-    categoryArrowImg.src = './img/arrow_up.svg';
+    categoryArrowImg.src = 'img/arrow_up.svg';
 
     let categoryDropdown = document.getElementById('categoryOptions');
     if (categoryDropdown) {

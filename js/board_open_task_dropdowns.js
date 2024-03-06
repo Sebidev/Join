@@ -8,7 +8,7 @@ function createContactDropdown(taskId) {
     inputContainer.className = 'input-container';
     inputContainer.innerHTML = `
         <input id="assignedToEdit" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
-            <img id="arrow_down_edit" onclick="showDropdownEdit('${currentTaskId}')" class="arrow_down_edit" src="./img/arrow_down.svg" alt="">
+            <img id="arrow_down_edit" onclick="showDropdownEdit('${currentTaskId}')" class="arrow_down_edit" src="img/arrow_down.svg" alt="">
         <div id="contactDropdownEdit_${currentTaskId}" class="dropdown-content-edit" data-task-id="${currentTaskId}"></div>
     `;
 
@@ -153,7 +153,7 @@ function generateContactHTMLEdit(contact, isSelected) {
 function toggleContactSelectionEdit(element, contactId) {
     let isSelected = element.classList.toggle('checked');
     let checkboxImg = element.querySelector('.checkbox-img');
-    checkboxImg && (checkboxImg.src = isSelected ? '/img/checked_white.svg' : 'img/unchecked.svg');
+    checkboxImg && (checkboxImg.src = isSelected ? 'img/checked_white.svg' : 'img/unchecked.svg');
 
     let selectedContacts = JSON.parse(localStorage.getItem('selectedContacts')) || [];
     let index = selectedContacts.findIndex(c => c.id === contactId);
@@ -327,9 +327,9 @@ function createPriorityOptionsContainer() {
     let optionContainer = document.createElement('div');
     optionContainer.className = 'prio-option-container';
 
-    createPriorityButton(optionContainer, 'Urgent', 'urgent', './img/Prio_up.svg');
-    createPriorityButton(optionContainer, 'Medium', 'medium', './img/Prio_neutral.svg');
-    createPriorityButton(optionContainer, 'Low', 'low', './img/Prio_down.svg');
+    createPriorityButton(optionContainer, 'Urgent', 'urgent', 'img/Prio_up.svg');
+    createPriorityButton(optionContainer, 'Medium', 'medium', 'img/Prio_neutral.svg');
+    createPriorityButton(optionContainer, 'Low', 'low', 'img/Prio_down.svg');
 
     priorityContainer.appendChild(priorityHeadline);
     priorityContainer.appendChild(optionContainer);
@@ -489,9 +489,9 @@ function updateSelectedPriorityStyles(buttons, selectedPriority) {
  */
 function updatePriorityTextAndSymbol(letterElement, symbolElement, selectedPriority) {
     let priorityMappings = {
-        'urgent': { text: 'Urgent', symbolSrc: './img/Prio_up.svg' },
-        'medium': { text: 'Medium', symbolSrc: './img/Prio_neutral.svg' },
-        'low': { text: 'Low', symbolSrc: './img/Prio_down.svg' }
+        'urgent': { text: 'Urgent', symbolSrc: 'img/Prio_up.svg' },
+        'medium': { text: 'Medium', symbolSrc: 'img/Prio_neutral.svg' },
+        'low': { text: 'Low', symbolSrc: 'img/Prio_down.svg' }
     };
 
     let selectedPriorityInfo = priorityMappings[selectedPriority] || {};

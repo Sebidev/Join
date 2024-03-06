@@ -5,9 +5,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
   <title>Board</title>
-  <link rel="stylesheet" href="./css/board.css" />
-  <link rel="stylesheet" href="./css/add_task.css" />
-  <link rel="stylesheet" href="./css/contacts.css" />
+  <link rel="stylesheet" href="css/board.css" />
+  <link rel="stylesheet" href="css/add_task.css" />
+  <link rel="stylesheet" href="css/contacts.css" />
+  <link href="fonts/inter.css" rel="stylesheet" type="text/css">
+  <link href="fonts/opensans.css" rel="stylesheet" type="text/css">
 </head>
 
 <body onload="initUser(), initHead(), initBoard()">
@@ -16,17 +18,17 @@
   <div class="head">
     <div class="board-head">Board</div>
     <button class="add-task-button-mobile" onclick="addTask('todo-column')">
-      <img src="./img/add.svg" alt="" />
+      <img src="img/add.svg" alt="" />
     </button>
     <div class="head-right">
       <div class="input-container">
         <input class="find-task-search" type="text" placeholder="Search..." id="input-search">
-        <img class="vector" src="./img/Vector 3.svg" alt="" />
-        <img class="search-icon" src="./img/search.svg" alt="" />
+        <img class="vector" src="img/Vector 3.svg" alt="" />
+        <img class="search-icon" src="img/search.svg" alt="" />
       </div>
       <button class="add-task-button hover-color" onclick="addTask('todo-column')">
         Add task
-        <img src="./img/add.svg" alt="" />
+        <img src="img/add.svg" alt="" />
       </button>
     </div>
   </div>
@@ -34,8 +36,8 @@
   <div class="mobile-searchbar">
     <div class="input-container-mobile">
       <input class="find-task-search" type="text" placeholder="Search..." id="input-search-mobile">
-      <img class="vector" src="./img/Vector 3.svg" alt="" />
-      <img class="search-icon" src="./img/search.svg" alt="" />
+      <img class="vector" src="img/Vector 3.svg" alt="" />
+      <img class="search-icon" src="img/search.svg" alt="" />
     </div>
   </div>
   <div class="board">
@@ -44,8 +46,8 @@
         <h3>To do</h3>
         <div onclick="addTask('todo-column')" class="plus-button">
           <svg xmlns="http://www.w3.org/2000/svg" width="10" height="11" viewBox="0 0 10 11" fill="none">
-            <path d="M5 1.5V9.5" stroke="#2A3647" stroke-width="2" stroke-linecap="round"/>
-            <path d="M9 5.57544L1 5.57544" stroke="#2A3647" stroke-width="2" stroke-linecap="round"/>
+            <path d="M5 1.5V9.5" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
+            <path d="M9 5.57544L1 5.57544" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
           </svg>
         </div>
       </div>
@@ -60,8 +62,8 @@
         <h3>In progress</h3>
         <div onclick="addTask('progress-column')" class="plus-button">
           <svg xmlns="http://www.w3.org/2000/svg" width="10" height="11" viewBox="0 0 10 11" fill="none">
-            <path d="M5 1.5V9.5" stroke="#2A3647" stroke-width="2" stroke-linecap="round"/>
-            <path d="M9 5.57544L1 5.57544" stroke="#2A3647" stroke-width="2" stroke-linecap="round"/>
+            <path d="M5 1.5V9.5" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
+            <path d="M9 5.57544L1 5.57544" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
           </svg>
         </div>
       </div>
@@ -76,8 +78,8 @@
         <h3>Await feedback</h3>
         <div onclick="addTask('await-column')" class="plus-button">
           <svg xmlns="http://www.w3.org/2000/svg" width="10" height="11" viewBox="0 0 10 11" fill="none">
-            <path d="M5 1.5V9.5" stroke="#2A3647" stroke-width="2" stroke-linecap="round"/>
-            <path d="M9 5.57544L1 5.57544" stroke="#2A3647" stroke-width="2" stroke-linecap="round"/>
+            <path d="M5 1.5V9.5" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
+            <path d="M9 5.57544L1 5.57544" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
           </svg>
         </div>
       </div>

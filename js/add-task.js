@@ -327,10 +327,10 @@ function addSubtask() {
             <div class="subtask-item">
                 <div class="subtask-text" contentEditable="false">${subtaskText}</div>
                 <p class="subtask-icon-edit" onclick="editSubtaskItem(this.parentNode)">
-                    <img src="./img/edit.svg" alt="Edit Subtask">
+                    <img src="img/edit.svg" alt="Edit Subtask">
                 </p>
                 <p class="delete-button" onclick="deleteSubtaskItem(this.parentNode)">
-                    <img src="./img/delete.svg" alt="">
+                    <img src="img/delete.svg" alt="">
                 </p>
             </div>
         `;

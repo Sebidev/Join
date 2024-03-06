@@ -293,7 +293,7 @@ function createSubtasksInputContainer() {
     inputContainer.innerHTML = `
         <input class="subtasks-input" type="text" id="newSubtaskInputEdit" placeholder="Add new subtask" id="subtask">
         <div id="iconContainerEdit">
-        <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" />
+        <img class="add-icon" src="img/Subtasks icons11.svg" alt="" />
          </div>
     `;
     return inputContainer;
@@ -389,14 +389,14 @@ function createSubtaskContainer(taskId, subtaskIndex, subtaskText) {
         <div class="card-modal-description-checkbox">
             <div class="card-modal-subtask-checked"> 
                 <input type="checkbox" class="subtask-checkbox" id="${checkboxId}" style="display: none;"> 
-                <img src="./img/circle.svg" class="subtask-image">                   
+                <img src="img/circle.svg" class="subtask-image">                   
             </div>
             <div class="card-modal-subtask-description">${subtaskText}</div>
         </div>
         <div class="subtasks-edit-icons-container d-none">
             <div class="subtasks-edit-icons-container-p">
-                <p class="subtask-icon-edit"><img src="./img/edit.svg" alt="Edit Subtask"></p>
-                <p class="subtask-icon-delete"><img src="./img/delete.svg" alt="Delete Subtask"></p>
+                <p class="subtask-icon-edit"><img src="img/edit.svg" alt="Edit Subtask"></p>
+                <p class="subtask-icon-delete"><img src="img/delete.svg" alt="Delete Subtask"></p>
             </div>
         </div>
     `;
@@ -411,11 +411,11 @@ function createSubtaskContainer(taskId, subtaskIndex, subtaskText) {
 function getPriorityIcon(priority) {
     switch (priority) {
         case 'urgent':
-            return './img/Prio_up.svg';
+            return 'img/Prio_up.svg';
         case 'medium':
-            return './img/Prio_neutral.svg';
+            return 'img/Prio_neutral.svg';
         case 'low':
-            return './img/Prio_down.svg';
+            return 'img/Prio_down.svg';
         default:
             return '';
     }

@@ -5,9 +5,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1"/>
   <title>Add Task</title>
-  <link rel="stylesheet" href="./fonts/inter.css" />
-  <link rel="stylesheet" href="./css/add_task.css" />
-  <link rel="stylesheet" href="./css/contacts.css" />
+  <link rel="stylesheet" href="fonts/inter.css" />
+  <link rel="stylesheet" href="css/add_task.css" />
+  <link rel="stylesheet" href="css/contacts.css" />
 </head>
 
 <body onload="initHead(), initUser()">
@@ -34,7 +34,7 @@
         <div class="assigned-to">Assigned to</div>
         <div class="input-container">
           <input id="assignedTo" type="text" class="assigned-dropdown" placeholder="Select contacts to assign" />
-          <img id="arrow_img_contacts" onclick="toggleArrowContacts()" class="arrow_down" src="./img/arrow_down.svg" alt="" />
+          <img id="arrow_img_contacts" onclick="toggleArrowContacts()" class="arrow_down" src="img/arrow_down.svg" alt="" />
           <div id="contactDropdown" class="dropdown-content"></div>
         </div>
 
@@ -48,7 +48,7 @@
     </div>
 
     <div class="divider">
-      <img src="./img/divider.svg" alt="" />
+      <img src="img/divider.svg" alt="" />
     </div>
 
     <div class="Add-task-right">
@@ -63,15 +63,15 @@
         <div class="prio-option-container">
           <button type="button" onclick="choose('urgent')" class="button urgent">
             <h3>Urgent</h3>
-            <img src="./img/Prio_up.svg" alt="" />
+            <img src="img/Prio_up.svg" alt="" />
           </button>
           <button type="button" onclick="choose('medium')" class="button medium">
             <h3>Medium</h3>
-            <img src="./img/Prio_neutral.svg" alt="" />
+            <img src="img/Prio_neutral.svg" alt="" />
           </button>
           <button type="button" onclick="choose('low')" class="button low">
             <h3>Low</h3>
-            <img src="./img/Prio_down.svg" alt="" />
+            <img src="img/Prio_down.svg" alt="" />
           </button>
         </div>
       </div>
@@ -80,7 +80,7 @@
         <div class="category">Category</div>
         <div class="input-container">
           <input id="category" class="category-dropdown" type="text" placeholder="Select task category" required />
-          <img id="arrow_img_category" class="arrow_down_category" src="./img/arrow_down.svg" onclick="toggleArrowCategory()" alt="" />
+          <img id="arrow_img_category" class="arrow_down_category" src="img/arrow_down.svg" onclick="toggleArrowCategory()" alt="" />
           <div class="category-options" id="categoryOptions">
             <label onclick="updateSelectedCategory('Technical task')">
               Technical task
@@ -97,7 +97,7 @@
         <div class="input-container-subtask">
           <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask" id="subtask" />
           <div id="iconContainer">
-            <img class="add-icon" src="./img/Subtasks icons11.svg" alt="" />
+            <img class="add-icon" src="img/Subtasks icons11.svg" alt="" />
           </div>
           
           <div class="subImgContainer" id="subImgContainer"></div>
@@ -122,7 +122,7 @@
         </div>
         <button class="create-task-button hover-color" onclick="addToBoard('todo-column')">
           <h3>Create Task</h3>
-          <img src="./img/check.svg" alt="" />
+          <img src="img/check.svg" alt="" />
         </button>
       </div>
       
@@ -132,7 +132,7 @@
   </form>
   
   <div class="animated-icon" id="animatedIcon">
-    <img src="./img/added_to_board.svg" alt="Added to Board">
+    <img src="img/added_to_board.svg" alt="Added to Board">
   </div>
 
     <!-- jQuery -->
