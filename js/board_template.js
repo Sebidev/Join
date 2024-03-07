@@ -14,29 +14,29 @@ function addTaskModalHTML(column) {
         </div>
         <div class="Add-task-content">
             <div class="Add-task-left-modal">
-                <div class="title-container">
+                <div class="title-container-modal">
                     <div class="title">Title</div>
-                    <input id="taskTitleInput" type="text" class="title-input" placeholder="Enter a title" required>
+                    <input id="taskTitleInput" type="text" class="title-input-modal" placeholder="Enter a title" required>
                     <div class="required-info">This field is required</div>
                 </div>
 
-                <div class="description-container">
+                <div class="description-container-modal">
                     <div class="description">Description</div>
-                    <input id="descriptionInput" type="text" class="description-input" placeholder="Enter a Description">
+                    <input id="descriptionInput" type="text" class="description-input-modal" placeholder="Enter a Description">
                     <div class="required-info">This field is required</div>
                 </div>
 
-                <div class="assigned-to-container">
+                <div class="assigned-to-container-modal">
                     <div class="assigned-to">Assigned to</div>
-                    <div class="input-container">
-                        <input id="assignedTo" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
+                    <div class="input-container-modal-contacts">
+                        <input id="assignedTo" type="text" class="assigned-dropdown-add-task-modal" placeholder="Select contacts to assign">
                         <img id="arrow_img_contacts" onclick="toggleArrowContacts()" class="arrow_down" src="img/arrow_down.svg" alt="">
                         <div id="contactDropdown" class="dropdown-content"></div>
                     </div>
 
                     <div id="selectedContactsContainer"></div>
                     <div class="input-container">
-                    <div class="dropdown-content"></div>
+                        <div class="dropdown-content"></div>
                     <div class="arrow_down"></div>
                     </div>
                 </div>
@@ -80,8 +80,8 @@ function addTaskModalHTML(column) {
 
                 <div class="category-container">
                     <div class="category">Category</div>
-                    <div class="input-container">
-                        <input id="category" class="category-dropdown" type="text" placeholder="Select task category">
+                    <div class="input-container-modal-category">
+                        <input id="category" class="category-dropdown-add-task-modal" type="text" placeholder="Select task category">
                         <img id="arrow_img_category" class="arrow_down_category" src="img/arrow_down.svg" onclick="toggleArrowCategory()" alt="" />
                         <div class="category-options" id="categoryOptions">
                             <label onclick="updateSelectedCategory('Technical task')">

@@ -352,6 +352,80 @@ body {
   transition: transform 0.125s ease-in-out;
 }
 
+.title-input-modal,
+.description-input-modal {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 8px;
+  margin-bottom: 4px;
+  padding: 12px 21px;
+  align-items: center;
+  border-radius: 10px;
+  border: 1px solid var(--Style, #d1d1d1);
+  background: #fff;
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%;
+}
+
+.description-input-modal {
+  height: 84px;
+}
+
+.assigned-to-container-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  font-family: Inter;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  margin-top: 0px !important;
+}
+
+.assigned-dropdown-add-task-modal,
+.category-dropdown-add-task-modal {
+  width: 100%;
+  background-position: right center;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--Style, #d1d1d1);
+  background: var(--white, #fff);
+  color: var(--black, #000);
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%;
+}
+
+.input-container-modal-contacts,
+.input-container-modal-category {
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 48px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 5px;
+}
+
+.description-container-modal {
+  display: flex;
+  height: 168px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  font-family: Inter;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  margin-top: 0px !important;
+}
+
 .title-container {
   display: flex;
   flex-direction: column;
@@ -501,19 +575,24 @@ body {
 /* Java Script */
 
 #taskModal {
-  width: 1116px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  box-sizing: border-box;
+  overflow: hidden;
+  width: 80%;
   height: 870px;
   border-radius: 30px;
   background: #fff;
   margin: 0;
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
-  position: fixed;
   top: 50%;
   left: 50%;
   transition: transform 0.125s;
   background-color: white;
   border: 1px solid #ccc;
-  z-index: 1000;
+  z-index: 10000;
 }
 
 .modal-headline {
@@ -558,23 +637,17 @@ body {
 }
 
 .add-task-create-open {
-  flex-direction: column;
-  align-items: center;
-  transform: translate(-50%, -50%);
 }
 
 .Add-task-content {
   display: flex;
-  width: 100%;
+  flex-direction: row;
 }
 
 .Add-task-left-modal {
-  height: 376px;
-  width: 440px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 16px;
+  flex: 1;
+  overflow: hidden;
+  box-sizing: border-box;
   margin-left: 74px;
 }
 

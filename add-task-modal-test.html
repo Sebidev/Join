@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="add-task-modal-style.css">
+</head>
+<body>
+    <form id="taskModal" class="add-task-create-open">
+        <div class="modal-headline">Add task</div>
+        <div onclick="closeModal()">
+        <img class="close-modal" src="img/close_modal.svg" alt="">
+        </div>
+        <div class="Add-task-content">
+            <div class="Add-task-left-modal">
+                <div class="title-container">
+                    <div class="title">Title</div>
+                    <input id="taskTitleInput" type="text" class="title-input" placeholder="Enter a title" required>
+                    <div class="required-info">This field is required</div>
+                </div>
+
+                <div class="description-container">
+                    <div class="description">Description</div>
+                    <input id="descriptionInput" type="text" class="description-input" placeholder="Enter a Description">
+                    <div class="required-info">This field is required</div>
+                </div>
+
+                <div class="assigned-to-container">
+                    <div class="assigned-to">Assigned to</div>
+                    <div class="input-container">
+                        <input id="assignedTo" type="text" class="assigned-dropdown" placeholder="Select contacts to assign">
+                        <img id="arrow_img_contacts" onclick="toggleArrowContacts()" class="arrow_down" src="img/arrow_down.svg" alt="">
+                        <div id="contactDropdown" class="dropdown-content"></div>
+                    </div>
+
+                    <div id="selectedContactsContainer"></div>
+                    <div class="input-container">
+                    <div class="dropdown-content"></div>
+                    <div class="arrow_down"></div>
+                    </div>
+                </div>
+                <div class="required-legend-modal">This field is required</div>
+            </div>
+
+            <div class="divider">
+                <img src="img/divider.svg" alt="">
+            </div>
+
+            <div class="Add-task-right-modal">
+                <div class="due-date-container">
+                    <div class="due-date">Due date</div>
+                    <input id="date" class="due-date-input" type="text" placeholder="dd/mm/yyyy" required />
+                </div>
+
+                <div class="prio-container">
+                    <div class="prio">Prio</div>
+
+                    <div class="prio-option-container">
+                    <button
+                        type="button"
+                        onclick="choose('urgent')"
+                        class="button urgent">
+                        <h3>Urgent</h3>
+                        <img src="img/Prio_up.svg" alt="" />
+                    </button>
+                    <button
+                        type="button"
+                        onclick="choose('medium')"
+                        class="button medium">
+                        <h3>Medium</h3>
+                        <img src="img/Prio_neutral.svg" alt="" />
+                    </button>
+                    <button type="button" onclick="choose('low')" class="button low">
+                        <h3>Low</h3>
+                        <img src="img/Prio_down.svg" alt="" />
+                    </button>
+                    </div>
+                </div>
+
+                <div class="category-container">
+                    <div class="category">Category</div>
+                    <div class="input-container">
+                        <input id="category" class="category-dropdown" type="text" placeholder="Select task category">
+                        <img id="arrow_img_category" class="arrow_down_category" src="img/arrow_down.svg" onclick="toggleArrowCategory()" alt="" />
+                        <div class="category-options" id="categoryOptions">
+                            <label onclick="updateSelectedCategory('Technical task')">
+                                Technical task
+                            </label>
+                            <label onclick="updateSelectedCategory('User Story')">
+                                User Story
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subtasks-container">
+                    <div class="subtasks-add-task">Subtasks</div>
+                    <div class="input-container-subtask">
+                        <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask" id="subtask">
+                        <div id="iconContainer">
+                            <img class="add-icon" src="img/Subtasks icons11.svg" alt="" />
+                        </div>   
+                    </div>
+                    <div class="subtask-list" id="subtaskList"></div>
+                </div>
+
+                <div class="clear-and-create-section-modal">
+                    <button onclick="clearFields()" class="cancel-button-modal">
+                        <h3>Cancel</h3>
+                        <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="iconoir:cancel">
+                            <path id="Vector" d="M12.2496 11.9998L17.4926 17.2428M7.00659 17.2428L12.2496 11.9998L7.00659 17.2428ZM17.4926 6.75684L12.2486 11.9998L17.4926 6.75684ZM12.2486 11.9998L7.00659 6.75684L12.2486 11.9998Z" stroke="#2A3647" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </g>
+                        </svg>
+                    </button>
+
+                    <button class="create-task-button-modal" onclick="addToBoardModal('${column}')">
+                        <h3>Create Task</h3>
+                        <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="check">
+                            <mask id="mask0_126260_6098" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="25" height="24">
+                            <rect id="Bounding box" x="0.248535" width="24" height="24" fill="#D9D9D9"/>
+                            </mask>
+                            <g mask="url(#mask0_126260_6098)">
+                            <path id="check_2" d="M9.79923 15.15L18.2742 6.675C18.4742 6.475 18.7117 6.375 18.9867 6.375C19.2617 6.375 19.4992 6.475 19.6992 6.675C19.8992 6.875 19.9992 7.1125 19.9992 7.3875C19.9992 7.6625 19.8992 7.9 19.6992 8.1L10.4992 17.3C10.2992 17.5 10.0659 17.6 9.79923 17.6C9.53256 17.6 9.29923 17.5 9.09923 17.3L4.79923 13C4.59923 12.8 4.5034 12.5625 4.51173 12.2875C4.52006 12.0125 4.62423 11.775 4.82423 11.575C5.02423 11.375 5.26173 11.275 5.53673 11.275C5.81173 11.275 6.04923 11.375 6.24923 11.575L9.79923 15.15Z" fill="white"/>
+                            </g>
+                            </g>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="overlay-feedback" id="overlayFeedack"></div>
+    </form>
+</body>
+</html>
