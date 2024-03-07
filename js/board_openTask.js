@@ -186,7 +186,6 @@ async function getUpdatedTask(taskId) {
 async function openCard(data, subtasksData) {
     let taskId = data.id;
     currentTaskId = taskId;
-
     let tasks = await getTasks();
     let task = tasks.find(task => task.id === taskId) || data;
 
@@ -194,12 +193,11 @@ async function openCard(data, subtasksData) {
     let openCardHTML = generateOpenCardHTML(data, taskId, cardDetails);
 
     document.body.insertAdjacentHTML('beforeend', openCardHTML);
-
+    animateCardEffect(taskId);
     await updateSubtaskCheckboxes(taskId);
     await updateCardProgressAndSubtasks(taskId, task);
 
     showCardOverlay(taskId);
-    animateCardEffect(taskId);
     currentEditData = data;
 }
 
