@@ -1728,6 +1728,10 @@ body {
   display: none;
 }
 
+#taskModal, #overlay {
+  z-index: 99999 !important;
+}
+
 /* Media Queries */
 @media only screen and (max-width: 690px) {
   body,
@@ -2107,6 +2111,10 @@ body {
     gap: 5px;
     transition: gap 0.5s ease-in-out;
   }
+
+  #taskModal{
+    z-index: 99999 !important;
+  }
 }
 
 @media only screen and (max-width: 926px) {
@@ -2150,5 +2158,17 @@ body {
   .await-section {
     min-height: auto;
     flex: 0;
+  }
+
+  #taskModal{
+    width: 100vw;
+  }
+
+  .clear-and-create-section-modal {
+    margin-left: 0px;
+  }
+
+  .Add-task-left-modal {
+    width: 35vw;
   }
 }
