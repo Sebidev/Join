@@ -51,7 +51,7 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: start;
-    width: 100%;
+    width: auto;
     margin-top: 55px;
     margin-bottom: 48px;
     color: #000;

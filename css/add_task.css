@@ -137,6 +137,13 @@ body {
   position: relative;
 }
 
+.input-container_assignedto {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
 .assigned-to-container {
   margin-top: 16px;
   display: flex;
@@ -918,6 +925,11 @@ body {
     transition: margin 0.5s ease-in-out;
   }
 
+  .Add-task-right {
+    width: 100%;
+    transition: margin 0.5s ease-in-out;
+  }
+
   .divider {
     margin: 0 16px;
     transition: margin 0.5s ease-in-out;
@@ -936,18 +948,30 @@ body {
   }
 
   .due-date-input {
-    width: 29.7vw;
+    width: 104%;
   }
 
   .prio-option-container {
-    width: clamp(320px, 32.5vw, 100%);
+    width: 360px;
   }
 
-  .category-dropdown {
-    width: 30vw;
+  .category-options {
+    width: 100%;
   }
 
   .input-container-subtask {
+    width: 83%;
+  }
+
+  .input-container{
+    width: 82%;
+  }
+
+  .subtask-list {
+    width: 83%;
+  }
+
+  #selectedContactsContainer {
     width: 32.5vw;
   }
 }
@@ -1016,10 +1040,6 @@ body {
     height: 42px;
   }
 
-  .assigned-dropdown {
-    width: 88vw;
-  }
-
   #selectedContactsContainer {
     display: flex;
     flex-direction: row;
@@ -1068,7 +1088,7 @@ body {
 
   .due-date-input {
     padding: 8px 21px;
-    width: 85vw;
+    width: 88.5vw;
   }
 
   .prio-container {
@@ -1127,7 +1147,7 @@ body {
     justify-content: end;
     margin-top: -33px;
     width: 50px;
-    left: 88%;
+    left: 93%;
   }
 
   .subImgContainer{
@@ -1148,7 +1168,19 @@ body {
   }
 
   .input-container-subtask input {
-    width: 88vw;
+    width: 91vw;
+  }
+
+  .input-container{
+    width: 100%;
+  }
+
+  .category-dropdown {
+    width: 100vw;
+  }
+
+  .assigned-dropdown {
+    width: 90.5vw;
   }
 
   .subtasks-input {

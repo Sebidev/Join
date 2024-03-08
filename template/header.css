@@ -104,6 +104,7 @@ body {
     background: #FFF;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.10);
     height: 50px;
+    width: auto;
 }
 
 .header_text {
@@ -178,21 +179,7 @@ body {
         display: flex;
     }
 
-    .header {
-        width: auto !important;
-    }
-
     .icon_box {
         padding-right: 0px;
-    }
-}
-
-@media screen and (max-width: 1380px){
-    .header {
-        width: 100%;
-    }
-
-    .icon_box {
-        padding-right: 10px;
     }
 }
