@@ -61,10 +61,7 @@ async function loadUsers() {
  * set all users inside the user object to false if guest login, then forward to summary
  */
 async function guestLogin() {
-    let storedContacts = JSON.parse(localStorage.getItem('contacts')) || [];
-    if (!storedContacts || storedContacts.length === 0) {
-        localStorage.setItem('contacts', JSON.stringify(demoContacts));
-    }
+    localStorage.setItem('contacts', JSON.stringify(demoContacts));
 
     for (let user of users) {
         user.isYou = false;
