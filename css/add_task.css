@@ -1259,6 +1259,24 @@ body {
   }
 }
 
+@media only screen and (max-width: 600px){
+  .assigned-dropdown, .input-container-subtask input {
+    width: 87.5vw;
+  }
+
+  .due-date-input{
+    width: 84vw;
+  }
+
+  .input-container{
+    width: 95.6vw;
+  }
+
+  #iconContainer{ 
+    left: 87%;
+  }
+}
+
 @media only screen and (max-width: 926px) {
   .header-add-task {
     margin-left: 15px;
