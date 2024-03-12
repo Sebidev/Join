@@ -1,3 +1,4 @@
+
 /** open add-task popup
  * 
  * @param {string} column current column id (''todo-column, progress-column, etc.)
@@ -27,6 +28,109 @@ function addTask(column) {
 }
 
 /**
+ * Toggles the display of the category options.
+ * If the category options are currently displayed, they are hidden, and vice versa.
+ * The function also stops the propagation of the click event to prevent it from closing the options.
+ *
+ * @param {Event} event - The click event.
+ */
+function toggleArrowCategoryAddTaskModal() {
+    let categoryArrowImg = document.getElementById('arrow_img_category_modal');
+    let categoryDropdown = document.getElementById('categoryOptionsAddTaskModal');
+
+    categoryArrowImg.classList.toggle('arrow_up');
+    categoryArrowImg.src = `img/arrow_${categoryArrowImg.classList.contains('arrow_up') ? 'up' : 'down'}.svg`;
+
+    if (categoryDropdown) {
+        categoryDropdown.style.display = categoryArrowImg.classList.contains('arrow_up') ? 'block' : 'none';
+        isCategoryDropdownOpen = categoryArrowImg.classList.contains('arrow_up');
+    }
+}
+
+/**
+ * Opens the category dropdown by adding the 'arrow_up' class to the category arrow image,
+ * changing its source, displaying the category options, and updating the dropdown status.
+ */
+function openCategoryDropdownAddTaskModal() {
+    let categoryArrowImg = document.getElementById('arrow_img_category_modal');
+    categoryArrowImg.classList.add('arrow_up');
+    categoryArrowImg.src = 'img/arrow_up.svg';
+
+    let categoryDropdown = document.getElementById('categoryOptionsAddTaskModal');
+    if (categoryDropdown) {
+        categoryDropdown.style.display = 'block';
+        isCategoryDropdownOpen = true;
+    }
+}
+
+/**
+ * Closes the category dropdown by hiding it, updating the dropdown status,
+ * and resetting the category arrow image to its default state.
+ *
+ * @param {HTMLElement} categoryArrowImg - The category arrow image element.
+ */
+function closeCategoryDropdownAddTaskModal() {
+    let categoryArrowImg = document.getElementById('arrow_img_category_modal');
+    let categoryDropdown = document.getElementById('categoryOptionsAddTaskModal');
+
+    if (categoryDropdown) {
+        categoryDropdown.style.display = 'none';
+        isCategoryDropdownOpen = false;
+
+        if (categoryArrowImg) {
+            categoryArrowImg.src = 'img/arrow_down.svg';
+            categoryArrowImg.classList.remove('arrow_up');
+        }
+    }
+}
+
+/**
+ * Updates the selected category in the category dropdown.
+ * If the selected category is not the same as the given category, the selected category is updated to the given category.
+ * Otherwise, the selected category is cleared.
+ * The category options are also hidden.
+ *
+ * @param {string} category - The category to select.
+ */
+function updateSelectedCategoryAddTaskModal(category) {
+    let selectedCategoryInput = document.getElementById('categoryAddTaskModal');
+    let categoryOptions = document.getElementById('categoryOptionsAddTaskModal');
+
+    if (selectedCategoryInput && categoryOptions) {
+        selectedCategoryInput.value = selectedCategoryInput.value !== category ? category : "";
+
+        categoryOptions.style.display = "none";
+    }
+}
+
+/**
+ * Event listener for handling clicks on the document.
+ *
+ * @param {Event} event - The click event.
+ */
+document.addEventListener('click', function (event) {
+    let categoryArrowImg = document.getElementById('arrow_img_category_modal');
+    let categoryInput = document.getElementById('categoryAddTaskModal');
+    let categoryDropdown = document.getElementById('categoryOptionsAddTaskModal');
+
+    if (categoryDropdown) {
+        let isArrowClick = event.target.matches('.arrow_down, .arrow_up');
+        let isCategoryClickes = event.target.id === 'categoryAddTaskModal';
+
+        if ((!isArrowClick && !isCategoryClickes)) {
+            categoryDropdown.style.display = 'none';
+            isDropdownOpen = false;
+            categoryArrowImg?.setAttribute('src', 'img/arrow_down.svg')?.classList.remove('arrow_up');
+        }
+
+        if (isCategoryClickes) {
+            openCategoryDropdownAddTaskModal();
+            categoryArrowImg?.setAttribute('src', 'img/arrow_up.svg')?.classList.add('arrow_up');
+        }
+    }
+});
+
+/**
  * Adds a new task to the board based on the provided form inputs and column.
  * Redirects to the board page after successfully adding the task.
  * Closes the modal and resets form fields regardless of success.
@@ -34,23 +138,25 @@ function addTask(column) {
  * @param {string} column - The column on the board where the task should be added.
  */
 async function addToBoardModal(column) {
+    debugger
     let form = document.getElementById('taskModal');
     let taskTitle = getFieldValueById('taskTitleInput');
-    let category = getFieldValueById('category');
+    let category = getFieldValueById('categoryAddTaskModal');
 
     if (!taskTitle) {
         showRequiredInfo('taskTitleInput');
         return;
     }
-
     if (!category) {
-        showRequiredInfo('category');
+        showRequiredInfo('categoryAddTaskModal');
         return;
     }
-
+    
     if (window.location.pathname.includes("board.html") && form.checkValidity() && taskTitle && category) {
+        
         let description = getFieldValueById('descriptionInput');
-        let date = getFieldValueById('date');
+        console.log('Date:', getFieldValueById('dateAddTaskModal'));
+        let date = getFieldValueById('dateAddTaskModal');
         let subtasksList = document.getElementById('subtaskList').children;
         let selectedContacts = getSelectedContacts();
         let selectedPriority = getSelectedPriority();
@@ -63,6 +169,16 @@ async function addToBoardModal(column) {
 
     resetFormFields();
     closeModal();
+}
+
+/**
+ * Retrieves the value of a DOM element by its ID.
+ *
+ * @param {string} id - The ID of the DOM element to retrieve the value from.
+ * @returns {string} The value of the DOM element.
+ */
+function getFieldValueById(id) {
+    return document.getElementById(id).value;
 }
 
 /**
@@ -123,4 +239,58 @@ function closeModal() {
         modal.remove();
         overlay.remove();
     }, 200);
+}
+
+/**
+ * Sets up the due date input by replacing it with a datepicker on the "Add Task" page.
+ */
+function setupDueDateInputAddTaskModal() {
+    if (window.location.pathname.includes("board.html")) {
+        let dateElement = document.getElementById('dateAddTaskModal');
+
+        if (dateElement) {
+            let dateInput = createAndConfigureDateInputModal(dateElement);
+
+            dateElement.replaceWith(createDateContainerModal(dateInput));
+
+            $(dateInput).datepicker({
+                dateFormat: 'yy-mm-dd',
+                showButtonPanel: true,
+            });
+        }
+    }
+}
+setupDueDateInputAddTaskModal();
+
+/**
+ * Creates a new date input container and configures the date input element.
+ * @param {HTMLElement} dateElement - The existing date input element.
+ * @returns {HTMLElement} The configured date input element.
+ */
+function createAndConfigureDateInputModal(dateElement) {
+    let dateInput = document.createElement('input');
+    dateInput.type = 'text';
+    dateInput.id = 'dateAddTaskModal';
+    dateInput.className = 'due-date-input-add-task-modal';
+    dateInput.placeholder = 'dd/mm/yyyy';
+    dateInput.required = true;
+    dateInput.value = dateElement.value;
+    dateInput.style.backgroundImage = 'url("img/calendar.svg")';
+    dateInput.style.backgroundRepeat = 'no-repeat';
+    dateInput.style.backgroundPosition = 'right 8px center';
+    dateInput.style.backgroundSize = '24px';
+    dateInput.classList.add('calendar-hover');
+    return dateInput;
+}
+
+/**
+ * Creates a new date input container.
+ * @param {HTMLElement} dateInput - The configured date input element.
+ * @returns {HTMLDivElement} The date input container.
+ */
+function createDateContainerModal(dateInput) {
+    let dateContainer = document.createElement('div');
+    dateContainer.className = 'due-date-container-add-task-modal';
+    dateContainer.appendChild(dateInput);
+    return dateContainer;
 }

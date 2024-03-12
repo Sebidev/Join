@@ -281,7 +281,7 @@ function updateCheckboxState() {
  * @name setupDueDateInputAddTaskModal
  * @returns {void}
  */
-function setupDueDateInputAddTaskModal() {
+function setupDueDateInputEdit() {
     let dateElement = document.getElementById('date');
 
     let dateContainer = document.createElement('div');

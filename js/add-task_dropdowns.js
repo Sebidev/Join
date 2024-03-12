@@ -117,6 +117,7 @@ document.addEventListener('click', function (event) {
         }
     }
 });
+
 /**
  * This function initializes the contact dropdown by adding an event listener to the document.
  * @param {*} contact - The contact to be added to the selected contacts.

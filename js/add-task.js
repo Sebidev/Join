@@ -76,6 +76,7 @@ async function addToBoard(column) {
         animatedIcon.style.bottom = '500px';
 
         let description = getFieldValueById('descriptionInput');
+        debugger
         let date = getFieldValueById('date');
         let subtasksList = document.getElementById('subtaskList').children;
         let selectedContacts = getSelectedContacts();
@@ -169,6 +170,7 @@ async function saveToLocalStorage(taskTitle, description, date, category, subtas
         localStorage.setItem('tasks', JSON.stringify(tasks));
         localStorage.setItem('selectedContacts', JSON.stringify(selectedContacts));
     }
+    
 }
 
 /**

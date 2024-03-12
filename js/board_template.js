@@ -8,7 +8,7 @@ function addTaskModalHTML(column) {
     return /*html*/ `
     <div id="overlay"></div>
     <form id="taskModal" class="add-task-create-open">
-        <div class="modal-headline">Add task</div>
+        <div class="modal-headline-add-task">Add task</div>
         <div onclick="closeModal()">
         <img class="close-modal" src="img/close_modal.svg" alt="">
         </div>
@@ -34,29 +34,28 @@ function addTaskModalHTML(column) {
                         <div id="contactDropdown" class="dropdown-content"></div>
                     </div>
 
-                    <div id="selectedContactsContainer"></div>
-                    <div class="input-container">
+                    <div id="selectedContactsContainer" class="selected-contacts-modal"></div>
+                    <div class="input-container-modal">
                         <div class="dropdown-content"></div>
                     <div class="arrow_down"></div>
                     </div>
                 </div>
-                <div class="required-legend-modal">This field is required</div>
+                
             </div>
 
-            <div class="divider">
+            <div class="divider-add-task-modal">
                 <img src="img/divider.svg" alt="">
             </div>
 
             <div class="Add-task-right-modal">
-                <div class="due-date-container">
+                <div class="due-date-container-add-task-modal">
                     <div class="due-date">Due date</div>
-                    <input id="date" class="due-date-input" type="text" placeholder="dd/mm/yyyy" required />
+                    <input id="dateAddTaskModal" class="due-date-input-add-task-modal" type="text" placeholder="dd/mm/yyyy" required />
                 </div>
 
-                <div class="prio-container">
-                    <div class="prio">Prio</div>
-
-                    <div class="prio-option-container">
+                <div class="prio-container-add-task-modal">
+                    <div class="prio-add-task-modal">Prio</div>
+                    <div class="prio-option-container-add-task-modal">
                     <button
                         type="button"
                         onclick="choose('urgent')"
@@ -78,34 +77,35 @@ function addTaskModalHTML(column) {
                     </div>
                 </div>
 
-                <div class="category-container">
-                    <div class="category">Category</div>
+                <div class="category-container-add-task-modal">
+                    <div class="category-add-task-modal">Category</div>
                     <div class="input-container-modal-category">
-                        <input id="category" class="category-dropdown-add-task-modal" type="text" placeholder="Select task category">
-                        <img id="arrow_img_category" class="arrow_down_category" src="img/arrow_down.svg" onclick="toggleArrowCategory()" alt="" />
-                        <div class="category-options" id="categoryOptions">
-                            <label onclick="updateSelectedCategory('Technical task')">
+                        <input id="categoryAddTaskModal" class="category-dropdown-add-task-modal" type="text" placeholder="Select task category" required>
+                        <img id="arrow_img_category_modal" class="arrow_down_category" src="img/arrow_down.svg" onclick="toggleArrowCategoryAddTaskModal()" alt="" />
+                        <div class="category-options-add-task-modal" id="categoryOptionsAddTaskModal">
+                            <label onclick="updateSelectedCategoryAddTaskModal('Technical task')">
                                 Technical task
                             </label>
-                            <label onclick="updateSelectedCategory('User Story')">
+                            <label onclick="updateSelectedCategoryAddTaskModal('User Story')">
                                 User Story
                             </label>
                         </div>
                     </div>
                 </div>
 
-                <div class="subtasks-container">
+                <div class="subtasks-container-add-task-modal">
                     <div class="subtasks-add-task">Subtasks</div>
-                    <div class="input-container-subtask">
-                        <input class="subtasks-input" type="text" id="newSubtaskInput" placeholder="Add new subtask" id="subtask">
+                    <div class="input-container-subtask-add-task-modal">
+                        <input class="subtasks-input-add-task-modal" type="text" id="newSubtaskInput" placeholder="Add new subtask" id="subtask">
                         <div id="iconContainer">
                             <img class="add-icon" src="img/Subtasks icons11.svg" alt="" />
                         </div>   
                     </div>
                     <div class="subtask-list" id="subtaskList"></div>
                 </div>
-
-                <div class="clear-and-create-section-modal">
+            </div>
+            <div class="required-legend-modal">This field is required</div>
+            <div class="clear-and-create-section-modal">
                     <button onclick="clearFields()" class="cancel-button-modal">
                         <h3>Cancel</h3>
                         <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -129,8 +129,8 @@ function addTaskModalHTML(column) {
                         </svg>
                     </button>
                 </div>
-            </div>
         </div>
+        
         <div class="overlay-feedback" id="overlayFeedack"></div>
     </form>
     <div class="animated-icon" id="animatedIcon">
