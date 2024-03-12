@@ -855,7 +855,6 @@ body {
         margin: 0;
         margin-top: 48px;
         margin-left: 260px;
-        width: 110vw;
     }
 
     .contact_title{
@@ -904,7 +903,7 @@ body {
     #contactModal{
         top: 45%;
         width: 35%;
-        height: 60%;
+        height: 760px;
     }
 
     .bluebar_joinlogo{
