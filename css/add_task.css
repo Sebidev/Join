@@ -526,7 +526,8 @@ body {
 }
 
 .button img {
-  width: 1.1vw;
+  width: 20px;
+  height: 14.51px;
 }
 
 .urgent {
@@ -912,7 +913,6 @@ body {
 }
 
 /* Media queries */
-
 @media screen and (max-width: 1330px) {
   .header-add-task {
     margin-left: 250px;
@@ -952,11 +952,7 @@ body {
   }
 
   .due-date-input {
-    width: 104%;
-  }
-
-  .prio-option-container {
-    width: 360px;
+    width: 100%;
   }
 
   .category-options {
@@ -964,16 +960,41 @@ body {
   }
 
   .input-container-subtask {
-    width: 83%;
+    width: 100%;
   }
 
   .input-container{
-    width: 82%;
+    width: 97%;
   }
 
   .subtask-list {
     width: 83%;
   }
+
+  .due-date-container {
+    width: 95%;
+  }
+
+  .due-date-container-2 {
+    width: 94%;
+  }
+
+  .prio-option-container { 
+    width: 97%;
+  }
+
+  .category-container{
+    width: 100%;
+  }
+
+  .category-dropdown{
+    width: 100%;
+  }
+
+  .subtasks-container {
+    width: 97%;
+  }
+
 
   #selectedContactsContainer {
     width: 32.5vw;
@@ -989,6 +1010,11 @@ body {
 @media only screen and (max-width: 768px) {
   .divider img {
     display: none;
+  }
+
+  .button img {
+    width: 20px;
+    height: 14.509px;
   }
 
   .Add-task-right {
@@ -1263,7 +1289,7 @@ body {
   }
 }
 
-@media only screen and (max-width: 600px){
+@media only screen and (max-width: 500px){
   .assigned-dropdown, .input-container-subtask input {
     width: 87.5vw;
   }

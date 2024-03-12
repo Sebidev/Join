@@ -750,7 +750,7 @@ body {
   color: #000;
   margin-bottom: 32px;
   font-family: Inter;
-  font-size: clamp(41px, 2.5vw, 61px);
+  font-size: clamp(41px, 3.5vw, 61px);
   font-style: normal;
   font-weight: 700;
   line-height: 120%;
@@ -2180,7 +2180,7 @@ body {
 }
 
 
-
+/* Media Queries */
 @media (max-width: 800px) {
   #taskModal {
       width: 70%;
@@ -2213,6 +2213,20 @@ body {
   .subtasks-container,
   .clear-and-create-section-modal {
       padding: 5px;
+  }
+
+  #selectedContactsContainer{
+    margin-bottom: 0 !important; 
+  }
+
+  .required-legend-modal {
+    bottom: unset;
+    top: 65px;
+  }
+
+  .clear-and-create-section-modal {
+    margin-left: 0px;
+    margin-bottom: -21px;
   }
 }
 
@@ -2615,6 +2629,10 @@ body {
   .clear-and-create-section-modal {
     margin-left: 70px;
   }
+
+  .selected-contact {
+    width: 90%;
+  }
 }
 
 @media only screen and (max-width: 926px) {
@@ -2659,17 +2677,4 @@ body {
     min-height: auto;
     flex: 0;
   }
-  /*
-  #taskModal {
-    width: 100vw;
-  }
-*/
-  .clear-and-create-section-modal {
-    margin-left: 0px;
-  }
-  /*
-  .Add-task-left-modal {
-    width: 35vw;
-  }
-  */
 }
