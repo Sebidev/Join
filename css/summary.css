@@ -498,6 +498,22 @@ body {
     }
 }
 
+@media only screen and (max-width: 1600px) {
+    .summary_container {
+        gap: 100px;
+    }
+
+    .header_summary {
+        font-size: 50px;
+    }
+}
+
+@media only screen and (max-width: 1400px) {
+    .right_textbox {
+        display: none;
+    }
+}
+
 @media only screen and (max-width: 926px) {
     .summary {
         margin-left: -15px;
