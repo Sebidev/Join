@@ -132,7 +132,7 @@ body {
   font-weight: 700;
   line-height: 120%;
   transition: 105ms ease-in-out;
-  /* 25.2px */
+  text-wrap: nowrap;
 }
 
 .hover-color:hover {
@@ -634,9 +634,6 @@ body {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1;
-}
-
-.add-task-create-open {
 }
 
 .Add-task-content {
@@ -1959,7 +1956,7 @@ body {
 
   .board-column-content {
     flex-direction: row;
-    width: 100vw;
+    width: 100%;
     gap: 10px;
     max-height: 500px;
     padding-right: 35px;
@@ -2084,13 +2081,17 @@ body {
 
   .board-column-content {
     flex-direction: row;
-    width: 100vw;
+    width: 100%;
     gap: 10px;
     max-height: 500px;
     padding-right: 35px;
     overflow-x: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
+  }
+
+  .input-container {
+    width: 62% !important;
   }
 
   .no-tasks-here {
@@ -2115,6 +2116,18 @@ body {
   #taskModal{
     z-index: 99999 !important;
   }
+
+  .due-date-input {
+    width: 74% !important;
+  }
+
+  .category-container {
+    width: 83% !important;
+  }
+
+  .clear-and-create-section-modal {
+    margin-left: 70px;
+  }
 }
 
 @media only screen and (max-width: 926px) {
@@ -2137,7 +2150,7 @@ body {
 
   .board-column-content {
     flex-direction: row;
-    width: 100vw;
+    width: 100%;
     gap: 10px;
     max-height: 500px;
     padding-right: 35px;

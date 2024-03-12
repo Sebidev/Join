@@ -974,6 +974,12 @@ body {
   #selectedContactsContainer {
     width: 32.5vw;
   }
+
+  .required-legend{
+    left: 250px;
+    bottom: 25px;
+    transition: all 0.5s ease-in-out;
+  }
 }
 
 @media only screen and (max-width: 768px) {
