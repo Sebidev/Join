@@ -156,7 +156,7 @@ body {
 .assigned-to {
   margin-bottom: 8px;
   width: 112px;
-  flex: 1 0 0;
+  /*flex: 1 0 0;*/
   color: var(--Version-2-main-color, #2a3647);
   font-family: Inter;
   font-size: 20px;
