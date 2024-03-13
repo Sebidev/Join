@@ -2179,9 +2179,8 @@ body {
   }
 }
 
-
 /* Media Queries */
-@media (max-width: 800px) {
+@media (max-width: 900px) {
   #taskModal {
       width: 70%;
   }
@@ -2217,6 +2216,7 @@ body {
 
   #selectedContactsContainer{
     margin-bottom: 0 !important; 
+    width: 100%;
   }
 
   .required-legend-modal {
@@ -2227,6 +2227,286 @@ body {
   .clear-and-create-section-modal {
     margin-left: 0px;
     margin-bottom: -21px;
+  }
+
+  .divider img {
+    display: none;
+  }
+
+  .button img {
+    width: 20px;
+    height: 14.509px;
+  }
+
+  .Add-task-right {
+    display: contents;
+  }
+
+  .header-add-task {
+    margin-top: 48px;
+    margin-bottom: 24px;
+    font-size: 47px;
+    margin-left: 15px;
+  }
+
+  .Add-task {
+    margin-left: 5px !important;
+    flex-direction: column;
+    height: 95vw;
+  }
+
+  .Add-task-left {
+    height: 188px;
+    width: 95vw !important;
+    margin-left: 5px;
+  }
+
+  .title-container-add-task,
+  .description-container,
+  .assigned-to-container {
+    width: 95vw !important;
+  }
+
+  .assigned-to-container {
+    margin-top: 90px;
+    margin-left: 5px;
+  }
+
+  .description-container {
+    height: auto;
+    margin-top: 0px;
+  }
+
+  .title-input,
+  .description-input,
+  .assigned-dropdown {
+    font-size: 16px;
+  }
+
+  .title-input,
+  .description-input,
+  .assigned-dropdown,
+  .due-date-input,
+  .prio-option-container,
+  .category-dropdown,
+  .input-container-subtask {
+    width: unset;
+  }
+
+  .description-input {
+    height: 42px;
+  }
+
+  #selectedContactsContainer {
+    display: flex;
+    flex-direction: row;
+    height: 42px;
+    margin-top: 10px;
+    margin-bottom: 32px;
+  }
+
+  #selectedContactsContainer .initials-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(1.5%, -50%);
+    font-size: 14px;
+    color: white;
+  }
+
+  .input-container-subtask {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .arrow_down {
+    top: 0;
+    right: 0;
+  }
+
+  .divider {
+    height: 212px;
+    margin: 0 24px;
+  }
+
+  .due-date,
+  .prio,
+  .description,
+  .title,
+  .assigned-to,
+  .category {
+    font-size: 16px;
+  }
+
+  .due-date-container {
+    width: 95vw;
+    margin-bottom: 8px;
+  }
+
+  .due-date-input {
+    padding: 8px 21px;
+    width: 90vw;
+  }
+
+  .prio-container {
+    width: 95vw;
+  }
+
+  .prio-option-container {
+    flex-direction: row;
+    width: 95vw;
+  }
+
+  .prio {
+    margin-left: 3px;
+  }
+
+  .prio-option-container h3 {
+    font-size: 16px;
+  }
+
+  .button {
+    width: 100vw;
+    font-size: 16px;
+    padding: 12px;
+    height: 45px;
+  }
+
+  .urgent,
+  .medium,
+  .low {
+    padding: 12px 8px;
+  }
+
+  .category-container {
+    width: 95vw;
+  }
+
+  .category,
+  .category-dropdown {
+    font-size: 16px;
+  }
+
+  .category-dropdown {
+    width: 88vw;
+  }
+
+  .category-options label {
+    font-size: 16px;
+  }
+
+  .selected-contact span {
+    display: none;
+  }
+
+  #iconContainer {
+    position: relative;
+    justify-content: end;
+    margin-top: -33px;
+    width: 50px;
+    left: 93%;
+  }
+
+  .subImgContainer{
+    margin-top: 9px;
+  }
+
+  .subtasks-container {
+    width: 95vw;
+    min-height: 35vh;
+    margin-top: -65px;
+    margin-left: 5px;
+    gap: 4px;
+  }
+
+  .subtasks-add-task {
+    font-size: 16px;
+    margin-top: 5px;
+  }
+
+  .input-container-subtask input {
+    width: 92vw;
+  }
+
+  .input-container{
+    width: 101%;
+  }
+
+  .arrow_down_category{
+    right: 5px !important;
+  }
+
+  .category-dropdown {
+    width: 100vw;
+  }
+
+  .assigned-dropdown {
+    width: 91.5vw;
+  }
+
+  .subtask-list {
+    width: 100% !important;
+    height: 7vh;
+    overflow-y: scroll;
+  }
+
+  .subtasks-input {
+    width: 90vw;
+    height: 20px;
+    padding: 12px 16px;
+    font-size: 16px;
+  }
+
+  .subtask-text {
+    font-size: 16px;
+  }
+
+  .clear-and-create-section {
+    display: flex;
+    justify-content: flex-end;
+    position: fixed;
+    bottom: 80px;
+    padding: 8px;
+    gap: 8px;
+    right: 0px;
+    width: 100vw;
+    background-color: white;
+  }
+
+  .clear-button {
+    display: none;
+  }
+
+  .clear-button h3 {
+    display: none;
+  }
+
+  .create-task-button {
+    padding: 16px;
+    margin-right: 15px;
+  }
+
+  .create-task-button h3 {
+    font-size: 18px;
+  }
+
+  .required-legend {
+    position: fixed;
+    bottom: 95px;
+    padding: 8px;
+    gap: 8px;
+    left: 0px;
+    font-size: 14px;
+    z-index: 1;
+  }
+
+  .required-legend::before {
+    font-size: 14px;
+  }
+
+  .arrow_down {
+    top: unset !important;
+    right: 5px !important;
   }
 }
 
