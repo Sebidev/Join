@@ -2956,5 +2956,6 @@ body {
   .await-section {
     min-height: auto;
     flex: 0;
+    width: 100%;
   }
 }
