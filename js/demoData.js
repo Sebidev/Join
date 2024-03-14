@@ -21,6 +21,27 @@ function generateDemoTasks() {
     return [
         {
             content: {
+                title: 'Contact Form & Imprint',
+                description: 'Create a contact form and imprint page...',
+                date: '2024-10-15',
+                category: 'User Story',
+                subtasks: 2,
+                subtasksData: [
+                    { description: 'Implement contact form', checked: false },
+                    { description: 'Start imprint layout', checked: false }
+                ],
+                selectedContacts: [
+                    { id: demoContacts[1].id, imagePath: "img/Ellipse5-3.svg", initials: "AS", name: "Anja Schulz" },
+                    { id: demoContacts[3].id, imagePath: "img/Ellipse5-1.svg", initials: "DE", name: "David Eisenberg" },
+                    { id: demoContacts[4].id, imagePath: "img/Ellipse5-2.svg", initials: "EF", name: "Eva Fischer" }
+                ],
+                priority: 'urgent',
+                boardColumn: 'todo-column',
+            },
+            id: 'task0',
+        },
+        {
+            content: {
                 title: 'Kochwelt Page & Recipe Recommender',
                 description: 'Build start page with recipe recommendation...',
                 date: '2024-12-31',
@@ -33,12 +54,13 @@ function generateDemoTasks() {
                 selectedContacts: [
                     { id: demoContacts[0].id, imagePath: "img/Ellipse5-0.svg", initials: "AM", name: "Anton Mayer"  },
                     { id: demoContacts[5].id, imagePath: "img/Ellipse5-1.svg", initials: "EM", name: "Emmanuel Mauer"},
-                    { id: demoContacts[6].id, imagePath: "img/Ellipse5-3.svg", initials: "MB", name: "Marcel Bauer" }
+                    { id: demoContacts[6].id, imagePath: "img/Ellipse5-3.svg", initials: "MB", name: "Marcel Bauer" },
+                    { id: demoContacts[2].id, imagePath: "img/Ellipse5-4.svg", initials: "BZ", name: "Benedikt Ziegler" }
                 ],
                 priority: 'medium',
                 boardColumn: 'progress-column',
             },
-            id: 'task0',
+            id: 'task1',
         },
         {
             content: {
@@ -51,12 +73,12 @@ function generateDemoTasks() {
                 selectedContacts: [
                     { id: demoContacts[3].id, imagePath: "img/Ellipse5-1.svg", initials: "DE", name: "David Eisenberg" },
                     { id: demoContacts[2].id, imagePath: "img/Ellipse5-4.svg", initials: "BZ", name: "Benedikt Ziegler" },
-                    { id: demoContacts[1].id, imagePath: "img/Ellipse5-3.svg", initials: "AS", name: "Anja Schulz" }
+                    { id: demoContacts[1].id, imagePath: "img/Ellipse5-3.svg", initials: "AS", name: "Anja Schulz" },
                 ],
                 priority: 'low',
                 boardColumn: 'await-column',
             },
-            id: 'task1',
+            id: 'task2',
         },
         {
             content: {
@@ -74,7 +96,7 @@ function generateDemoTasks() {
                 priority: 'medium',
                 boardColumn: 'await-column',
             },
-            id: 'task2',
+            id: 'task3',
         },
         {
             content: {
@@ -94,7 +116,7 @@ function generateDemoTasks() {
                 priority: 'urgent',
                 boardColumn: 'done-column',
             },
-            id: 'task3',
+            id: 'task4',
         },
     ]
 }

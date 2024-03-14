@@ -25,6 +25,7 @@ function addTask(column) {
         }, 100);
         setupDueDateInputAddTaskModal();
     }
+    hideScrollbar();
 }
 
 /**
@@ -237,6 +238,7 @@ function closeModal() {
         modal.remove();
         overlay.remove();
     }, 200);
+    showScrollbar();
 }
 
 /**

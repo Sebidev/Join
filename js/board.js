@@ -91,6 +91,16 @@ document.addEventListener('DOMContentLoaded', () => {
  * @returns {string} The HTML code for the content section of the task card.
  */
 function createCardContentHTML(data, progress, currentSubtasks, totalSubtasks, initialsHTML, categoryClass, priorityIconSrc) {
+    let progressHTML = '';
+    if (totalSubtasks > 0) {
+        progressHTML = `
+            <div class="progress">
+                <div class="progress-bar" id="progressBar_${data.id}">
+                    <div class="progress-fill" id="progressFill_${data.id}" style="width: ${progress}%;"></div>
+                </div>
+                <div class="subtasks" id="subtasks_${data.id}">${currentSubtasks}/${totalSubtasks} Subtasks</div>
+            </div>`;
+    }
     return `
     <div class="top-mobile">
         <p class="${categoryClass}">${data.content.category}</p>
@@ -101,12 +111,7 @@ function createCardContentHTML(data, progress, currentSubtasks, totalSubtasks, i
             <p class="card-content">${data.content.description}</p>
         </div>
         <p style="display: none">${data.content.date}</p>
-        <div class="progress">
-            <div class="progress-bar" id="progressBar_${data.id}">
-                <div class="progress-fill" id="progressFill_${data.id}" style="width: ${progress}%;"></div>
-            </div>
-            <div class="subtasks" id="subtasks_${data.id}">${currentSubtasks}/${totalSubtasks} Subtasks</div>
-        </div>
+        ${progressHTML}
         <div class="to-do-bottom">
             <div class="initials-cont">
                 ${initialsHTML}
@@ -264,7 +269,7 @@ async function getTasksData() {
  * @returns {string} The HTML code for the created contact images.
  */
 function createAvatarDivs(selectedContacts) {
-    let maxVisibleContacts = 3;
+    let maxVisibleContacts = selectedContacts.length === 3 ? 3 : 2;
     let avatarDivsHTML = '';
 
     for (let i = 0; i < Math.min(maxVisibleContacts, selectedContacts.length); i++) {
@@ -279,11 +284,11 @@ function createAvatarDivs(selectedContacts) {
     }
 
     if (selectedContacts.length > maxVisibleContacts) {
-        let remainingContacts = selectedContacts.length - maxVisibleContacts + 1;
+        let remainingContacts = selectedContacts.length - maxVisibleContacts;
         avatarDivsHTML += `
             <div class="initial-container">
-                <div class="avatar" id="${selectedContacts[maxVisibleContacts - 1].id}">
-                    <img src="${selectedContacts[maxVisibleContacts - 1].imagePath}">
+                <div class="avatar" id="${selectedContacts[maxVisibleContacts].id}">
+                    <img src="${selectedContacts[maxVisibleContacts].imagePath}">
                     <div class="avatar_initletter">+${remainingContacts}</div>
                 </div>
             </div>`;

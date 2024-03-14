@@ -352,6 +352,10 @@ body {
   transition: transform 0.125s ease-in-out;
 }
 
+.hide-scroll {
+  overflow: hidden;
+}
+
 .title-input-modal,
 .description-input-modal {
   width: 100%;
@@ -969,7 +973,7 @@ body {
 }
 
 .card-modal {
-  height: 835px;
+  height: 788px;
   width: 445px;
   position: fixed;
   top: 50%;
