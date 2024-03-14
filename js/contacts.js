@@ -3,10 +3,11 @@
  * This file contains the JavaScript code for the contacts.html page.
  */
 
-import { editContactTemplate, addContactTemplate } from './contacts_template.js';
+import { editContactTemplate, addContactTemplate, add_new_conatct_btnTemplate } from './contacts_template.js';
 
 let editcontact_innerHTML = editContactTemplate;
 let addcontact_innerHTML = addContactTemplate;
+let add_new_conatct_btn_innerHTML = add_new_conatct_btnTemplate;
 
 let overlay;
 let contactModal;
@@ -152,7 +153,9 @@ async function successMsg() {
 
     await new Promise(resolve => setTimeout(() => {
         resolve();
-        location.reload();
+        reloadContacts();
+        successOverlay.classList.remove('visible');
+        successMessage.classList.remove('success-message-visible');
     }, 800));
 }
 
@@ -364,7 +367,9 @@ async function saveEditedContact(contactid) {
             }
 
             closeContactModal();
-            location.reload();
+
+            reloadContacts();
+            floatingContactRender(contactid);
         }
         else {
             console.log(`No contact found with ID ${contactid}.`);
@@ -402,7 +407,8 @@ async function delContact(contactId) {
     } else {
         localStorage.setItem('contacts', JSON.stringify(contacts));
     }
-    location.reload();
+    reloadContacts();
+    clearFloatingContact();
 }
 
 
@@ -456,6 +462,21 @@ function hideMenuOnClickOutside(event) {
     });
 
     document.removeEventListener('click', hideMenuOnClickOutside);
+}
+
+
+function reloadContacts() {
+    let contactsContainer = document.getElementById('contactentry');
+    contactsContainer.innerHTML = add_new_conatct_btn_innerHTML;
+    loadContacts();
+}
+
+function clearFloatingContact() {
+    let floating_contactElement = document.getElementById("floating_contact");
+
+    while (floating_contactElement.firstChild) {
+        floating_contactElement.removeChild(floating_contactElement.firstChild);
+    }
 }
 
 /**

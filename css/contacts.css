@@ -680,10 +680,12 @@ body {
 }
 
 .newcontact_success {
+    position: absolute;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 20%;
+    left: 50vw;
     overflow: hidden;
 }
   
