@@ -77,6 +77,8 @@ let replaceElementWithInput = (element, containerClass, inputType) => {
     container.appendChild(input);
     element.replaceWith(container);
 };
+///let dateElement = document.getElementById('dueDateText');
+
 
 /**
  * Sets up the due date input for the edit modal and fills it with the current task data.

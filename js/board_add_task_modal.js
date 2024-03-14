@@ -240,7 +240,7 @@ function closeModal() {
 }
 
 /**
- * Sets up the due date input by replacing it with a datepicker on the "Add Task" page.
+ * Sets up the due date input by replacing it with a datepicker on the "Add Task" modal.
  */
 function setupDueDateInputAddTaskModal() {
     if (window.location.pathname.includes("board.html")) {
@@ -248,7 +248,6 @@ function setupDueDateInputAddTaskModal() {
 
         if (dateElement) {
             let dateInput = createAndConfigureDateInputModal(dateElement);
-
             dateElement.replaceWith(createDateContainerModal(dateInput));
 
             $(dateInput).datepicker({
@@ -262,28 +261,133 @@ function setupDueDateInputAddTaskModal() {
 setupDueDateInputAddTaskModal();
 
 /**
- * Creates a new date input container and configures the date input element.
+ * Creates and configures a date input element for the modal.
  * @param {HTMLElement} dateElement - The existing date input element.
  * @returns {HTMLElement} The configured date input element.
  */
 function createAndConfigureDateInputModal(dateElement) {
-    let dateInput = document.createElement('input');
-    dateInput.type = 'text';
-    dateInput.id = 'dateAddTaskModal';
-    dateInput.className = 'due-date-input-add-task-modal';
-    dateInput.placeholder = 'dd/mm/yyyy';
-    dateInput.required = true;
-    dateInput.value = dateElement.value;
-    dateInput.style.backgroundImage = 'url("img/calendar.svg")';
-    dateInput.style.backgroundRepeat = 'no-repeat';
-    dateInput.style.backgroundPosition = 'right 8px center';
-    dateInput.style.backgroundSize = '24px';
-    dateInput.classList.add('calendar-hover');
+    let dateInput = createDateInputModal(dateElement);
+    configureDateInputModal(dateInput);
     return dateInput;
 }
 
 /**
- * Creates a new date input container.
+ * Creates a date input element for the modal.
+ * @param {HTMLElement} dateElement - The existing date input element.
+ * @returns {HTMLElement} The created date input element.
+ */
+function createDateInputModal(dateElement) {
+    let dateInput = document.createElement('input');
+    dateInput.type = 'text';
+    dateInput.id = 'date';
+    dateInput.className = 'due-date-input-add-task-modal';
+    dateInput.placeholder = 'dd/mm/yyyy';
+    dateInput.required = true;
+    dateInput.value = dateElement.value;
+    return dateInput;
+}
+
+/**
+ * Configures the date input element for the modal.
+ * @param {HTMLElement} dateInput - The date input element to be configured.
+ */
+function configureDateInputModal(dateInput) {
+    dateInput.style.cssText = 'background-image: url("img/calendar.svg"); background-repeat: no-repeat; background-position: right center; background-size: 24px;';
+    dateInput.classList.add('calendar-hover');
+    dateInput.addEventListener('input', handleDateInputModal);
+    dateInput.addEventListener('keypress', handleKeyPressModal);
+}
+
+/**
+ * Handles input event for the date input element in the modal.
+ * @param {Event} event - The input event object.
+ */
+function handleDateInputModal(event) {
+    let inputValue = event.target.value.replace(/\//g, '');
+    let day = inputValue.slice(0, 2);
+    let month = inputValue.slice(2, 4);
+    let year = inputValue.slice(4, 8);
+
+    let formattedValue = formatDateStringModal(day, month, year);
+
+    if (formattedValue !== event.target.value) {
+        event.target.value = formattedValue;
+    }
+
+    handleInvalidDayModal(event, day, month, year);
+    handleInvalidMonthModal(event, day, month, year);
+    handleInvalidYearModal(event, day, month, year);
+    handleDateValidity(event, day, month, year);
+}
+
+/**
+ * Formats the date string for the modal.
+ * @param {string} day - The day part of the date.
+ * @param {string} month - The month part of the date.
+ * @param {string} year - The year part of the date.
+ * @returns {string} The formatted date string.
+ */
+function formatDateStringModal(day, month, year) {
+    return day + (day.length === 2 ? '/' : '') + month + (month.length === 2 ? '/' : '') + year;
+}
+
+/**
+ * Handles invalid day entry for the modal.
+ * @param {Event} event - The input event object.
+ * @param {string} day - The day part of the date.
+ * @param {string} month - The month part of the date.
+ * @param {string} year - The year part of the date.
+ */
+function handleInvalidDayModal(event, day, month, year) {
+    if (day.length === 2 && (parseInt(day) < 1 || parseInt(day) > 31)) {
+        day = '31';
+        event.target.value = day + '/' + month + '' + year;
+    }
+}
+
+/**
+ * Handles invalid month entry for the modal.
+ * @param {Event} event - The input event object.
+ * @param {string} day - The day part of the date.
+ * @param {string} month - The month part of the date.
+ * @param {string} year - The year part of the date.
+ */
+function handleInvalidMonthModal(event, day, month, year) {
+    if (month.length === 2 && (parseInt(month) < 1 || parseInt(month) > 12)) {
+        month = '12';
+        event.target.value = day + '/' + month + '/' + year;
+    }
+}
+
+/**
+ * Handles invalid year entry for the modal.
+ * @param {Event} event - The input event object.
+ * @param {string} day - The day part of the date.
+ * @param {string} month - The month part of the date.
+ * @param {string} year - The year part of the date.
+ */
+function handleInvalidYearModal(event, day, month, year) {
+    if (year.length === 4 && (parseInt(year) < 1 || parseInt(year) > 2100)) {
+        year = '2100';
+        event.target.value = day + '/' + month + '/' + year;
+    }
+}
+
+/**
+ * Handles key press event for the date input element in the modal.
+ * @param {Event} event - The key press event object.
+ */
+function handleKeyPressModal(event) {
+    if (!/[0-9\b]/.test(event.key)) {
+        event.preventDefault();
+    }
+    if (event.target.value.length >= 10 && event.key !== 'Backspace') {
+        event.preventDefault();
+    }
+}
+
+/**
+ * Creates a new date input container for the modal.
  * @param {HTMLElement} dateInput - The configured date input element.
  * @returns {HTMLDivElement} The date input container.
  */
