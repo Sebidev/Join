@@ -989,7 +989,7 @@ body {
 .card-modal-userstory {
   margin-top: 0px;
   margin-bottom: 0px;
-  width: 112px;
+  width: 116px;
   height: 28px;
   display: flex;
   padding: 4px 24px;
@@ -1002,7 +1002,7 @@ body {
   color: #fff;
 
   /* Version 2/t5 */
-  font-family: "Open Sans";
+  font-family: "Inter";
   font-size: 23px;
   font-style: normal;
   font-weight: 400;
@@ -1013,7 +1013,7 @@ body {
 .card-modal-technical {
   margin-top: 0px;
   margin-bottom: 0px;
-  width: 155px;
+  width: 156px;
   height: 28px;
   display: flex;
   padding: 4px 24px;
@@ -1026,7 +1026,7 @@ body {
   color: #ffffff;
 
   /* Version 2/t5 */
-  font-family: "Open Sans";
+  font-family: "Inter";
   font-size: 23px;
   font-style: normal;
   font-weight: 400;
