@@ -33,7 +33,7 @@ async function closeOpenCard() {
 
         }, 100);
     }
-
+    showScrollbar();
     clearSelectedContacts();
 }
 
@@ -184,6 +184,7 @@ async function getUpdatedTask(taskId) {
  * @param {Object} subtasksData - Subtasks data.
  */
 async function openCard(data, subtasksData) {
+
     let taskId = data.id;
     currentTaskId = taskId;
     let tasks = await getTasks();
@@ -198,7 +199,17 @@ async function openCard(data, subtasksData) {
     await updateCardProgressAndSubtasks(taskId, task);
 
     showCardOverlay(taskId);
+    hideScrollbar();
     currentEditData = data;
+
+    let subtasksContainer = document.querySelector(`#cardModal_${taskId} .card-modal-subtasks-container`);
+    if (subtasksContainer) {
+        if (subtasksData.length === 0) {
+            subtasksContainer.style.display = 'none';
+        } else {
+            subtasksContainer.style.display = 'flex';
+        }
+    }
 }
 
 /**
@@ -258,8 +269,24 @@ async function updateSubtaskCheckboxes(taskId) {
  */
 async function updateCardProgressAndSubtasks(taskId, task) {
     let { currentSubtasks, totalSubtasks, progress } = await updateCardInformation(taskId, task);
-    document.getElementById(`progressFill_${taskId}`).style.width = `${progress}%`;
-    document.getElementById(`subtasks_${taskId}`).textContent = `${currentSubtasks}/${totalSubtasks} Subtasks`;
+    let progressFill = document.getElementById(`progressFill_${taskId}`);
+    let subtasksInfo = document.querySelector(`#subtasks_${taskId}`);
+
+    if (progressFill && subtasksInfo) {
+        progressFill.style.width = `${progress}%`;
+        subtasksInfo.textContent = `${currentSubtasks}/${totalSubtasks} Subtasks`;
+
+        let progressContainer = document.querySelector(`#progressBar_${taskId}`);
+        let subtasksContainer = document.querySelector(`#subtasks_${taskId}`);
+
+        if (totalSubtasks === 0) {
+            progressContainer.style.display = 'none';
+            subtasksContainer.style.display = 'none';
+        } else {
+            progressContainer.style.display = 'block'; 
+            subtasksContainer.style.display = 'block';
+        }
+    }
 }
 
 /**

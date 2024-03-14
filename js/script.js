@@ -1,3 +1,11 @@
+function hideScrollbar() {
+    document.body.classList.add('hide-scroll');
+}
+
+function showScrollbar() {
+    document.body.classList.remove('hide-scroll');
+}
+
 function createPopupContent() {
   return `
       <div id="popupMobileColumns">

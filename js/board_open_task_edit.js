@@ -29,6 +29,7 @@ function edit() {
         $('.card-modal-subtasks-container-headline').addClass('card-modal-subtasks-container-headline_edit_mobile'); // added class for mobile view
         $('.subtask-checkbox').css('display', 'none');
         $('.subtask-image').css('display', 'block');
+        $('.card-modal-subtasks-container').css('display', 'unset');
 
         if (currentEditData) {
             addContactsToSelectedContacts(currentEditData);
