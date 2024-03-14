@@ -5,12 +5,18 @@
  * It contains the code for rearranging the elements on the page when the screen size changes.
  */
 
+const mediaQuery = window.matchMedia('(max-width: 767px)');
 let hasMovedElements = false;
 let originalOrder = [];
 
-function rearrangeElements() {
+/**
+ * This function rearranges the elements on the page when the screen size changes.
+ * @function rearrangeElements
+ * @param {*} mediaQuery 
+ */
+function rearrangeElements(mediaQuery) {
     try {
-        if (window.innerWidth < 768 && !hasMovedElements) {
+        if (mediaQuery.matches && !hasMovedElements) {
             let element = document.querySelector('.prio-container');
             let target = document.querySelector('.assigned-to-container');
             if (element && target && target.parentNode) {
@@ -40,7 +46,7 @@ function rearrangeElements() {
             }
 
             hasMovedElements = true;
-        } else if (window.innerWidth >= 768 && hasMovedElements) {
+        } else if (!mediaQuery.matches && hasMovedElements) {
             originalOrder.reverse().forEach(item => {
                 if (item.nextSibling) {
                     item.parent.insertBefore(item.element, item.nextSibling);
@@ -57,15 +63,16 @@ function rearrangeElements() {
     }
 }
 
+/**
+ * This function adds the task on mobile devices.
+ * @function addTaskMobile
+ */
 function addTaskMobile() {
-    if ('onorientationchange' in window) {
-        window.addEventListener('orientationchange', rearrangeElements);
-    } else {
-        window.addEventListener('resize', rearrangeElements);
-    }
+    mediaQuery.addEventListener('change', rearrangeElements);
+    rearrangeElements(mediaQuery);
 }
 
-window.addEventListener('load', function() {
-    addTaskMobile();
-    rearrangeElements();
-});
+/**
+ * This event listener listens for the DOMContentLoaded event and calls the addTaskMobile function.
+ */
+document.addEventListener('DOMContentLoaded', addTaskMobile);
