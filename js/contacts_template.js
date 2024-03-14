@@ -4,6 +4,14 @@
  * 
  */
 
+export let add_new_conatct_btnTemplate = `
+<div class="add_new_conatct_btn_container">
+    <div class="add_new_contact_btn hover-color" onclick="addContact()">
+        <span>Add new contact</span>
+        <img src="img/person_add.svg">
+    </div>
+</div>`;
+
 export let editContactTemplate = `
 <div id="bluebar">
     <img class="bluebar_joinlogo" src="img/join_logo.svg"></img>
