@@ -65,13 +65,12 @@ function setupDueDateInputAddTask() {
         if (dateElement) {
             let dateInput = createAndConfigureDateInput(dateElement);
 
-            // Replace the existing date input with the new container
             dateElement.replaceWith(createDateContainer(dateInput));
 
-            // Initialize the datepicker
             $(dateInput).datepicker({
-                dateFormat: 'yy-mm-dd',
+                dateFormat: 'dd/mm/yy',
                 showButtonPanel: true,
+                minDate: new Date()
             });
         }
     }
@@ -79,11 +78,22 @@ function setupDueDateInputAddTask() {
 setupDueDateInputAddTask();
 
 /**
- * Creates a new date input container and configures the date input element.
+ * Creates and configures a date input element.
  * @param {HTMLElement} dateElement - The existing date input element.
  * @returns {HTMLElement} The configured date input element.
  */
 function createAndConfigureDateInput(dateElement) {
+    let dateInput = createDateInput(dateElement);
+    configureDateInput(dateInput);
+    return dateInput;
+}
+
+/**
+ * Creates a date input element.
+ * @param {HTMLElement} dateElement - The existing date input element.
+ * @returns {HTMLElement} The created date input element.
+ */
+function createDateInput(dateElement) {
     let dateInput = document.createElement('input');
     dateInput.type = 'text';
     dateInput.id = 'date';
@@ -91,12 +101,106 @@ function createAndConfigureDateInput(dateElement) {
     dateInput.placeholder = 'dd/mm/yyyy';
     dateInput.required = true;
     dateInput.value = dateElement.value;
-    dateInput.style.backgroundImage = 'url("img/calendar.svg")';
-    dateInput.style.backgroundRepeat = 'no-repeat';
-    dateInput.style.backgroundPosition = 'right center';
-    dateInput.style.backgroundSize = '24px';
-    dateInput.classList.add('calendar-hover');
     return dateInput;
+}
+
+/**
+ * Configures the date input element.
+ * @param {HTMLElement} dateInput - The date input element to be configured.
+ */
+function configureDateInput(dateInput) {
+    dateInput.style.cssText = 'background-image: url("img/calendar.svg"); background-repeat: no-repeat; background-position: right center; background-size: 24px;';
+    dateInput.classList.add('calendar-hover');
+    dateInput.addEventListener('input', handleDateInput);
+    dateInput.addEventListener('keypress', handleKeyPress);
+}
+
+/**
+ * Handles input event for the date input element.
+ * @param {Event} event - The input event object.
+ */
+function handleDateInput(event) {
+    let inputValue = event.target.value.replace(/\//g, '');
+    let day = inputValue.slice(0, 2);
+    let month = inputValue.slice(2, 4);
+    let year = inputValue.slice(4, 8);
+
+    let formattedValue = formatDateString(day, month, year);
+
+    if (formattedValue !== event.target.value) {
+        event.target.value = formattedValue;
+    }
+
+    handleInvalidDay(event, day, month, year);
+    handleInvalidMonth(event, day, month, year);
+    handleInvalidYear(event, day, month, year);
+    handleDateValidity(event, day, month, year);
+}
+
+/**
+ * Formats the date string.
+ * @param {string} day - The day part of the date.
+ * @param {string} month - The month part of the date.
+ * @param {string} year - The year part of the date.
+ * @returns {string} The formatted date string.
+ */
+function formatDateString(day, month, year) {
+    return day + (day.length === 2 ? '/' : '') + month + (month.length === 2 ? '/' : '') + year;
+}
+
+/**
+ * Handles invalid day entry.
+ * @param {Event} event - The input event object.
+ * @param {string} day - The day part of the date.
+ * @param {string} month - The month part of the date.
+ * @param {string} year - The year part of the date.
+ */
+function handleInvalidDay(event, day, month, year) {
+    if (day.length === 2 && (parseInt(day) < 1 || parseInt(day) > 31)) {
+        day = '31';
+        event.target.value = day + '/' + month + '' + year;
+    }
+}
+
+/**
+ * Handles invalid month entry.
+ * @param {Event} event - The input event object.
+ * @param {string} day - The day part of the date.
+ * @param {string} month - The month part of the date.
+ * @param {string} year - The year part of the date.
+ */
+function handleInvalidMonth(event, day, month, year) {
+    if (month.length === 2 && (parseInt(month) < 1 || parseInt(month) > 12)) {
+        month = '12';
+        event.target.value = day + '/' + month + '/' + year;
+    }
+}
+
+/**
+ * Handles invalid year entry.
+ * @param {Event} event - The input event object.
+ * @param {string} day - The day part of the date.
+ * @param {string} month - The month part of the date.
+ * @param {string} year - The year part of the date.
+ */
+function handleInvalidYear(event, day, month, year) {
+    if (year.length === 4 && (parseInt(year) < 1 || parseInt(year) > 2100)) {
+        year = '2100';
+        event.target.value = day + '/' + month + '/' + year;
+    }
+}
+
+/**
+ * Handles key press event for the date input element.
+ * @param {Event} event - The key press event object.
+ */
+function handleKeyPress(event) {
+    if (!/[0-9\b]/.test(event.key)) {
+        event.preventDefault();
+    }
+    if (event.target.value.length >= 10 && event.key !== 'Backspace') {
+        event.preventDefault();
+    }
 }
 
 /**

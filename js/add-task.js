@@ -61,9 +61,9 @@ function clearSelectedContacts() {
  * Adds a new task to the specified column on the board.
  *
  * @param {string} column - The target column for the new task.
- * @returns {Promise<void>} A Promise that resolves after the task is added and redirected to the board.
+ * @returns {void} - Returns nothing.
  */
-async function addToBoard(column) {
+function addToBoard(column) {
     event.preventDefault();
     let form = document.querySelector('form');
     let taskTitle = getFieldValueById('taskTitleInput');
@@ -76,19 +76,18 @@ async function addToBoard(column) {
         animatedIcon.style.bottom = '500px';
 
         let description = getFieldValueById('descriptionInput');
-        debugger
         let date = getFieldValueById('date');
         let subtasksList = document.getElementById('subtaskList').children;
         let selectedContacts = getSelectedContacts();
         let selectedPriority = getSelectedPriority();
 
-        if (form.checkValidity()) {
-            saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column);
+        saveToLocalStorage(taskTitle, description, date, category, subtasksList, selectedContacts, selectedPriority, column);
 
-            setTimeout(() => {
-                window.location.href = 'board.html';
-            }, 1000);
-        }
+        setTimeout(() => {
+            window.location.href = 'board.html';
+        }, 1000);
+    } else {
+        form.reportValidity();
     }
     resetFormFields();
 }
@@ -170,7 +169,7 @@ async function saveToLocalStorage(taskTitle, description, date, category, subtas
         localStorage.setItem('tasks', JSON.stringify(tasks));
         localStorage.setItem('selectedContacts', JSON.stringify(selectedContacts));
     }
-    
+
 }
 
 /**
@@ -390,6 +389,7 @@ function clearFields() {
     if (selectedContactsContainer) {
         selectedContactsContainer.innerHTML = '';
     }
+    selectedInitialsArray = [];
 
-    clearSelectedContacts();
+    saveAndDisplaySelectedContacts();
 }

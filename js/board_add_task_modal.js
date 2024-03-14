@@ -138,11 +138,10 @@ document.addEventListener('click', function (event) {
  * @param {string} column - The column on the board where the task should be added.
  */
 async function addToBoardModal(column) {
-    debugger
     let form = document.getElementById('taskModal');
     let taskTitle = getFieldValueById('taskTitleInput');
     let category = getFieldValueById('categoryAddTaskModal');
-
+/*
     if (!taskTitle) {
         showRequiredInfo('taskTitleInput');
         return;
@@ -151,11 +150,10 @@ async function addToBoardModal(column) {
         showRequiredInfo('categoryAddTaskModal');
         return;
     }
-    
+  */  
     if (window.location.pathname.includes("board.html") && form.checkValidity() && taskTitle && category) {
         
         let description = getFieldValueById('descriptionInput');
-        console.log('Date:', getFieldValueById('dateAddTaskModal'));
         let date = getFieldValueById('dateAddTaskModal');
         let subtasksList = document.getElementById('subtaskList').children;
         let selectedContacts = getSelectedContacts();
@@ -256,6 +254,7 @@ function setupDueDateInputAddTaskModal() {
             $(dateInput).datepicker({
                 dateFormat: 'yy-mm-dd',
                 showButtonPanel: true,
+                minDate: new Date()
             });
         }
     }

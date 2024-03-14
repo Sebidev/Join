@@ -113,6 +113,7 @@ function setupDueDateInput() {
     $(dateInput).datepicker({
         dateFormat: 'yy-mm-dd',
         showButtonPanel: true,
+        minDate: new Date()
     });
 }
 
