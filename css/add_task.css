@@ -1087,7 +1087,7 @@ body {
     /*height: 42px;*/
     width: 95vw;
     margin-top: 10px;
-    margin-bottom: 32px;
+    margin-bottom: 20px;
   }
 
   .selected-contact {
@@ -1262,7 +1262,6 @@ body {
   .subtask-list {
     width: 100%;
     height: 7vh;
-    overflow-y: scroll;
   }
 
   .subtasks-input {
