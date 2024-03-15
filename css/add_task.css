@@ -1034,6 +1034,7 @@ body {
   .Add-task {
     margin-left: 5px !important;
     flex-direction: column;
+    justify-content: normal;
     width: 98%;
     height: 95vw;
   }
@@ -1346,3 +1347,4 @@ body {
     width: 154.2px;
   }
 }
+
