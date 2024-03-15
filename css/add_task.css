@@ -937,17 +937,17 @@ body {
     transition: margin 0.5s ease-in-out;
   }
 
-  .title-input {
-    /*width: 29.2vw;*/
+/*.title-input {
+    width: 29.2vw;
   }
 
   .description-input {
-    /*width: 30vw;*/
+    width: 30vw;
   }
 
   .assigned-dropdown {
-    /*width: 30vw;*/
-  }
+    width: 30vw;
+  } */
 
   .due-date-input {
     width: 92%;
@@ -965,10 +965,11 @@ body {
     width: 100%;
   }
 
-  .subtask-list {
-    /*width: 83%;*/
+/*.subtask-list {
+    width: 83%;
   }
-
+ */
+ 
   .due-date-container {
     width: 100%;
   }
@@ -1005,7 +1006,7 @@ body {
 
   .required-legend{
     left: 250px;
-    bottom: 25px;
+    bottom: 107px;
     transition: all 0.5s ease-in-out;
   }
 }

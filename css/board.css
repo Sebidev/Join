@@ -2367,6 +2367,17 @@ body {
     padding: 12px 8px;
   }
 
+  .create-task-button-modal, .cancel-button-modal{
+    width: 20vw;
+  }
+
+  .create-task-button-modal h3, .cancel-button-modal h3{
+    font-size: 2.4vw;
+    text-wrap: nowrap;
+    display: flex;
+    align-items: center;
+  }
+
   .category-container {
     width: 95vw;
   }
@@ -2792,6 +2803,12 @@ body {
 
   .input-container-subtask img {
     right: 20px !important;
+  }
+}
+
+@media only  screen and (max-width: 530px) {
+  .create-task-button-modal h3, .cancel-button-modal h3{
+    display: none;
   }
 }
 
