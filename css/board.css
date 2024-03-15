@@ -414,7 +414,7 @@ body {
   height: 48px;
   width: 100%;
   box-sizing: border-box;
-  margin-top: 5px;
+  margin-top: 0px;
 }
 
 .category-add-task-modal {
@@ -795,19 +795,9 @@ body {
 .Add-task-left-modal,
 .Add-task-right-modal {
     flex: 1;
-    overflow: hidden;
+    /*overflow: hidden;*/
     box-sizing: border-box;
 }
-
-/* .Add-task-right-modal {
-  width: 440px;
-  height: 416px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 24px;
-} */
-
 
 #selectedContactsContainer {
   margin-top: 2px;
@@ -817,7 +807,7 @@ body {
 }
 
 .dropdown-content {
-  background-color: unset !important;
+  background-color: #fff !important;
 }
 
 .clear-and-create-section-modal {
@@ -2078,10 +2068,10 @@ body {
     display: flex;
     align-items: center;
     position: relative;
-    height: 30px;
+    height: 48px;
     width: 100%;
     box-sizing: border-box;
-    margin-top: 5px;
+    margin-top: 0px;
   }
 
   .assigned-dropdown-add-task-modal,
