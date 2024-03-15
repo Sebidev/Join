@@ -1157,6 +1157,12 @@ body {
     .floating_contact_phone{
         min-height: 30vh;
     }
+
+    .newcontact_success {
+        position: absolute;
+        height: 20%;
+        left: 20%;
+    }
 }
 
 @media only screen and (max-width: 400px){

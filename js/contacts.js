@@ -8,6 +8,7 @@ import { editContactTemplate, addContactTemplate, add_new_conatct_btnTemplate } 
 let editcontact_innerHTML = editContactTemplate;
 let addcontact_innerHTML = addContactTemplate;
 let add_new_conatct_btn_innerHTML = add_new_conatct_btnTemplate;
+let isMobile = window.innerWidth <= 1370;
 
 let overlay;
 let contactModal;
@@ -387,6 +388,7 @@ window.delContact = delContact;
  */
 async function delContact(contactId) {
     let contacts;
+
     if (isUserLoggedIn) {
         let users = JSON.parse(await getItem('users'));
         if (users[currentUser]) {
@@ -409,6 +411,10 @@ async function delContact(contactId) {
     }
     reloadContacts();
     clearFloatingContact();
+
+    if (isMobile) {
+        backButtonHandler();
+    }
 }
 
 
@@ -579,3 +585,11 @@ document.addEventListener('DOMContentLoaded', async (event) => {
     loadContacts();
 });
 
+/**
+ * This function is called when the user clicks on the "Back" button in the contacts.html page.
+ * It hides the floating contact window.
+ * only for mobile visible
+ */
+window.addEventListener('resize', function() {
+    isMobile = window.innerWidth <= 1370;
+});

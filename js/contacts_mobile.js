@@ -39,7 +39,11 @@ let handleMobileView = () => {
  * It hides the contacts container and shows the contact title and floating contact container.
  * It also removes the contact_selected class from the contact entry.
  */
-let mobileClickHandler = () => {
+let mobileClickHandler = (event) => {
+    if (event.target.closest('.add_new_contact_btn')) {
+        return;
+    }
+
     let contactsContainer = document.querySelector('.contacts_container');
     contactsContainer.style.display = 'none';
 
@@ -55,7 +59,11 @@ let mobileClickHandler = () => {
  * It hides the contact title and floating contact container and shows the contacts container.
  * It also removes the contact_selected class from the contact entry.
  */
-let backButtonHandler = () => {
+let backButtonHandler = (event) => {
+    if (event && event.target && event.target.closest('.add_new_contact_btn')) {
+        return;
+    }
+
     let contactTitle = document.querySelector('.contact_title');
     let floatingContactContainer = document.querySelector('.floating_contact_container');
     contactTitle.style.display = 'none';
@@ -70,7 +78,7 @@ let backButtonHandler = () => {
     contactsContainer.style.display = 'flex';
 }
 
-
+window.backButtonHandler = backButtonHandler;
 handleMobileView();
 
 /**
