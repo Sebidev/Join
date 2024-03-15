@@ -950,7 +950,7 @@ body {
   }
 
   .due-date-input {
-    width: 100%;
+    width: 92%;
   }
 
   .category-options {
@@ -962,7 +962,7 @@ body {
   }
 
   .input-container{
-    width: 97%;
+    width: 100%;
   }
 
   .subtask-list {
@@ -970,11 +970,11 @@ body {
   }
 
   .due-date-container {
-    width: 95%;
+    width: 100%;
   }
 
   .due-date-container-2 {
-    width: 94%;
+    width: 100%;
   }
 
   .prio-option-container { 
@@ -995,7 +995,7 @@ body {
   }
 
   .subtasks-container {
-    width: 97%;
+    width: 100%;
   }
 
 
