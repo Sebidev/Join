@@ -1084,11 +1084,15 @@ body {
   #selectedContactsContainer {
     display: flex;
     flex-direction: row;
-    height: 42px;
+    /*height: 42px;*/
     width: 95vw;
     margin-top: 10px;
     margin-bottom: 32px;
   }
+
+  .selected-contact {
+    gap: 2vw;
+}
 
   #selectedContactsContainer .initials-overlay {
     position: absolute;
