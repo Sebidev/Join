@@ -19,7 +19,8 @@ body {
 
 .Add-task {
   display: flex;
-  margin-left: 250px;
+  margin-left: 328px;
+  margin-right: 8px;
 }
 
 /* Add-task left */
@@ -30,13 +31,11 @@ body {
   justify-content: center;
   align-items: flex-start;
   gap: 16px;
-  margin-left: 96px;
 }
 
 .title-container-add-task {
   display: flex;
   height: 96px;
-  width: 440px;
   flex-direction: column;
   align-items: flex-start;
 }
@@ -77,7 +76,7 @@ body {
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 24px */
+  line-height: 120%;
 }
 
 .required-info {
@@ -94,7 +93,6 @@ body {
 .description-container {
   margin-top: 16px;
   display: flex;
-  width: 440px;
   height: 168px;
   flex-direction: column;
   align-items: flex-start;
@@ -121,13 +119,12 @@ body {
   border-radius: 10px;
   border: 1px solid var(--Style, #d1d1d1);
   background: #fff;
-
   color: var(--Style, #d1d1d1);
   font-family: Inter;
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 24px */
+  line-height: 120%;
 }
 
 .input-container {
@@ -138,6 +135,7 @@ body {
 }
 
 .input-container_assignedto {
+  width: 100%;
   height: 48px;
   display: flex;
   align-items: center;
@@ -147,7 +145,6 @@ body {
 .assigned-to-container {
   margin-top: 16px;
   display: flex;
-  width: 440px;
   height: 327px;
   flex-direction: column;
   align-items: flex-start;
@@ -166,25 +163,21 @@ body {
 }
 
 .assigned-dropdown {
-  background-image: url("./img/arrow_down.svg");
-  background-repeat: no-repeat;
   background-position: right center;
-
   display: flex;
-  width: 408px;
+  width: 100%;
   padding: 12px 16px;
   justify-content: space-between;
   align-items: center;
   border-radius: 10px;
   border: 1px solid var(--Style, #d1d1d1);
   background: var(--white, #fff);
-
   color: var(--black, #000);
   font-family: Inter;
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 24px */
+  line-height: 120%;
 }
 
 .assigned-dropdown:hover,
@@ -504,11 +497,11 @@ body {
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
-  line-height: 120%; /* 24px */
+  line-height: 120%; 
 }
 
 .button {
-  width: 33%;
+  width: 1.1vw;
   font-weight: 400;
   font-size: 20px;
   border: 1px solid #d1d1d1;
@@ -526,7 +519,7 @@ body {
 }
 
 .button img {
-  width: 20px;
+  width: 1.8vw;
   height: 14.51px;
 }
 
@@ -913,15 +906,17 @@ body {
 }
 
 /* Media queries */
-@media screen and (max-width: 1330px) {
+@media screen and (max-width: 1230px) {
   .header-add-task {
     margin-left: 250px;
     transition: margin 0.5s ease-in-out;
   }
 
   .Add-task {
-    margin-left: 160px;
+    display: flex;
     transition: margin 0.5s ease-in-out;
+    justify-content: center;
+    margin-left: 250px;
   }
 
   .Add-task-left {
@@ -930,25 +925,26 @@ body {
   }
 
   .Add-task-right {
-    width: 100%;
+    width: 33vw;
     transition: margin 0.5s ease-in-out;
   }
 
   .divider {
-    margin: 0 16px;
+    margin-right: 2vw;
+    margin-left: 2vw;
     transition: margin 0.5s ease-in-out;
   }
 
   .title-input {
-    width: 29.2vw;
+    /*width: 29.2vw;*/
   }
 
   .description-input {
-    width: 30vw;
+    /*width: 30vw;*/
   }
 
   .assigned-dropdown {
-    width: 30vw;
+    /*width: 30vw;*/
   }
 
   .due-date-input {
@@ -980,7 +976,12 @@ body {
   }
 
   .prio-option-container { 
-    width: 97%;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .prio-option-container h3 {
+    font-size: 1.8vw;
   }
 
   .category-container{
