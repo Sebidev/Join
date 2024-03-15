@@ -676,9 +676,11 @@ body {
 }
 
 .subtask-list {
+  height: 50px;
   width: 100%;
   padding-top: 6px;
   padding-bottom: 6px;
+  overflow: auto;
 }
 
 .subtask-icons-add-task {
@@ -964,7 +966,7 @@ body {
   }
 
   .subtask-list {
-    width: 83%;
+    /*width: 83%;*/
   }
 
   .due-date-container {
