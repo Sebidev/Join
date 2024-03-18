@@ -374,10 +374,6 @@ body {
   line-height: 120%;
 }
 
-.description-input-modal {
-  height: 84px;
-}
-
 .assigned-to-container-modal {
   display: flex;
   flex-direction: column;
@@ -513,6 +509,19 @@ body {
   border: none;
 }
 
+.input-container-subtask {
+  display: flex;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #d1d1d1;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 45px;
+  padding: 4px 0px;
+  box-sizing: border-box;
+}
+
 .description-container-modal {
   display: flex;
   /*height: 168px;*/
@@ -532,17 +541,6 @@ body {
   align-items: flex-start;
   gap: 8px;
   align-self: stretch;
-}
-
-.title-container,
-.description-container,
-.assigned-to-container,
-.due-date-container,
-.prio-container,
-.category-container,
-.subtasks-container,
-.clear-and-create-section-modal {
-    padding: 10px;
 }
 
 .title-input,
@@ -894,8 +892,8 @@ body {
 
 .required-legend-modal {
   position: fixed;
-  bottom: 20px;
-  margin-left: 20px;
+  bottom: 90px;
+  margin-left: 0px;
   width: 170px;
   height: 27px;
   flex-shrink: 0;
@@ -1057,6 +1055,7 @@ body {
   padding: 9px 19px;
   align-items: center;
   gap: 10px;
+  width: 98%;
   align-self: stretch;
   border-radius: 10px;
   border: 1px solid var(--Style, #d1d1d1);
@@ -1066,6 +1065,7 @@ body {
   font-style: normal;
   font-weight: 400;
   line-height: 120%;
+  box-sizing: border-box;
 }
 
 .justify-end {
@@ -1074,7 +1074,7 @@ body {
 
 .description-container {
   display: flex;
-  width: 440px;
+  width: 432px;
   height: 168px;
   flex-direction: column;
   align-items: flex-start;
@@ -1152,8 +1152,8 @@ body {
   background-position-x: calc(96%) !important;
   background-position-y: center !important;
   display: flex;
-  width: 408px;
-  height: 24px;
+  width: 100% !important;
+  height: 45px !important;
   padding: 12px 16px;
   justify-content: space-between;
   align-items: center;
@@ -1195,6 +1195,7 @@ body {
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
+  width: 95%;
 }
 
 .card-modal-title {
@@ -1359,6 +1360,7 @@ body {
   align-items: flex-end;
   gap: 8px;
   align-self: stretch;
+  width: 97%;
 }
 
 .card-modal-assigned-to-headline,
@@ -1599,6 +1601,7 @@ body {
   font-weight: 400;
   line-height: 120%;
   /* 24px */
+  width: 98%;
 }
 
 .card-modal-subtasks {
@@ -1609,6 +1612,7 @@ body {
   gap: 4px;
   align-self: stretch;
   padding-top: 13px;
+  width: 98%;
 }
 
 #closeButtonMobilePopup {
@@ -2170,6 +2174,10 @@ body {
     padding-left: 5px;
     padding-right: 5px;
   }
+
+  .card-modal-contacts{
+    width: 100%;
+  }
 }
 
 /* Media Queries */
@@ -2334,16 +2342,16 @@ body {
 
   .due-date-input {
     padding: 8px 21px;
-    width: 90vw;
+    width: 100% !important;
   }
 
   .prio-container {
-    width: 95vw;
+    width: 99% !important;
   }
 
   .prio-option-container {
     flex-direction: row;
-    width: 95vw;
+    width: 99% !important;
   }
 
   .prio {
@@ -2424,26 +2432,6 @@ body {
     margin-top: 5px;
   }
 
-  .input-container-subtask input {
-    width: 92vw;
-  }
-
-  .input-container{
-    width: 101%;
-  }
-
-  .arrow_down_category{
-    right: 5px !important;
-  }
-
-  .category-dropdown {
-    width: 100vw;
-  }
-
-  .assigned-dropdown {
-    width: 91.5vw;
-  }
-
   .subtask-list {
     width: 100% !important;
     height: 7vh;
@@ -2453,7 +2441,7 @@ body {
   .subtasks-input {
     width: 90vw;
     height: 20px;
-    padding: 12px 16px;
+    padding: 16px 16px !important;
     font-size: 16px;
   }
 
@@ -2750,19 +2738,40 @@ body {
     width: 0px;
   }
 
+  .card-modal-cont{
+    gap: 2rem !important;
+  }
+
+  #iconContainerEdit {
+    position: absolute !important;
+    justify-content: end !important;
+    margin-top: 5px !important;
+    width: 70px !important;
+    right: 3px !important;
+    z-index: 1 !important;
+  }
+
+  .dropdown-content-edit {
+    width: 100% !important;
+    z-index: 3 !important;
+  }
+
+  .card-modal-subtask-maincontainer{
+    width: unset !important;
+  }
+
   .title-container-add-task input {
-    width: 81%;
     font-size: 16px;
     padding: 7px 15px;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .description-container {
-    width: 80%;
     font-size: 16px;
   }
 
   .description-container textarea {
-    width: 83%;
     font-size: 16px;
     padding: 10px 12px;
   }
@@ -2772,7 +2781,7 @@ body {
   }
 
   .prio-option-container {
-    width: 85vw !important;
+    width: 99% !important;
   }
 
   .card-modal-assigned-to-headline_edit_mobile {
@@ -2780,7 +2789,6 @@ body {
   }
 
   .due-date-input {
-    width: 76vw !important;
     margin-bottom: -7px !important;
   }
 
@@ -2793,16 +2801,22 @@ body {
     height: 53px !important;
   }
 
-  .input-container-subtask {
-    width: 99% !important;
-  }
-
-  .input-container-subtask input {
-    width: 90% !important;
-  }
-
   .input-container-subtask img {
     right: 20px !important;
+  }
+
+  .input-container-subtask input{
+    height: 0px !important;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  .card-modal-subtasks-container-headline, .card-modal-subtasks-container-headline_edit_mobile{
+    width: 100% !important;
+  }
+
+  .input-container-subtask{
+    height: unset !important;
   }
 }
 
@@ -2813,45 +2827,9 @@ body {
 }
 
 @media only screen and (max-width: 320px) {
-  .find-task-search {
-    width: 80vw;
-    transition: all 0.5s ease-in-out;
-  }
-
-  .search-icon {
-    right: 15px;
-  }
-
-  .title-container-add-task input {
-    width: 77% !important;
-  }
-
-  .description-container textarea {
-    width: 79% !important;
-  }
-
-  .due-date-input {
-    width: 90% !important;
-  }
-
-  .prio-option-container h3 {
-    font-size: 13px !important;
-    text-wrap: nowrap;
-  }
-
-  .card-modal-title {
-    font-size: 34px !important;
-  }
-
-  .prio-option-container {
-    width: 85% !important;
-    gap: 5px !important;
-    margin-left: 5px;
-  }
-
-  .input-container-subtask input {
-    width: 88% !important;
-  }
+  .button{
+    padding: 12px 0px !important;
+  } 
 }
 
 @media only screen and (max-width: 1400px) {
@@ -2919,6 +2897,55 @@ body {
   .selected-contact {
     width: 90%;
   }
+
+  .title-container,
+  .description-container,
+  .assigned-to-container,
+  .due-date-container,
+  .prio-container,
+  .category-container,
+  .subtasks-container,
+  .clear-and-create-section-modal {
+      padding: 0px;
+  }
+
+  .card-modal-priority-container, .prio-container, .card-modal-title-container, .description-container, .title-container-add-task, .card-modal-date, .due-date-input, .input-container {
+    width: 100% !important;
+  }
+
+  .input-container-subtask {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .input-container-subtask{
+    height: 45px !important; 
+  }
+
+  .card-modal-cont{
+    gap: 0.7rem;
+  }
+
+  .card-modal-date{
+    gap: 0rem;
+  }
+
+  .clear-and-create-section-modal, .required-legend-modal {
+    margin-top: 0px;
+  }
+
+  .card-modal-subtasks-container-headline, .card-modal-subtasks-container-headline_edit_mobile {
+    width: 100% !important;
+  }
+  
+  .prio-option-container {
+    width: 99% !important;
+    gap: 8px;
+  }
+
+  .card-modal-contacts {
+    width: 100% !important;
+  }
 }
 
 @media only screen and (max-width: 926px) {
@@ -2963,5 +2990,12 @@ body {
     min-height: auto;
     flex: 0;
     width: 100%;
+  }
+}
+
+@media only screen and (max-height: 1000px) {
+  .Add-task-content{
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 }
