@@ -2838,6 +2838,11 @@ body {
   .create-task-button-modal h3, .cancel-button-modal h3{
     display: none;
   }
+
+  .clear-and-create-section-modal, .required-legend-modal {
+    position: relative;
+    bottom: 25px;
+  }
 }
 
 @media only screen and (max-width: 320px) {
