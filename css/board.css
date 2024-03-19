@@ -75,7 +75,7 @@ body {
   gap: 32px;
 }
 
-.input-container {
+.input-container, .input-container-search {
   position: relative;
   display: inline-block;
 }
@@ -1416,7 +1416,7 @@ body {
 
 .dropdown-content-edit {
   height: 216px;
-  width: 440px;
+  width: 100%;
   top: 46px;
   display: none;
   position: absolute;
@@ -1424,7 +1424,7 @@ body {
   border-radius: 10px;
   border: 1px solid var(--Style, #d1d1d1);
   overflow-y: auto;
-  z-index: 1;
+  z-index: 2;
 }
 
 /*
@@ -2181,12 +2181,12 @@ body {
 }
 
 /* Media Queries */
-@media (max-width: 900px) {
+@media only screen and (max-width: 900px) {
   #taskModal {
       width: 95%;
       height: 90%;
   }
-
+  
   .divider {
       display: none;
   }
@@ -2407,12 +2407,13 @@ body {
     display: none;
   }
 
-  #iconContainer {
-    position: relative !important;
-    justify-content: end;
-    margin-top: 0px !important;
-    right: 0px !important;
-    z-index: unset !important;
+  #iconContainerEdit {
+    position: absolute !important;
+    justify-content: end !important;
+    margin-top: 5px !important;
+    width: 70px !important;
+    right: 20px !important;
+    z-index: 1 !important;
   }
 
   .subImgContainer{
@@ -2495,6 +2496,19 @@ body {
   .arrow_down {
     top: unset !important;
     right: 5px !important;
+  }
+
+  .input-container-subtask input{
+    height: 0px !important;
+    padding: 12px 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .title-container-add-task input {
+    padding: 12px 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 }
 
@@ -2742,15 +2756,6 @@ body {
     gap: 2rem !important;
   }
 
-  #iconContainerEdit {
-    position: absolute !important;
-    justify-content: end !important;
-    margin-top: 5px !important;
-    width: 70px !important;
-    right: 3px !important;
-    z-index: 1 !important;
-  }
-
   .dropdown-content-edit {
     width: 100% !important;
     z-index: 3 !important;
@@ -2817,6 +2822,15 @@ body {
 
   .input-container-subtask{
     height: unset !important;
+  }
+
+  #iconContainerEdit {
+    position: absolute !important;
+    justify-content: end !important;
+    margin-top: 5px !important;
+    width: 70px !important;
+    right: 5px !important;
+    z-index: 1 !important;
   }
 }
 
@@ -2945,6 +2959,12 @@ body {
 
   .card-modal-contacts {
     width: 100% !important;
+  }
+
+  .title-container-add-task input {
+    padding: 12px 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 }
 
