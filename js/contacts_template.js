@@ -43,15 +43,15 @@ export let addContactTemplate = `
 <div>
     <form id="addcontactForm" class="form_container">
         <div class="input_container">
-            <input type="text" class="textfield_newcontact" id="name" name="name" placeholder="Name" pattern="^[a-zA-Z0-9_-]*$" title="Bitte nur Buchstaben, Zahlen und die Sonderzeichen Bindestrich und Unterstrich eingeben." required>
+            <input type="text" class="textfield_newcontact" id="name" name="name" placeholder="Name" title="Bitte nur Buchstaben, Zahlen und die Sonderzeichen Bindestrich und Unterstrich eingeben." required>
             <img src="img/person.svg" class="textfield_image">
         </div>
         <div class="input_container">
-            <input type="email" class="textfield_newcontact" id="email" name="email" placeholder="Email" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$" title="Bitte eine gültige E-Mail-Adresse eingeben." required>
+            <input type="email" class="textfield_newcontact" id="email" name="email" placeholder="Email" pattern="^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}$" title="Bitte eine gültige E-Mail-Adresse eingeben in diesen Format: user@example.com" required>
             <img src="img/mail.svg" class="textfield_image">
         </div>
         <div class="input_container">
-            <input type="text" class="textfield_newcontact" id="phone" name="phone" placeholder="Phone" pattern="^[+]?[0-9]*$" title="Bitte nur Zahlen und optional ein Pluszeichen am Anfang eingeben." required>
+            <input type="tel" class="textfield_newcontact" id="phone" name="phone" placeholder="Phone" pattern="^\\+?[0-9]*$" title="Bitte nur Zahlen und optional ein Pluszeichen am Anfang eingeben." required>
             <img src="img/call.svg" class="textfield_image">
         </div>
         <div class="button_container">
